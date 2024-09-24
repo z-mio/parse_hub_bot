@@ -10,3 +10,7 @@ Telegram聚合解析Bot, 支持AI总结视频和图文
 
 ![](https://img.155155155.xyz/i/2024/09/66f2d4b70416c.webp)
 ![](https://img.155155155.xyz/i/2024/09/66f2d4d6ca7ec.webp)
+
+## 鸣谢
+
+- [OhMyGPT](https://www.ohmygpt.com)
