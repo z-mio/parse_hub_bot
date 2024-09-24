@@ -1,0 +1,22 @@
+https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.28.zip
+TgCrypto
+loguru
+python-dotenv
+telegraph
+urlextract
+aiofiles
+yt_dlp
+dynamicadaptor
+dynrender_skia # apt install libgl1-mesa-glx ,  ubuntu 24 需要安装 apt install libgl1 libglx-mesa0
+beautifulsoup4
+xhs
+aiocache
+apscheduler
+tenacity
+openai
+langchain
+langchain-openai
+langchain_core
+aiofiles
+playwright
+pydub
