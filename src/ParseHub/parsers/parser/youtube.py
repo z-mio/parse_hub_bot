@@ -11,5 +11,5 @@ class YtbParse(YtParse):
         self, url: str, progress=None, progress_args=()
     ) -> Union["YtVideoParseResult", "YtImageParseResult"]:
         url = await self.get_raw_url(url)
-
+        self.params["writesubtitles"] = True
         return await super().parse(url, progress, progress_args)

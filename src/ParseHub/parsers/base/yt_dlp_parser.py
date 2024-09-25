@@ -20,6 +20,24 @@ from ...types import (
 class YtParse(Parse):
     """yt-dlp解析器"""
 
+    params = {
+        "format": "(mp4+bestaudio) / (bestvideo* + bestaudio / best)",
+        "quiet": True,  # 不输出日志
+        "writethumbnail": True,  # 下载缩略图
+        "writesubtitles": False,  # 下载字幕
+        "writeautomaticsub": True,  # 下载自动翻译的字幕
+        "subtitlesformat": "ttml",  # 字幕格式
+        "subtitleslangs": ["en", "zh-CN"],  # 字幕语言
+        "postprocessors": [
+            {
+                "key": "FFmpegVideoConvertor",
+                "preferedformat": "mp4",  # 视频格式
+            }
+        ],
+        "playlist_items": "1",  # 分p列表默认解析第一个
+        # "progress_hooks": [self.hook], # 进度回调
+    }
+
     async def parse(
         self, url: str, progress=None, progress_args=()
     ) -> Union["YtVideoParseResult", "YtImageParseResult"]:
@@ -36,8 +54,8 @@ class YtParse(Parse):
         else:
             return YtVideoParseResult(video=video_info.url, **_d)
 
-    async def _parse(self, url) -> "YtVideoInfo":
-        with YoutubeDL(self.build_yto()) as ydl:
+    async def _parse(self, url, params=None) -> "YtVideoInfo":
+        with YoutubeDL(params or self.params) as ydl:
             dl = ydl.extract_info(url, download=False)
         if dl.get("_type"):
             dl = dl["entries"][0]
@@ -63,26 +81,6 @@ class YtParse(Parse):
     #         self.loop.create_task(
     #             self.set_status(0, f"下 载 中...|{current * 100 / total:.0f}%")
     #         )
-
-    @staticmethod
-    def build_yto():
-        return {
-            "format": "(mp4+bestaudio) / (bestvideo* + bestaudio / best)",
-            "quiet": True,  # 不输出日志
-            "writethumbnail": True,  # 下载缩略图
-            "writesubtitles": True,  # 下载字幕
-            "writeautomaticsub": True,  # 下载自动翻译的字幕
-            "subtitlesformat": "ttml",  # 字幕格式
-            "subtitleslangs": ["en", "zh-CN"],  # 字幕语言
-            "postprocessors": [
-                {
-                    "key": "FFmpegVideoConvertor",
-                    "preferedformat": "mp4",  # 视频格式
-                }
-            ],
-            "playlist_items": "1",  # 分p列表默认解析第一个
-            # "progress_hooks": [self.hook], # 进度回调
-        }
 
 
 class YtVideoParseResult(VideoParseResult):
@@ -113,8 +111,8 @@ class YtVideoParseResult(VideoParseResult):
         dir_.mkdir(parents=True, exist_ok=True)
 
         # 输出模板
-        yto = YtParse.build_yto()
-        yto["outtmpl"] = f"{dir_.joinpath(f'ytdlp_%(id)s')}.%(ext)s"
+        yto = YtParse().params
+        yto["outtmpl"] = f"{dir_.joinpath('ytdlp_%(id)s')}.%(ext)s"
 
         text = "下载合并中...请耐心等待..."
         if self.dl.duration > 1800:
