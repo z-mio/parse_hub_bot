@@ -82,7 +82,8 @@ class TgParseHub(ParseHub):
 
         if not (operate := await self._get_cache()):
             await self._add_parse_task()
-            r = await super().parse(self.url)
+            async with self.error_handler():
+                r = await super().parse(self.url)
             operate = self._select_operate(r)
 
         self.operate = operate
