@@ -31,13 +31,13 @@ class DouyinParse(Parse):
         if not ph_cfg.douyin_api:
             raise ParseError("抖音解析API未配置")
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=10) as client:
             params = {"url": url, "minimal": False}
             response = await client.get(
                 f"{ph_cfg.douyin_api}/api/hybrid/video_data", params=params
             )
         if response.status_code != 200:
-            raise ParseError(f"抖音解析失败")
+            raise ParseError("抖音解析失败")
         return DYResult.parse(url, response.json())
 
     @staticmethod

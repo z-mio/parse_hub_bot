@@ -24,10 +24,6 @@ class YtParse(Parse):
         "format": "(mp4+bestaudio) / (bestvideo* + bestaudio / best)",
         "quiet": True,  # 不输出日志
         "writethumbnail": True,  # 下载缩略图
-        "writesubtitles": False,  # 下载字幕
-        "writeautomaticsub": True,  # 下载自动翻译的字幕
-        "subtitlesformat": "ttml",  # 字幕格式
-        "subtitleslangs": ["en", "zh-CN"],  # 字幕语言
         "postprocessors": [
             {
                 "key": "FFmpegVideoConvertor",
