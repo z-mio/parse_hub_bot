@@ -10,9 +10,12 @@ from ...types import ParseResult
 
 
 class Parse(ABC):
-    __match__: str = None  # 链接匹配规则
-    __reserved_parameters__ = []  # 要保留的参数, 例如翻页. 默认清除全部参数
-    __redirect_keywords__ = []  # 如果链接包含其中之一, 则遵循重定向规则
+    __match__: str = None
+    """链接匹配规则"""
+    __reserved_parameters__ = []
+    """要保留的参数, 例如翻页. 默认清除全部参数"""
+    __redirect_keywords__ = []
+    """如果链接包含其中之一, 则遵循重定向规则"""
 
     def match(self, url: str) -> bool:
         """判断是否匹配该解析器"""

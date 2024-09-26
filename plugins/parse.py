@@ -12,15 +12,18 @@ from utiles.utile import progress
 async def call_parse(cli: Client, msg: Message):
     try:
         tph = TgParseHub()
-        t = "已有相同任务正在解析, 等待解析完成..." if await tph.get_parse_task(msg.text) else "解 析 中..."
+        t = (
+            "已有相同任务正在解析, 等待解析完成..."
+            if await tph.get_parse_task(msg.text)
+            else "解 析 中..."
+        )
         r_msg = await msg.reply_text(t)
         pp = await tph.parse(msg.text)
+        await pp.download(callback, (r_msg,))
     except Exception as e:
         await msg.reply_text(f"{e}")
         raise e
     else:
-        await pp.download(callback, (r_msg,))
-
         await r_msg.edit_text("上 传 中...")
         try:
             await pp.chat_upload(cli, msg)

@@ -13,10 +13,11 @@ xhs
 aiocache
 apscheduler
 tenacity
-openai
+openai==1.42.0
 langchain
-langchain-openai
-langchain_core
+langchain-openai==0.1.22
+langchain_core==0.2.35
 aiofiles
 playwright
 pydub
+opencv-python

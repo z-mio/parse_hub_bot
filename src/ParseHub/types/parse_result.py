@@ -12,6 +12,7 @@ from .media import Image, MediaT
 from .subtitles import Subtitles, Subtitle
 from .summary_result import SummaryResult
 from ..config.config import ph_cfg
+from ..utiles.utile import video_to_png
 
 CN_PROMPT = """
 你是一个有用的助手，总结文章和视频字幕的要点。
@@ -167,16 +168,15 @@ class DownloadResult(Generic[T]):
 
     async def summary(self) -> "SummaryResult":
         """总结解析结果"""
-        if not isinstance(self.media, list):
-            media = [self.media]
-        else:
-            media = self.media
-
+        media = self.media if isinstance(self.media, list) else [self.media]
         subtitles = ""
         tasks = []
         for i in media:
             if isinstance(i, Video):
                 subtitles = await self._video_to_subtitles(i)
+                if not subtitles:
+                    img = await asyncio.to_thread(video_to_png, i.path)
+                    tasks.append(img2base64(img))
             elif isinstance(i, Image):
                 tasks.append(img2base64(i.path))
             else:
@@ -226,6 +226,4 @@ class DownloadResult(Generic[T]):
                     for c in tr.chucks
                 ]
             )
-        if not media_.subtitles.subtitles[5:]:  # 小于5条字幕，直接过滤掉
-            return ""
-        return media_.subtitles.to_str()
+        return media_.subtitles.to_str() if media_.subtitles.subtitles[5:] else ""

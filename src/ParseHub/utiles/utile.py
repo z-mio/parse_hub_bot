@@ -5,8 +5,8 @@ import re
 import base64
 import aiofiles
 import httpx
+import cv2
 from typing import Literal
-
 from urlextract import URLExtract
 
 from ...ParseHub import parsers
@@ -32,7 +32,7 @@ def is_method_overridden(method_name, base_class, derived_class):
 
 def get_all_subclasses(cls):
     for _, module_name, _ in pkgutil.walk_packages(
-        parsers.__path__, parsers.__name__ + "."
+        parsers.__path__, f"{parsers.__name__}."
     ):
         importlib.import_module(module_name)
 
@@ -43,11 +43,7 @@ def get_all_subclasses(cls):
 
 
 def progress(current, total, type_=Literal["数量", "百分比"]):
-    if type_ == "百分比":
-        text = f"{current * 100 / total:.0f}%"
-    else:
-        text = f"{current}/{total}"
-    return text
+    return f"{current * 100 / total:.0f}%" if type_ == "百分比" else f"{current}/{total}"
 
 
 def timestamp_to_time(timestamp):
@@ -77,3 +73,14 @@ async def img2base64(img: str) -> str:
         async with aiofiles.open(img, "rb") as f:
             content = await f.read()
     return base64.b64encode(content).decode("utf-8")
+
+
+def video_to_png(video: str) -> str:
+    """提取视频第一帧
+    :return: 图片路径
+    """
+    o_p = f"{video}.png"
+    video = cv2.VideoCapture(video)
+    image = video.read()[1]
+    cv2.imwrite(o_p, image)
+    return o_p

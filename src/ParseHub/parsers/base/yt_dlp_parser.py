@@ -20,20 +20,6 @@ from ...types import (
 class YtParse(Parse):
     """yt-dlp解析器"""
 
-    params = {
-        "format": "(mp4+bestaudio) / (bestvideo* + bestaudio / best)",
-        "quiet": True,  # 不输出日志
-        "writethumbnail": True,  # 下载缩略图
-        "postprocessors": [
-            {
-                "key": "FFmpegVideoConvertor",
-                "preferedformat": "mp4",  # 视频格式
-            }
-        ],
-        "playlist_items": "1",  # 分p列表默认解析第一个
-        # "progress_hooks": [self.hook], # 进度回调
-    }
-
     async def parse(
         self, url: str, progress=None, progress_args=()
     ) -> Union["YtVideoParseResult", "YtImageParseResult"]:
@@ -77,6 +63,22 @@ class YtParse(Parse):
     #         self.loop.create_task(
     #             self.set_status(0, f"下 载 中...|{current * 100 / total:.0f}%")
     #         )
+
+    @property
+    def params(self) -> dict:
+        return {
+            "format": "(mp4+bestaudio) / (bestvideo* + bestaudio / best)",
+            "quiet": True,  # 不输出日志
+            "writethumbnail": True,  # 下载缩略图
+            "postprocessors": [
+                {
+                    "key": "FFmpegVideoConvertor",
+                    "preferedformat": "mp4",  # 视频格式
+                }
+            ],
+            "playlist_items": "1",  # 分p列表默认解析第一个
+            # "progress_hooks": [self.hook], # 进度回调
+        }
 
 
 class YtVideoParseResult(VideoParseResult):

@@ -57,14 +57,14 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
 
     try:
         pp = await TgParseHub().parse(cir.query)
-    except Exception as e:
-        await client.edit_inline_text(imid, f"{e}")
-        raise e
-    else:
         await pp.download(
             callback,
             (client, imid, pp),
         )
+    except Exception as e:
+        await client.edit_inline_text(imid, f"{e}")
+        raise e
+    else:
         await client.edit_inline_text(
             imid,
             f"{pp.operate.content_and_no_url}\n\n上 传 中...",

@@ -40,7 +40,9 @@ class Subtitles:
         return cls(subtitles=subtitles)
 
     def to_str(self) -> str:
-        return "\n".join([f"{i.begin}-{i.end}: {i.text}" for i in self.subtitles])
+        return "\n".join(
+            [f"{i.begin}-{i.end}: {i.text}" for i in self.subtitles]
+        ).strip()
 
 
 if __name__ == "__main__":
