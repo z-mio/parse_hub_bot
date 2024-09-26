@@ -2,7 +2,7 @@ from ..base.yt_dlp_parser import YtParse, YtVideoParseResult
 
 
 class FacebookParse(YtParse):
-    __match__ = r"^(http(s)?://)?.+facebook.com/(watch\?v|share/v).*"
+    __match__ = r"^(http(s)?://)?.+facebook.com/(watch\?v|share/[v,r]).*"
 
     async def parse(
         self, url: str, progress=None, progress_args=()
