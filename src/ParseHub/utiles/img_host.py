@@ -13,7 +13,7 @@ class ImgHost:
     @retry(stop=stop_after_attempt(5))
     async def catbox(self, filename_or_url: str):
         host_url = "https://catbox.moe/user/api.php"
-        is_url = "http" in filename_or_url
+        is_url = "http" in str(filename_or_url)
         if is_url:
             response = await self.async_client.get(filename_or_url)
             filename = filename_or_url.split("/")[-1]

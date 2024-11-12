@@ -67,15 +67,15 @@ class YtParse(Parse):
     @property
     def params(self) -> dict:
         return {
-            "format": "(mp4+bestaudio) / (bestvideo* + bestaudio / best)",
+            "format": "mp4+bestvideo[height<=1080]+bestaudio",
             "quiet": True,  # 不输出日志
             "writethumbnail": True,  # 下载缩略图
-            "postprocessors": [
-                {
-                    "key": "FFmpegVideoConvertor",
-                    "preferedformat": "mp4",  # 视频格式
-                }
-            ],
+            # "postprocessors": [
+            #     {
+            #         "key": "FFmpegVideoConvertor",
+            #         "preferedformat": "mp4",  # 视频格式
+            #     }
+            # ],
             "playlist_items": "1",  # 分p列表默认解析第一个
             # "progress_hooks": [self.hook], # 进度回调
         }
@@ -128,7 +128,7 @@ class YtVideoParseResult(VideoParseResult):
         subtitles = (v := list(dir_.glob("*.ttml"))) and Subtitles().parse(v[0])
         thumb = (
             v := list(dir_.glob("*.webp")) or list(dir_.glob("*.jpg"))
-        ) and await ImgHost().ipfs(v[0])
+        ) and await ImgHost().catbox(v[0])
         return DownloadResult(
             self, Video(path=str(video_path), subtitles=subtitles, thumb_url=thumb)
         )
