@@ -28,21 +28,22 @@
 
 将 `.env.exa` 复制为 `.env`, 并修改配置
 
-| 参数                   | 说明                            |
-|----------------------|-------------------------------|
-| `API_HASH`, `API_ID` | 登录 https://my.telegram.org 获取 |
-| `BOT_TOKEN`          | 在 @BotFather 获取               |
-| `PROXY`              | 海外服务器无需填写                     |
-| `DOUYIN_API`         | 你部署的抖音API地址, 可不填              |
-| `AI_SUMMARY`         | 是否开启AI总结                      |
-| `API_KEY`            | openai 密钥                     |
-| `BASE_URL`           | openai api地址                  |
-| `MODEL`              | AI总结使用的模型                     |
-| `CACHE_TIME`         | 解析结果缓存时间, 单位: 秒, 0为不缓存        |
+| 参数                   | 说明                                  |
+|----------------------|-------------------------------------|
+| `API_HASH`, `API_ID` | 登录 https://my.telegram.org 获取       |
+| `BOT_TOKEN`          | 在 @BotFather 获取                     |
+| `PROXY`              | 海外服务器无需填写                           |
+| `DOUYIN_API`         | 你部署的抖音API地址, 默认: https://douyin.wtf |
+| `AI_SUMMARY`         | 是否开启AI总结                            |
+| `API_KEY`            | openai 密钥                           |
+| `BASE_URL`           | openai api地址                        |
+| `MODEL`              | AI总结使用的模型                           |
+| `CACHE_TIME`         | 解析结果缓存时间, 单位: 秒, 0为不缓存, 默认缓存10分钟    |
 
 ### 开始部署
 
 **在项目根目录运行:**
+
 ```shell
 apt install python3-pip -y
 pip install uv --break-system-packages
