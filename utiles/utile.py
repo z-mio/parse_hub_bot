@@ -1,7 +1,5 @@
 import asyncio
-import functools
 import hashlib
-from typing import Callable, Any
 
 from pyrogram import Client
 

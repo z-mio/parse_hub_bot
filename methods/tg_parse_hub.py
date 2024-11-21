@@ -1,6 +1,4 @@
 import asyncio
-import os
-import shutil
 import tempfile
 import httpx
 from abc import ABC, abstractmethod
@@ -8,6 +6,7 @@ from typing import Union, Callable
 from aiocache import Cache
 from aiocache.plugins import TimingPlugin
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from parsehub.config import ParseConfig, DownloadConfig
 from pyrogram import enums, Client
 from pyrogram.types import (
     Message,
@@ -23,9 +22,8 @@ from pyrogram.types import (
     InputTextMessageContent,
 )
 
-from src.ParseHub import ParseHub
-from src.ParseHub.config.config import ph_cfg
-from src.ParseHub.types import (
+from parsehub import ParseHub
+from parsehub.types import (
     ParseResult,
     Image,
     Video,
@@ -37,13 +35,14 @@ from src.ParseHub.types import (
     DownloadResult,
     ParseError,
 )
-from src.ParseHub.utiles.img_host import ImgHost
-from src.ParseHub.utiles.utile import match_url
+from parsehub.utiles.img_host import ImgHost
+from parsehub.utiles.utile import match_url
+
+from config.config import bot_cfg
 from utiles.ph import Telegraph
 from utiles.utile import encrypt
 from contextlib import asynccontextmanager
 
-CACHE = ph_cfg.cache_time
 _parsing = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 正在解析的链接
 _url_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 网址缓存
 _operate_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 解析结果缓存
@@ -56,10 +55,10 @@ scheduler.start()
 class TgParseHub(ParseHub):
     """重新封装 ParseHub 类，使其适用于 Telegram"""
 
-    def __init__(self, cache: bool = True):
-        super().__init__()
+    def __init__(self):
+        super().__init__(ParseConfig(douyin_api=bot_cfg.douyin_api))
         self.url = None
-        self.on_cache = cache
+        self.on_cache = bool(bot_cfg.cache_time)
         self.parsing = _parsing
         """正在解析的链接"""
         self.cache = _operate_cache
@@ -69,7 +68,9 @@ class TgParseHub(ParseHub):
         self.operate: ParseResultOperate | None = None
         """解析结果操作对象"""
 
-    async def parse(self, url: str, cache_time: int = CACHE) -> "TgParseHub":
+    async def parse(
+        self, url: str, cache_time: int = bot_cfg.cache_time
+    ) -> "TgParseHub":
         """
         解析网址，并返回解析结果操作对象。
         :param url: url 或 hash后的url
@@ -78,7 +79,7 @@ class TgParseHub(ParseHub):
         """
         self.url = await self._get_url(url)
         while await self._get_parse_task():
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(1)
 
         if not (operate := await self._get_cache()):
             await self._add_parse_task()
@@ -92,7 +93,7 @@ class TgParseHub(ParseHub):
             """缓存结果"""
             await self._set_cache(operate, cache_time)
 
-        if ph_cfg.ai_summary:
+        if bot_cfg.ai_summary:
             """开启 AI 总结"""
             await self._set_url_cache()
 
@@ -101,7 +102,7 @@ class TgParseHub(ParseHub):
     async def ai_summary(self, cq: CallbackQuery):
         """获取 AI 总结"""
         self.operate = await self.operate.ai_summary(cq)
-        await self._set_cache(self.operate, CACHE)
+        await self._set_cache(self.operate, bot_cfg.cache_time)
 
     async def un_ai_summary(self, cq: CallbackQuery):
         """取消 AI 总结"""
@@ -116,7 +117,13 @@ class TgParseHub(ParseHub):
         if (dr := self.operate.download_result) and dr.exists():
             return dr
         async with self.error_handler():
-            r = await self.result.download(callback, callback_args, proxies)
+            r = await self.result.download(
+                None,
+                callback,
+                callback_args,
+                proxies,
+                config=DownloadConfig(yt_dlp_duration_limit=1800),
+            )
         self.operate.download_result = r
         return r
 
@@ -158,14 +165,18 @@ class TgParseHub(ParseHub):
         async with self.error_handler():
             msg = await self.operate.chat_upload(msg)
 
-        await self._set_msg_cache(msg)
-        await self._del_parse_task(self.url)
+        if self.on_cache:
+            await self._set_msg_cache(msg)
+        else:
+            await self.delete()
+        await self._del_parse_task()
         return msg
 
     async def inline_upload(self, iq: InlineQuery):
         """发送解析结果到内联中"""
         async with self.error_handler():
-            return await self.operate.inline_upload(iq)
+            await self.operate.inline_upload(iq)
+        await self._del_parse_task()
 
     @asynccontextmanager
     async def error_handler(self):
@@ -177,7 +188,7 @@ class TgParseHub(ParseHub):
 
     async def _error_callback(self):
         """错误回调"""
-        await self._del_parse_task(self.url)
+        await self._del_parse_task()
 
     async def get_parse_task(self, url: str) -> bool:
         """获取解析任务"""
@@ -192,9 +203,9 @@ class TgParseHub(ParseHub):
         """添加解析任务, 超时: 5分钟"""
         await self.parsing.set(self.url, True, ttl=300)
 
-    async def _del_parse_task(self, url: str):
+    async def _del_parse_task(self):
         """解析结束"""
-        await self.parsing.delete(url)
+        await self.parsing.delete(self.url)
 
     async def _get_url(self, url: str):
         """获取网址"""
@@ -203,11 +214,11 @@ class TgParseHub(ParseHub):
         url = match_url(url)
         if not url:
             raise ParseError("无效的网址")
-        return await self.select_parser(url)().get_raw_url(url)
+        return await self._select_parser(url)().get_raw_url(url)
 
     async def _set_url_cache(self):
         """缓存网址"""
-        await self.url_cache.set(encrypt(self.url), self.url, ttl=CACHE)
+        await self.url_cache.set(encrypt(self.url), self.url, ttl=bot_cfg.cache_time)
 
     async def _get_url_cache(self, hash_url: str) -> str | None:
         """获取缓存网址"""
@@ -222,7 +233,7 @@ class TgParseHub(ParseHub):
         await self.cache.set(result.hash_url, result)
         await self._clear_cache(cache_time)
 
-    async def _clear_cache(self, cache_time: int = CACHE):
+    async def _clear_cache(self, cache_time: int = bot_cfg.cache_time):
         """定时删除缓存"""
 
         async def fn():
@@ -243,7 +254,7 @@ class TgParseHub(ParseHub):
 
     async def _set_msg_cache(self, msg: Message):
         """缓存消息"""
-        await _msg_cache.set(self.operate.hash_url, msg, ttl=CACHE)
+        await _msg_cache.set(self.operate.hash_url, msg, ttl=bot_cfg.cache_time)
 
     @staticmethod
     def _select_operate(result: ParseResult = None) -> "ParseResultOperate":
@@ -340,15 +351,7 @@ class ParseResultOperate(ABC):
         """删除文件"""
         if not self.download_result:
             return
-
-        media = self.download_result.media
-        if isinstance(media, list):
-            p = [i.path for i in media if i.exists()]
-            if p:
-                shutil.rmtree(os.path.dirname(p[0]))
-        else:
-            if media.exists():
-                os.remove(media.path)
+        self.download_result.delete()
 
     def button(
         self,
@@ -375,7 +378,7 @@ class ParseResultOperate(ABC):
             ai_summary_btn = Ikb("AI总结❎", callback_data=f"summary_{self.hash_url}")
 
         button.append(raw_url_btn)
-        if ph_cfg.ai_summary and not hide_summary:
+        if bot_cfg.ai_summary and not hide_summary:
             if summarizing:
                 ai_summary_btn = Ikb(
                     "AI总结中❇️", callback_data=f"summarizing_{self.hash_url}"

@@ -8,8 +8,8 @@ from pyrogram.types import (
     InputMediaVideo,
 )
 
-from config.config import HELP_TEXT
 from methods import TgParseHub
+from plugins.start import get_supported_platforms
 from utiles.filters import platform_filter
 from utiles.utile import progress
 
@@ -20,7 +20,7 @@ async def inline_parse_tip(_, iq: InlineQuery):
         InlineQueryResultArticle(
             title="聚合解析",
             description="请在聊天框输入链接",
-            input_message_content=InputTextMessageContent(f"{HELP_TEXT}"),
+            input_message_content=InputTextMessageContent(get_supported_platforms()),
             thumb_url="https://i.imgloc.com/2023/06/15/Vbfazk.png",
         )
     ]

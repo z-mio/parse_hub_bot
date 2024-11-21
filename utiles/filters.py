@@ -1,7 +1,7 @@
 from pyrogram import filters
 from pyrogram.types import Message, InlineQuery
 
-from src.ParseHub import ParseHub
+from parsehub import ParseHub
 
 
 async def _platform_filter(_, __, update: Message | InlineQuery):
@@ -9,7 +9,7 @@ async def _platform_filter(_, __, update: Message | InlineQuery):
         t = update.caption or update.text
     else:
         t = update.query
-    return bool(ParseHub().select_parser(t))
+    return bool(ParseHub()._select_parser(t))
 
 
 platform_filter = filters.create(_platform_filter)

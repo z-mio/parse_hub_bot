@@ -4,12 +4,6 @@ from dotenv import load_dotenv
 from os import getenv
 
 load_dotenv()
-HELP_TEXT = (
-    "**支持的平台:**\n\n"
-    "抖音视频|图文、哔哩哔哩视频|动态、YouTube、YouTube Music、"
-    "TikTok视频|图文、小红书视频|图文、Twitter视频|图文、"
-    "百度贴吧图文|视频、Facebook视频、微博视频|图文"
-)
 
 
 class BotConfig:
@@ -18,6 +12,10 @@ class BotConfig:
         self.api_id = getenv("API_ID")
         self.api_hash = getenv("API_HASH")
         self.proxy: None | BotConfig._Proxy = self._Proxy(getenv("PROXY", None))
+
+        self.cache_time = int(ct) if (ct := getenv("CACHE_TIME")) else 600
+        self.ai_summary = bool(getenv("AI_SUMMARY").lower() == "true")
+        self.douyin_api = getenv("DOUYIN_API", None)
 
     class _Proxy:
         def __init__(self, url: str):
