@@ -1,0 +1,19 @@
+[project]
+name = "parsehubbot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiocache>=0.12.3",
+    "apscheduler==3.10.4",
+    "loguru>=0.6.0,<0.7.0",
+    "parsehub>=1.0.5",
+    "pyrogram",
+    "python-dotenv>=1.0.1",
+    "telegraph>=2.2.0",
+    "tgcrypto>=1.2.5",
+]
+
+[tool.uv.sources]
+pyrogram = { url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.28.zip" }
