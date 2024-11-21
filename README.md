@@ -51,23 +51,14 @@ uv venv --python 3.12
 uv sync
 ```
 
-1. **安装pip**
+**启动bot**
 
    ```shell
-   apt install python3-pip -y
+   uv run bot.py
    ```
-2. **安装依赖**
 
-   ```shell
-   pip3 install -r requirements.txt
-   ```
-3. **运行**
-
-   ```shell
-   python3 bot.py
-   ```
-4. **设置命令列表**
-   私聊bot发送指令 `/menu`
+**设置命令列表**
+私聊bot发送指令 `/menu`
 
 ## 使用
 
