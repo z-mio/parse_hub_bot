@@ -14,7 +14,7 @@ async def call_parse(cli: Client, msg: Message):
         tph = TgParseHub()
         t = (
             "已有相同任务正在解析, 等待解析完成..."
-            if await tph.get_parse_task(msg.text)
+            if await tph.get_parse_task(msg.text or msg.caption)
             else "解 析 中..."
         )
         r_msg = await msg.reply_text(t)
