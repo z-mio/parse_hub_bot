@@ -35,13 +35,15 @@ from parsehub.types import (
     DownloadResult,
     ParseError,
 )
-from parsehub.utiles.img_host import ImgHost
 from parsehub.utiles.utile import match_url
-
+from parsehub.parsers.parser.weixin import WXImageParseResult
 from config.config import bot_cfg
+from utiles.converter import clean_article_html
+from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
 from utiles.utile import encrypt
 from contextlib import asynccontextmanager
+from markdown import markdown
 
 _parsing = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 正在解析的链接
 _url_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 网址缓存
@@ -480,8 +482,24 @@ class VideoParseResultOperate(ParseResultOperate):
 class ImageParseResultOperate(ParseResultOperate):
     """图片解析结果操作"""
 
+    async def _send_ph(self, html_content: str, msg: Message):
+        page = await Telegraph().create_page(
+            self.result.title or "无标题", html_content=html_content
+        )
+        self.telegraph_url = page.url
+        return await msg.reply_text(
+            self.content_and_no_url,
+            quote=True,
+            reply_markup=self.button(),
+        )
+
     async def chat_upload(self, msg: Message) -> Message | list[Message]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
+
+        if isinstance(self.result, WXImageParseResult):
+            await self._send_ph(
+                clean_article_html(markdown(self.result.wx.markdown_content)), msg
+            )
 
         count = len(self.download_result.media)
         text = self.content_and_no_url
@@ -512,22 +530,13 @@ class ImageParseResultOperate(ParseResultOperate):
             )
             return m
         else:
-            tasks = [ImgHost().ipfs(i.path) for i in self.download_result.media]
+            tasks = [ImgHost().litterbox(i.path) for i in self.download_result.media]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             results = [
                 f'<img src="{i}">' for i in results if not isinstance(i, Exception)
             ]
 
-            page = await Telegraph().create_page(
-                self.result.title or "无标题",
-                html_content=f"{self.result.desc}<br><br>" + "".join(results),
-            )
-            self.telegraph_url = page.url
-            return await msg.reply_text(
-                self.content_and_no_url,
-                quote=True,
-                reply_markup=self.button(),
-            )
+            await self._send_ph(f"{self.result.desc}<br><br>" + "".join(results), msg)
 
 
 class MultimediaParseResultOperate(ParseResultOperate):

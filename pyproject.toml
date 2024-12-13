@@ -8,6 +8,8 @@ dependencies = [
     "aiocache>=0.12.3",
     "apscheduler==3.10.4",
     "loguru>=0.6.0,<0.7.0",
+    "lxml-html-clean>=0.4.1",
+    "markdown>=3.7",
     "parsehub>=1.0.5",
     "pyrogram",
     "python-dotenv>=1.0.1",
