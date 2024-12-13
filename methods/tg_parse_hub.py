@@ -497,7 +497,7 @@ class ImageParseResultOperate(ParseResultOperate):
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
 
         if isinstance(self.result, WXImageParseResult):
-            await self._send_ph(
+            return await self._send_ph(
                 clean_article_html(markdown(self.result.wx.markdown_content)), msg
             )
 
