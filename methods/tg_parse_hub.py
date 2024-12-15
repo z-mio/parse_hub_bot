@@ -58,7 +58,9 @@ class TgParseHub(ParseHub):
     """重新封装 ParseHub 类，使其适用于 Telegram"""
 
     def __init__(self):
-        super().__init__(ParseConfig(douyin_api=bot_cfg.douyin_api))
+        super().__init__(
+            ParseConfig(douyin_api=bot_cfg.douyin_api, proxy=bot_cfg.parser_proxy)
+        )
         self.url = None
         self.on_cache = bool(bot_cfg.cache_time)
         self.parsing = _parsing
@@ -114,7 +116,6 @@ class TgParseHub(ParseHub):
         self,
         callback: Callable = None,
         callback_args: tuple = (),
-        proxies: dict | str = None,
     ) -> DownloadResult:
         if (dr := self.operate.download_result) and dr.exists():
             return dr
@@ -123,8 +124,9 @@ class TgParseHub(ParseHub):
                 None,
                 callback,
                 callback_args,
-                proxies,
-                config=DownloadConfig(yt_dlp_duration_limit=1800),
+                config=DownloadConfig(
+                    yt_dlp_duration_limit=1800, proxy=bot_cfg.downloader_proxy
+                ),
             )
         self.operate.download_result = r
         return r
@@ -498,7 +500,14 @@ class ImageParseResultOperate(ParseResultOperate):
 
         if isinstance(self.result, WXImageParseResult):
             return await self._send_ph(
-                clean_article_html(markdown(self.result.wx.markdown_content)), msg
+                clean_article_html(
+                    markdown(
+                        self.result.wx.markdown_content.replace(
+                            "mmbiz.qpic.cn", "mmbiz.qpic.cn.in"
+                        )
+                    )
+                ),
+                msg,
             )
 
         count = len(self.download_result.media)

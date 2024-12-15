@@ -11,7 +11,9 @@ class BotConfig:
         self.bot_token = getenv("BOT_TOKEN")
         self.api_id = getenv("API_ID")
         self.api_hash = getenv("API_HASH")
-        self.proxy: None | BotConfig._Proxy = self._Proxy(getenv("PROXY", None))
+        self.bot_proxy: None | BotConfig._Proxy = self._Proxy(getenv("BOT_PROXY", None))
+        self.parser_proxy: None | str = getenv("PARSER_PROXY", None)
+        self.downloader_proxy: None | str = getenv("DOWNLOADER_PROXY", None)
 
         self.cache_time = int(ct) if (ct := getenv("CACHE_TIME")) else 600
         self.ai_summary = bool(getenv("AI_SUMMARY").lower() == "true")

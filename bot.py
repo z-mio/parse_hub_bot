@@ -15,7 +15,7 @@ class Bot(Client):
             api_hash=self.cfg.api_hash,
             bot_token=self.cfg.bot_token,
             plugins=dict(root="plugins"),
-            proxy=self.cfg.proxy.dict_format,
+            proxy=self.cfg.bot_proxy.dict_format,
         )
 
     async def start(self):

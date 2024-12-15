@@ -158,11 +158,11 @@ wheels = [
 
 [[package]]
 name = "certifi"
-version = "2024.8.30"
+version = "2024.12.14"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b0/ee/9b19140fe824b367c04c5e1b369942dd754c4c5462d5674002f75c4dedc1/certifi-2024.8.30.tar.gz", hash = "sha256:bec941d2aa8195e248a60b31ff9f0558284cf01a52591ceda73ea9afffd69fd9", size = 168507 }
+sdist = { url = "https://files.pythonhosted.org/packages/0f/bd/1d41ee578ce09523c81a15426705dd20969f5abf006d1afe8aeff0dd776a/certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db", size = 166010 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/12/90/3c9ff0512038035f59d279fddeb79f5f1eccd8859f06d6163c58798b9487/certifi-2024.8.30-py3-none-any.whl", hash = "sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8", size = 167321 },
+    { url = "https://files.pythonhosted.org/packages/a5/32/8f6669fc4798494966bf446c8c4a162e0b5d893dff088afddf76414f70e1/certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56", size = 164927 },
 ]
 
 [[package]]
@@ -962,7 +962,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.1.2"
+version = "1.1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -993,6 +993,7 @@ dependencies = [
     { name = "pyperclip" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
+    { name = "requests" },
     { name = "rookiepy" },
     { name = "tenacity" },
     { name = "textual" },
@@ -1000,9 +1001,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/10/51/1e23b4eb83bad066bbe3ec3173aa5864d36f883147d661617b0028c87bcb/parsehub-1.1.2.tar.gz", hash = "sha256:44dae140bf766e23a716a372658660c0140e5b09c5d0981ddb21a1f94dd48b9d", size = 58219 }
+sdist = { url = "https://files.pythonhosted.org/packages/23/c5/f26856f9c731f32f98efe872b93abb73e7a48527d97fe1e64d89c22b4f18/parsehub-1.1.3.tar.gz", hash = "sha256:d77f63a4291f96d70ffb37602dbaea8944517325b8b45ebae62d437873a2ee37", size = 58146 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/26/c4/89b55243bfc3255737e17e09ff3f6deeb2ccd5adcfa1447bd051deb7ba01/parsehub-1.1.2-py3-none-any.whl", hash = "sha256:7610af4c0ee027b829c36ab3a791698af29f85ca2ceba8499e5bd96a4f49ebd8", size = 81755 },
+    { url = "https://files.pythonhosted.org/packages/6e/a3/aff82597d12312359f93fc65e1bd148801106d2dbff907dfc4d23903893f/parsehub-1.1.3-py3-none-any.whl", hash = "sha256:99dcac97778552ae32b6d8e3e0ee006f5421285295fd404ff0ef8b3536875f47", size = 81719 },
 ]
 
 [[package]]
@@ -1573,15 +1574,15 @@ wheels = [
 
 [[package]]
 name = "uvicorn"
-version = "0.32.1"
+version = "0.34.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "h11" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6a/3c/21dba3e7d76138725ef307e3d7ddd29b763119b3aa459d02cc05fefcff75/uvicorn-0.32.1.tar.gz", hash = "sha256:ee9519c246a72b1c084cea8d3b44ed6026e78a4a309cbedae9c37e4cb9fbb175", size = 77630 }
+sdist = { url = "https://files.pythonhosted.org/packages/4b/4d/938bd85e5bf2edeec766267a5015ad969730bb91e31b44021dfe8b22df6c/uvicorn-0.34.0.tar.gz", hash = "sha256:404051050cd7e905de2c9a7e61790943440b3416f49cb409f965d9dcd0fa73e9", size = 76568 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/c1/2d27b0a15826c2b71dcf6e2f5402181ef85acf439617bb2f1453125ce1f3/uvicorn-0.32.1-py3-none-any.whl", hash = "sha256:82ad92fd58da0d12af7482ecdb5f2470a04c9c9a53ced65b9bbb4a205377602e", size = 63828 },
+    { url = "https://files.pythonhosted.org/packages/61/14/33a3a1352cfa71812a3a21e8c9bfb83f60b0011f5e36f2b1399d51928209/uvicorn-0.34.0-py3-none-any.whl", hash = "sha256:023dc038422502fa28a09c7a30bf2b6991512da7dcdb8fd35fe57cfc154126f4", size = 62315 },
 ]
 
 [[package]]

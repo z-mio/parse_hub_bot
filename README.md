@@ -32,7 +32,9 @@
 |----------------------|-------------------------------------|
 | `API_HASH`, `API_ID` | 登录 https://my.telegram.org 获取       |
 | `BOT_TOKEN`          | 在 @BotFather 获取                     |
-| `PROXY`              | 海外服务器无需填写                           |
+| `BOT_PROXY`          | 海外服务器无需填写                           |
+| `PARSER_PROXY`       | 解析时使用的代理                            |
+| `DOWNLOADER_PROXY`   | 下载时使用的代理                            |
 | `DOUYIN_API`         | 你部署的抖音API地址, 默认: https://douyin.wtf |
 | `AI_SUMMARY`         | 是否开启AI总结                            |
 | `API_KEY`            | openai 密钥                           |
