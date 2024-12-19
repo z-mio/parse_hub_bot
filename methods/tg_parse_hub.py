@@ -154,8 +154,8 @@ class TgParseHub(ParseHub):
 
                     return mg
                 [await handle_cache(i) for i in m]
-                mm = m[0][0] if isinstance(m[0], list) else m[0]
-                await mm.reply(
+                # mm = m[0][0] if isinstance(m[0], list) else m[0]
+                await msg.reply(
                     self.operate.content_and_no_url,
                     quote=True,
                     reply_markup=self.operate.button(),

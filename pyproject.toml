@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "aiocache>=0.12.3",
     "apscheduler==3.10.4",
+    "dynrender-skia>=0.2.5",
     "loguru>=0.6.0,<0.7.0",
     "lxml-html-clean>=0.4.1",
     "markdown>=3.7",
