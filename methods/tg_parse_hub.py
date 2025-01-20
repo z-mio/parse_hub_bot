@@ -37,6 +37,7 @@ from parsehub.types import (
 )
 from parsehub.utiles.utile import match_url
 from parsehub.parsers.parser.weixin import WXImageParseResult
+from parsehub.parsers.parser.coolapk import CoolapkImageParseResult
 from config.config import bot_cfg
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
@@ -154,10 +155,9 @@ class TgParseHub(ParseHub):
 
                     return mg
                 [await handle_cache(i) for i in m]
-                # mm = m[0][0] if isinstance(m[0], list) else m[0]
                 await msg.reply(
                     self.operate.content_and_no_url,
-                    quote=True,
+                    quote=False,
                     reply_markup=self.operate.button(),
                     disable_web_page_preview=True,
                 )
@@ -495,7 +495,9 @@ class ImageParseResultOperate(ParseResultOperate):
             reply_markup=self.button(),
         )
 
-    async def chat_upload(self, msg: Message) -> Message | list[Message]:
+    async def chat_upload(
+        self, msg: Message
+    ) -> Message | list[Message] | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
 
         if isinstance(self.result, WXImageParseResult):
@@ -504,6 +506,19 @@ class ImageParseResultOperate(ParseResultOperate):
                     markdown(
                         self.result.wx.markdown_content.replace(
                             "mmbiz.qpic.cn", "mmbiz.qpic.cn.in"
+                        )
+                    )
+                ),
+                msg,
+            )
+        elif isinstance(self.result, CoolapkImageParseResult) and (
+            markdown_content := self.result.coolapk.markdown_content
+        ):
+            return await self._send_ph(
+                clean_article_html(
+                    markdown(
+                        markdown_content.replace(
+                            "image.coolapk.com", "qpic.cn.in/image.coolapk.com"
                         )
                     )
                 ),
@@ -537,7 +552,7 @@ class ImageParseResultOperate(ParseResultOperate):
                 reply_markup=self.button(),
                 quote=True,
             )
-            return m
+            return [m]
         else:
             tasks = [ImgHost().litterbox(i.path) for i in self.download_result.media]
             results = await asyncio.gather(*tasks, return_exceptions=True)
