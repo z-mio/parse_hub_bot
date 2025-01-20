@@ -12,6 +12,7 @@ dependencies = [
     "lxml-html-clean>=0.4.1",
     "markdown>=3.7",
     "parsehub>=1.0.5",
+    "pydantic==1.10.19",
     "pyrogram",
     "python-dotenv>=1.0.1",
     "telegraph>=2.2.0",
