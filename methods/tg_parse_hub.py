@@ -1,5 +1,7 @@
 import asyncio
 import tempfile
+from datetime import datetime, timedelta
+
 import httpx
 from abc import ABC, abstractmethod
 from typing import Union, Callable
@@ -93,11 +95,9 @@ class TgParseHub(ParseHub):
             operate = self._select_operate(r)
 
         self.operate = operate
-
         if self.on_cache:
             """缓存结果"""
             await self._set_cache(operate, cache_time)
-
         if bot_cfg.ai_summary:
             """开启 AI 总结"""
             await self._set_url_cache()
@@ -241,14 +241,12 @@ class TgParseHub(ParseHub):
         """定时删除缓存"""
 
         async def fn():
-            scheduler.remove_job(self.operate.hash_url)
             await self.cache.delete(self.operate.hash_url)
             self.operate.delete()
 
         if not scheduler.get_job(self.operate.hash_url):
-            scheduler.add_job(
-                fn, "interval", seconds=cache_time, id=self.operate.hash_url
-            )
+            run_time = datetime.now() + timedelta(seconds=cache_time)
+            scheduler.add_job(fn, "date", run_date=run_time, id=self.operate.hash_url)
 
     async def _get_msg_cache(
         self,
