@@ -3,6 +3,7 @@
 ---
 
 **Telegram聚合解析Bot, 支持AI总结, 支持内联模式**
+**Telegram aggregation analysis Bot, supports AI summary, supports inline mode**
 
 部署好的Bot: [@ParseHubBot](https://t.me/ParseHubBot)目前支持的平台:
 
@@ -17,7 +18,7 @@
 - `Facebook视频`
 - `微博视频|图文`
 - `Instagram视频|图文`
-- 更多平台添加中...
+- [查看更多...](https://github.com/z-mio/ParseHub)
 
 ![](https://img.155155155.xyz/i/2024/09/66f2d4b70416c.webp)
 ![](https://img.155155155.xyz/i/2024/09/66f2d4d6ca7ec.webp)

@@ -218,7 +218,7 @@ class TgParseHub(ParseHub):
         url = match_url(url)
         if not url:
             raise ParseError("无效的网址")
-        return await self._select_parser(url)().get_raw_url(url)
+        return await self._select_parser(url)(parse_config=self.config).get_raw_url(url)
 
     async def _set_url_cache(self):
         """缓存网址"""
