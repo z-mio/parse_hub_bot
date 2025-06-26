@@ -45,6 +45,19 @@
 
 ### 开始部署
 
+#### Docker (推荐):
+
+**在项目根目录运行:**
+
+```shell
+sudo sh start.sh
+```
+
+停止Bot: `docker stop parse-hub-bot`  
+重启Bot: `docker restart parse-hub-bot`  
+
+#### 直接运行:
+
 **在项目根目录运行:**
 
 ```shell
