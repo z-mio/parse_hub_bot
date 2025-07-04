@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
     ffmpeg \
+    fonts-noto-cjk \
+    fonts-noto-cjk-extra \
+    fonts-noto-color-emoji \
     && rm -rf /var/lib/apt/lists/*
 
 RUN uv venv && uv sync --frozen
