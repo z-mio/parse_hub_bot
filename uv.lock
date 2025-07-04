@@ -987,7 +987,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.2.16"
+version = "1.2.19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -1027,9 +1027,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6b/39/affa317e466fec17b4d0a5f8d11011b7bfc180c1771cf29ebae9b865bbcf/parsehub-1.2.16.tar.gz", hash = "sha256:0d08f44a48485335dc3f32f99798e8fbfa61626ccab0926fe58434675730f64c", size = 33162, upload-time = "2025-07-04T10:04:02.527Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/47/29/08bbe808d657be5706ebe7523191c1b18fe54d3c55a4ae0bf9009ba6f8e1/parsehub-1.2.19.tar.gz", hash = "sha256:7d2fb884e53e9f3f3d20c69bf0fe4db49eca2fc23d397025f51f9f271940df88", size = 64024, upload-time = "2025-07-04T11:10:41.482Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fd/5b/6c33216da1b14cbf5638d2f063f13cf840b3ebcf34a8b150ddc7c432b294/parsehub-1.2.16-py3-none-any.whl", hash = "sha256:7cb370be68fa112f9ca0dcedc76c49e5ca073ee9d059672366d73bf01e4aad13", size = 44292, upload-time = "2025-07-04T10:04:01.261Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/22/97bea83afa317dcb39b6f0a133bbe1ed5045d8a273798ab2798f553690c0/parsehub-1.2.19-py3-none-any.whl", hash = "sha256:8965bcf12cc70d9ac271401fad14aa285e0634dd47cbbae5b7b6a10cc3036f99", size = 90789, upload-time = "2025-07-04T11:10:40.183Z" },
 ]
 
 [[package]]
@@ -1040,6 +1040,7 @@ dependencies = [
     { name = "aiocache" },
     { name = "apscheduler" },
     { name = "dynrender-skia" },
+    { name = "httpx" },
     { name = "loguru" },
     { name = "lxml-html-clean" },
     { name = "markdown" },
@@ -1056,10 +1057,11 @@ requires-dist = [
     { name = "aiocache", specifier = ">=0.12.3" },
     { name = "apscheduler", specifier = "==3.10.4" },
     { name = "dynrender-skia", specifier = ">=0.2.5" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "loguru", specifier = ">=0.6.0,<0.7.0" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
-    { name = "parsehub", specifier = ">=1.0.5" },
+    { name = "parsehub", specifier = ">=1.2.17" },
     { name = "pydantic", specifier = "==1.10.19" },
     { name = "pyrogram", url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.28.zip" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
