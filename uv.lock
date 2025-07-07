@@ -987,7 +987,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.2.19"
+version = "1.2.20"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -1027,9 +1027,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/47/29/08bbe808d657be5706ebe7523191c1b18fe54d3c55a4ae0bf9009ba6f8e1/parsehub-1.2.19.tar.gz", hash = "sha256:7d2fb884e53e9f3f3d20c69bf0fe4db49eca2fc23d397025f51f9f271940df88", size = 64024, upload-time = "2025-07-04T11:10:41.482Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f9/ba/df031900b047a49ed17894feea656fb9011f8044baf511e9de22039a931a/parsehub-1.2.20.tar.gz", hash = "sha256:42d6cffbfb3c59e7c0dc422a9d8ebe4e72aedb8f6738bc229d16d43fefc4d00b", size = 64000, upload-time = "2025-07-07T08:59:51.701Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/22/97bea83afa317dcb39b6f0a133bbe1ed5045d8a273798ab2798f553690c0/parsehub-1.2.19-py3-none-any.whl", hash = "sha256:8965bcf12cc70d9ac271401fad14aa285e0634dd47cbbae5b7b6a10cc3036f99", size = 90789, upload-time = "2025-07-04T11:10:40.183Z" },
+    { url = "https://files.pythonhosted.org/packages/38/6b/e9a5501ae346ee2b6aea4d9dc1947098c2edaf35040b76cba6e8f6105c4c/parsehub-1.2.20-py3-none-any.whl", hash = "sha256:cbbd0e9220296b3759bd88e5fa47a8995b4e06970dfa3757f286eb183800b974", size = 90795, upload-time = "2025-07-07T08:59:50.002Z" },
 ]
 
 [[package]]
@@ -1502,7 +1502,7 @@ wheels = [
 
 [[package]]
 name = "textual"
-version = "3.5.0"
+version = "3.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown-it-py", extra = ["linkify", "plugins"] },
@@ -1510,9 +1510,9 @@ dependencies = [
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0c/63/16cdf4b9efb47366940d8315118c5c6dd6309f5eb2c159d7195b60e2e221/textual-3.5.0.tar.gz", hash = "sha256:c4a440338694672acf271c74904f1cf1e4a64c6761c056b02a561774b81a04f4", size = 1590084, upload-time = "2025-06-20T14:46:58.263Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/68/faec325fa8ff1680233c0588a0a1577745c49bf278a741a11ffd184dec4b/textual-3.6.0.tar.gz", hash = "sha256:d86b666e34758392a4a1aefc4b781b17d0d001419d24e4d47c277f36c20b1222", size = 1593210, upload-time = "2025-07-06T07:57:09.294Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/36/2597036cb80e40f71555bf59741471f7bd76ebed112f10ae0549650a12bf/textual-3.5.0-py3-none-any.whl", hash = "sha256:7c960efb70391b754e66201776793de2b26d699d51fb91f5f78401d13cec79a1", size = 688740, upload-time = "2025-06-20T14:46:56.484Z" },
+    { url = "https://files.pythonhosted.org/packages/12/63/d8624c3d2cf01544a878c4a7340b057efa5b7a89a5ac77faef7d95429141/textual-3.6.0-py3-none-any.whl", hash = "sha256:8b2fafe17b1805fd608092ab2f99b6ddeaff1809f1d5de6820bf5db5b6c51c28", size = 689551, upload-time = "2025-07-06T07:57:07.559Z" },
 ]
 
 [[package]]
@@ -1559,11 +1559,11 @@ wheels = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.14.0"
+version = "4.14.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d1/bc/51647cd02527e87d05cb083ccc402f93e441606ff1f01739a62c8ad09ba5/typing_extensions-4.14.0.tar.gz", hash = "sha256:8676b788e32f02ab42d9e7c61324048ae4c6d844a399eebace3d4979d75ceef4", size = 107423, upload-time = "2025-06-02T14:52:11.399Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/98/5a/da40306b885cc8c09109dc2e1abd358d5684b1425678151cdaed4731c822/typing_extensions-4.14.1.tar.gz", hash = "sha256:38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36", size = 107673, upload-time = "2025-07-04T13:28:34.16Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/69/e0/552843e0d356fbb5256d21449fa957fa4eff3bbc135a74a691ee70c7c5da/typing_extensions-4.14.0-py3-none-any.whl", hash = "sha256:a1514509136dd0b477638fc68d6a91497af5076466ad0fa6c338e44e359944af", size = 43839, upload-time = "2025-06-02T14:52:10.026Z" },
+    { url = "https://files.pythonhosted.org/packages/b5/00/d631e67a838026495268c2f6884f3711a15a9a2a96cd244fdaea53b823fb/typing_extensions-4.14.1-py3-none-any.whl", hash = "sha256:d1e1e3b58374dc93031d6eda2420a48ea44a36c2b4766a4fdeb3710755731d76", size = 43906, upload-time = "2025-07-04T13:28:32.743Z" },
 ]
 
 [[package]]
