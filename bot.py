@@ -10,7 +10,7 @@ class Bot(Client):
         self.cfg = bot_cfg
 
         super().__init__(
-            f'{self.cfg.bot_token.split(":")[0]}_bot',
+            f"{self.cfg.bot_token.split(':')[0]}_bot",
             api_id=self.cfg.api_id,
             api_hash=self.cfg.api_hash,
             bot_token=self.cfg.bot_token,
