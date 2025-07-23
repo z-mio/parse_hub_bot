@@ -54,11 +54,12 @@
 **在项目根目录运行:**
 
 ```shell
-sudo sh start.sh
+sudo sh start.sh # 构建并运行 Bot
+# 其他命令:
+sudo sh start.sh -h # 查看帮助
+sudo sh start.sh stop  # 停止 Bot
+sudo sh start.sh restart # 重启 Bot
 ```
-
-停止Bot: `docker stop parse-hub-bot`  
-重启Bot: `docker restart parse-hub-bot`
 
 #### 直接运行:
 
