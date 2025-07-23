@@ -193,6 +193,7 @@ class TgParseHub(ParseHub):
     async def _error_callback(self):
         """错误回调"""
         await self._del_parse_task()
+        await self.delete()
 
     async def get_parse_task(self, url: str) -> bool:
         """获取解析任务"""
