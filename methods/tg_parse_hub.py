@@ -134,6 +134,8 @@ class TgParseHub(ParseHub):
 
     async def delete(self):
         """删除文件"""
+        if not self.operate:
+            return
         if self.on_cache:
             await self.cache.delete(self.operate.hash_url)
         self.operate.delete()
