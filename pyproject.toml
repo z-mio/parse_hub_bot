@@ -9,16 +9,13 @@ dependencies = [
     "apscheduler==3.10.4",
     "dynrender-skia>=0.2.5",
     "httpx>=0.28.1",
+    "kurigram>=2.2.7",
     "loguru>=0.6.0,<0.7.0",
     "lxml-html-clean>=0.4.1",
     "markdown>=3.7",
     "parsehub>=1.2.17",
     "pydantic==1.10.19",
-    "pyrogram",
     "python-dotenv>=1.0.1",
     "telegraph>=2.2.0",
     "tgcrypto>=1.2.5",
 ]
-
-[tool.uv.sources]
-pyrogram = { url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.28.zip" }

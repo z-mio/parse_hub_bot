@@ -6,8 +6,10 @@ from pyrogram.types import (
     InlineQueryResultArticle,
     ChosenInlineResult,
     InputMediaVideo,
+    LinkPreviewOptions,
 )
 
+from log import logger
 from methods import TgParseHub
 from plugins.start import get_supported_platforms
 from utiles.filters import platform_filter
@@ -62,8 +64,13 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
             (client, imid, pp),
         )
     except Exception as e:
-        await client.edit_inline_text(imid, f"{e}")
-        raise e
+        await client.edit_inline_text(
+            imid,
+            f"解析或下载错误: \n```\n{e}```",
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        logger.exception(e)
+        logger.error("解析或下载失败, 以上为错误信息")
     else:
         await client.edit_inline_text(
             imid,

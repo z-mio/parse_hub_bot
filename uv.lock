@@ -519,6 +519,19 @@ wheels = [
 ]
 
 [[package]]
+name = "kurigram"
+version = "2.2.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyaes" },
+    { name = "pysocks" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/23/8a/0bf73959dffc64c47c64cf5e89120ddc52a28f30879888b47194b603a746/kurigram-2.2.7.tar.gz", hash = "sha256:61f3529a0cdc0a0f10f8b98103c6509317d90ebc0ae69959f38a4b684ad244f8", size = 496972, upload-time = "2025-07-13T14:29:22.254Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/60/e04aa30e8137a7b2fc007f24552412fe22933eeac160dcff20cdcf6e7e79/kurigram-2.2.7-py3-none-any.whl", hash = "sha256:3ebcfd4f4e7e6e9a2547997b8915ed323f679d9e99fde70a1f30f4c72aee0a97", size = 4933992, upload-time = "2025-07-13T14:29:20.469Z" },
+]
+
+[[package]]
 name = "langchain"
 version = "0.2.5"
 source = { registry = "https://pypi.org/simple" }
@@ -998,7 +1011,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.2.28"
+version = "1.2.29"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -1038,9 +1051,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/86/a2/fa3a90e148fc55b47760c59631a2e25c83a9ca1f4db19b221a3e4427aaef/parsehub-1.2.28.tar.gz", hash = "sha256:cd8a9e835ef6c759cba6f3c85c4121237aab4525a6c578144137ef67839d537c", size = 64390, upload-time = "2025-08-06T14:15:16.99Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/9b/61d9706b2e02b55893297f574f42630a12cabe0051f091c268d14c3e2bee/parsehub-1.2.29.tar.gz", hash = "sha256:847aa113f13d293d960c8c38317c92f6f28b2de12ede5359457f395101193308", size = 64418, upload-time = "2025-08-06T15:26:15.181Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f6/b0/604b848c321fcde074748b8cb55ffb09418ac7afdd26585d68b9f87598c5/parsehub-1.2.28-py3-none-any.whl", hash = "sha256:277268af07b7b6a5c5154a6998232a6790bd11c55659a3a659cb6f5b173bdbee", size = 91209, upload-time = "2025-08-06T14:15:15.227Z" },
+    { url = "https://files.pythonhosted.org/packages/3a/d6/7d8aaa4828b0a83bf224f6928639fd35138107f7856bf8a6c78426ed2f22/parsehub-1.2.29-py3-none-any.whl", hash = "sha256:46694f67197005bf44de67e9e970ea02a864030ad98d68753ac6445e4090a8a2", size = 91250, upload-time = "2025-08-06T15:26:13.902Z" },
 ]
 
 [[package]]
@@ -1052,12 +1065,12 @@ dependencies = [
     { name = "apscheduler" },
     { name = "dynrender-skia" },
     { name = "httpx" },
+    { name = "kurigram" },
     { name = "loguru" },
     { name = "lxml-html-clean" },
     { name = "markdown" },
     { name = "parsehub" },
     { name = "pydantic" },
-    { name = "pyrogram" },
     { name = "python-dotenv" },
     { name = "telegraph" },
     { name = "tgcrypto" },
@@ -1069,12 +1082,12 @@ requires-dist = [
     { name = "apscheduler", specifier = "==3.10.4" },
     { name = "dynrender-skia", specifier = ">=0.2.5" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "kurigram", specifier = ">=2.2.7" },
     { name = "loguru", specifier = ">=0.6.0,<0.7.0" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
     { name = "parsehub", specifier = ">=1.2.17" },
     { name = "pydantic", specifier = "==1.10.19" },
-    { name = "pyrogram", url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.28.zip" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "telegraph", specifier = ">=2.2.0" },
     { name = "tgcrypto", specifier = ">=1.2.5" },
@@ -1234,22 +1247,6 @@ name = "pyperclip"
 version = "1.9.0"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/30/23/2f0a3efc4d6a32f3b63cdff36cd398d9701d26cda58e3ab97ac79fb5e60d/pyperclip-1.9.0.tar.gz", hash = "sha256:b7de0142ddc81bfc5c7507eea19da920b92252b548b96186caf94a5e2527d310", size = 20961, upload-time = "2024-06-18T20:38:48.401Z" }
-
-[[package]]
-name = "pyrogram"
-version = "2.1.28"
-source = { url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.28.zip" }
-dependencies = [
-    { name = "pyaes" },
-    { name = "pysocks" },
-]
-sdist = { hash = "sha256:73a2b6508778edf3459d60b83be4afcca5ad67643db17a93b078270870c4a377" }
-
-[package.metadata]
-requires-dist = [
-    { name = "pyaes", specifier = "==1.6.1" },
-    { name = "pysocks", specifier = "==1.7.1" },
-]
 
 [[package]]
 name = "pysocks"

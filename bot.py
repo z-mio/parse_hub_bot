@@ -18,11 +18,11 @@ class Bot(Client):
             proxy=self.cfg.bot_proxy.dict_format,
         )
 
-    async def start(self):
+    async def start(self, *args, **kwargs):
         logger.info("Bot开始运行...")
         await super().start()
 
-    async def stop(self, *args):
+    async def stop(self, *args, **kwargs):
         await super().stop()
 
 

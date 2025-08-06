@@ -1,8 +1,10 @@
 from pyrogram import Client, filters
 from pyrogram.types import (
     Message,
+    LinkPreviewOptions,
 )
 
+from log import logger
 from utiles.filters import platform_filter
 from methods import TgParseHub
 from utiles.utile import progress
@@ -21,15 +23,20 @@ async def call_parse(cli: Client, msg: Message):
         pp = await tph.parse(msg.text)
         await pp.download(callback, (r_msg,))
     except Exception as e:
-        await msg.reply_text(f"{e}")
-        raise e
+        await msg.reply_text(
+            f"解析或下载错误: \n```\n{e}```",
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        logger.exception(e)
+        logger.error("解析或下载失败, 以上为错误信息")
     else:
         await r_msg.edit_text("上 传 中...")
         try:
             await pp.chat_upload(cli, msg)
         except Exception as e:
             await r_msg.edit_text("上传失败")
-            raise e
+            logger.exception(e)
+            logger.error("上传失败, 以上为错误信息")
         await r_msg.delete()
 
 
