@@ -15,7 +15,7 @@ class BotConfig:
         self.parser_proxy: None | str = getenv("PARSER_PROXY", None)
         self.downloader_proxy: None | str = getenv("DOWNLOADER_PROXY", None)
 
-        self.cache_time = int(ct) if (ct := getenv("CACHE_TIME")) else 600
+        self.cache_time = int(ct) if (ct := getenv("CACHE_TIME")) else 24 * 60 * 60  # 24 hours
         self.ai_summary = bool(getenv("AI_SUMMARY").lower() == "true")
         self.douyin_api = getenv("DOUYIN_API", None)
 

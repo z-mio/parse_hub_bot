@@ -114,9 +114,7 @@ class TgParseHub(ParseHub):
         return await self.operate.un_ai_summary(cq)
 
     async def download(
-        self,
-        callback: Callable = None,
-        callback_args: tuple = (),
+        self, callback: Callable = None, callback_args: tuple = ()
     ) -> DownloadResult:
         if (dr := self.operate.download_result) and dr.exists():
             return dr

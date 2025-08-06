@@ -45,7 +45,7 @@
 | `TRANSCRIPTIONS_PROVIDER` | 语音转文本模型提供商 支持: `openai`,`azure`,`fast_whisper` | 
 | `TRANSCRIPTIONS_BASE_URL` | 语音转文本 API端点                                    |
 | `TRANSCRIPTIONS_API_KEY`  | 语音转文本 API密钥                                    |
-| `CACHE_TIME`              | 解析结果缓存时间, 单位: 秒, 0为不缓存, 默认缓存10分钟               |
+| `CACHE_TIME`              | 解析结果缓存时间, 单位: 秒, 0为不缓存, 默认缓存 24 小时             |
 
 ### 开始部署
 
