@@ -1018,7 +1018,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.2.30"
+version = "1.2.31"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -1059,7 +1059,7 @@ dependencies = [
     { name = "yt-dlp" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c3/cd/4a3a236428c70626cfcfb984c8aa569f75667acdd9e41c06349bc067ed84/parsehub-1.2.30-py3-none-any.whl", hash = "sha256:9f90898163b606bc98c35bd267a6e66340631e8ea512f4b9e91ac971fdae71b5", size = 91390, upload-time = "2025-08-10T07:00:16.099Z" },
+    { url = "https://files.pythonhosted.org/packages/5e/5d/107248edb01ca7cd9f55a4465bb1d5c40de4d031729db52e7a7497c7f52a/parsehub-1.2.31-py3-none-any.whl", hash = "sha256:0638ad8c88e053448779c44a936412612ac0c380654660afef97dd59efe6e0d1", size = 91407, upload-time = "2025-08-10T07:48:14.034Z" },
 ]
 
 [[package]]
