@@ -1,4 +1,5 @@
 import asyncio
+import re
 import tempfile
 from datetime import datetime, timedelta
 
@@ -214,11 +215,8 @@ class TgParseHub(ParseHub):
 
     async def _get_url(self, url: str):
         """获取网址"""
-        if "http" not in url:
+        if re.match(r"[a-f0-9]{32}", url):
             url = await self._get_url_cache(url)
-        url = match_url(url)
-        if not url:
-            raise ParseError("无效的网址")
         return await self._select_parser(url)(parse_config=self.config).get_raw_url(url)
 
     async def _set_url_cache(self):
