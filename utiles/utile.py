@@ -24,10 +24,10 @@ def progress(current, total, status):
     text = None
     if total >= 100:
         if round(current * 100 / total, 1) % 25 == 0:
-            text = f"下 载 中...|{status}"
+            text = f"下 载 中... | {status}"
     else:
         if (current + 1) % 3 == 0 or (current + 1) == total:
-            text = f"下 载 中...|{status}"
+            text = f"下 载 中... | {status}"
     return text
 
 

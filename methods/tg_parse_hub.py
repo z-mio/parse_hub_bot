@@ -36,9 +36,7 @@ from parsehub.types import (
     MultimediaParseResult,
     SummaryResult,
     DownloadResult,
-    ParseError,
 )
-from parsehub.utiles.utile import match_url
 from parsehub.parsers.parser.weixin import WXImageParseResult
 from parsehub.parsers.parser.coolapk import CoolapkImageParseResult
 from config.config import bot_cfg
