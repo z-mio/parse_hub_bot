@@ -23,6 +23,7 @@ from pyrogram.types import (
     CallbackQuery,
     InlineQueryResultArticle,
     InputTextMessageContent,
+    LinkPreviewOptions,
 )
 
 from parsehub import ParseHub
@@ -158,7 +159,7 @@ class TgParseHub(ParseHub):
                     self.operate.content_and_no_url,
                     quote=False,
                     reply_markup=self.operate.button(),
-                    disable_web_page_preview=True,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
                 )
 
         cache_msg = await self._get_msg_cache()
@@ -305,7 +306,8 @@ class ParseResultOperate(ABC):
                     title=self.result.title or "无标题",
                     description=self.result.desc,
                     input_message_content=InputTextMessageContent(
-                        self.content_and_no_url, disable_web_page_preview=True
+                        self.content_and_no_url,
+                        link_preview_options=LinkPreviewOptions(is_disabled=True),
                     ),
                     reply_markup=self.button(),
                 )
@@ -526,7 +528,7 @@ class ImageParseResultOperate(ParseResultOperate):
             return await msg.reply_text(
                 text,
                 quote=True,
-                disable_web_page_preview=True,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
                 reply_markup=self.button(),
             )
         elif count == 1:
@@ -543,7 +545,7 @@ class ImageParseResultOperate(ParseResultOperate):
             )
             await m[0].reply_text(
                 text,
-                disable_web_page_preview=True,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
                 reply_markup=self.button(),
                 quote=True,
             )
@@ -572,7 +574,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
             return await msg.reply_text(
                 text,
                 quote=True,
-                disable_web_page_preview=True,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
                 reply_markup=self.button(),
             )
         elif count == 1:
@@ -612,7 +614,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
             mm = m[0][0] if isinstance(m[0], list) else m[0]
             await mm.reply_text(
                 text,
-                disable_web_page_preview=True,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
                 reply_markup=self.button(),
                 quote=True,
             )
