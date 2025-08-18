@@ -751,7 +751,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.2.36"
+version = "1.2.37"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -777,6 +777,7 @@ dependencies = [
     { name = "playwright" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "pydicom" },
     { name = "pydub" },
     { name = "pyperclip" },
     { name = "python-dotenv" },
@@ -790,9 +791,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2c/97/c866be58291db59b5fd065e3f2241459c5efa9d5fd8052ce76cbba193cd5/parsehub-1.2.36.tar.gz", hash = "sha256:8d782c252b0d4f586fbfaa68e4c0c712bbfd951c3a19f0962f926a4987323ea1", size = 66245, upload-time = "2025-08-18T16:41:16.837Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/cd/13/da6182bf4c6c91288d63520dafbec61f7cae533ed9cedb18d97c20285b54/parsehub-1.2.37.tar.gz", hash = "sha256:32a464b49fd5e03fa506cc25ffc3291776cea94f564d38c7bc6e1ab6d25908b5", size = 66435, upload-time = "2025-08-18T18:36:22.779Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/59/42a995ad18125a064cb19d311f63933bf23e8fa2016837175d1b8102c1b6/parsehub-1.2.36-py3-none-any.whl", hash = "sha256:eb2fd81e44d619076be5821f1bd1cfae41120ed8972584749bd551ff21693499", size = 93082, upload-time = "2025-08-18T16:41:15.075Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/4d/dd205c668c161bfb2578becc61ee569c28e45de21c682c3265b050fbea2a/parsehub-1.2.37-py3-none-any.whl", hash = "sha256:b5a281dbdf3a29956ac6f4e9aa6234025e2923c36823e563bb0ab12e9caff98c", size = 93418, upload-time = "2025-08-18T18:36:21.216Z" },
 ]
 
 [[package]]
@@ -824,7 +825,7 @@ requires-dist = [
     { name = "loguru", specifier = ">=0.6.0,<0.7.0" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
-    { name = "parsehub", specifier = ">=1.2.17" },
+    { name = "parsehub", specifier = ">=1.2.37" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "telegraph", specifier = ">=2.2.0" },
     { name = "tgcrypto", specifier = ">=1.2.5" },
@@ -942,6 +943,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/68/85/1ea668bbab3c50071ca613c6ab30047fb36ab0da1b92fa8f17bbc38fd36c/pydantic_settings-2.10.1.tar.gz", hash = "sha256:06f0062169818d0f5524420a360d632d5857b83cffd4d42fe29597807a1614ee", size = 172583, upload-time = "2025-06-24T13:26:46.841Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/58/f0/427018098906416f580e3cf1366d3b1abfb408a0652e9f31600c24a1903c/pydantic_settings-2.10.1-py3-none-any.whl", hash = "sha256:a60952460b99cf661dc25c29c0ef171721f98bfcb52ef8d9ea4c943d7c8cc796", size = 45235, upload-time = "2025-06-24T13:26:45.485Z" },
+]
+
+[[package]]
+name = "pydicom"
+version = "3.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d7/6f/55ea163b344c91df2e03c007bebf94781f0817656e2c037d7c5bf86c3bfc/pydicom-3.0.1.tar.gz", hash = "sha256:7b8be344b5b62493c9452ba6f5a299f78f8a6ab79786c729b0613698209603ec", size = 2884731, upload-time = "2024-09-22T02:02:43.202Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/27/a6/98651e752a49f341aa99aa3f6c8ba361728dfc064242884355419df63669/pydicom-3.0.1-py3-none-any.whl", hash = "sha256:db32f78b2641bd7972096b8289111ddab01fb221610de8d7afa835eb938adb41", size = 2376126, upload-time = "2024-09-22T02:02:41.616Z" },
 ]
 
 [[package]]

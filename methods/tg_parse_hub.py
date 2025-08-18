@@ -40,8 +40,9 @@ from parsehub.types import (
 )
 from parsehub.parsers.parser.weixin import WXImageParseResult
 from parsehub.parsers.parser.coolapk import CoolapkImageParseResult
+from parsehub.parsers.base.base import Parser
 from config.config import bot_cfg
-from config.platform_config import platforms_config
+from config.platform_config import platforms_config, Platform
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
@@ -64,10 +65,10 @@ class TgParseHub(ParseHub):
     def __init__(self):
         super().__init__()
         self.url = None
-        self.platform = None
-        self.platform_config = None
-        self.parser_config = None
-        self.downloader_config = None
+        self.platform: Parser | None = None
+        self.platform_config: Platform | None = None
+        self.parser_config: ParseConfig | None = None
+        self.downloader_config: DownloadConfig | None = None
 
         self.is_cache = bool(bot_cfg.cache_time)
         self.parsing = _parsing
@@ -92,6 +93,7 @@ class TgParseHub(ParseHub):
                 else None,
                 cookie=self.platform_config.cookie,
             )
+            print(self.platform_config.downloader_proxy or bot_cfg.downloader_proxy)
             self.downloader_config = DownloadConfig(
                 proxy=(
                     self.platform_config.downloader_proxy or bot_cfg.downloader_proxy
@@ -99,6 +101,7 @@ class TgParseHub(ParseHub):
                 if not self.platform_config.disable_downloader_proxy
                 else None,
             )
+            print(self.downloader_config)
         else:
             self.parser_config = ParseConfig(proxy=bot_cfg.parser_proxy)
             self.downloader_config = DownloadConfig(proxy=bot_cfg.downloader_proxy)
