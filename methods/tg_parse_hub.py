@@ -38,9 +38,8 @@ from parsehub.types import (
     SummaryResult,
     DownloadResult,
 )
-from parsehub.parsers.parser.weixin import WXImageParseResult
-from parsehub.parsers.parser.coolapk import CoolapkImageParseResult
-from parsehub.parsers.base.base import Parser
+from parsehub.parsers.parser import WXImageParseResult, CoolapkImageParseResult
+from parsehub.parsers.base import Parser
 from config.config import bot_cfg
 from config.platform_config import platforms_config, Platform
 from utiles.converter import clean_article_html
