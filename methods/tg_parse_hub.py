@@ -93,7 +93,6 @@ class TgParseHub(ParseHub):
                 else None,
                 cookie=self.platform_config.cookie,
             )
-            print(self.platform_config.downloader_proxy or bot_cfg.downloader_proxy)
             self.downloader_config = DownloadConfig(
                 proxy=(
                     self.platform_config.downloader_proxy or bot_cfg.downloader_proxy
@@ -101,7 +100,6 @@ class TgParseHub(ParseHub):
                 if not self.platform_config.disable_downloader_proxy
                 else None,
             )
-            print(self.downloader_config)
         else:
             self.parser_config = ParseConfig(proxy=bot_cfg.parser_proxy)
             self.downloader_config = DownloadConfig(proxy=bot_cfg.downloader_proxy)
