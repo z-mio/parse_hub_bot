@@ -10,7 +10,7 @@ from methods import TgParseHub
 from utiles.utile import progress
 
 
-@Client.on_message(filters.text & platform_filter)
+@Client.on_message((filters.text | filters.caption) & platform_filter)
 async def call_parse(cli: Client, msg: Message):
     try:
         tph = TgParseHub()
@@ -20,7 +20,7 @@ async def call_parse(cli: Client, msg: Message):
             else "解 析 中..."
         )
         r_msg = await msg.reply_text(t)
-        pp = await tph.parse(msg.text)
+        pp = await tph.parse(msg.text or msg.caption)
         await pp.download(callback, (r_msg,))
     except Exception as e:
         await msg.reply_text(

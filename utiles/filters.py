@@ -9,7 +9,7 @@ async def _platform_filter(_, __, update: Message | InlineQuery):
         t = update.caption or update.text
     else:
         t = update.query
-    return bool(ParseHub()._select_parser(t))
+    return bool(ParseHub().select_parser(t))
 
 
 platform_filter = filters.create(_platform_filter)

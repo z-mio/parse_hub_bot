@@ -1,0 +1,7 @@
+platforms:
+  twitter:
+    cookies:
+      - auth_token=054df5bf5da9044bc01b5a443f9a182b635625fd; ct0=891f2779d2b8a3052512ec8ca1d4e75e8609671b7a6a76f6042d0de008c60cf46c22a8e1fe6fe24e6b8caba3cdf408689832dc97f29536721629dc68f4362e2744b6993c1206b684e4cd97f51aeb1c68
+  bilibili:
+    disable_parser_proxy: true
+    disable_downloader_proxy: true

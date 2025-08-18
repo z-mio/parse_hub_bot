@@ -1,10 +1,9 @@
 import httpx
-from httpx._types import ProxyTypes
 from tenacity import retry, stop_after_attempt
 
 
 class ImgHost:
-    def __init__(self, proxies: ProxyTypes = None):
+    def __init__(self, proxies: httpx.Proxy = None):
         self.async_client = httpx.AsyncClient(proxy=proxies)
 
     @retry(stop=stop_after_attempt(5))

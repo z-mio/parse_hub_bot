@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 from os import getenv
+from parsehub.config import GlobalConfig
 
 load_dotenv()
 
@@ -40,3 +41,5 @@ class BotConfig:
 
 
 bot_cfg = BotConfig()
+GlobalConfig.douyin_api = bot_cfg.douyin_api
+GlobalConfig.duration_limit = 1800

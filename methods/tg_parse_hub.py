@@ -41,6 +41,7 @@ from parsehub.types import (
 from parsehub.parsers.parser.weixin import WXImageParseResult
 from parsehub.parsers.parser.coolapk import CoolapkImageParseResult
 from config.config import bot_cfg
+from config.platform_config import platforms_config
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
@@ -61,11 +62,14 @@ class TgParseHub(ParseHub):
     """重新封装 ParseHub 类，使其适用于 Telegram"""
 
     def __init__(self):
-        super().__init__(
-            ParseConfig(douyin_api=bot_cfg.douyin_api, proxy=bot_cfg.parser_proxy)
-        )
+        super().__init__()
         self.url = None
-        self.on_cache = bool(bot_cfg.cache_time)
+        self.platform = None
+        self.platform_config = None
+        self.parser_config = None
+        self.downloader_config = None
+
+        self.is_cache = bool(bot_cfg.cache_time)
         self.parsing = _parsing
         """正在解析的链接"""
         self.cache = _operate_cache
@@ -74,6 +78,29 @@ class TgParseHub(ParseHub):
         """网址缓存"""
         self.operate: ParseResultOperate | None = None
         """解析结果操作对象"""
+
+    async def init_parser(self, url: str):
+        self.url = await self._get_url(url)
+        self.platform = self.select_parser(self.url)
+        self.platform_config = platforms_config.platforms.get(
+            self.platform.__platform_id__
+        )
+        if self.platform_config:
+            self.parser_config = ParseConfig(
+                proxy=self.platform_config.parser_proxy or bot_cfg.parser_proxy
+                if not self.platform_config.disable_parser_proxy
+                else None,
+                cookie=self.platform_config.cookie,
+            )
+            self.downloader_config = DownloadConfig(
+                proxy=self.platform_config.downloader_proxy or bot_cfg.downloader_proxy
+                if not self.platform_config.disable_downloader_proxy
+                else None,
+            )
+        else:
+            self.parser_config = ParseConfig(proxy=bot_cfg.parser_proxy)
+            self.downloader_config = DownloadConfig(proxy=bot_cfg.downloader_proxy)
+        self.config = self.parser_config
 
     async def parse(
         self, url: str, cache_time: int = bot_cfg.cache_time
@@ -84,7 +111,7 @@ class TgParseHub(ParseHub):
         :param cache_time: 缓存时间, 默认缓存一天
         :return:
         """
-        self.url = await self._get_url(url)
+        await self.init_parser(url)
         while await self._get_parse_task():
             await asyncio.sleep(1)
 
@@ -95,7 +122,7 @@ class TgParseHub(ParseHub):
             operate = self._select_operate(r)
 
         self.operate = operate
-        if self.on_cache:
+        if self.is_cache:
             """缓存结果"""
             await self._set_cache(operate, cache_time)
         if bot_cfg.ai_summary:
@@ -119,22 +146,16 @@ class TgParseHub(ParseHub):
         if (dr := self.operate.download_result) and dr.exists():
             return dr
         async with self.error_handler():
-            r = await self.result.download(
-                None,
-                callback,
-                callback_args,
-                config=DownloadConfig(
-                    yt_dlp_duration_limit=1800, proxy=bot_cfg.downloader_proxy
-                ),
+            self.operate.download_result = await self.result.download(
+                None, callback, callback_args, config=self.downloader_config
             )
-        self.operate.download_result = r
-        return r
+        return self.operate.download_result
 
     async def delete(self):
         """删除文件"""
         if not self.operate:
             return
-        if self.on_cache:
+        if self.is_cache:
             await self.cache.delete(self.operate.hash_url)
         self.operate.delete()
 
@@ -169,7 +190,7 @@ class TgParseHub(ParseHub):
         async with self.error_handler():
             msg = await self.operate.chat_upload(msg)
 
-        if self.on_cache:
+        if self.is_cache:
             await self._set_msg_cache(msg)
         else:
             await self.delete()
@@ -214,9 +235,10 @@ class TgParseHub(ParseHub):
 
     async def _get_url(self, url: str):
         """获取网址"""
+        # 如果是 hash 链接，则从缓存中获取原始链接
         if re.match(r"[a-f0-9]{32}", url):
             url = await self._get_url_cache(url)
-        return await self._select_parser(url)(parse_config=self.config).get_raw_url(url)
+        return await self.get_raw_url(url)
 
     async def _set_url_cache(self):
         """缓存网址"""
