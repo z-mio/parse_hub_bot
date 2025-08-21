@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     # 因为 loguru 模块实际上没有 `Logger` 类
     from loguru import Logger
 
-logger: "Logger" = loguru.logger
+logger: Logger = loguru.logger
 
 
 class InterceptHandler(logging.Handler):
