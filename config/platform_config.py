@@ -12,18 +12,20 @@ class PlatformsConfig:
     @classmethod
     def load_config(cls, file: str | Path):
         if Path(file).exists():
-            with open(file, "r") as f:
-                platforms: dict = safe_load(f)["platforms"]
-                cls.platforms = {k: Platform(**v) for k, v in platforms.items()}
-        return cls
+            with open(file, "r", encoding="utf-8") as f:
+                platforms: dict = safe_load(f).get("platforms")
+                if not platforms:
+                    return cls({})
+                return cls(platforms={k: Platform(**v) for k, v in platforms.items()})
+        return cls({})
 
 
 @dataclass
 class Platform:
     disable_parser_proxy: bool = False
     disable_downloader_proxy: bool = False
-    parser_proxys: list | None = None
-    downloader_proxys: list | None = None
+    parser_proxies: list | None = None
+    downloader_proxies: list | None = None
     cookies: list | None = None
 
     @property
@@ -34,25 +36,25 @@ class Platform:
 
     @property
     def parser_proxy(self):
-        if not self.parser_proxys:
+        if not self.parser_proxies:
             return None
-        return random.choice(self.parser_proxys)
+        return random.choice(self.parser_proxies)
 
     @property
     def downloader_proxy(self):
-        if not self.downloader_proxys:
+        if not self.downloader_proxies:
             return None
-        return random.choice(self.downloader_proxys)
+        return random.choice(self.downloader_proxies)
 
     def __post_init__(self):
-        if isinstance(self.parser_proxys, str):
-            if self.disable_parser_proxy:
-                self.parser_proxys = None
-            self.parser_proxys = [self.parser_proxys]
-        if isinstance(self.downloader_proxys, str):
-            if self.disable_downloader_proxy:
-                self.downloader_proxys = None
-            self.downloader_proxys = [self.downloader_proxys]
+        if not self.disable_downloader_proxy:
+            if isinstance(self.parser_proxies, str):
+                self.parser_proxies = [self.parser_proxies]
+
+        if not self.disable_downloader_proxy:
+            if isinstance(self.downloader_proxies, str):
+                self.downloader_proxies = [self.downloader_proxies]
+
         if isinstance(self.cookies, str):
             self.cookies = [self.cookies]
 

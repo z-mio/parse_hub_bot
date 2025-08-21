@@ -1,7 +1,7 @@
 platforms:
   twitter:
-    parser_proxys: []
-    downloader_proxys: []
+    parser_proxies: []
+    downloader_proxies: []
     cookies:
       - auth_token=xxxx; ct0=xxxx
   bilibili:
