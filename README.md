@@ -64,8 +64,8 @@ platforms:
   twitter: # 平台id
     disable_parser_proxy: false # 解析时是否禁用代理
     disable_downloader_proxy: false # 下载时是否禁用代理
-    parser_proxys: [ ] # 解析代理池, 多个代理会随机选择
-    downloader_proxys: [ ] # 下载代理池, 多个代理会随机选择
+    parser_proxies: [ ] # 解析代理池, 多个代理会随机选择
+    downloader_proxies: [ ] # 下载代理池, 多个代理会随机选择
     cookies: [ ] # 平台 cookies, 部分平台的部分帖子需要登录后才能获取到内容
 ```
 
@@ -80,7 +80,7 @@ platforms:
 
   bilibili:
     disable_parser_proxy: true
-    downloader_proxys:
+    downloader_proxies:
       - http://127.0.0.1:7890
       - http://127.0.0.1:7891
 ```
