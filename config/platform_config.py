@@ -11,9 +11,10 @@ class PlatformsConfig:
 
     @classmethod
     def load_config(cls, file: str | Path):
-        with open(file, "r") as f:
-            platforms: dict = safe_load(f)["platforms"]
-            cls.platforms = {k: Platform(**v) for k, v in platforms.items()}
+        if Path(file).exists():
+            with open(file, "r") as f:
+                platforms: dict = safe_load(f)["platforms"]
+                cls.platforms = {k: Platform(**v) for k, v in platforms.items()}
         return cls
 
 

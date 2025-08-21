@@ -5,7 +5,9 @@
 **Telegram聚合解析Bot, 支持AI总结, 支持内联模式**  
 **Telegram aggregation analysis Bot, supports AI summary, supports inline mode**
 
-部署好的Bot: [@ParseHubBot](https://t.me/ParseHubBot)目前支持的平台:
+实例: [@ParseHubBot](https://t.me/ParseHubBot)
+
+目前支持的平台:
 
 - `抖音视频|图文`
 - `哔哩哔哩视频|动态`
@@ -27,6 +29,10 @@
 
 ### 修改配置
 
+配置优先级: `平台配置` > `环境变量`
+
+**修改环境变量:**
+
 将 `.env.exa` 复制为 `.env`, 并修改配置
 
 | 参数                        | 说明                                             |
@@ -46,6 +52,38 @@
 | `TRANSCRIPTIONS_BASE_URL` | 语音转文本 API端点                                    |
 | `TRANSCRIPTIONS_API_KEY`  | 语音转文本 API密钥                                    |
 | `CACHE_TIME`              | 解析结果缓存时间, 单位: 秒, 0为不缓存, 默认缓存 24 小时             |
+
+**修改平台配置:**
+
+将 `platform_config.yaml.exa` 复制为 `platform_config.yaml`
+
+配置说明:
+
+```yaml
+platforms:
+  twitter: # 平台id
+    disable_parser_proxy: false # 解析时是否禁用代理
+    disable_downloader_proxy: false # 下载时是否禁用代理
+    parser_proxys: [ ] # 解析代理池, 多个代理会随机选择
+    downloader_proxys: [ ] # 下载代理池, 多个代理会随机选择
+    cookies: [ ] # 平台 cookies, 部分平台的部分帖子需要登录后才能获取到内容
+```
+
+配置示例:
+
+```yaml
+platforms:
+  twitter:
+    cookies:
+      - auth_token=xxxx; ct0=xxxx
+      - auth_token=xxxx; ct0=xxxx
+
+  bilibili:
+    disable_parser_proxy: true
+    downloader_proxys:
+      - http://127.0.0.1:7890
+      - http://127.0.0.1:7891
+```
 
 ### 开始部署
 
