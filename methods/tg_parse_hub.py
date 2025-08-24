@@ -81,7 +81,13 @@ class TgParseHub(ParseHub):
 
     async def init_parser(self, url: str):
         self.url = await self._get_url(url)
+        if not self.url:
+            raise ValueError("获取链接失败")
+
         self.platform = self.select_parser(self.url)
+        if not self.platform:
+            raise ValueError("不支持的平台/内容")
+
         self.platform_config = platforms_config.platforms.get(
             self.platform.__platform_id__
         )
