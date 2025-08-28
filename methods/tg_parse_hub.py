@@ -82,7 +82,7 @@ class TgParseHub(ParseHub):
     async def init_parser(self, url: str):
         self.url = await self._get_url(url)
         if not self.url:
-            raise ValueError("获取链接失败")
+            raise ValueError("未获取到链接")
 
         self.platform = self.select_parser(self.url)
         if not self.platform:
@@ -245,7 +245,9 @@ class TgParseHub(ParseHub):
         """获取网址"""
         # 如果是 hash 链接，则从缓存中获取原始链接
         if re.match(r"[a-f0-9]{32}", url):
-            url = await self._get_url_cache(url)
+            if not (url := await self._get_url_cache(url)):
+                return None
+            return url
         return await self.get_raw_url(url)
 
     async def _set_url_cache(self):
