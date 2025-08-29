@@ -461,7 +461,11 @@ class ParseResultOperate(ABC):
         return (
             f"[{self.result.title or '无标题'}]({self.telegraph_url})"
             if self.telegraph_url
-            else self.f_text(f"**{self.result.title}**\n\n{self.result.desc}")
+            else (
+                self.f_text(f"**{self.result.title}**\n\n{self.result.desc}")
+                if self.result.title or self.result.desc
+                else "无标题"
+            )
         ).strip()
 
     @property
