@@ -64,6 +64,8 @@ async def cmd_jx(cli: Client, msg: Message):
 
 @Client.on_message((filters.text | filters.caption) & filters.mentioned)
 async def mention_parse(cli: Client, msg: Message):
+    if not msg.text.startswith(f"@{cli.me.username}"):
+        return
     if not msg.reply_to_message:
         await msg.reply_text("请回复一条消息")
     text = msg.reply_to_message.text or msg.reply_to_message.caption or ""
