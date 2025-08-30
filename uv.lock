@@ -774,7 +774,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.3.16"
+version = "1.3.17"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -814,9 +814,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/13/a0/df5d6202c8a2885a6f7e37cc62828c7e21209b07b97b898374f5bca4cafb/parsehub-1.3.16.tar.gz", hash = "sha256:793afc5d4ccfd37612cb9e73777a767b7597866e7800f76145987fa32b9527a8", size = 68108, upload-time = "2025-08-30T05:03:50.733Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/9b/aaadd4155ca144c11bb784e324291caf1f3b172376cee8002f1ac3207da7/parsehub-1.3.17.tar.gz", hash = "sha256:2f9f4d1b3d49679da9c1edd3bb72724d3b88137bf3f46357be84fd0f432139c5", size = 68129, upload-time = "2025-08-30T06:11:48.74Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/31/1a/c214b4a2fb7aec0f799b7555b3aedab3924ea1839a9172884a05fe030d01/parsehub-1.3.16-py3-none-any.whl", hash = "sha256:56880a461d86a520761d29073e65f36b028a9b8ec93a763e10dbcfcebb3dd98a", size = 95399, upload-time = "2025-08-30T05:03:48.917Z" },
+    { url = "https://files.pythonhosted.org/packages/42/d2/5bb7c7255b716aa34932b66e35216ebda50113ecfc63d69c69530c176835/parsehub-1.3.17-py3-none-any.whl", hash = "sha256:da7d79a1edc431af01a206d4757c2b135892455b151d6532196bdb0b7722b769", size = 95402, upload-time = "2025-08-30T06:11:47.091Z" },
 ]
 
 [[package]]
