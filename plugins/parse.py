@@ -10,17 +10,16 @@ from methods import TgParseHub
 from utiles.utile import progress
 
 
-@Client.on_message((filters.text | filters.caption) & platform_filter)
-async def call_parse(cli: Client, msg: Message):
+async def _handle_parse(cli: Client, msg: Message, text: str):
     try:
         tph = TgParseHub()
         t = (
             "已有相同任务正在解析, 等待解析完成..."
-            if await tph.get_parse_task(msg.text or msg.caption)
+            if await tph.get_parse_task(text)
             else "解 析 中..."
         )
         r_msg = await msg.reply_text(t)
-        pp = await tph.parse(msg.text or msg.caption)
+        pp = await tph.parse(text)
         await pp.download(callback, (r_msg,))
     except Exception as e:
         await msg.reply_text(
@@ -38,6 +37,38 @@ async def call_parse(cli: Client, msg: Message):
             logger.exception(e)
             logger.error("上传失败, 以上为错误信息")
         await r_msg.delete()
+
+
+@Client.on_message((filters.text | filters.caption) & platform_filter)
+async def text_parse(cli: Client, msg: Message):
+    text = msg.text or msg.caption
+    await _handle_parse(cli, msg, text)
+
+
+@Client.on_message(filters.command(["jx"]))
+async def cmd_jx(cli: Client, msg: Message):
+    if msg.command[1:]:
+        text = msg.command[1]
+    else:
+        text = ""
+
+    if not text and msg.reply_to_message:
+        text = msg.reply_to_message.text or msg.reply_to_message.caption or ""
+
+    if not text:
+        await msg.reply_text("请加上链接或回复一条消息")
+        return
+
+    await _handle_parse(cli, msg, text)
+
+
+@Client.on_message((filters.text | filters.caption) & filters.mentioned)
+async def mention_parse(cli: Client, msg: Message):
+    if not msg.reply_to_message:
+        await msg.reply_text("请回复一条消息")
+    text = msg.reply_to_message.text or msg.reply_to_message.caption or ""
+    if text:
+        await _handle_parse(cli, msg, text)
 
 
 async def callback(current, total, status: str, msg: Message):

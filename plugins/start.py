@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message, LinkPreviewOptions
+from pyrogram.types import Message, LinkPreviewOptions, BotCommand
 from parsehub import ParseHub
 
 
@@ -14,3 +14,12 @@ async def start(_, msg: Message):
 
 def get_supported_platforms():
     return "\n".join(ParseHub().get_supported_platforms())
+
+
+@Client.on_message(filters.command("menu"))
+async def set_menu(cli: Client, msg: Message):
+    commands = {"start": "开始", "jx": "解析"}
+    await cli.set_bot_commands(
+        [BotCommand(command=k, description=v) for k, v in commands.items()]
+    )
+    await msg.reply("👌")
