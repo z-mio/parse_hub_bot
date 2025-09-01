@@ -20,6 +20,7 @@ async def _handle_parse(cli: Client, msg: Message, text: str):
         )
         r_msg = await msg.reply_text(t)
         pp = await tph.parse(text)
+        await r_msg.edit_text("下 载 中...")
         await pp.download(callback, (r_msg,))
     except Exception as e:
         await msg.reply_text(

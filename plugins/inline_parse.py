@@ -59,6 +59,9 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
 
     try:
         pp = await TgParseHub().parse(cir.query)
+        await client.edit_inline_text(
+            imid, "下 载 中...", reply_markup=pp.operate.button(hide_summary=True)
+        )
         await pp.download(
             callback,
             (client, imid, pp),
