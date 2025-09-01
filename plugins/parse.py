@@ -11,20 +11,32 @@ from utiles.utile import progress
 
 
 async def _handle_parse(cli: Client, msg: Message, text: str):
+    tph = TgParseHub()
+    t = (
+        "已有相同任务正在解析, 等待解析完成..."
+        if await tph.get_parse_task(text)
+        else "解 析 中..."
+    )
+    r_msg = await msg.reply_text(t)
+
     try:
-        tph = TgParseHub()
-        t = (
-            "已有相同任务正在解析, 等待解析完成..."
-            if await tph.get_parse_task(text)
-            else "解 析 中..."
-        )
-        r_msg = await msg.reply_text(t)
         pp = await tph.parse(text)
-        await r_msg.edit_text("下 载 中...")
+    except Exception as e:
+        await r_msg.edit_text(
+            f"解析错误: \n```\n{e}```",
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        logger.exception(e)
+        logger.error("解析失败, 以上为错误信息")
+        return
+
+    await r_msg.edit_text("下 载 中...")
+
+    try:
         await pp.download(callback, (r_msg,))
     except Exception as e:
-        await msg.reply_text(
-            f"解析或下载错误: \n```\n{e}```",
+        await r_msg.edit_text(
+            f"下载错误: \n```\n{e}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         logger.exception(e)
