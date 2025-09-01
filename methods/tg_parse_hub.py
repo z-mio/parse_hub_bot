@@ -517,7 +517,7 @@ class VideoParseResultOperate(ParseResultOperate):
 class ImageParseResultOperate(ParseResultOperate):
     """图片解析结果操作"""
 
-    async def _send_ph(self, html_content: str, msg: Message):
+    async def _send_ph(self, html_content: str, msg: Message) -> Message:
         page = await Telegraph().create_page(
             self.result.title or "无标题", html_content=html_content
         )
@@ -587,13 +587,17 @@ class ImageParseResultOperate(ParseResultOperate):
             )
             return [m]
         else:
-            tasks = [ImgHost().litterbox(i.path) for i in self.download_result.media]
+            ih = ImgHost()
+            tasks = [ih.litterbox(i.path) for i in self.download_result.media]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             results = [
                 f'<img src="{i}">' for i in results if not isinstance(i, Exception)
             ]
-
-            await self._send_ph(f"{self.result.desc}<br><br>" + "".join(results), msg)
+            if not results:
+                return await msg.reply_text("图片上传图床失败")
+            return await self._send_ph(
+                f"{self.result.desc}<br><br>" + "".join(results), msg
+            )
 
 
 class MultimediaParseResultOperate(ParseResultOperate):
