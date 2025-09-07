@@ -1,9 +1,7 @@
 import asyncio
 import re
-import tempfile
 from datetime import datetime, timedelta
 
-import httpx
 from abc import ABC, abstractmethod
 from typing import Union, Callable
 from aiocache import Cache
@@ -495,23 +493,23 @@ class VideoParseResultOperate(ParseResultOperate):
     """视频解析结果操作"""
 
     async def chat_upload(self, msg: Message) -> Message:
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            if self.result.media.thumb_url:
-                async with httpx.AsyncClient() as client:
-                    thumb = await client.get(self.result.media.thumb_url)
-                    temp_file.write(thumb.content)
-                    temp = temp_file.name
-            else:
-                temp = None
+        # with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
+        #     if self.result.media.thumb_url:
+        #         async with httpx.AsyncClient() as client:
+        #             thumb = await client.get(self.result.media.thumb_url)
+        #             temp_file.write(thumb.content)
+        #             temp = temp_file.name
+        #     else:
+        #         temp = None
 
-            await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
-            return await msg.reply_video(
-                self.download_result.media.path,
-                caption=self.content_and_no_url,
-                thumb=temp,
-                quote=True,
-                reply_markup=self.button(),
-            )
+        await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
+        return await msg.reply_video(
+            self.download_result.media.path,
+            caption=self.content_and_no_url,
+            video_cover=self.result.media.thumb_url,
+            quote=True,
+            reply_markup=self.button(),
+        )
 
 
 class ImageParseResultOperate(ParseResultOperate):
@@ -627,7 +625,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
             if isinstance(m, Image):
                 return await msg.reply_photo(m.path, **k)
             elif isinstance(m, Video):
-                return await msg.reply_video(m.path, **k)
+                return await msg.reply_video(m.path, video_cover=m.thumb_url, **k)
             elif isinstance(m, Ani):
                 return await msg.reply_animation(m.path, **k)
 
@@ -639,7 +637,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 if isinstance(v, Image):
                     media.append(InputMediaPhoto(v.path))
                 elif isinstance(v, Video):
-                    media.append(InputMediaVideo(v.path))
+                    media.append(InputMediaVideo(v.path, video_cover=v.thumb_url))
                 elif isinstance(v, Ani):
                     ani = await msg.reply_animation(
                         v.path,
