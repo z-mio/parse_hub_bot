@@ -88,7 +88,12 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
         await client.edit_inline_media(
             imid,
             media=InputMediaVideo(
-                v.path, caption=pp.operate.content_and_no_url, video_cover=v.thumb_url
+                v.path,
+                caption=pp.operate.content_and_no_url,
+                video_cover=v.thumb_url,
+                duration=v.duration,
+                width=v.width,
+                height=v.height,
             ),
             reply_markup=pp.operate.button(),
         )

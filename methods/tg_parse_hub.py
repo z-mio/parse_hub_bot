@@ -503,12 +503,16 @@ class VideoParseResultOperate(ParseResultOperate):
         #         temp = None
 
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
+        drm = self.download_result.media
         return await msg.reply_video(
-            self.download_result.media.path,
+            drm.path,
             caption=self.content_and_no_url,
-            video_cover=self.result.media.thumb_url,
+            video_cover=drm.thumb_url,
             quote=True,
             reply_markup=self.button(),
+            width=drm.width,
+            height=drm.height,
+            duration=drm.duration,
         )
 
 
@@ -625,7 +629,14 @@ class MultimediaParseResultOperate(ParseResultOperate):
             if isinstance(m, Image):
                 return await msg.reply_photo(m.path, **k)
             elif isinstance(m, Video):
-                return await msg.reply_video(m.path, video_cover=m.thumb_url, **k)
+                return await msg.reply_video(
+                    m.path,
+                    video_cover=m.thumb_url,
+                    width=m.width,
+                    height=m.height,
+                    duration=m.duration,
+                    **k,
+                )
             elif isinstance(m, Ani):
                 return await msg.reply_animation(m.path, **k)
 
@@ -637,7 +648,15 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 if isinstance(v, Image):
                     media.append(InputMediaPhoto(v.path))
                 elif isinstance(v, Video):
-                    media.append(InputMediaVideo(v.path, video_cover=v.thumb_url))
+                    media.append(
+                        InputMediaVideo(
+                            v.path,
+                            video_cover=v.thumb_url,
+                            duration=v.duration,
+                            width=v.width,
+                            height=v.height,
+                        )
+                    )
                 elif isinstance(v, Ani):
                     ani = await msg.reply_animation(
                         v.path,
