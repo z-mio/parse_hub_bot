@@ -80,13 +80,15 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
             f"{pp.operate.content_and_no_url}\n\n上 传 中...",
             reply_markup=pp.operate.button(hide_summary=True),
         )
+        v = (
+            pp.operate.download_result.media[index]
+            if isinstance(pp.operate.download_result.media, list)
+            else pp.operate.download_result.media
+        )
         await client.edit_inline_media(
             imid,
             media=InputMediaVideo(
-                pp.operate.download_result.media[index].path
-                if isinstance(pp.operate.download_result.media, list)
-                else pp.operate.download_result.media.path,
-                caption=pp.operate.content_and_no_url,
+                v.path, caption=pp.operate.content_and_no_url, video_cover=v.thumb_url
             ),
             reply_markup=pp.operate.button(),
         )
