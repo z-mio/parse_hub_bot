@@ -493,15 +493,6 @@ class VideoParseResultOperate(ParseResultOperate):
     """视频解析结果操作"""
 
     async def chat_upload(self, msg: Message) -> Message:
-        # with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
-        #     if self.result.media.thumb_url:
-        #         async with httpx.AsyncClient() as client:
-        #             thumb = await client.get(self.result.media.thumb_url)
-        #             temp_file.write(thumb.content)
-        #             temp = temp_file.name
-        #     else:
-        #         temp = None
-
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
         drm = self.download_result.media
         return await msg.reply_video(
