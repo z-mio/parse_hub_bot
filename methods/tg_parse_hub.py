@@ -458,7 +458,7 @@ class ParseResultOperate(ABC):
     @property
     def content_and_no_url(self) -> str:
         return (
-            f"[{self.result.title or '无标题'}]({self.telegraph_url})"
+            f"[{self.result.title.replace('\n', ' ') or '无标题'}]({self.telegraph_url})"
             if self.telegraph_url
             else (
                 self.f_text(f"**{self.result.title}**\n\n{self.result.desc}")
@@ -583,6 +583,7 @@ class ImageParseResultOperate(ParseResultOperate):
         else:
             sem = asyncio.Semaphore(5)
             async with ImgHost() as ih:
+
                 @logger.catch()
                 async def limited_ih(path: str):
                     async with sem:

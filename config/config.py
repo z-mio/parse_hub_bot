@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -8,6 +9,8 @@ from parsehub.config import GlobalConfig
 load_dotenv()
 
 TEMP_DIR = Path("./temp")
+if TEMP_DIR.exists():
+    shutil.rmtree(str(TEMP_DIR), ignore_errors=True)
 TEMP_DIR.mkdir(exist_ok=True)
 
 
