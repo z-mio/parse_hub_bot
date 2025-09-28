@@ -40,6 +40,7 @@ from parsehub.parsers.parser import WXImageParseResult, CoolapkImageParseResult
 from parsehub.parsers.base import Parser
 from config.config import bot_cfg
 from config.platform_config import platforms_config, Platform
+from log import logger
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
@@ -580,9 +581,15 @@ class ImageParseResultOperate(ParseResultOperate):
             )
             return [m]
         else:
-            ih = ImgHost()
-            tasks = [ih.litterbox(i.path) for i in self.download_result.media]
-            results = await asyncio.gather(*tasks, return_exceptions=True)
+            sem = asyncio.Semaphore(5)
+            async with ImgHost() as ih:
+                @logger.catch()
+                async def limited_ih(path: str):
+                    async with sem:
+                        return await ih.zioooo(path)
+
+                tasks = [limited_ih(i.path) for i in self.download_result.media]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
             results = [
                 f'<img src="{i}">' for i in results if not isinstance(i, Exception)
             ]
@@ -630,6 +637,8 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 )
             elif isinstance(m, Ani):
                 return await msg.reply_animation(m.path, **k)
+            else:
+                raise ValueError(f"未知的媒体类型: {type(m)}")
 
         else:
             text = self.content_and_no_url

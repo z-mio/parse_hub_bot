@@ -1,3 +1,4 @@
+from pathlib import Path
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
@@ -5,6 +6,9 @@ from os import getenv
 from parsehub.config import GlobalConfig
 
 load_dotenv()
+
+TEMP_DIR = Path("./temp")
+TEMP_DIR.mkdir(exist_ok=True)
 
 
 class BotConfig:
