@@ -38,6 +38,7 @@ from parsehub.types import (
 )
 from parsehub.parsers.parser import WXImageParseResult, CoolapkImageParseResult
 from parsehub.parsers.base import Parser
+
 from config.config import bot_cfg
 from config.platform_config import platforms_config, Platform
 from log import logger
@@ -173,13 +174,20 @@ class TgParseHub(ParseHub):
 
         async def handle_cache(m):
             if isinstance(m, Message):
-                return await m.copy(msg.chat.id)
+                return await m.copy(
+                    msg.chat.id, message_thread_id=msg.message_thread_id
+                )
             if isinstance(m, list):
                 if all(isinstance(i, Message) for i in m):
                     if not m:
                         return None
                     m = m[0]
-                    mg = await cli.copy_media_group(msg.chat.id, m.chat.id, m.id)
+                    mg = await cli.copy_media_group(
+                        msg.chat.id,
+                        m.chat.id,
+                        m.id,
+                        message_thread_id=msg.message_thread_id,
+                    )
 
                     return mg
                 [await handle_cache(i) for i in m]
@@ -189,6 +197,7 @@ class TgParseHub(ParseHub):
                     reply_markup=self.operate.button(),
                     link_preview_options=LinkPreviewOptions(is_disabled=True),
                 )
+            return None
 
         cache_msg = await self._get_msg_cache()
         if cache_msg:
