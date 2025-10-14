@@ -59,8 +59,6 @@ _msg_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 解析结果消息
 scheduler = AsyncIOScheduler()
 scheduler.start()
 
-EXC = ProcessPoolExecutor()
-
 
 class TgParseHub(ParseHub):
     """重新封装 ParseHub 类，使其适用于 Telegram"""
@@ -510,12 +508,8 @@ class ParseResultOperate(ABC):
         if ext not in [".heif", ".heic"]:
             return str(img)
 
-        loop = asyncio.get_running_loop()
         try:
-            return await asyncio.wait_for(
-                loop.run_in_executor(EXC, img2webp, img),
-                timeout=30,
-            )
+            return await asyncio.to_thread(img2webp, img)
         except Exception as e:
             logger.exception(e)
             return str(img)

@@ -807,7 +807,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.4.8"
+version = "1.4.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -830,6 +830,8 @@ dependencies = [
     { name = "markdownify" },
     { name = "openai" },
     { name = "opencv-python" },
+    { name = "pillow" },
+    { name = "pillow-heif" },
     { name = "playwright" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -847,9 +849,8 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5a/b8/7256705fa8cceaf864add4657d03c1eb6db2343eab114dccae58fa309f77/parsehub-1.4.8.tar.gz", hash = "sha256:a11b48f188651e459f759f6a95f00d94acac3dfbdde796a6ed39cbd9702f330b", size = 72690, upload-time = "2025-10-14T11:55:53.459Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/e5/e608ebae813ca03dd116c3982635c5844c270900adbdb1ef2f05fd32dfca/parsehub-1.4.8-py3-none-any.whl", hash = "sha256:af79914e0423ef2e36873f507caeeedef8c631e6bf65d6b68aef4716cc8a4d02", size = 103919, upload-time = "2025-10-14T11:55:51.795Z" },
+    { url = "https://files.pythonhosted.org/packages/e5/f6/463e1a59000bb550280986884cefc3589f10468767536b30d52330462a38/parsehub-1.4.9-py3-none-any.whl", hash = "sha256:69f18b641ea20becc0793a1455b0198c0758d30ab2ee35555e3aceb3ea8b7357", size = 104171, upload-time = "2025-10-14T12:56:43.374Z" },
 ]
 
 [[package]]
