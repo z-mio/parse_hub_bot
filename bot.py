@@ -1,6 +1,9 @@
+import pillow_heif
 from pyrogram import Client
 from config.config import bot_cfg
 from log import logger
+
+pillow_heif.register_heif_opener()
 
 logger.add("logs/bot.log", rotation="10 MB")
 

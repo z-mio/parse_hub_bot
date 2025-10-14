@@ -121,4 +121,6 @@ class ImgHost:
 
 
 if __name__ == "__main__":
-    print(asyncio.run(ImgHost().zioooo("https://i.iij.li/i/20250928/68d8f26f7b571.png")))
+    print(
+        asyncio.run(ImgHost().zioooo("https://i.iij.li/i/20250928/68d8f26f7b571.png"))
+    )

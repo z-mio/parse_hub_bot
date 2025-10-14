@@ -1,9 +1,11 @@
 import asyncio
 import re
+from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timedelta
 
 from abc import ABC, abstractmethod
-from typing import Union, Callable
+from pathlib import Path
+from typing import Union, Callable, BinaryIO
 from aiocache import Cache
 from aiocache.plugins import TimingPlugin
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -36,8 +38,8 @@ from parsehub.types import (
     SummaryResult,
     DownloadResult,
 )
+from parsehub.parsers.base import BaseParser
 from parsehub.parsers.parser import WXImageParseResult, CoolapkImageParseResult
-from parsehub.parsers.base import Parser
 
 from config.config import bot_cfg
 from config.platform_config import platforms_config, Platform
@@ -45,7 +47,7 @@ from log import logger
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
-from utiles.utile import encrypt
+from utiles.utile import encrypt, img2webp
 from contextlib import asynccontextmanager
 from markdown import markdown
 
@@ -57,6 +59,8 @@ _msg_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 解析结果消息
 scheduler = AsyncIOScheduler()
 scheduler.start()
 
+EXC = ProcessPoolExecutor()
+
 
 class TgParseHub(ParseHub):
     """重新封装 ParseHub 类，使其适用于 Telegram"""
@@ -64,7 +68,7 @@ class TgParseHub(ParseHub):
     def __init__(self):
         super().__init__()
         self.url = None
-        self.platform: Parser | None = None
+        self.platform: BaseParser | None = None
         self.platform_config: Platform | None = None
         self.parser_config: ParseConfig | None = None
         self.downloader_config: DownloadConfig | None = None
@@ -580,7 +584,10 @@ class ImageParseResultOperate(ParseResultOperate):
         elif count <= 9:
             text = self.content_and_no_url
             m = await msg.reply_media_group(
-                [InputMediaPhoto(v.path) for v in self.download_result.media]
+                [
+                    InputMediaPhoto(await self.tg_compatible(v.path))
+                    for v in self.download_result.media
+                ]
             )
             await m[0].reply_text(
                 text,
@@ -608,6 +615,25 @@ class ImageParseResultOperate(ParseResultOperate):
             return await self._send_ph(
                 f"{self.result.desc}<br><br>" + "".join(results), msg
             )
+
+    @staticmethod
+    async def tg_compatible(img: str | Path) -> BinaryIO | str:
+        """将图片转换为Tg兼容的格式"""
+
+        ext = Path(img).suffix.lower()
+        if ext not in [".heif", ".heic"]:
+            return str(img)
+
+        loop = asyncio.get_running_loop()
+        try:
+            r = await asyncio.wait_for(
+                loop.run_in_executor(EXC, img2webp, img),
+                timeout=30,
+            )
+            return r
+        except Exception as e:
+            logger.exception(e)
+            return str(img)
 
 
 class MultimediaParseResultOperate(ParseResultOperate):

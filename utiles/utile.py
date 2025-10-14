@@ -1,6 +1,8 @@
 import asyncio
 import hashlib
+import io
 
+from PIL import Image
 from pyrogram import Client
 
 
@@ -36,3 +38,13 @@ def encrypt(text: str):
     md5 = hashlib.md5()
     md5.update(text.encode("utf-8"))
     return md5.hexdigest()
+
+
+def img2webp(img):
+    with Image.open(img) as pil_img:
+        if pil_img.mode != "RGBA":
+            pil_img = pil_img.convert("RGBA")
+        output = io.BytesIO()
+        pil_img.save(output, format="WEBP")
+        output.seek(0)
+    return output
