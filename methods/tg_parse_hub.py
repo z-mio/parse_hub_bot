@@ -502,6 +502,24 @@ class ParseResultOperate(ABC):
         else:
             return text
 
+    @staticmethod
+    async def tg_compatible(img: str | Path) -> BinaryIO | str:
+        """将图片转换为Tg兼容的格式"""
+
+        ext = Path(img).suffix.lower()
+        if ext not in [".heif", ".heic"]:
+            return str(img)
+
+        loop = asyncio.get_running_loop()
+        try:
+            return await asyncio.wait_for(
+                loop.run_in_executor(EXC, img2webp, img),
+                timeout=30,
+            )
+        except Exception as e:
+            logger.exception(e)
+            return str(img)
+
 
 class VideoParseResultOperate(ParseResultOperate):
     """视频解析结果操作"""
@@ -576,7 +594,7 @@ class ImageParseResultOperate(ParseResultOperate):
             )
         elif count == 1:
             return await msg.reply_photo(
-                self.download_result.media[0].path,
+                await self.tg_compatible(self.download_result.media[0].path),
                 quote=True,
                 caption=text,
                 reply_markup=self.button(),
@@ -616,25 +634,6 @@ class ImageParseResultOperate(ParseResultOperate):
                 f"{self.result.desc}<br><br>" + "".join(results), msg
             )
 
-    @staticmethod
-    async def tg_compatible(img: str | Path) -> BinaryIO | str:
-        """将图片转换为Tg兼容的格式"""
-
-        ext = Path(img).suffix.lower()
-        if ext not in [".heif", ".heic"]:
-            return str(img)
-
-        loop = asyncio.get_running_loop()
-        try:
-            r = await asyncio.wait_for(
-                loop.run_in_executor(EXC, img2webp, img),
-                timeout=30,
-            )
-            return r
-        except Exception as e:
-            logger.exception(e)
-            return str(img)
-
 
 class MultimediaParseResultOperate(ParseResultOperate):
     """图片视频混合解析结果操作"""
@@ -661,7 +660,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 "reply_markup": self.button(),
             }
             if isinstance(m, Image):
-                return await msg.reply_photo(m.path, **k)
+                return await msg.reply_photo(await self.tg_compatible(m.path), **k)
             elif isinstance(m, Video):
                 return await msg.reply_video(
                     m.path,
@@ -682,7 +681,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
             ani_msg = []
             for i, v in enumerate(self.download_result.media):
                 if isinstance(v, Image):
-                    media.append(InputMediaPhoto(v.path))
+                    media.append(InputMediaPhoto(await self.tg_compatible(v.path)))
                 elif isinstance(v, Video):
                     media.append(
                         InputMediaVideo(
