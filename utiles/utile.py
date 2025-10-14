@@ -40,7 +40,8 @@ def encrypt(text: str):
     return md5.hexdigest()
 
 
-def img2webp(img):
+def img2webp(img) -> io.BytesIO:
+    """将图片转换为webp格式, 返回io.BytesIO对象, 可直接上传到telegram"""
     with Image.open(img) as pil_img:
         if pil_img.mode != "RGBA":
             pil_img = pil_img.convert("RGBA")
