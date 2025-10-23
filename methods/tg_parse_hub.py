@@ -1,6 +1,5 @@
 import asyncio
 import re
-from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timedelta
 
 from abc import ABC, abstractmethod
@@ -194,7 +193,7 @@ class TgParseHub(ParseHub):
                     return mg
                 [await handle_cache(i) for i in m]
                 await msg.reply(
-                    self.operate.content_and_no_url,
+                    self.operate.content_and_url,
                     quote=False,
                     reply_markup=self.operate.button(),
                     link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -348,14 +347,14 @@ class ParseResultOperate(ABC):
                     title=self.result.title or "无标题",
                     description=self.result.desc,
                     input_message_content=InputTextMessageContent(
-                        self.content_and_no_url,
+                        self.content_and_url,
                         link_preview_options=LinkPreviewOptions(is_disabled=True),
                     ),
                     reply_markup=self.button(),
                 )
             )
         for index, i in enumerate(media):
-            text = self.content_and_no_url
+            text = self.content_and_url
             k = {
                 "caption": text,
                 "title": text,
@@ -440,7 +439,7 @@ class ParseResultOperate(ABC):
 
         if not (r := self.ai_summary_result):
             await cq.edit_message_text(
-                self.content_and_no_url,
+                self.content_and_url,
                 reply_markup=self.button(summarizing=True),
             )
             if not self.download_result:
@@ -449,7 +448,7 @@ class ParseResultOperate(ABC):
                 r = await self.download_result.summary()
             except Exception as e:
                 await cq.edit_message_text(
-                    self.content_and_no_url,
+                    self.content_and_url,
                     reply_markup=self.button(),
                 )
                 raise e
@@ -464,7 +463,7 @@ class ParseResultOperate(ABC):
     async def un_ai_summary(self, cq: CallbackQuery):
         """取消 AI 总结"""
 
-        await cq.edit_message_text(self.content_and_no_url, reply_markup=self.button())
+        await cq.edit_message_text(self.content_and_url, reply_markup=self.button())
 
     @property
     def content_and_no_url(self) -> str:
@@ -481,8 +480,8 @@ class ParseResultOperate(ABC):
     @property
     def content_and_url(self) -> str:
         text = self.content_and_no_url
-        return self.f_text(
-            f"{text}\n\n<b>> 原文链接: [LINK]({self.result.raw_url})</b>"
+        return (
+            f"{text}\n\n<b>▎[Source]({self.result.raw_url})</b>"
             if self.result.raw_url
             else text
         ).strip()
@@ -492,7 +491,7 @@ class ParseResultOperate(ABC):
         """格式化输出内容, 限制长度, 添加折叠块样式"""
         text = text.strip()
         if text[1020:]:
-            text = text[:1000] + "..."
+            text = text[:1000] + "......"
             return f"<blockquote expandable>{text}</blockquote>"
         elif text[500:] or len(text.splitlines()) > 10:
             # 超过 500 字或超过 10 行, 则添加折叠块样式
@@ -523,7 +522,7 @@ class VideoParseResultOperate(ParseResultOperate):
         drm = self.download_result.media
         return await msg.reply_video(
             drm.path,
-            caption=self.content_and_no_url,
+            caption=self.content_and_url,
             video_cover=drm.thumb_url,
             quote=True,
             reply_markup=self.button(),
@@ -542,7 +541,7 @@ class ImageParseResultOperate(ParseResultOperate):
         )
         self.telegraph_url = page.url
         return await msg.reply_text(
-            self.content_and_no_url,
+            self.content_and_url,
             quote=True,
             reply_markup=self.button(),
         )
@@ -578,7 +577,7 @@ class ImageParseResultOperate(ParseResultOperate):
             )
 
         count = len(self.download_result.media)
-        text = self.content_and_no_url
+        text = self.content_and_url
         if count == 0:
             return await msg.reply_text(
                 text,
@@ -594,7 +593,7 @@ class ImageParseResultOperate(ParseResultOperate):
                 reply_markup=self.button(),
             )
         elif count <= 9:
-            text = self.content_and_no_url
+            text = self.content_and_url
             m = await msg.reply_media_group(
                 [
                     InputMediaPhoto(await self.tg_compatible(v.path))
@@ -638,7 +637,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
 
         count = len(self.download_result.media)
-        text = self.content_and_no_url
+        text = self.content_and_url
         if count == 0:
             return await msg.reply_text(
                 text,
@@ -670,7 +669,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 raise ValueError(f"未知的媒体类型: {type(m)}")
 
         else:
-            text = self.content_and_no_url
+            text = self.content_and_url
             media = []
             ani_msg = []
             for i, v in enumerate(self.download_result.media):

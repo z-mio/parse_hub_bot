@@ -1,3 +1,4 @@
+from parsehub.types import Video
 from pyrogram import Client
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import (
@@ -41,7 +42,7 @@ async def callback(
     text = progress(current, total, status)
     if not text:
         return
-    text = f"{pp.operate.content_and_no_url}\n\n{text}"
+    text = f"{pp.operate.content_and_url}\n\n{text}"
     try:
         await client.edit_inline_text(
             inline_message_id, text, reply_markup=pp.operate.button(hide_summary=True)
@@ -52,6 +53,8 @@ async def callback(
 
 @Client.on_chosen_inline_result()
 async def inline_result_jx(client: Client, cir: ChosenInlineResult):
+    """只用于下载视频"""
+
     if not cir.result_id.startswith("download_"):
         return
     index = int(cir.result_id.split("_")[1])
@@ -77,10 +80,10 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
     else:
         await client.edit_inline_text(
             imid,
-            f"{pp.operate.content_and_no_url}\n\n上 传 中...",
+            f"{pp.operate.content_and_url}\n\n上 传 中...",
             reply_markup=pp.operate.button(hide_summary=True),
         )
-        v = (
+        v: Video = (
             pp.operate.download_result.media[index]
             if isinstance(pp.operate.download_result.media, list)
             else pp.operate.download_result.media
@@ -89,7 +92,7 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
             imid,
             media=InputMediaVideo(
                 v.path,
-                caption=pp.operate.content_and_no_url,
+                caption=pp.operate.content_and_url,
                 video_cover=v.thumb_url,
                 duration=v.duration,
                 width=v.width,
