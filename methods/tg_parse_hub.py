@@ -523,9 +523,10 @@ class VideoParseResultOperate(ParseResultOperate):
     async def chat_upload(self, msg: Message) -> Message | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
         drm = self.download_result.media
-        handle_video = []
+        op = TEMP_DIR / f"{time.time_ns()}"
+        op.mkdir(parents=True, exist_ok=True)
         try:
-            handle_video = await self.handle_video(drm.path)
+            handle_video = await self.handle_video(drm.path, op)
             if len(handle_video) == 1:
                 m = await msg.reply_video(
                     handle_video[0],
@@ -537,7 +538,7 @@ class VideoParseResultOperate(ParseResultOperate):
                     height=drm.height,
                     duration=drm.duration,
                 )
-                self.clear_video_split(handle_video)
+                shutil.rmtree(str(op), ignore_errors=True)
                 return m
             else:
                 media = []
@@ -561,13 +562,13 @@ class VideoParseResultOperate(ParseResultOperate):
                     reply_markup=self.button(),
                     quote=True,
                 )
-                self.clear_video_split(handle_video)
+                shutil.rmtree(str(op), ignore_errors=True)
                 return m
         except Exception as e:
             # 错误回退
             logger.exception(e)
             logger.error("上传视频失败, 以上为错误信息")
-            self.clear_video_split(handle_video)
+            shutil.rmtree(str(op), ignore_errors=True)
             if drm.thumb_url:
                 return await msg.reply_photo(
                     photo=drm.thumb_url,
@@ -584,21 +585,12 @@ class VideoParseResultOperate(ParseResultOperate):
                 )
 
     @staticmethod
-    async def handle_video(video: str | Path) -> list[Path | str]:
+    async def handle_video(video: str | Path, op: Path) -> list[Path | str]:
         video_size = os.path.getsize(video)
         if video_size > 1024 * 1024 * 2:
-            op = TEMP_DIR / f"{time.time_ns()}"
-            return await split_video(str(video), op)
+            return await split_video(str(video), str(op))
         else:
             return [video]
-
-    @staticmethod
-    def clear_video_split(handle_video_result: list[Path | str]):
-        """清除视频切片"""
-        if not handle_video_result:
-            return
-        p = Path(handle_video_result[0]).parent
-        shutil.rmtree(p)
 
 
 class ImageParseResultOperate(ParseResultOperate):
