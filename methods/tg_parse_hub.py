@@ -374,18 +374,29 @@ class ParseResultOperate(ABC):
                     )
                 )
             elif isinstance(i, Video):
-                results.append(
-                    InlineQueryResultPhoto(
-                        i.thumb_url
-                        or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
-                        photo_width=300,
-                        photo_height=300,
-                        id=f"download_{index}",
-                        title=text,
-                        caption=text,
-                        reply_markup=self.button(hide_summary=True),
+                video_size = os.path.getsize(i.path)
+                if video_size > 1024 * 1024 * 2:
+                    results.append(
+                        InlineQueryResultPhoto(
+                            i.thumb_url,
+                            photo_width=300,
+                            photo_height=300,
+                            **k,
+                        )
                     )
-                )
+                else:
+                    results.append(
+                        InlineQueryResultPhoto(
+                            i.thumb_url
+                            or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
+                            photo_width=300,
+                            photo_height=300,
+                            id=f"download_{index}",
+                            title=text,
+                            caption=text,
+                            reply_markup=self.button(hide_summary=True),
+                        )
+                    )
             elif isinstance(i, Ani):
                 results.append(
                     InlineQueryResultAnimation(i.path, thumb_url=i.thumb_url, **k)
