@@ -526,7 +526,7 @@ class VideoParseResultOperate(ParseResultOperate):
         handle_video = []
         try:
             handle_video = await self.handle_video(drm.path)
-            if len(handle_video):
+            if len(handle_video) == 1:
                 m = await msg.reply_video(
                     handle_video[0],
                     caption=self.content_and_url,
