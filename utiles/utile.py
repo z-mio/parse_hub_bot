@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import io
+from pathlib import Path
 
 from PIL import Image
 from pyrogram import Client
@@ -49,3 +50,93 @@ def img2webp(img) -> io.BytesIO:
         pil_img.save(output, format="WEBP")
         output.seek(0)
     return output
+
+
+async def run_cmd(*cmd: str) -> str:
+    """运行外部命令并异步读取输出"""
+    proc = await asyncio.create_subprocess_exec(
+        *cmd,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.DEVNULL,
+    )
+    stdout, _ = await proc.communicate()
+    return stdout.decode().strip()
+
+
+async def get_duration(file: str) -> float:
+    """获取视频时长"""
+    out = await run_cmd(
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        file,
+    )
+    return float(out) if out else 0.0
+
+
+async def split_video(
+    file: str,
+    output_dir: str,
+    size_limit: int = 2_000_000_000,
+    ffmpeg_args: str = "-c copy",
+    keep_sec: float = 1.0,
+) -> list[Path]:
+    """按大小切片视频"""
+    src = Path(file)
+    if not src.exists():
+        raise FileNotFoundError(file)
+
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    base = src.stem
+    ext = src.suffix.lstrip(".")
+    total_duration = int(await get_duration(file))
+    cur = 0
+    part = 1
+
+    # print(f"▶ 总时长: {total_duration}s")
+    # print(f"📁 输出目录: {out_dir.resolve()}\n")
+    op = []
+    while cur < total_duration:
+        out_file = out_dir / f"{base}_part_{part:03d}.{ext}"
+        op.append(out_file)
+        # print(f"🎬 生成分段: {out_file.name} (起点 {cur}s)")
+
+        cmd = [
+            "ffmpeg",
+            "-ss",
+            str(cur),
+            "-i",
+            str(file),
+            "-fs",
+            str(size_limit),
+            *ffmpeg_args.split(),
+            "-y",
+            str(out_file),
+        ]
+
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.DEVNULL,
+        )
+        await proc.wait()
+
+        new_dur = int(await get_duration(str(out_file)))
+        if new_dur <= 0:
+            # print(f"⚠️ {out_file.name} 为空，停止。")
+            break
+
+        cur += new_dur
+        if cur < total_duration:
+            cur = max(cur - int(keep_sec), 0)
+
+        part += 1
+
+    # print(f"\n✅ 分割完成，共输出 {part - 1} 段。")
+    return op

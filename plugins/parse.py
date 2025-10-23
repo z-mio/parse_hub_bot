@@ -1,3 +1,5 @@
+import asyncio
+
 from pyrogram import Client, filters
 from pyrogram.types import (
     Message,
@@ -22,12 +24,14 @@ async def _handle_parse(cli: Client, msg: Message, text: str):
     try:
         pp = await tph.parse(text)
     except Exception as e:
+        logger.exception(e)
+        logger.error("解析失败, 以上为错误信息")
         await r_msg.edit_text(
             f"解析错误: \n```\n{e}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        logger.exception(e)
-        logger.error("解析失败, 以上为错误信息")
+        await asyncio.sleep(3)
+        await r_msg.delete()
         return
 
     await r_msg.edit_text("下 载 中...")
@@ -35,12 +39,14 @@ async def _handle_parse(cli: Client, msg: Message, text: str):
     try:
         await pp.download(callback, (r_msg,))
     except Exception as e:
+        logger.exception(e)
+        logger.error("解析或下载失败, 以上为错误信息")
         await r_msg.edit_text(
             f"下载错误: \n```\n{e}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        logger.exception(e)
-        logger.error("解析或下载失败, 以上为错误信息")
+        await asyncio.sleep(3)
+        await r_msg.delete()
     else:
         await r_msg.edit_text("上 传 中...")
         try:

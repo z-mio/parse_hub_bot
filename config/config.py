@@ -50,4 +50,4 @@ class BotConfig:
 bot_cfg = BotConfig()
 if bot_cfg.douyin_api:
     GlobalConfig.douyin_api = bot_cfg.douyin_api
-GlobalConfig.duration_limit = 1800
+GlobalConfig.duration_limit = 0

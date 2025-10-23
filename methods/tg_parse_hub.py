@@ -1,5 +1,8 @@
 import asyncio
+import os
 import re
+import shutil
+import time
 from datetime import datetime, timedelta
 
 from abc import ABC, abstractmethod
@@ -40,13 +43,13 @@ from parsehub.types import (
 from parsehub.parsers.base import BaseParser
 from parsehub.parsers.parser import WXImageParseResult, CoolapkImageParseResult
 
-from config.config import bot_cfg
+from config.config import bot_cfg, TEMP_DIR
 from config.platform_config import platforms_config, Platform
 from log import logger
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
-from utiles.utile import encrypt, img2webp
+from utiles.utile import encrypt, img2webp, split_video
 from contextlib import asynccontextmanager
 from markdown import markdown
 
@@ -517,19 +520,85 @@ class ParseResultOperate(ABC):
 class VideoParseResultOperate(ParseResultOperate):
     """视频解析结果操作"""
 
-    async def chat_upload(self, msg: Message) -> Message:
+    async def chat_upload(self, msg: Message) -> Message | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
         drm = self.download_result.media
-        return await msg.reply_video(
-            drm.path,
-            caption=self.content_and_url,
-            video_cover=drm.thumb_url,
-            quote=True,
-            reply_markup=self.button(),
-            width=drm.width,
-            height=drm.height,
-            duration=drm.duration,
-        )
+        handle_video = []
+        try:
+            handle_video = await self.handle_video(drm.path)
+            if len(handle_video):
+                m = await msg.reply_video(
+                    handle_video[0],
+                    caption=self.content_and_url,
+                    video_cover=drm.thumb_url,
+                    quote=True,
+                    reply_markup=self.button(),
+                    width=drm.width,
+                    height=drm.height,
+                    duration=drm.duration,
+                )
+                self.clear_video_split(handle_video)
+                return m
+            else:
+                media = []
+                for i, v in enumerate(handle_video):
+                    media.append(
+                        InputMediaVideo(
+                            v,
+                            video_cover=drm.thumb_url if i == 0 else None,
+                            width=drm.width,
+                            height=drm.height,
+                        )
+                    )
+                m = [
+                    await msg.reply_media_group(media[i : i + 10], quote=True)
+                    for i in range(0, len(handle_video), 10)
+                ]
+                mm = m[0][0] if isinstance(m[0], list) else m[0]
+                await mm.reply_text(
+                    self.content_and_url,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
+                    reply_markup=self.button(),
+                    quote=True,
+                )
+                self.clear_video_split(handle_video)
+                return m
+        except Exception as e:
+            # 错误回退
+            logger.exception(e)
+            logger.error("上传视频失败, 以上为错误信息")
+            self.clear_video_split(handle_video)
+            if drm.thumb_url:
+                return await msg.reply_photo(
+                    photo=drm.thumb_url,
+                    caption=self.content_and_url,
+                    reply_markup=self.button(),
+                    quote=True,
+                )
+            else:
+                return await msg.reply_text(
+                    self.content_and_url,
+                    quote=True,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
+                    reply_markup=self.button(),
+                )
+
+    @staticmethod
+    async def handle_video(video: str | Path) -> list[Path | str]:
+        video_size = os.path.getsize(video)
+        if video_size > 1024 * 1024 * 2:
+            op = TEMP_DIR / f"{time.time_ns()}"
+            return await split_video(str(video), op)
+        else:
+            return [video]
+
+    @staticmethod
+    def clear_video_split(handle_video_result: list[Path | str]):
+        """清除视频切片"""
+        if not handle_video_result:
+            return
+        p = Path(handle_video_result[0]).parent
+        shutil.rmtree(p)
 
 
 class ImageParseResultOperate(ParseResultOperate):
