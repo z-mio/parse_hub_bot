@@ -2,23 +2,19 @@ import asyncio
 
 from pyrogram import Client, filters
 from pyrogram.types import (
-    Message,
     LinkPreviewOptions,
+    Message,
 )
 
 from log import logger
-from utiles.filters import platform_filter
 from methods import TgParseHub
+from utiles.filters import platform_filter
 from utiles.utile import progress
 
 
 async def _handle_parse(cli: Client, msg: Message, text: str):
     tph = TgParseHub()
-    t = (
-        "已有相同任务正在解析, 等待解析完成..."
-        if await tph.get_parse_task(text)
-        else "解 析 中..."
-    )
+    t = "已有相同任务正在解析, 等待解析完成..." if await tph.get_parse_task(text) else "解 析 中..."
     r_msg = await msg.reply_text(t)
 
     try:

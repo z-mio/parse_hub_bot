@@ -12,7 +12,7 @@ class PlatformsConfig:
     @classmethod
     def load_config(cls, file: str | Path):
         if Path(file).exists():
-            with open(file, "r", encoding="utf-8") as f:
+            with open(file, encoding="utf-8") as f:
                 platforms: dict = safe_load(f).get("platforms")
                 if not platforms:
                     return cls({})

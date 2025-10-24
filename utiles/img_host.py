@@ -1,10 +1,10 @@
 import asyncio
 import os
 import shutil
+from pathlib import Path
+
 import aiofiles
 import httpx
-
-from pathlib import Path
 from tenacity import retry, stop_after_attempt, wait_fixed
 
 from config.config import TEMP_DIR
@@ -46,9 +46,7 @@ class ImgHost:
                 "reqtype": "fileupload",
                 "userhash": "",
             }
-            response = await self._get_client.post(
-                host_url, data=data, files={"fileToUpload": file}
-            )
+            response = await self._get_client.post(host_url, data=data, files={"fileToUpload": file})
             response.raise_for_status()
             return response.text
         except Exception as e:
@@ -69,9 +67,7 @@ class ImgHost:
                 "fileNameLength": 16,
                 "time": "72h",
             }
-            response = await self._get_client.post(
-                host_url, data=data, files={"fileToUpload": file}
-            )
+            response = await self._get_client.post(host_url, data=data, files={"fileToUpload": file})
             response.raise_for_status()
             return response.text
         except Exception as e:
@@ -92,9 +88,7 @@ class ImgHost:
             data = {
                 "storage_id": storage,
             }
-            response = await self._get_client.post(
-                api_url + "/upload", data=data, files={"file": file}
-            )
+            response = await self._get_client.post(api_url + "/upload", data=data, files={"file": file})
             response.raise_for_status()
             j = response.json()
             if j["status"] != "success":
@@ -121,6 +115,4 @@ class ImgHost:
 
 
 if __name__ == "__main__":
-    print(
-        asyncio.run(ImgHost().zioooo("https://i.iij.li/i/20250928/68d8f26f7b571.png"))
-    )
+    print(asyncio.run(ImgHost().zioooo("https://i.iij.li/i/20250928/68d8f26f7b571.png")))

@@ -1,7 +1,6 @@
-from pyrogram import filters
-from pyrogram.types import Message, InlineQuery
-
 from parsehub import ParseHub
+from pyrogram import filters
+from pyrogram.types import InlineQuery, Message
 
 
 async def _platform_filter(_, __, update: Message | InlineQuery):

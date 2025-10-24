@@ -1,7 +1,8 @@
+from parsehub.types import ParseError
 from pyrogram import Client, filters
 from pyrogram.types import CallbackQuery
+
 from methods.tg_parse_hub import TgParseHub
-from parsehub.types import ParseError
 
 
 @Client.on_callback_query(filters.regex("^summary_|unsummary_"))

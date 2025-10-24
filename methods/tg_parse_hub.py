@@ -3,55 +3,59 @@ import os
 import re
 import shutil
 import time
-from datetime import datetime, timedelta
-
 from abc import ABC, abstractmethod
+from collections.abc import Callable
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Union, Callable, BinaryIO
+from typing import BinaryIO, Union
+
 from aiocache import Cache
 from aiocache.plugins import TimingPlugin
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from parsehub.config import ParseConfig, DownloadConfig
-from pyrogram import enums, Client
-from pyrogram.types import (
-    Message,
-    InlineKeyboardMarkup as Ikm,
-    InlineKeyboardButton as Ikb,
-    InputMediaPhoto,
-    InputMediaVideo,
-    InlineQuery,
-    InlineQueryResultPhoto,
-    InlineQueryResultAnimation,
-    CallbackQuery,
-    InlineQueryResultArticle,
-    InputTextMessageContent,
-    LinkPreviewOptions,
-)
-
+from markdown import markdown
 from parsehub import ParseHub
+from parsehub.config import DownloadConfig, ParseConfig
+from parsehub.parsers.base import BaseParser
+from parsehub.parsers.parser import CoolapkImageParseResult, WXImageParseResult
 from parsehub.types import (
-    ParseResult,
-    Image,
-    Video,
     Ani,
-    VideoParseResult,
+    DownloadResult,
+    Image,
     ImageParseResult,
     MultimediaParseResult,
+    ParseResult,
     SummaryResult,
-    DownloadResult,
+    Video,
+    VideoParseResult,
 )
-from parsehub.parsers.base import BaseParser
-from parsehub.parsers.parser import WXImageParseResult, CoolapkImageParseResult
+from pyrogram import Client, enums
+from pyrogram.types import (
+    CallbackQuery,
+    InlineQuery,
+    InlineQueryResultAnimation,
+    InlineQueryResultArticle,
+    InlineQueryResultPhoto,
+    InputMediaPhoto,
+    InputMediaVideo,
+    InputTextMessageContent,
+    LinkPreviewOptions,
+    Message,
+)
+from pyrogram.types import (
+    InlineKeyboardButton as Ikb,
+)
+from pyrogram.types import (
+    InlineKeyboardMarkup as Ikm,
+)
 
-from config.config import bot_cfg, TEMP_DIR
-from config.platform_config import platforms_config, Platform
+from config.config import TEMP_DIR, bot_cfg
+from config.platform_config import Platform, platforms_config
 from log import logger
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
 from utiles.utile import encrypt, img2webp, split_video
-from contextlib import asynccontextmanager
-from markdown import markdown
 
 _parsing = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 正在解析的链接
 _url_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 网址缓存
@@ -92,9 +96,7 @@ class TgParseHub(ParseHub):
         if not self.platform:
             raise ValueError("不支持的平台/内容")
 
-        self.platform_config = platforms_config.platforms.get(
-            self.platform.__platform_id__
-        )
+        self.platform_config = platforms_config.platforms.get(self.platform.__platform_id__)
         if self.platform_config:
             self.parser_config = ParseConfig(
                 proxy=(self.platform_config.parser_proxy or bot_cfg.parser_proxy)
@@ -103,9 +105,7 @@ class TgParseHub(ParseHub):
                 cookie=self.platform_config.cookie,
             )
             self.downloader_config = DownloadConfig(
-                proxy=(
-                    self.platform_config.downloader_proxy or bot_cfg.downloader_proxy
-                )
+                proxy=(self.platform_config.downloader_proxy or bot_cfg.downloader_proxy)
                 if not self.platform_config.disable_downloader_proxy
                 else None,
             )
@@ -114,9 +114,7 @@ class TgParseHub(ParseHub):
             self.downloader_config = DownloadConfig(proxy=bot_cfg.downloader_proxy)
         self.config = self.parser_config
 
-    async def parse(
-        self, url: str, cache_time: int = bot_cfg.cache_time
-    ) -> "TgParseHub":
+    async def parse(self, url: str, cache_time: int = bot_cfg.cache_time) -> "TgParseHub":
         """
         解析网址，并返回解析结果操作对象。
         :param url: url 或 hash后的url
@@ -152,15 +150,11 @@ class TgParseHub(ParseHub):
         """取消 AI 总结"""
         return await self.operate.un_ai_summary(cq)
 
-    async def download(
-        self, callback: Callable = None, callback_args: tuple = ()
-    ) -> DownloadResult:
+    async def download(self, callback: Callable = None, callback_args: tuple = ()) -> DownloadResult:
         if (dr := self.operate.download_result) and dr.exists():
             return dr
         async with self.error_handler():
-            self.operate.download_result = await self.result.download(
-                None, callback, callback_args, config=self.downloader_config
-            )
+            self.operate.download_result = await self.result.download(None, callback, callback_args, config=self.downloader_config)
         return self.operate.download_result
 
     async def delete(self):
@@ -171,16 +165,12 @@ class TgParseHub(ParseHub):
             await self.cache.delete(self.operate.hash_url)
         self.operate.delete()
 
-    async def chat_upload(
-        self, cli: Client, msg: Message
-    ) -> Message | list[Message] | list[list[Message]]:
+    async def chat_upload(self, cli: Client, msg: Message) -> Message | list[Message] | list[list[Message]]:
         """发送解析结果到聊天中"""
 
         async def handle_cache(m):
             if isinstance(m, Message):
-                return await m.copy(
-                    msg.chat.id, message_thread_id=msg.message_thread_id
-                )
+                return await m.copy(msg.chat.id, message_thread_id=msg.message_thread_id)
             if isinstance(m, list):
                 if all(isinstance(i, Message) for i in m):
                     if not m:
@@ -329,9 +319,7 @@ class ParseResultOperate(ABC):
         self.telegraph_url: str | None = None  # telegraph 帖子链接
 
     @abstractmethod
-    async def chat_upload(
-        self, msg: Message
-    ) -> Message | list[Message] | list[list[Message]]:
+    async def chat_upload(self, msg: Message) -> Message | list[Message] | list[list[Message]]:
         """普通聊天上传"""
         raise NotImplementedError
 
@@ -339,11 +327,7 @@ class ParseResultOperate(ABC):
         """内联上传"""
         results = []
 
-        media = (
-            self.result.media
-            if isinstance(self.result.media, list)
-            else [self.result.media]
-        )
+        media = self.result.media if isinstance(self.result.media, list) else [self.result.media]
         if not media:
             results.append(
                 InlineQueryResultArticle(
@@ -387,8 +371,7 @@ class ParseResultOperate(ABC):
                 else:
                     results.append(
                         InlineQueryResultPhoto(
-                            i.thumb_url
-                            or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
+                            i.thumb_url or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
                             photo_width=300,
                             photo_height=300,
                             id=f"download_{index}",
@@ -398,9 +381,7 @@ class ParseResultOperate(ABC):
                         )
                     )
             elif isinstance(i, Ani):
-                results.append(
-                    InlineQueryResultAnimation(i.path, thumb_url=i.thumb_url, **k)
-                )
+                results.append(InlineQueryResultAnimation(i.path, thumb_url=i.thumb_url, **k))
         return await iq.answer(results, cache_time=0)
 
     def delete(self):
@@ -423,7 +404,7 @@ class ParseResultOperate(ABC):
         :return:
         """
         if not self.result.raw_url:
-            return
+            return None
         button = []
 
         raw_url_btn = Ikb("原链接", url=self.result.raw_url)
@@ -436,9 +417,7 @@ class ParseResultOperate(ABC):
         button.append(raw_url_btn)
         if bot_cfg.ai_summary and not hide_summary:
             if summarizing:
-                ai_summary_btn = Ikb(
-                    "AI总结中❇️", callback_data=f"summarizing_{self.hash_url}"
-                )
+                ai_summary_btn = Ikb("AI总结中❇️", callback_data=f"summarizing_{self.hash_url}")
             button.append(ai_summary_btn)
 
         return Ikm([button])
@@ -468,9 +447,7 @@ class ParseResultOperate(ABC):
                 raise e
             self.ai_summary_result = r
 
-        await cq.edit_message_text(
-            self.f_text(r.content), reply_markup=self.button(show_summary_result=True)
-        )
+        await cq.edit_message_text(self.f_text(r.content), reply_markup=self.button(show_summary_result=True))
 
         return self
 
@@ -484,21 +461,13 @@ class ParseResultOperate(ABC):
         return (
             f"[{self.result.title.replace('\n', ' ') or '无标题'}]({self.telegraph_url})"
             if self.telegraph_url
-            else (
-                self.f_text(f"**{self.result.title}**\n\n{self.result.desc}")
-                if self.result.title or self.result.desc
-                else "无标题"
-            )
+            else (self.f_text(f"**{self.result.title}**\n\n{self.result.desc}") if self.result.title or self.result.desc else "无标题")
         ).strip()
 
     @property
     def content_and_url(self) -> str:
         text = self.content_and_no_url
-        return (
-            f"{text}\n\n<b>▎[Source]({self.result.raw_url})</b>"
-            if self.result.raw_url
-            else text
-        ).strip()
+        return (f"{text}\n\n<b>▎[Source]({self.result.raw_url})</b>" if self.result.raw_url else text).strip()
 
     @staticmethod
     def f_text(text: str) -> str:
@@ -562,10 +531,7 @@ class VideoParseResultOperate(ParseResultOperate):
                             height=drm.height,
                         )
                     )
-                m = [
-                    await msg.reply_media_group(media[i : i + 10], quote=True)
-                    for i in range(0, len(handle_video), 10)
-                ]
+                m = [await msg.reply_media_group(media[i : i + 10], quote=True) for i in range(0, len(handle_video), 10)]
                 mm = m[0][0] if isinstance(m[0], list) else m[0]
                 await mm.reply_text(
                     self.content_and_url,
@@ -608,9 +574,7 @@ class ImageParseResultOperate(ParseResultOperate):
     """图片解析结果操作"""
 
     async def _send_ph(self, html_content: str, msg: Message) -> Message:
-        page = await Telegraph().create_page(
-            self.result.title or "无标题", html_content=html_content
-        )
+        page = await Telegraph().create_page(self.result.title or "无标题", html_content=html_content)
         self.telegraph_url = page.url
         return await msg.reply_text(
             self.content_and_url,
@@ -618,33 +582,17 @@ class ImageParseResultOperate(ParseResultOperate):
             reply_markup=self.button(),
         )
 
-    async def chat_upload(
-        self, msg: Message
-    ) -> Message | list[Message] | list[list[Message]]:
+    async def chat_upload(self, msg: Message) -> Message | list[Message] | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
 
         if isinstance(self.result, WXImageParseResult):
             return await self._send_ph(
-                clean_article_html(
-                    markdown(
-                        self.result.wx.markdown_content.replace(
-                            "mmbiz.qpic.cn", "mmbiz.qpic.cn.in"
-                        )
-                    )
-                ),
+                clean_article_html(markdown(self.result.wx.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))),
                 msg,
             )
-        elif isinstance(self.result, CoolapkImageParseResult) and (
-            markdown_content := self.result.coolapk.markdown_content
-        ):
+        elif isinstance(self.result, CoolapkImageParseResult) and (markdown_content := self.result.coolapk.markdown_content):
             return await self._send_ph(
-                clean_article_html(
-                    markdown(
-                        markdown_content.replace(
-                            "image.coolapk.com", "qpic.cn.in/image.coolapk.com"
-                        )
-                    )
-                ),
+                clean_article_html(markdown(markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))),
                 msg,
             )
 
@@ -666,12 +614,7 @@ class ImageParseResultOperate(ParseResultOperate):
             )
         elif count <= 9:
             text = self.content_and_url
-            m = await msg.reply_media_group(
-                [
-                    InputMediaPhoto(await self.tg_compatible(v.path))
-                    for v in self.download_result.media
-                ]
-            )
+            m = await msg.reply_media_group([InputMediaPhoto(await self.tg_compatible(v.path)) for v in self.download_result.media])
             await m[0].reply_text(
                 text,
                 link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -690,22 +633,16 @@ class ImageParseResultOperate(ParseResultOperate):
 
                 tasks = [limited_ih(i.path) for i in self.download_result.media]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
-            results = [
-                f'<img src="{i}">' for i in results if not isinstance(i, Exception)
-            ]
+            results = [f'<img src="{i}">' for i in results if not isinstance(i, Exception)]
             if not results:
                 return await msg.reply_text("图片上传图床失败")
-            return await self._send_ph(
-                f"{self.result.desc}<br><br>" + "".join(results), msg
-            )
+            return await self._send_ph(f"{self.result.desc}<br><br>" + "".join(results), msg)
 
 
 class MultimediaParseResultOperate(ParseResultOperate):
     """图片视频混合解析结果操作"""
 
-    async def chat_upload(
-        self, msg: Message
-    ) -> Message | list[Message] | list[list[Message]]:
+    async def chat_upload(self, msg: Message) -> Message | list[Message] | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
 
         count = len(self.download_result.media)
@@ -764,10 +701,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                         caption=text if not i else f"**{i + 1}/{count}**",
                     )
                     ani_msg.append(ani)
-            m = ani_msg + [
-                await msg.reply_media_group(media[i : i + 10], quote=True)
-                for i in range(0, count, 10)
-            ]
+            m = ani_msg + [await msg.reply_media_group(media[i : i + 10], quote=True) for i in range(0, count, 10)]
             mm = m[0][0] if isinstance(m[0], list) else m[0]
             await mm.reply_text(
                 text,

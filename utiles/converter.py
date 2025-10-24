@@ -1,8 +1,7 @@
-# encoding=utf8
 # FROM https://github.com/mercuree/html-telegraph-poster/blob/7212225e28a0206803c32e67d1185bbfbd1fc181/html_telegraph_poster/converter.py
 import re
-from lxml.html.clean import Cleaner
 
+from lxml.html.clean import Cleaner
 
 allowed_tags = (
     "a",
@@ -64,7 +63,7 @@ def clean_article_html(html_string):
     )
     # wrap with div to be sure it is there
     # (otherwise lxml will add parent element in some cases
-    html_string = "<div>%s</div>" % html_string
+    html_string = f"<div>{html_string}</div>"
     cleaned = c.clean_html(html_string)
     # remove wrapped div
     cleaned = cleaned[5:-6]

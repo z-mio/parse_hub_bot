@@ -1,5 +1,6 @@
 import pillow_heif
 from pyrogram import Client
+
 from config.config import bot_cfg
 from log import logger
 
@@ -17,7 +18,7 @@ class Bot(Client):
             api_id=self.cfg.api_id,
             api_hash=self.cfg.api_hash,
             bot_token=self.cfg.bot_token,
-            plugins=dict(root="plugins"),
+            plugins={"root": "plugins"},
             proxy=self.cfg.bot_proxy.dict_format,
         )
 

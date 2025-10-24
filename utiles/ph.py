@@ -11,13 +11,9 @@ class Telegraph:
         self.domain = domain
         self.telegraph = TelegraphAPI(access_token=token, domain=domain)
 
-    async def create_account(
-        self, short_name: str, author_name: str = None, author_url: str = None
-    ) -> "TelegraphAccount":
+    async def create_account(self, short_name: str, author_name: str = None, author_url: str = None) -> "TelegraphAccount":
         """创建 Telegraph 账户"""
-        account = await self.telegraph.create_account(
-            short_name, author_name, author_url
-        )
+        account = await self.telegraph.create_account(short_name, author_name, author_url)
         acc_info = await self.get_account_info(account)
         self.token = acc_info.access_token
         return acc_info
@@ -53,9 +49,7 @@ class Telegraph:
         """创建 Telegraph 页面"""
         if auto_create_account and not self.token:
             # 随机用户名
-            short_name = "tg_" + str(
-                int(100000 * (1 + 0.5 * (1 + 0.5 * (1 + 0.5 * 1))))
-            )
+            short_name = "tg_" + str(int(100000 * (1 + 0.5 * (1 + 0.5 * (1 + 0.5 * 1)))))
             await self.create_account(short_name)
         response = await self.telegraph.create_page(
             title,

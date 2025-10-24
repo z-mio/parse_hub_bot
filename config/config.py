@@ -1,9 +1,9 @@
 import shutil
+from os import getenv
 from pathlib import Path
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
-from os import getenv
 from parsehub.config import GlobalConfig
 
 load_dotenv()
@@ -23,9 +23,7 @@ class BotConfig:
         self.parser_proxy: None | str = getenv("PARSER_PROXY", None)
         self.downloader_proxy: None | str = getenv("DOWNLOADER_PROXY", None)
 
-        self.cache_time = (
-            int(ct) if (ct := getenv("CACHE_TIME")) else 24 * 60 * 60
-        )  # 24 hours
+        self.cache_time = int(ct) if (ct := getenv("CACHE_TIME")) else 24 * 60 * 60  # 24 hours
         self.ai_summary = bool(getenv("AI_SUMMARY").lower() == "true")
         self.douyin_api = getenv("DOUYIN_API", None)
 

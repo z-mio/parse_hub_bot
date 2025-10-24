@@ -7,9 +7,7 @@ from PIL import Image
 from pyrogram import Client
 
 
-async def schedule_delete_messages(
-    client: Client, chat_id: int, message_ids: int | list, delay_seconds: int = 2
-):
+async def schedule_delete_messages(client: Client, chat_id: int, message_ids: int | list, delay_seconds: int = 2):
     """定时删除消息"""
 
     await asyncio.sleep(delay_seconds)

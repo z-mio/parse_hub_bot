@@ -4,11 +4,11 @@ from parsehub.types import Video
 from pyrogram import Client
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import (
-    InlineQuery,
-    InputTextMessageContent,
-    InlineQueryResultArticle,
     ChosenInlineResult,
+    InlineQuery,
+    InlineQueryResultArticle,
     InputMediaVideo,
+    InputTextMessageContent,
     LinkPreviewOptions,
 )
 
@@ -38,17 +38,13 @@ async def call_inline_parse(_, iq: InlineQuery):
     await pp.inline_upload(iq)
 
 
-async def callback(
-    current, total, status: str, client: Client, inline_message_id, pp: TgParseHub
-):
+async def callback(current, total, status: str, client: Client, inline_message_id, pp: TgParseHub):
     text = progress(current, total, status)
     if not text:
         return
     text = f"{pp.operate.content_and_url}\n\n{text}"
     try:
-        await client.edit_inline_text(
-            inline_message_id, text, reply_markup=pp.operate.button(hide_summary=True)
-        )
+        await client.edit_inline_text(inline_message_id, text, reply_markup=pp.operate.button(hide_summary=True))
     except MessageNotModified:
         ...
 
@@ -74,9 +70,7 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
         return
 
     try:
-        await client.edit_inline_text(
-            imid, "下 载 中...", reply_markup=pp.operate.button(hide_summary=True)
-        )
+        await client.edit_inline_text(imid, "下 载 中...", reply_markup=pp.operate.button(hide_summary=True))
         await pp.download(
             callback,
             (client, imid, pp),
@@ -103,9 +97,7 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
         reply_markup=pp.operate.button(hide_summary=True),
     )
     v: Video = (
-        pp.operate.download_result.media[index]
-        if isinstance(pp.operate.download_result.media, list)
-        else pp.operate.download_result.media
+        pp.operate.download_result.media[index] if isinstance(pp.operate.download_result.media, list) else pp.operate.download_result.media
     )
     try:
         await client.edit_inline_media(
