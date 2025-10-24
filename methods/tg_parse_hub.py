@@ -57,10 +57,7 @@ from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
 from utiles.utile import encrypt, img2webp, split_video
 
-_parsing = SimpleMemoryCache(plugins=[TimingPlugin()])  # 正在解析的链接
-_url_cache = SimpleMemoryCache(plugins=[TimingPlugin()])  # 网址缓存
-_operate_cache = SimpleMemoryCache(plugins=[TimingPlugin()])  # 解析结果缓存
-_msg_cache = SimpleMemoryCache(plugins=[TimingPlugin()])  # 解析结果消息缓存
+CACHE = SimpleMemoryCache(plugins=[TimingPlugin()])
 
 scheduler = AsyncIOScheduler()
 scheduler.start()
@@ -78,12 +75,7 @@ class TgParseHub(ParseHub):
         self.downloader_config: DownloadConfig | None = None
 
         self.is_cache = bool(bot_cfg.cache_time)
-        self.parsing = _parsing
-        """正在解析的链接"""
-        self.cache = _operate_cache
-        """解析结果缓存"""
-        self.url_cache = _url_cache
-        """网址缓存"""
+        self.cache = CACHE
         self.operate: ParseResultOperate | None = None
         """解析结果操作对象"""
 
@@ -164,7 +156,7 @@ class TgParseHub(ParseHub):
         if not self.operate:
             return
         if self.is_cache:
-            await self.cache.delete(self.operate.hash_url)
+            await self.cache.delete(f"parse:result:{self.operate.hash_url}")
         self.operate.delete()
 
     async def chat_upload(self, cli: Client, msg: Message) -> Message | list[Message] | list[list[Message]]:
@@ -231,19 +223,19 @@ class TgParseHub(ParseHub):
     async def get_parse_task(self, url: str) -> bool:
         """获取解析任务"""
         url = await self._get_url(url)
-        return await self.parsing.get(url)
+        return await self.cache.get(f"parse:parsing:{url}")
 
     async def _get_parse_task(self):
         """获取解析任务"""
-        return await self.parsing.get(self.url, False)
+        return await self.cache.get(f"parse:parsing:{self.url}", False)
 
     async def _add_parse_task(self):
         """添加解析任务, 超时: 5分钟"""
-        await self.parsing.set(self.url, True, ttl=300)
+        await self.cache.set(f"parse:parsing:{self.url}", True, ttl=300)
 
     async def _del_parse_task(self):
         """解析结束"""
-        await self.parsing.delete(self.url)
+        await self.cache.delete(f"parse:parsing:{self.url}")
 
     async def _get_url(self, url: str):
         """获取网址"""
@@ -256,26 +248,26 @@ class TgParseHub(ParseHub):
 
     async def _set_url_cache(self):
         """缓存网址"""
-        await self.url_cache.set(encrypt(self.url), self.url, ttl=bot_cfg.cache_time)
+        await self.cache.set(f"parse:url:{encrypt(self.url)}", self.url, ttl=bot_cfg.cache_time)
 
     async def _get_url_cache(self, hash_url: str) -> str | None:
         """获取缓存网址"""
-        return await self.url_cache.get(hash_url)
+        return await self.cache.get(f"parse:url:{hash_url}")
 
     async def _get_cache(self) -> Union["ParseResultOperate", None]:
         """获取缓存结果"""
-        return await self.cache.get(encrypt(self.url))
+        return await self.cache.get(f"parse:result:{encrypt(self.url)}")
 
     async def _set_cache(self, result: "ParseResultOperate", cache_time):
         """缓存结果"""
-        await self.cache.set(result.hash_url, result)
+        await self.cache.set(f"parse:result:{result.hash_url}", result)
         await self._clear_cache(cache_time)
 
     async def _clear_cache(self, cache_time: int = bot_cfg.cache_time):
         """定时删除缓存"""
 
         async def fn():
-            await self.cache.delete(self.operate.hash_url)
+            await self.cache.delete(f"parse:result:{self.operate.hash_url}")
             self.operate.delete()
 
         if not scheduler.get_job(self.operate.hash_url):
@@ -286,11 +278,11 @@ class TgParseHub(ParseHub):
         self,
     ) -> Message | list[Message] | list[list[Message]] | None:
         """获取缓存消息"""
-        return await _msg_cache.get(self.operate.hash_url)
+        return await self.cache.get(f"parse:msg:{self.operate.hash_url}")
 
     async def _set_msg_cache(self, msg: Message):
         """缓存消息"""
-        await _msg_cache.set(self.operate.hash_url, msg, ttl=bot_cfg.cache_time)
+        await self.cache.set(f"parse:msg:{self.operate.hash_url}", msg, ttl=bot_cfg.cache_time)
 
     @staticmethod
     def _select_operate(result: ParseResult = None) -> "ParseResultOperate":
