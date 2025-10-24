@@ -37,6 +37,7 @@ from pyrogram.types import (
     InlineQueryResultAnimation,
     InlineQueryResultArticle,
     InlineQueryResultPhoto,
+    InlineQueryResultVideo,
     InputMediaPhoto,
     InputMediaVideo,
     InputTextMessageContent,
@@ -403,7 +404,6 @@ class ParseResultOperate(ABC):
         results = []
 
         media = self.result.media if isinstance(self.result.media, list) else [self.result.media]
-        print(media)
         if not media:
             results.append(
                 InlineQueryResultArticle(
@@ -420,7 +420,8 @@ class ParseResultOperate(ABC):
             text = self.content_and_url
             k = {
                 "caption": text,
-                "title": text,
+                "title": self.result.title or "无标题",
+                "description": self.result.desc,
                 "reply_markup": self.button(),
             }
 
@@ -456,7 +457,16 @@ class ParseResultOperate(ABC):
                         )
                     )
             elif isinstance(i, Ani):
-                results.append(InlineQueryResultAnimation(i.path, thumb_url=i.thumb_url, **k))
+                if i.ext != "gif":
+                    results.append(
+                        InlineQueryResultVideo(
+                            i.path,
+                            i.thumb_url or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
+                            **k,
+                        )
+                    )
+                else:
+                    results.append(InlineQueryResultAnimation(i.path, thumb_url=i.thumb_url, **k))
         return await iq.answer(results, cache_time=0)
 
     def delete(self):
