@@ -6,6 +6,7 @@ import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import BinaryIO, Union
@@ -61,6 +62,15 @@ CACHE = SimpleMemoryCache(plugins=[TimingPlugin()])
 
 scheduler = AsyncIOScheduler()
 scheduler.start()
+
+
+@dataclass
+class CachedMessageInfo:
+    """缓存的消息信息"""
+
+    chat_id: int
+    message_id: int
+    is_media_group: bool = False
 
 
 class TgParseHub(ParseHub):
@@ -162,44 +172,24 @@ class TgParseHub(ParseHub):
     async def chat_upload(self, cli: Client, msg: Message) -> Message | list[Message] | list[list[Message]]:
         """发送解析结果到聊天中"""
 
-        async def handle_cache(m):
-            if isinstance(m, Message):
-                return await m.copy(msg.chat.id, message_thread_id=msg.message_thread_id)
-            if isinstance(m, list):
-                if all(isinstance(i, Message) for i in m):
-                    if not m:
-                        return None
-                    m = m[0]
-                    mg = await cli.copy_media_group(
-                        msg.chat.id,
-                        m.chat.id,
-                        m.id,
-                        message_thread_id=msg.message_thread_id,
-                    )
+        # 检查缓存
+        if cached_info := await self._get_msg_cache():
+            if reconstructed := await self._reconstruct_messages(
+                cli, cached_info, msg.chat.id, msg.id, msg.message_thread_id
+            ):
+                return reconstructed
 
-                    return mg
-                [await handle_cache(i) for i in m]
-                await msg.reply(
-                    self.operate.content_and_url,
-                    quote=False,
-                    reply_markup=self.operate.button(),
-                    link_preview_options=LinkPreviewOptions(is_disabled=True),
-                )
-            return None
-
-        cache_msg = await self._get_msg_cache()
-        if cache_msg:
-            return await handle_cache(cache_msg)
-
+        # 没有缓存则执行实际上传
         async with self.error_handler():
-            msg = await self.operate.chat_upload(msg)
+            result_msg = await self.operate.chat_upload(msg)
 
+        # 缓存消息信息
         if self.is_cache:
-            await self._set_msg_cache(msg)
+            await self._set_msg_cache(result_msg)
         else:
             await self.delete()
         await self._del_parse_task()
-        return msg
+        return result_msg
 
     async def inline_upload(self, iq: InlineQuery):
         """发送解析结果到内联中"""
@@ -274,15 +264,106 @@ class TgParseHub(ParseHub):
             run_time = datetime.now() + timedelta(seconds=cache_time)
             scheduler.add_job(fn, "date", run_date=run_time, id=self.operate.hash_url)
 
-    async def _get_msg_cache(
-        self,
-    ) -> Message | list[Message] | list[list[Message]] | None:
-        """获取缓存消息"""
+    async def _get_msg_cache(self) -> CachedMessageInfo | list[CachedMessageInfo] | None:
+        """获取缓存的消息信息"""
         return await self.cache.get(f"parse:msg:{self.operate.hash_url}")
 
-    async def _set_msg_cache(self, msg: Message):
-        """缓存消息"""
-        await self.cache.set(f"parse:msg:{self.operate.hash_url}", msg, ttl=bot_cfg.cache_time)
+    async def _set_msg_cache(self, msg: Message | list[Message] | list[list[Message]]):
+        """缓存消息ID信息"""
+        cached_info = self._extract_msg_ids(msg)
+        if cached_info:
+            await self.cache.set(f"parse:msg:{self.operate.hash_url}", cached_info, ttl=bot_cfg.cache_time)
+
+    @staticmethod
+    def _extract_msg_ids(
+        msg: Message | list[Message] | list[list[Message]],
+    ) -> CachedMessageInfo | list[CachedMessageInfo] | None:
+        """从消息中提取 chat_id 和 message_id 信息"""
+        if isinstance(msg, Message):
+            # 单条消息
+            return CachedMessageInfo(chat_id=msg.chat.id, message_id=msg.id)
+        elif isinstance(msg, list):
+            if not msg:
+                return None
+            if all(isinstance(i, Message) for i in msg):
+                # 媒体组：缓存第一条消息的ID
+                return CachedMessageInfo(chat_id=msg[0].chat.id, message_id=msg[0].id, is_media_group=True)
+            else:
+                # 嵌套列表（多个媒体组）
+                result = []
+                for item in msg:
+                    if isinstance(item, Message):
+                        result.append(CachedMessageInfo(chat_id=item.chat.id, message_id=item.id))
+                    elif isinstance(item, list) and item:
+                        result.append(
+                            CachedMessageInfo(chat_id=item[0].chat.id, message_id=item[0].id, is_media_group=True)
+                        )
+                return result if result else None
+        return None
+
+    async def _reconstruct_messages(
+        self,
+        cli: Client,
+        cached_info: CachedMessageInfo | list[CachedMessageInfo],
+        target_chat_id: int,
+        target_message_id: int,
+        message_thread_id: int | None = None,
+    ) -> Message | list[Message] | list[list[Message]] | None:
+        """根据缓存的消息ID信息重建消息并复制到目标聊天"""
+        try:
+            if isinstance(cached_info, CachedMessageInfo):
+                # 单条消息或单个媒体组
+                if cached_info.is_media_group:
+                    # 复制媒体组
+                    return await cli.copy_media_group(
+                        target_chat_id,
+                        cached_info.chat_id,
+                        cached_info.message_id,
+                        message_thread_id=message_thread_id,
+                        reply_to_message_id=target_message_id,
+                    )
+                else:
+                    # 复制单条消息
+                    original_msg = await cli.get_messages(cached_info.chat_id, cached_info.message_id)
+                    return await original_msg.copy(
+                        target_chat_id, message_thread_id=message_thread_id, reply_to_message_id=target_message_id
+                    )
+            elif isinstance(cached_info, list):
+                # 多个消息/媒体组
+                results = []
+                for info in cached_info:
+                    if info.is_media_group:
+                        mg = await cli.copy_media_group(
+                            target_chat_id,
+                            info.chat_id,
+                            info.message_id,
+                            message_thread_id=message_thread_id,
+                            reply_to_message_id=target_message_id,
+                        )
+                        results.append(mg)
+                    else:
+                        original_msg = await cli.get_messages(info.chat_id, info.message_id)
+                        copied = await original_msg.copy(
+                            target_chat_id, message_thread_id=message_thread_id, reply_to_message_id=target_message_id
+                        )
+                        results.append(copied)
+                    await asyncio.sleep(0.5)  # 避免速率限制
+
+                # 发送文本说明消息
+                if results:
+                    first_msg = results[0][0] if isinstance(results[0], list) else results[0]
+                    await first_msg.reply_text(
+                        self.operate.content_and_url,
+                        link_preview_options=LinkPreviewOptions(is_disabled=True),
+                        reply_markup=self.operate.button(),
+                        quote=True,
+                    )
+                return results
+        except Exception as e:
+            logger.warning(f"重建缓存消息失败: {e}")
+            # 缓存失效，删除缓存
+            await self.cache.delete(f"parse:msg:{self.operate.hash_url}")
+            return None
 
     @staticmethod
     def _select_operate(result: ParseResult = None) -> "ParseResultOperate":
@@ -322,6 +403,7 @@ class ParseResultOperate(ABC):
         results = []
 
         media = self.result.media if isinstance(self.result.media, list) else [self.result.media]
+        print(media)
         if not media:
             results.append(
                 InlineQueryResultArticle(
@@ -711,7 +793,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                     ani = await msg.reply_animation(
                         v.path,
                         quote=True,
-                        caption=text if not i else f"**{i + 1}/{count}**",
+                        caption=f"**{i + 1}/{count}**",
                     )
                     ani_msg.append(ani)
             m = ani_msg + [await msg.reply_media_group(media[i : i + 10], quote=True) for i in range(0, count, 10)]
