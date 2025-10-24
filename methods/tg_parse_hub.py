@@ -440,7 +440,9 @@ class ParseResultOperate(ABC):
                 raise e
             self.ai_summary_result = r
 
-        await cq.edit_message_text(self.f_text(r.content), reply_markup=self.button(show_summary_result=True))
+        await cq.edit_message_text(
+            self.add_source(self.f_text(r.content)), reply_markup=self.button(show_summary_result=True)
+        )
 
         return self
 
@@ -464,6 +466,10 @@ class ParseResultOperate(ABC):
     @property
     def content_and_url(self) -> str:
         text = self.content_and_no_url
+        return self.add_source(text)
+
+    def add_source(self, text: str):
+        """添加链接"""
         return (f"{text}\n\n<b>▎[Source]({self.result.raw_url})</b>" if self.result.raw_url else text).strip()
 
     @staticmethod
