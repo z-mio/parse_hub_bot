@@ -358,8 +358,7 @@ class ParseResultOperate(ABC):
                     )
                 )
             elif isinstance(i, Video):
-                video_size = os.path.getsize(i.path)
-                if video_size > 1024 * 1024 * 2:
+                if i.exists() and os.path.getsize(i.path) > 1024 * 1024 * 2:
                     results.append(
                         InlineQueryResultPhoto(
                             i.thumb_url,
