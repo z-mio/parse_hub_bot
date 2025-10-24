@@ -97,7 +97,9 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
         reply_markup=pp.operate.button(hide_summary=True),
     )
     v: Video = (
-        pp.operate.download_result.media[index] if isinstance(pp.operate.download_result.media, list) else pp.operate.download_result.media
+        pp.operate.download_result.media[index]
+        if isinstance(pp.operate.download_result.media, list)
+        else pp.operate.download_result.media
     )
     try:
         await client.edit_inline_media(

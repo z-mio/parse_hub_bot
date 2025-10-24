@@ -154,7 +154,9 @@ class TgParseHub(ParseHub):
         if (dr := self.operate.download_result) and dr.exists():
             return dr
         async with self.error_handler():
-            self.operate.download_result = await self.result.download(None, callback, callback_args, config=self.downloader_config)
+            self.operate.download_result = await self.result.download(
+                None, callback, callback_args, config=self.downloader_config
+            )
         return self.operate.download_result
 
     async def delete(self):
@@ -460,7 +462,11 @@ class ParseResultOperate(ABC):
         return (
             f"[{self.result.title.replace('\n', ' ') or '无标题'}]({self.telegraph_url})"
             if self.telegraph_url
-            else (self.f_text(f"**{self.result.title}**\n\n{self.result.desc}") if self.result.title or self.result.desc else "无标题")
+            else (
+                self.f_text(f"**{self.result.title}**\n\n{self.result.desc}")
+                if self.result.title or self.result.desc
+                else "无标题"
+            )
         ).strip()
 
     @property
@@ -530,7 +536,9 @@ class VideoParseResultOperate(ParseResultOperate):
                             height=drm.height,
                         )
                     )
-                m = [await msg.reply_media_group(media[i : i + 10], quote=True) for i in range(0, len(handle_video), 10)]
+                m = [
+                    await msg.reply_media_group(media[i : i + 10], quote=True) for i in range(0, len(handle_video), 10)
+                ]
                 mm = m[0][0] if isinstance(m[0], list) else m[0]
                 await mm.reply_text(
                     self.content_and_url,
@@ -586,12 +594,18 @@ class ImageParseResultOperate(ParseResultOperate):
 
         if isinstance(self.result, WXImageParseResult):
             return await self._send_ph(
-                clean_article_html(markdown(self.result.wx.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))),
+                clean_article_html(
+                    markdown(self.result.wx.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))
+                ),
                 msg,
             )
-        elif isinstance(self.result, CoolapkImageParseResult) and (markdown_content := self.result.coolapk.markdown_content):
+        elif isinstance(self.result, CoolapkImageParseResult) and (
+            markdown_content := self.result.coolapk.markdown_content
+        ):
             return await self._send_ph(
-                clean_article_html(markdown(markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))),
+                clean_article_html(
+                    markdown(markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))
+                ),
                 msg,
             )
 
@@ -613,7 +627,9 @@ class ImageParseResultOperate(ParseResultOperate):
             )
         elif count <= 9:
             text = self.content_and_url
-            m = await msg.reply_media_group([InputMediaPhoto(await self.tg_compatible(v.path)) for v in self.download_result.media])
+            m = await msg.reply_media_group(
+                [InputMediaPhoto(await self.tg_compatible(v.path)) for v in self.download_result.media]
+            )
             await m[0].reply_text(
                 text,
                 link_preview_options=LinkPreviewOptions(is_disabled=True),

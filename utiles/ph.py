@@ -11,7 +11,9 @@ class Telegraph:
         self.domain = domain
         self.telegraph = TelegraphAPI(access_token=token, domain=domain)
 
-    async def create_account(self, short_name: str, author_name: str = None, author_url: str = None) -> "TelegraphAccount":
+    async def create_account(
+        self, short_name: str, author_name: str = None, author_url: str = None
+    ) -> "TelegraphAccount":
         """创建 Telegraph 账户"""
         account = await self.telegraph.create_account(short_name, author_name, author_url)
         acc_info = await self.get_account_info(account)
