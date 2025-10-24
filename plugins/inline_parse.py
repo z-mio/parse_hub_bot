@@ -1,3 +1,5 @@
+import asyncio
+
 from parsehub.types import Video
 from pyrogram import Client
 from pyrogram.errors import MessageNotModified
@@ -59,9 +61,19 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
         return
     index = int(cir.result_id.split("_")[1])
     imid = cir.inline_message_id
-
     try:
         pp = await TgParseHub().parse(cir.query)
+    except Exception as e:
+        logger.exception(e)
+        logger.error("内联解析失败, 以上为错误信息")
+        await client.edit_inline_text(
+            imid,
+            f"解析错误: \n```\n{e}```",
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        return
+
+    try:
         await client.edit_inline_text(
             imid, "下 载 中...", reply_markup=pp.operate.button(hide_summary=True)
         )
@@ -70,24 +82,32 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
             (client, imid, pp),
         )
     except Exception as e:
+        logger.exception(e)
+        logger.error("内联下载失败, 以上为错误信息")
         await client.edit_inline_text(
             imid,
-            f"解析或下载错误: \n```\n{e}```",
+            f"下载错误: \n```\n{e}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        logger.exception(e)
-        logger.error("解析或下载失败, 以上为错误信息")
-    else:
+        await asyncio.sleep(3)
         await client.edit_inline_text(
             imid,
-            f"{pp.operate.content_and_url}\n\n上 传 中...",
-            reply_markup=pp.operate.button(hide_summary=True),
+            pp.operate.content_and_url,
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        v: Video = (
-            pp.operate.download_result.media[index]
-            if isinstance(pp.operate.download_result.media, list)
-            else pp.operate.download_result.media
-        )
+        return
+
+    await client.edit_inline_text(
+        imid,
+        f"{pp.operate.content_and_url}\n\n上 传 中...",
+        reply_markup=pp.operate.button(hide_summary=True),
+    )
+    v: Video = (
+        pp.operate.download_result.media[index]
+        if isinstance(pp.operate.download_result.media, list)
+        else pp.operate.download_result.media
+    )
+    try:
         await client.edit_inline_media(
             imid,
             media=InputMediaVideo(
@@ -99,4 +119,18 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
                 height=v.height,
             ),
             reply_markup=pp.operate.button(),
+        )
+    except Exception as e:
+        logger.exception(e)
+        logger.error("内联上传失败, 以上为错误信息")
+        await client.edit_inline_text(
+            imid,
+            f"上传错误: \n```\n{e}```",
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        await asyncio.sleep(3)
+        await client.edit_inline_text(
+            imid,
+            pp.operate.content_and_url,
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
