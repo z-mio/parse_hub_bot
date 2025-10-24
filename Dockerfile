@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY --from=build --chown=appuser:appgroup /app /app
+COPY --from=build /app /app
 
 ENV PATH="/app/.venv/bin:$PATH"
 
