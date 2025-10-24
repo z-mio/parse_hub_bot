@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import BinaryIO, Union
 
-from aiocache import Cache
+from aiocache import SimpleMemoryCache
 from aiocache.plugins import TimingPlugin
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from markdown import markdown
@@ -57,10 +57,10 @@ from utiles.img_host import ImgHost
 from utiles.ph import Telegraph
 from utiles.utile import encrypt, img2webp, split_video
 
-_parsing = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 正在解析的链接
-_url_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 网址缓存
-_operate_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 解析结果缓存
-_msg_cache = Cache(Cache.MEMORY, plugins=[TimingPlugin()])  # 解析结果消息缓存
+_parsing = SimpleMemoryCache(plugins=[TimingPlugin()])  # 正在解析的链接
+_url_cache = SimpleMemoryCache(plugins=[TimingPlugin()])  # 网址缓存
+_operate_cache = SimpleMemoryCache(plugins=[TimingPlugin()])  # 解析结果缓存
+_msg_cache = SimpleMemoryCache(plugins=[TimingPlugin()])  # 解析结果消息缓存
 
 scheduler = AsyncIOScheduler()
 scheduler.start()
