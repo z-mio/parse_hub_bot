@@ -101,6 +101,52 @@ sudo sh start.sh restart # 重启 Bot
 
 #### 直接运行:
 
+> [!IMPORTANT]
+><details>
+><summary>注意</summary>
+>
+>Linux用户在导入skia-python包时可能会遇到以下报错
+>
+>```bash
+>libGL.so.1: cannot open shared object file: No such file or directory
+>```
+>
+>Windows用户在缺少Microsoft Visual C++ Runtime时可能会遇到以下报错
+>
+>```commandline
+>ImportError: DLL load failed while importing skia: The specified module could not be found.
+>```
+>
+>## 解决方法
+>
+>> ubuntu用户
+>
+>```bash
+># Ubuntu 22 安装
+>apt install libgl1-mesa-glx
+># Ubuntu 24 安装
+>apt install libgl1 libglx-mesa0
+>```
+>
+>> ArchLinux用户
+>
+>```bash
+>pacman -S libgl
+>```
+>
+>> centos用户
+>
+>```bash
+>yum install mesa-libGL -y
+>```
+>
+>> Windows用户
+>
+>下载链接[Microsoft Visual C++ 2015 Redistributable Update 3 RC](microsoft.com/en-US/download/details.aspx?id=52685)
+>
+>
+></details>
+
 **在项目根目录运行:**
 
 ```shell

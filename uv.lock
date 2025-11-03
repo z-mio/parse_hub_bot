@@ -228,7 +228,7 @@ wheels = [
 
 [[package]]
 name = "fastapi"
-version = "0.120.2"
+version = "0.121.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "annotated-doc" },
@@ -236,9 +236,9 @@ dependencies = [
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a0/fb/79e556bc8f9d360e5cc2fa7364a7ad6bda6f1736938b43a2791fa8baee7b/fastapi-0.120.2.tar.gz", hash = "sha256:4c5ab43e2a90335bbd8326d1b659eac0f3dbcc015e2af573c4f5de406232c4ac", size = 338684, upload-time = "2025-10-29T13:47:35.802Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8c/e3/77a2df0946703973b9905fd0cde6172c15e0781984320123b4f5079e7113/fastapi-0.121.0.tar.gz", hash = "sha256:06663356a0b1ee93e875bbf05a31fb22314f5bed455afaaad2b2dad7f26e98fa", size = 342412, upload-time = "2025-11-03T10:25:54.818Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/81/cc/1c33d05f62c9349bb80dfe789cc9a7409bdfb337a63fa347fd651d25294a/fastapi-0.120.2-py3-none-any.whl", hash = "sha256:bedcf2c14240e43d56cb9a339b32bcf15104fe6b5897c0222603cb7ec416c8eb", size = 108383, upload-time = "2025-10-29T13:47:32.978Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/2c/42277afc1ba1a18f8358561eee40785d27becab8f80a1f945c0a3051c6eb/fastapi-0.121.0-py3-none-any.whl", hash = "sha256:8bdf1b15a55f4e4b0d6201033da9109ea15632cb76cf156e7b8b4019f2172106", size = 109183, upload-time = "2025-11-03T10:25:53.27Z" },
 ]
 
 [[package]]
@@ -459,7 +459,7 @@ wheels = [
 
 [[package]]
 name = "langchain-core"
-version = "1.0.2"
+version = "1.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonpatch" },
@@ -470,23 +470,23 @@ dependencies = [
     { name = "tenacity" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b4/96/b298cb46643bb235240de7ec8d87d3b4ccefead6bf41ca3c48c7d5397e01/langchain_core-1.0.2.tar.gz", hash = "sha256:9aae1908cc00d50b88e812305e980e7fd06d07375590ce8da01c04037bdccd72", size = 769167, upload-time = "2025-10-29T23:13:02.732Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/15/dfe0c2af463d63296fe18608a06570ce3a4b245253d4f26c301481380f7d/langchain_core-1.0.3.tar.gz", hash = "sha256:10744945d21168fb40d1162a5f1cf69bf0137ff6ad2b12c87c199a5297410887", size = 770278, upload-time = "2025-11-03T14:32:09.712Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/52/54/3aed89938a42cf7115575c333647551e35adc380feed651105d2d86c22f5/langchain_core-1.0.2-py3-none-any.whl", hash = "sha256:1f4ab4a41fc2e135e5dd4b97a89af123bbdc535af8f1f0644e8e8801bc288a12", size = 469251, upload-time = "2025-10-29T23:13:00.864Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/1b/b0a37674bdcbd2931944e12ea742fd167098de5212ee2391e91dce631162/langchain_core-1.0.3-py3-none-any.whl", hash = "sha256:64f1bd45f04b174bbfd54c135a8adc52f4902b347c15a117d6383b412bf558a5", size = 469927, upload-time = "2025-11-03T14:32:08.322Z" },
 ]
 
 [[package]]
 name = "langchain-openai"
-version = "1.0.1"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "langchain-core" },
     { name = "openai" },
     { name = "tiktoken" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/50/eaa53ac18f63b3e92e6c3a30269714cff477af5a568f486254779a9973f1/langchain_openai-1.0.1.tar.gz", hash = "sha256:78aff09a631fccca08a64f5fc669b325d0f5821490acce024e5da4cf0a08e0d0", size = 1025305, upload-time = "2025-10-21T15:45:06.095Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/3c/edb7ffca76fdcfd938ce8380bf8ec79a0a8be41ba7fdbf6f9fe1cb5fd1a8/langchain_openai-1.0.2.tar.gz", hash = "sha256:621e8295c52db9a1fc74806a0bd227ea215c132c6c5e421d2982c9ee78468769", size = 1025578, upload-time = "2025-11-03T14:08:32.121Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/62/c0/06d74093e3e798eb464ef76f53d031235b87feccdadbbf6f7b8409043e4d/langchain_openai-1.0.1-py3-none-any.whl", hash = "sha256:9b61309a7268e7c1c614c554cfd66401519e7434aaefc52de7e251887aceb5f7", size = 81898, upload-time = "2025-10-21T15:45:04.957Z" },
+    { url = "https://files.pythonhosted.org/packages/78/9b/7af1d539a051d195c5ecc5990ebd483f208c40f75a8a9532846d16762704/langchain_openai-1.0.2-py3-none-any.whl", hash = "sha256:b3eb9b82752063b46452aa868d8c8bc1604e57631648c3bc325bba58d3aeb143", size = 81934, upload-time = "2025-11-03T14:08:30.655Z" },
 ]
 
 [[package]]
@@ -547,7 +547,7 @@ wheels = [
 
 [[package]]
 name = "langsmith"
-version = "0.4.38"
+version = "0.4.39"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
@@ -558,9 +558,9 @@ dependencies = [
     { name = "requests-toolbelt" },
     { name = "zstandard" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/37/21/f1ba48412c64bf3bb8feb532fc9d247b396935b5d8242332d44a4195ec2d/langsmith-0.4.38.tar.gz", hash = "sha256:3aa57f9c16a5880256cd1eab0452533c1fb5ee14ec5250e23ed919cc2b07f6d3", size = 942789, upload-time = "2025-10-23T22:28:20.458Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a7/67/cf7c22d2744286f872aacee2ac13928c46e2ba5d486514d60cd4ab59f58d/langsmith-0.4.39.tar.gz", hash = "sha256:8f2e6bae5cba88f86d8df2a4f95b20a319c65e9945be639302876ab6ef2f13e0", size = 943095, upload-time = "2025-11-01T00:06:18.59Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b4/2b/7e0248f65e35800ea8e4e3dbb3bcc36c61b81f5b8abeddaceec8320ab491/langsmith-0.4.38-py3-none-any.whl", hash = "sha256:326232a24b1c6dd308a3188557cc023adf8fb14144263b2982c115a6be5141e7", size = 397341, upload-time = "2025-10-23T22:28:18.333Z" },
+    { url = "https://files.pythonhosted.org/packages/1f/38/9a97f650b8cdb2ba0356d65aef9239f4a30db69ae44c30daa2cf8dd3f350/langsmith-0.4.39-py3-none-any.whl", hash = "sha256:48872eaaa449fc10781b5251f4fc05bc7d5c2d1d733a734566a96dd9166108b4", size = 397767, upload-time = "2025-11-01T00:06:16.433Z" },
 ]
 
 [[package]]
@@ -916,7 +916,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.4.15"
+version = "1.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -958,9 +958,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/97/55/a773d77adc410c24380e7a7a1246e139ac2cf9f4bf0503721e0940e260bb/parsehub-1.4.15.tar.gz", hash = "sha256:a17873b01b492f78208f44df1429bc302c7cae7c81cce348618d5b5185f75499", size = 73154, upload-time = "2025-10-30T11:20:02.236Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/dd/707d41d369278ba7376d920d49871e2d89ac7247335c6c89f46ca7302c06/parsehub-1.5.0.tar.gz", hash = "sha256:cc0b53c90639e460a250f17e79a7e1cbe4557ee51ed32582646ab2c3018246a3", size = 74854, upload-time = "2025-11-03T18:10:25.943Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4c/c7/300aac650cc81b0cdfbbb0437f396059f4b42f14c7e24dee0ba67c7a85f0/parsehub-1.4.15-py3-none-any.whl", hash = "sha256:26ab053256680c7ac301218f6bc12580450f2270463b6453e66c2b61306cc491", size = 104327, upload-time = "2025-10-30T11:20:00.495Z" },
+    { url = "https://files.pythonhosted.org/packages/63/b1/7befe3abc68ce72705db46665f5f4a9290687675619b18e56ada5bb7ee9f/parsehub-1.5.0-py3-none-any.whl", hash = "sha256:927425c214524e98fed10f1766c8032fccb3eacd1496d8c880958762998c3b8a", size = 107226, upload-time = "2025-11-03T18:10:24.314Z" },
 ]
 
 [[package]]
@@ -1550,15 +1550,15 @@ wheels = [
 
 [[package]]
 name = "starlette"
-version = "0.49.1"
+version = "0.49.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "typing-extensions", marker = "python_full_version < '3.13'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1b/3f/507c21db33b66fb027a332f2cb3abbbe924cc3a79ced12f01ed8645955c9/starlette-0.49.1.tar.gz", hash = "sha256:481a43b71e24ed8c43b11ea02f5353d77840e01480881b8cb5a26b8cae64a8cb", size = 2654703, upload-time = "2025-10-28T17:34:10.928Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/1a/608df0b10b53b0beb96a37854ee05864d182ddd4b1156a22f1ad3860425a/starlette-0.49.3.tar.gz", hash = "sha256:1c14546f299b5901a1ea0e34410575bc33bbd741377a10484a54445588d00284", size = 2655031, upload-time = "2025-11-01T15:12:26.13Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/da/545b75d420bb23b5d494b0517757b351963e974e79933f01e05c929f20a6/starlette-0.49.1-py3-none-any.whl", hash = "sha256:d92ce9f07e4a3caa3ac13a79523bd18e3bc0042bb8ff2d759a8e7dd0e1859875", size = 74175, upload-time = "2025-10-28T17:34:09.13Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/e0/021c772d6a662f43b63044ab481dc6ac7592447605b5b35a957785363122/starlette-0.49.3-py3-none-any.whl", hash = "sha256:b579b99715fdc2980cf88c8ec96d3bf1ce16f5a8051a7c2b84ef9b1cdecaea2f", size = 74340, upload-time = "2025-11-01T15:12:24.387Z" },
 ]
 
 [[package]]
@@ -1584,7 +1584,7 @@ wheels = [
 
 [[package]]
 name = "textual"
-version = "6.4.0"
+version = "6.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown-it-py", extra = ["linkify"] },
@@ -1594,9 +1594,9 @@ dependencies = [
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/23/6c/565521dc6dd00fa857845483ae0c070575fda1f9a56d92d732554fecfea4/textual-6.4.0.tar.gz", hash = "sha256:f40df9165a001c10249698d532f2f5a71708b70f0e4ef3fce081a9dd93ffeaaa", size = 1573599, upload-time = "2025-10-22T17:29:51.357Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/af/90/59757aa887ddcea61428820274f1a2d1f986feb7880374a5420ab5d37132/textual-6.5.0.tar.gz", hash = "sha256:e5f152cdd47db48a635d23b839721bae4d0e8b6d855e3fede7285218289294e3", size = 1574116, upload-time = "2025-10-31T17:21:53.4Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/37/20/6eed0e55bdd2576475e9cea49cc71c47f8e56ab54f04cbe04b2fb56440de/textual-6.4.0-py3-none-any.whl", hash = "sha256:b346dbb8e12f17cefb33ddfdf7f19bdc9e66c29daf82fc981a8db6b7d985e115", size = 711663, upload-time = "2025-10-22T17:29:49.346Z" },
+    { url = "https://files.pythonhosted.org/packages/42/37/1deba011782a49ea249c73adcf703a39b0249ac9b0e17d1a2e4074df8d57/textual-6.5.0-py3-none-any.whl", hash = "sha256:c5505be7fe606b8054fb88431279885f88352bddca64832f6acd293ef7d9b54f", size = 711848, upload-time = "2025-10-31T17:21:51.134Z" },
 ]
 
 [[package]]

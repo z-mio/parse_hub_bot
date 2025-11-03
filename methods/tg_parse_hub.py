@@ -429,8 +429,8 @@ class ParseResultOperate(ABC):
                 results.append(
                     InlineQueryResultPhoto(
                         i.path,
-                        photo_width=300,
-                        photo_height=300,
+                        photo_width=i.width or 300,
+                        photo_height=i.height or 300,
                         **k,
                     )
                 )
@@ -439,8 +439,8 @@ class ParseResultOperate(ABC):
                     results.append(
                         InlineQueryResultPhoto(
                             i.thumb_url,
-                            photo_width=300,
-                            photo_height=300,
+                            photo_width=i.width or 300,
+                            photo_height=i.height or 300,
                             **k,
                         )
                     )
@@ -448,8 +448,8 @@ class ParseResultOperate(ABC):
                     results.append(
                         InlineQueryResultPhoto(
                             i.thumb_url or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
-                            photo_width=300,
-                            photo_height=300,
+                            photo_width=i.width or 300,
+                            photo_height=i.height or 300,
                             id=f"download_{index}",
                             title=text,
                             caption=text,
