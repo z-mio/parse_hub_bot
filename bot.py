@@ -1,14 +1,36 @@
+import asyncio
+import sys
+
 import pillow_heif
 from pyrogram import Client
 from pyrogram.handlers import ConnectHandler, DisconnectHandler
 
 from config.config import bot_cfg, ws
-from log import logger
+from log import logger, logger_format
+from utiles.optimized_event_loop import setup_optimized_event_loop
 from utiles.watchdog import on_connect, on_disconnect
 
 pillow_heif.register_heif_opener()
 
-logger.add("logs/bot.log", rotation="10 MB")
+
+logger.remove()
+
+if bot_cfg.debug:
+    logger.add(sys.stderr, level="DEBUG", format=logger_format)
+    logger.debug("调试模式已启用")
+else:
+    logger.add(sys.stderr, level="INFO", format=logger_format)
+logger.add(
+    "logs/bot.log",
+    rotation="10 MB",
+    level="INFO",
+    format=logger_format,
+    # serialize=True,
+    enqueue=True,
+)
+
+setup_optimized_event_loop()
+loop = asyncio.new_event_loop()
 
 
 class Bot(Client):
@@ -22,6 +44,7 @@ class Bot(Client):
             bot_token=self.cfg.bot_token,
             plugins={"root": "plugins"},
             proxy=self.cfg.bot_proxy.dict_format,
+            loop=loop,
         )
 
     async def start(self, *args, **kwargs):

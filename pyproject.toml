@@ -20,6 +20,8 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "telegraph>=2.2.0",
     "tgcrypto>=1.2.5",
+    "uvloop>=0.22.1 ; sys_platform != 'win32'",
+    "winloop>=0.3.1 ; sys_platform == 'win32'",
 ]
 
 [tool.ruff]
