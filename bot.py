@@ -1,8 +1,10 @@
 import pillow_heif
 from pyrogram import Client
+from pyrogram.handlers import ConnectHandler, DisconnectHandler
 
-from config.config import bot_cfg
+from config.config import bot_cfg, ws
 from log import logger
+from utiles.watchdog import on_connect, on_disconnect
 
 pillow_heif.register_heif_opener()
 
@@ -23,11 +25,16 @@ class Bot(Client):
         )
 
     async def start(self, *args, **kwargs):
-        logger.info("Bot开始运行...")
+        self.init_watchdog()
         await super().start()
 
     async def stop(self, *args, **kwargs):
+        ws.exit_flag = True
         await super().stop()
+
+    def init_watchdog(self):
+        self.add_handler(ConnectHandler(on_connect))
+        self.add_handler(DisconnectHandler(on_disconnect))
 
 
 if __name__ == "__main__":

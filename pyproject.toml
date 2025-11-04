@@ -16,6 +16,7 @@ dependencies = [
     "parsehub>=1.2.37",
     "pillow>=11.3.0",
     "pillow-heif>=1.1.1",
+    "pydantic-settings>=2.11.0",
     "python-dotenv>=1.0.1",
     "telegraph>=2.2.0",
     "tgcrypto>=1.2.5",
