@@ -228,7 +228,7 @@ wheels = [
 
 [[package]]
 name = "fastapi"
-version = "0.121.0"
+version = "0.121.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "annotated-doc" },
@@ -236,9 +236,9 @@ dependencies = [
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8c/e3/77a2df0946703973b9905fd0cde6172c15e0781984320123b4f5079e7113/fastapi-0.121.0.tar.gz", hash = "sha256:06663356a0b1ee93e875bbf05a31fb22314f5bed455afaaad2b2dad7f26e98fa", size = 342412, upload-time = "2025-11-03T10:25:54.818Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6b/a4/29e1b861fc9017488ed02ff1052feffa40940cb355ed632a8845df84ce84/fastapi-0.121.1.tar.gz", hash = "sha256:b6dba0538fd15dab6fe4d3e5493c3957d8a9e1e9257f56446b5859af66f32441", size = 342523, upload-time = "2025-11-08T21:48:14.068Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/2c/42277afc1ba1a18f8358561eee40785d27becab8f80a1f945c0a3051c6eb/fastapi-0.121.0-py3-none-any.whl", hash = "sha256:8bdf1b15a55f4e4b0d6201033da9109ea15632cb76cf156e7b8b4019f2172106", size = 109183, upload-time = "2025-11-03T10:25:53.27Z" },
+    { url = "https://files.pythonhosted.org/packages/94/fd/2e6f7d706899cc08690c5f6641e2ffbfffe019e8f16ce77104caa5730910/fastapi-0.121.1-py3-none-any.whl", hash = "sha256:2c5c7028bc3a58d8f5f09aecd3fd88a000ccc0c5ad627693264181a3c33aa1fc", size = 109192, upload-time = "2025-11-08T21:48:12.458Z" },
 ]
 
 [[package]]
@@ -337,14 +337,14 @@ wheels = [
 
 [[package]]
 name = "instaloader"
-version = "4.14.2"
+version = "4.15"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/54/c3/55d75581c322a58adb3a9b10dd50a232b47cd7afb5feac86c47496d6e1d9/instaloader-4.14.2.tar.gz", hash = "sha256:e9205098e6ec494cdfe2aef6c56805084cef4008a06d4d78504301f42f8e4d33", size = 65978, upload-time = "2025-07-18T05:51:13.8Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/38/f82de9f71d6b8403f5b752d8eab4e466ac99c237ec8c642548a544948f23/instaloader-4.15.tar.gz", hash = "sha256:baf1c29ba16f9d30f7c6e330a00bc1fca100522bb3a217d3c36ad620eb744685", size = 66295, upload-time = "2025-11-08T21:30:32.06Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/78/6d8b2dc432c98ff4592be740826605986846d866c53587f2e14937255642/instaloader-4.14.2-py3-none-any.whl", hash = "sha256:e8c72410405fcbfd16c6e0034a10bccce634d91d59b1b0664b7de813be9d27fd", size = 67970, upload-time = "2025-07-18T05:51:12.512Z" },
+    { url = "https://files.pythonhosted.org/packages/96/7a/2e878dff89aa2ec8ffa6367aad31975e5d457ff303b8ea7568fd284e301c/instaloader-4.15-py3-none-any.whl", hash = "sha256:ba897ec738c238bdc427ad3f4a3478c6d2db07055361f2373779af8227ac2c08", size = 68310, upload-time = "2025-11-08T21:30:30.777Z" },
 ]
 
 [[package]]
@@ -922,7 +922,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.5.6"
+version = "1.5.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiocache" },
@@ -964,9 +964,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "yt-dlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/d7/2d09559fe9e7db986c425a810b048e737f516175c4b6956b4c15ae8fa9e7/parsehub-1.5.6.tar.gz", hash = "sha256:9ef41491f28843c0098e7c1304accfdf555d20df7a283fde7d374b1050571787", size = 75090, upload-time = "2025-11-08T01:52:16.798Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/71/fb/31cb455802882725de1cb26fd8297e0e431c5d44fe90a443a3d789345be0/parsehub-1.5.7.tar.gz", hash = "sha256:a256fc7f21cc325a0a01f3eedbb4d9313d4313d5777ee2d32b0fd92f40cd916b", size = 75047, upload-time = "2025-11-09T09:02:00.071Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/03/8cd253fdc566a87f66c8b5e96eee77f2f976fb2c7abeb6e0a51059e53f74/parsehub-1.5.6-py3-none-any.whl", hash = "sha256:d0fa11834b9198d63367b36ef043a66960d27701405e943b3352bee5c2f4ffd3", size = 107515, upload-time = "2025-11-08T01:52:15.319Z" },
+    { url = "https://files.pythonhosted.org/packages/ee/36/1162a75d8ca42aa87f7c2ef5d449b1bdf83522a3f071fa60663f488c4e3e/parsehub-1.5.7-py3-none-any.whl", hash = "sha256:f74c27461eda157bddc5a1ea07cb52f202e378d7754ef785b52920a68e7ab65b", size = 107500, upload-time = "2025-11-09T09:01:58.349Z" },
 ]
 
 [[package]]
