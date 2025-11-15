@@ -604,14 +604,14 @@ class VideoParseResultOperate(ParseResultOperate):
             handle_video = await self.handle_video(drm.path, op)
             if len(handle_video) == 1:
                 m = await msg.reply_video(
-                    handle_video[0],
+                    str(handle_video[0]),
                     caption=self.content_and_url,
                     video_cover=drm.thumb_url,
                     quote=True,
                     reply_markup=self.button(),
-                    width=drm.width,
-                    height=drm.height,
-                    duration=drm.duration,
+                    width=drm.width or 0,
+                    height=drm.height or 0,
+                    duration=drm.duration or 0,
                 )
                 shutil.rmtree(str(op), ignore_errors=True)
                 return m
@@ -620,10 +620,10 @@ class VideoParseResultOperate(ParseResultOperate):
                 for i, v in enumerate(handle_video):
                     media.append(
                         InputMediaVideo(
-                            v,
+                            str(v),
                             video_cover=drm.thumb_url if i == 0 else None,
-                            width=drm.width,
-                            height=drm.height,
+                            width=drm.width or 0,
+                            height=drm.height or 0,
                         )
                     )
                 m = [
@@ -659,12 +659,12 @@ class VideoParseResultOperate(ParseResultOperate):
                 )
 
     @staticmethod
-    async def handle_video(video: str | Path, op: Path) -> list[Path | str]:
+    async def handle_video(video: str | Path, op: Path) -> list[Path]:
         video_size = os.path.getsize(video)
         if video_size > 1024 * 1024 * 2:
             return await split_video(str(video), str(op))
         else:
-            return [video]
+            return [Path(video)]
 
 
 class ImageParseResultOperate(ParseResultOperate):
@@ -772,9 +772,9 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 return await msg.reply_video(
                     m.path,
                     video_cover=m.thumb_url,
-                    width=m.width,
-                    height=m.height,
-                    duration=m.duration,
+                    width=m.width or 0,
+                    height=m.height or 0,
+                    duration=m.duration or 0,
                     **k,
                 )
             elif isinstance(m, Ani):
@@ -794,9 +794,9 @@ class MultimediaParseResultOperate(ParseResultOperate):
                         InputMediaVideo(
                             v.path,
                             video_cover=v.thumb_url,
-                            duration=v.duration,
-                            width=v.width,
-                            height=v.height,
+                            duration=v.duration or 0,
+                            width=v.width or 0,
+                            height=v.height or 0,
                         )
                     )
                 elif isinstance(v, Ani):

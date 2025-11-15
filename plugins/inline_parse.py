@@ -108,9 +108,9 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
                 v.path,
                 caption=pp.operate.content_and_url,
                 video_cover=v.thumb_url,
-                duration=v.duration,
-                width=v.width,
-                height=v.height,
+                duration=v.duration or 0,
+                width=v.width or 0,
+                height=v.height or 0,
             ),
             reply_markup=pp.operate.button(),
         )
