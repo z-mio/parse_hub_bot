@@ -568,8 +568,8 @@ class ParseResultOperate(ABC):
     def f_text(text: str) -> str:
         """格式化输出内容, 限制长度, 添加折叠块样式"""
         text = text.strip()
-        if text[1020:]:
-            text = text[:1000] + "......"
+        if text[1000:]:
+            text = text[:900] + "......"
             return f"<blockquote expandable>{text}</blockquote>"
         elif text[500:] or len(text.splitlines()) > 10:
             # 超过 500 字或超过 10 行, 则添加折叠块样式
