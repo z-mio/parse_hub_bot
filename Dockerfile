@@ -26,7 +26,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libegl1 libgl1 libglib2.0-0 \
         ffmpeg \
         fonts-noto-cjk fonts-noto-cjk-extra fonts-noto-color-emoji \
+        curl unzip ca-certificates \
+    && curl -fsSL https://deno.land/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*
+
+ENV DENO_INSTALL="/root/.deno"
+ENV PATH="/app/.venv/bin:$DENO_INSTALL/bin:$PATH"
 
 WORKDIR /app
 COPY --from=build /app /app
