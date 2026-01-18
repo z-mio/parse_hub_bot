@@ -31,6 +31,9 @@ class BotConfig:
         self.douyin_api = getenv("DOUYIN_API", None)
         self.debug = bool(getenv("DEBUG", "false").lower() == "true")
 
+        self.bot_workdir: Path = Path("sessions")
+        self.bot_workdir.mkdir(parents=True, exist_ok=True)
+
     class _Proxy:
         def __init__(self, url: str):
             self._url = urlparse(url) if url else None

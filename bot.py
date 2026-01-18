@@ -12,7 +12,6 @@ from utiles.watchdog import on_connect, on_disconnect
 
 pillow_heif.register_heif_opener()
 
-
 logger.remove()
 
 if bot_cfg.debug:
@@ -45,6 +44,7 @@ class Bot(Client):
             plugins={"root": "plugins"},
             proxy=self.cfg.bot_proxy.dict_format,
             loop=loop,
+            workdir=self.cfg.bot_workdir,
         )
 
     async def start(self, *args, **kwargs):
