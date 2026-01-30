@@ -582,7 +582,7 @@ class ParseResultOperate(ABC):
         """将图片转换为Tg兼容的格式"""
 
         ext = Path(img).suffix.lower()
-        if ext not in [".heif", ".heic"]:
+        if ext not in [".heif", ".heic", ".avif"]:
             return str(img)
 
         try:
