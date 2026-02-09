@@ -18,7 +18,6 @@ from markdown import markdown
 from parsehub import ParseHub
 from parsehub.config import DownloadConfig, ParseConfig
 from parsehub.parsers.base import BaseParser
-from parsehub.parsers.parser import CoolapkRichTextParseResult, WXRichTextParseResult
 from parsehub.types import (
     Ani,
     AnyParseResult,
@@ -27,6 +26,7 @@ from parsehub.types import (
     ImageParseResult,
     LivePhoto,
     MultimediaParseResult,
+    Platform,
     RichTextParseResult,
     SummaryResult,
     Video,
@@ -54,7 +54,8 @@ from pyrogram.types import (
 )
 
 from config.config import TEMP_DIR, bot_cfg
-from config.platform_config import Platform, platforms_config
+from config.platform_config import Platform as Pf
+from config.platform_config import platforms_config
 from log import logger
 from utiles.converter import clean_article_html
 from utiles.img_host import ImgHost
@@ -83,7 +84,7 @@ class TgParseHub(ParseHub):
         super().__init__()
         self.url = None
         self.platform: BaseParser | None = None
-        self.platform_config: Platform | None = None
+        self.platform_config: Pf | None = None
         self.parser_config: ParseConfig | None = None
         self.downloader_config: DownloadConfig | None = None
 
@@ -101,7 +102,7 @@ class TgParseHub(ParseHub):
         if not self.platform:
             raise ValueError("不支持的平台/内容")
 
-        self.platform_config = platforms_config.platforms.get(self.platform.__platform_id__)
+        self.platform_config = platforms_config.platforms.get(self.platform.__platform__.id)
         if self.platform_config:
             self.parser_config = ParseConfig(
                 proxy=(self.platform_config.parser_proxy or bot_cfg.parser_proxy)
@@ -607,9 +608,7 @@ class ParseResultOperate(ABC):
         return await msg.reply_text(
             self.content_and_url,
             reply_markup=self.button(),
-            link_preview_options=LinkPreviewOptions(
-                url=self.telegraph_url, prefer_small_media=True, show_above_text=True
-            ),
+            link_preview_options=LinkPreviewOptions(show_above_text=True),
         )
 
     async def download(
@@ -854,12 +853,12 @@ class MultimediaParseResultOperate(ParseResultOperate):
 class RichTextParseResultOperate(ParseResultOperate):
     async def chat_upload(self, msg: Message) -> Message | list[Message] | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-        if isinstance(self.result, WXRichTextParseResult):
+        if self.result.platform == Platform.WEIXIN:
             return await self.send_ph(
                 clean_article_html(markdown(self.result.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))),
                 msg,
             )
-        elif isinstance(self.result, CoolapkRichTextParseResult):
+        elif self.result.platform == Platform.COOLAPK:
             return await self.send_ph(
                 clean_article_html(
                     markdown(self.result.markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))
