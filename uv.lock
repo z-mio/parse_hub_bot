@@ -511,16 +511,16 @@ wheels = [
 
 [[package]]
 name = "langchain-openai"
-version = "1.1.7"
+version = "1.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "langchain-core" },
     { name = "openai" },
     { name = "tiktoken" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/38/b7/30bfc4d1b658a9ee524bcce3b0b2ec9c45a11c853a13c4f0c9da9882784b/langchain_openai-1.1.7.tar.gz", hash = "sha256:f5ec31961ed24777548b63a5fe313548bc6e0eb9730d6552b8c6418765254c81", size = 1039134, upload-time = "2026-01-07T19:44:59.728Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8f/21/8053d1c41413521eae31cc6e71b0ac3048a53da0c7780c6e1b6ee4bf85b1/langchain_openai-1.1.8.tar.gz", hash = "sha256:3ff66966812a2362a8ccbcad24b517708f39c42471517abe77b07adc818a2c22", size = 1003370, upload-time = "2026-02-09T15:33:03.834Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/a1/50e7596aca775d8c3883eceeaf47489fac26c57c1abe243c00174f715a8a/langchain_openai-1.1.7-py3-none-any.whl", hash = "sha256:34e9cd686aac1a120d6472804422792bf8080a2103b5d21ee450c9e42d053815", size = 84753, upload-time = "2026-01-07T19:44:58.629Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/c0/8059e020fc308c321dcdca9768d2b0931e2b3b0685669a75124c9a675ee4/langchain_openai-1.1.8-py3-none-any.whl", hash = "sha256:c37d99eac78700cca2bef8d503cf367065685e1ac4cbdf674056046f3bebf118", size = 84939, upload-time = "2026-02-09T15:33:01.973Z" },
 ]
 
 [[package]]
@@ -706,11 +706,11 @@ wheels = [
 
 [[package]]
 name = "markdown"
-version = "3.10.1"
+version = "3.10.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b7/b1/af95bcae8549f1f3fd70faacb29075826a0d689a27f232e8cee315efa053/markdown-3.10.1.tar.gz", hash = "sha256:1c19c10bd5c14ac948c53d0d762a04e2fa35a6d58a6b7b1e6bfcbe6fefc0001a", size = 365402, upload-time = "2026-01-21T18:09:28.206Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2b/f4/69fa6ed85ae003c2378ffa8f6d2e3234662abd02c10d216c0ba96081a238/markdown-3.10.2.tar.gz", hash = "sha256:994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950", size = 368805, upload-time = "2026-02-09T14:57:26.942Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/59/1b/6ef961f543593969d25b2afe57a3564200280528caa9bd1082eecdd7b3bc/markdown-3.10.1-py3-none-any.whl", hash = "sha256:867d788939fe33e4b736426f5b9f651ad0c0ae0ecf89df0ca5d1176c70812fe3", size = 107684, upload-time = "2026-01-21T18:09:27.203Z" },
+    { url = "https://files.pythonhosted.org/packages/de/1f/77fa3081e4f66ca3576c896ae5d31c3002ac6607f9747d2e3aa49227e464/markdown-3.10.2-py3-none-any.whl", hash = "sha256:e91464b71ae3ee7afd3017d9f358ef0baf158fd9a298db92f1d4761133824c36", size = 108180, upload-time = "2026-02-09T14:57:25.787Z" },
 ]
 
 [[package]]
@@ -936,7 +936,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "1.5.13"
+version = "1.5.14"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -966,9 +966,9 @@ dependencies = [
     { name = "urlextract" },
     { name = "yt-dlp", extra = ["default"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/45/91/081aa44afde52b2ee2e65ddc7f358ab05823efd67db599eb8a8d9cd30591/parsehub-1.5.13.tar.gz", hash = "sha256:a19745ae04cad0e30e03a330f64e6d0fe1363285e2751b98add06b0b7ca15770", size = 56942, upload-time = "2026-02-09T14:40:05.577Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c5/bc/694f04aacdc4fb89f412c1984738bf4561e017b4a6102bfba6eacd9bc89d/parsehub-1.5.14.tar.gz", hash = "sha256:65b341bbb0b1a26b84b41c706416ae61591d46692a25762ac6e2ac5d04089268", size = 56900, upload-time = "2026-02-09T15:51:18.271Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c9/d1/6f519bfedea1637d386ac259341594898b533cc179d331464a4242156a99/parsehub-1.5.13-py3-none-any.whl", hash = "sha256:d64ee8d1c5b1d9e551fc28153c12033cc56832ad134eb91d8c87b6524dd903a7", size = 75904, upload-time = "2026-02-09T14:40:03.872Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/79/305da99f3b76ed82e3c1eabbf5e2846b2c70ce094b396d85e5655d6eeac9/parsehub-1.5.14-py3-none-any.whl", hash = "sha256:57ce2250ac462224f536aac5d7d336156cd342291cf898e47ea38b6d2fec559a", size = 75870, upload-time = "2026-02-09T15:51:17.141Z" },
 ]
 
 [[package]]
