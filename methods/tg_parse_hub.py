@@ -589,8 +589,11 @@ class ParseResultOperate(ABC):
             return text
 
     @staticmethod
-    async def tg_compatible(img: str | Path) -> BinaryIO | str:
+    async def tg_compatible(img: str | Path | None) -> BinaryIO | str | None:
         """将图片转换为Tg兼容的格式"""
+
+        if img is None:
+            return None
 
         ext = Path(img).suffix.lower()
         if ext not in [".heif", ".heic", ".avif"]:
