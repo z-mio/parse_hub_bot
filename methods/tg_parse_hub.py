@@ -95,11 +95,10 @@ class TgParseHub(ParseHub):
         """解析结果操作对象"""
 
     async def init_parser(self, url: str):
-        self.url = await self._get_url(url)
-        if not self.url:
-            raise ValueError("未获取到链接")
-
-        self.parser = self.get_parser(self.url)
+        try:
+            self.parser = self.get_parser(url)
+        except Exception:
+            self.parser = None
         if not self.parser:
             raise ValueError("不支持的平台/内容")
 
@@ -120,6 +119,7 @@ class TgParseHub(ParseHub):
             self.parser_config = ParseConfig(proxy=bot_cfg.parser_proxy)
             self.downloader_proxy = bot_cfg.downloader_proxy
         self.config = self.parser_config
+        self.url = await self._get_url(url)
 
     async def parse(self, url: str, cache_time: int = bot_cfg.cache_time) -> "TgParseHub":
         """
@@ -207,6 +207,7 @@ class TgParseHub(ParseHub):
 
     async def get_parse_task(self, url: str) -> bool:
         """获取解析任务"""
+        await self.init_parser(url)
         url = await self._get_url(url)
         return await self.cache.get(f"parse:parsing:{url}")
 
