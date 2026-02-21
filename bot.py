@@ -7,8 +7,8 @@ from pyrogram.handlers import ConnectHandler, DisconnectHandler
 
 from config.config import bot_cfg, ws
 from log import logger, logger_format
-from utiles.optimized_event_loop import setup_optimized_event_loop
-from utiles.watchdog import on_connect, on_disconnect
+from utils.optimized_event_loop import setup_optimized_event_loop
+from utils.watchdog import on_connect, on_disconnect
 
 pillow_heif.register_heif_opener()
 

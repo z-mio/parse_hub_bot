@@ -8,8 +8,8 @@ from pyrogram.types import (
 
 from log import logger
 from methods import TgParseHub
-from utiles.filters import platform_filter
-from utiles.utile import progress
+from utils.filters import platform_filter
+from utils.util import progress
 
 
 async def _handle_parse(cli: Client, msg: Message, text: str):
@@ -33,7 +33,7 @@ async def _handle_parse(cli: Client, msg: Message, text: str):
     await r_msg.edit_text("下 载 中...")
 
     try:
-        await pp.download(callback, (r_msg,))
+        await pp.download_(callback, (r_msg,))
     except Exception as e:
         logger.exception(e)
         logger.error("解析或下载失败, 以上为错误信息")
@@ -77,8 +77,8 @@ async def cmd_jx(cli: Client, msg: Message):
     await _handle_parse(cli, msg, text)
 
 
-async def callback(current, total, status: str, msg: Message):
-    text = progress(current, total, status)
+async def callback(current, total, unit: str, msg: Message):
+    text = progress(current, total, unit)
     if not text or msg.text == text:
         return
     await msg.edit_text(text)

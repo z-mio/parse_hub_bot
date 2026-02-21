@@ -18,18 +18,15 @@ async def schedule_delete_messages(client: Client, chat_id: int, message_ids: in
         ...
 
 
-def progress(current, total, status):
-    if total == 0:
-        return status
-
-    text = None
-    if total >= 100:
+def progress(current: int, total: int, unit: str):
+    text = f"下 载 中... | {f'{current * 100 / total:.0f}%' if unit == 'bytes' else f'{current}/{total}'}"
+    if unit == "bytes":
         if round(current * 100 / total, 1) % 25 == 0:
-            text = f"下 载 中... | {status}"
+            return text
     else:
         if (current + 1) % 3 == 0 or (current + 1) == total:
-            text = f"下 载 中... | {status}"
-    return text
+            return text
+    return None
 
 
 def encrypt(text: str):

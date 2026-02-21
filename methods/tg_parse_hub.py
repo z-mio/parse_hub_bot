@@ -16,25 +16,33 @@ from aiocache.plugins import TimingPlugin
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from markdown import markdown
 from parsehub import ParseHub
-from parsehub.config import DownloadConfig, ParseConfig
+from parsehub.config import ParseConfig
 from parsehub.parsers.base import BaseParser
 from parsehub.types import (
-    Ani,
+    AniFile,
+    AniRef,
     AnyParseResult,
     DownloadResult,
-    Image,
+    ImageFile,
     ImageParseResult,
-    LivePhoto,
+    ImageRef,
+    LivePhotoFile,
     MultimediaParseResult,
     Platform,
+    ProgressCallback,
     RichTextParseResult,
-    SummaryResult,
-    Video,
+    VideoFile,
     VideoParseResult,
+    VideoRef,
 )
 from pyrogram import Client, enums
 from pyrogram.types import (
-    CallbackQuery,
+    InlineKeyboardButton as Ikb,
+)
+from pyrogram.types import (
+    InlineKeyboardMarkup as Ikm,
+)
+from pyrogram.types import (
     InlineQuery,
     InlineQueryResultAnimation,
     InlineQueryResultArticle,
@@ -46,21 +54,15 @@ from pyrogram.types import (
     LinkPreviewOptions,
     Message,
 )
-from pyrogram.types import (
-    InlineKeyboardButton as Ikb,
-)
-from pyrogram.types import (
-    InlineKeyboardMarkup as Ikm,
-)
 
 from config.config import TEMP_DIR, bot_cfg
 from config.platform_config import Platform as Pf
 from config.platform_config import platforms_config
 from log import logger
-from utiles.converter import clean_article_html
-from utiles.img_host import ImgHost
-from utiles.ph import Telegraph
-from utiles.utile import encrypt, img2webp, split_video
+from utils.converter import clean_article_html
+from utils.img_host import ImgHost
+from utils.ph import Telegraph
+from utils.util import encrypt, img2webp, split_video
 
 CACHE = SimpleMemoryCache(plugins=[TimingPlugin()])
 
@@ -83,11 +85,10 @@ class TgParseHub(ParseHub):
     def __init__(self):
         super().__init__()
         self.url = None
-        self.platform: BaseParser | None = None
+        self.parser: type[BaseParser] | None = None
         self.platform_config: Pf | None = None
         self.parser_config: ParseConfig | None = None
-        self.downloader_config: DownloadConfig | None = None
-
+        self.downloader_proxy = None
         self.is_cache = bool(bot_cfg.cache_time)
         self.cache = CACHE
         self.operate: ParseResultOperate | None = None
@@ -98,11 +99,11 @@ class TgParseHub(ParseHub):
         if not self.url:
             raise ValueError("未获取到链接")
 
-        self.platform = self.select_parser(self.url)
-        if not self.platform:
+        self.parser = self.get_parser(self.url)
+        if not self.parser:
             raise ValueError("不支持的平台/内容")
 
-        self.platform_config = platforms_config.platforms.get(self.platform.__platform__.id)
+        self.platform_config = platforms_config.platforms.get(self.parser.__platform__.id)
         if self.platform_config:
             self.parser_config = ParseConfig(
                 proxy=(self.platform_config.parser_proxy or bot_cfg.parser_proxy)
@@ -110,14 +111,14 @@ class TgParseHub(ParseHub):
                 else None,
                 cookie=self.platform_config.cookie,
             )
-            self.downloader_config = DownloadConfig(
-                proxy=(self.platform_config.downloader_proxy or bot_cfg.downloader_proxy)
+            self.downloader_proxy = (
+                (self.platform_config.downloader_proxy or bot_cfg.downloader_proxy)
                 if not self.platform_config.disable_downloader_proxy
-                else None,
+                else None
             )
         else:
             self.parser_config = ParseConfig(proxy=bot_cfg.parser_proxy)
-            self.downloader_config = DownloadConfig(proxy=bot_cfg.downloader_proxy)
+            self.downloader_proxy = bot_cfg.downloader_proxy
         self.config = self.parser_config
 
     async def parse(self, url: str, cache_time: int = bot_cfg.cache_time) -> "TgParseHub":
@@ -147,18 +148,12 @@ class TgParseHub(ParseHub):
 
         return self
 
-    async def ai_summary(self, cq: CallbackQuery):
-        """获取 AI 总结"""
-        self.operate = await self.operate.ai_summary(cq)
-        await self._set_cache(self.operate, bot_cfg.cache_time)
-
-    async def un_ai_summary(self, cq: CallbackQuery):
-        """取消 AI 总结"""
-        return await self.operate.un_ai_summary(cq)
-
-    async def download(self, callback: Callable = None, callback_args: tuple = ()) -> DownloadResult:
+    async def download_(self, callback: ProgressCallback = None, callback_args: tuple = ()) -> DownloadResult:
         async with self.error_handler():
-            return await self.operate.download(callback, callback_args, downloader_config=self.downloader_config)
+            return await self.operate.download(
+                callback,
+                callback_args,
+            )
 
     async def delete(self):
         """删除文件"""
@@ -390,7 +385,6 @@ class ParseResultOperate(ABC):
     def __init__(self, result: AnyParseResult):
         self.result = result
         self.download_result: DownloadResult | None = None
-        self.ai_summary_result: SummaryResult | None = None
         self.telegraph_url: str | None = None  # telegraph 帖子链接
 
     @abstractmethod
@@ -400,6 +394,7 @@ class ParseResultOperate(ABC):
 
     async def inline_upload(self, iq: InlineQuery):
         """内联上传"""
+        reply_markup = Ikm([[Ikb("原链接", url=self.result.raw_url)]])
         results = []
 
         media = self.result.media if isinstance(self.result.media, list) else [self.result.media]
@@ -412,7 +407,7 @@ class ParseResultOperate(ABC):
                         self.content_and_url,
                         link_preview_options=LinkPreviewOptions(is_disabled=True),
                     ),
-                    reply_markup=self.button(),
+                    reply_markup=reply_markup,
                 )
             )
         for index, i in enumerate(media):
@@ -421,51 +416,42 @@ class ParseResultOperate(ABC):
                 "caption": text,
                 "title": self.result.title or "无标题",
                 "description": self.result.content,
-                "reply_markup": self.button(),
+                "reply_markup": reply_markup,
             }
 
-            if isinstance(i, Image):
+            if isinstance(i, ImageRef):
                 results.append(
                     InlineQueryResultPhoto(
-                        i.path,
+                        i.url,
+                        thumb_url=i.thumb_url,
                         photo_width=i.width or 300,
                         photo_height=i.height or 300,
                         **k,
                     )
                 )
-            elif isinstance(i, Video):
-                if i.exists() and os.path.getsize(i.path) > 1024 * 1024 * 2:
-                    results.append(
-                        InlineQueryResultPhoto(
-                            i.thumb_url,
-                            photo_width=i.width or 300,
-                            photo_height=i.height or 300,
-                            **k,
-                        )
+            elif isinstance(i, VideoRef):
+                results.append(
+                    InlineQueryResultPhoto(
+                        i.thumb_url or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
+                        photo_width=i.width or 300,
+                        photo_height=i.height or 300,
+                        id=f"download_{index}",
+                        title=text,
+                        caption=text,
+                        reply_markup=reply_markup,
                     )
-                else:
-                    results.append(
-                        InlineQueryResultPhoto(
-                            i.thumb_url or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
-                            photo_width=i.width or 300,
-                            photo_height=i.height or 300,
-                            id=f"download_{index}",
-                            title=text,
-                            caption=text,
-                            reply_markup=self.button(hide_summary=True),
-                        )
-                    )
-            elif isinstance(i, Ani):
+                )
+            elif isinstance(i, AniRef):
                 if i.ext != "gif":
                     results.append(
                         InlineQueryResultVideo(
-                            i.path,
+                            i.url,
                             i.thumb_url or "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png",
                             **k,
                         )
                     )
                 else:
-                    results.append(InlineQueryResultAnimation(i.path, thumb_url=i.thumb_url, **k))
+                    results.append(InlineQueryResultAnimation(i.url, thumb_url=i.thumb_url, **k))
         return await iq.answer(results, cache_time=0)
 
     def delete(self):
@@ -487,6 +473,7 @@ class ParseResultOperate(ABC):
         :param summarizing: 总结中
         :return:
         """
+        return None
         if not self.result.raw_url:
             return None
         button = []
@@ -510,49 +497,6 @@ class ParseResultOperate(ABC):
     def hash_url(self):
         """网址哈希值"""
         return encrypt(self.result.raw_url)
-
-    async def ai_summary(self, cq: CallbackQuery) -> "ParseResultOperate":
-        """获取 AI 总结"""
-
-        if not (r := self.ai_summary_result):
-            await cq.edit_message_text(
-                self.content_and_url,
-                reply_markup=self.button(summarizing=True),
-            )
-            if not self.download_result:
-                self.download_result = await self.result.download()
-            try:
-                r = await self.download_result.summary()
-            except Exception as e:
-                await cq.edit_message_text(
-                    self.content_and_url,
-                    reply_markup=self.button(),
-                    link_preview_options=LinkPreviewOptions(is_disabled=True),
-                )
-                raise e
-            self.ai_summary_result = r
-
-        await cq.edit_message_text(
-            self.add_source(self.f_text(r.content)),
-            reply_markup=self.button(show_summary_result=True),
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
-
-        return self
-
-    async def un_ai_summary(self, cq: CallbackQuery):
-        """取消 AI 总结"""
-
-        link_preview_options = (
-            LinkPreviewOptions(url=self.telegraph_url, prefer_small_media=True, show_above_text=True)
-            if self.telegraph_url
-            else LinkPreviewOptions(is_disabled=True)
-        )
-        await cq.edit_message_text(
-            self.content_and_url,
-            reply_markup=self.button(),
-            link_preview_options=link_preview_options,
-        )
 
     @property
     def content_and_no_url(self) -> str:
@@ -615,11 +559,11 @@ class ParseResultOperate(ABC):
         )
 
     async def download(
-        self, callback: Callable = None, callback_args: tuple = (), downloader_config: DownloadConfig = None
+        self, callback: Callable = None, callback_args: tuple = (), proxy: str | None = None
     ) -> DownloadResult:
-        if (dr := self.download_result) and dr.exists():
+        if dr := self.download_result:
             return dr
-        self.download_result = await self.result.download(None, callback, callback_args, config=downloader_config)
+        self.download_result = await self.result.download(None, callback, callback_args, proxy=proxy)
         return self.download_result
 
 
@@ -628,6 +572,7 @@ class VideoParseResultOperate(ParseResultOperate):
 
     async def chat_upload(self, msg: Message) -> Message | list[list[Message]]:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
+        thumb_url = self.result.media.thumb_url if self.result.media else None
         drm = self.download_result.media
         op = TEMP_DIR / f"{time.time_ns()}"
         op.mkdir(parents=True, exist_ok=True)
@@ -637,7 +582,7 @@ class VideoParseResultOperate(ParseResultOperate):
                 m = await msg.reply_video(
                     str(handle_video[0]),
                     caption=self.content_and_url,
-                    video_cover=drm.thumb_url,
+                    video_cover=thumb_url,
                     reply_markup=self.button(),
                     width=drm.width or 0,
                     height=drm.height or 0,
@@ -651,7 +596,7 @@ class VideoParseResultOperate(ParseResultOperate):
                     media.append(
                         InputMediaVideo(
                             str(v),
-                            video_cover=drm.thumb_url if i == 0 else None,
+                            video_cover=thumb_url if i == 0 else None,
                             width=drm.width or 0,
                             height=drm.height or 0,
                         )
@@ -670,9 +615,9 @@ class VideoParseResultOperate(ParseResultOperate):
             logger.exception(e)
             logger.error("上传视频失败, 以上为错误信息")
             shutil.rmtree(str(op), ignore_errors=True)
-            if drm.thumb_url:
+            if thumb_url:
                 return await msg.reply_photo(
-                    photo=drm.thumb_url,
+                    photo=thumb_url,
                     caption=self.content_and_url,
                     reply_markup=self.button(),
                 )
@@ -712,9 +657,9 @@ class ImageParseResultOperate(ParseResultOperate):
                 "caption": text,
                 "reply_markup": self.button(),
             }
-            if isinstance(m, Image):
+            if isinstance(m, ImageFile):
                 return await msg.reply_photo(await self.tg_compatible(m.path), **k)
-            elif isinstance(m, LivePhoto):
+            elif isinstance(m, LivePhotoFile):
                 return await msg.reply_video(
                     m.video_path,
                     video_cover=await self.tg_compatible(m.path),
@@ -729,9 +674,9 @@ class ImageParseResultOperate(ParseResultOperate):
             text = self.content_and_url
             media_group = []
             for v in self.download_result.media:
-                if isinstance(v, Image):
+                if isinstance(v, ImageFile):
                     media_group.append(InputMediaPhoto(await self.tg_compatible(v.path)))
-                elif isinstance(v, LivePhoto):
+                elif isinstance(v, LivePhotoFile):
                     media_group.append(
                         InputMediaVideo(
                             v.video_path,
@@ -779,24 +724,25 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 reply_markup=self.button(),
             )
         elif count == 1:
+            r = self.result.media[0]
             m = self.download_result.media[0]
             k = {
                 "quote": True,
                 "caption": text,
                 "reply_markup": self.button(),
             }
-            if isinstance(m, Image):
+            if isinstance(m, ImageFile):
                 return await msg.reply_photo(await self.tg_compatible(m.path), **k)
-            elif isinstance(m, Video):
+            elif isinstance(m, VideoFile):
                 return await msg.reply_video(
                     m.path,
-                    video_cover=await self.tg_compatible(m.thumb_url),
+                    video_cover=await self.tg_compatible(r.thumb_url),
                     width=m.width or 0,
                     height=m.height or 0,
                     duration=m.duration or 0,
                     **k,
                 )
-            elif isinstance(m, LivePhoto):
+            elif isinstance(m, LivePhotoFile):
                 return await msg.reply_video(
                     m.video_path,
                     video_cover=await self.tg_compatible(m.path),
@@ -805,7 +751,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                     duration=m.duration or 0,
                     **k,
                 )
-            elif isinstance(m, Ani):
+            elif isinstance(m, AniFile):
                 return await msg.reply_animation(m.path, **k)
             else:
                 raise ValueError(f"未知的媒体类型: {type(m)}")
@@ -815,19 +761,20 @@ class MultimediaParseResultOperate(ParseResultOperate):
             media = []
             ani_msg = []
             for i, v in enumerate(self.download_result.media):
-                if isinstance(v, Image):
+                r = self.result.media[i]
+                if isinstance(v, ImageFile):
                     media.append(InputMediaPhoto(await self.tg_compatible(v.path)))
-                elif isinstance(v, Video):
+                elif isinstance(v, VideoFile):
                     media.append(
                         InputMediaVideo(
                             v.path,
-                            video_cover=await self.tg_compatible(v.thumb_url),
+                            video_cover=await self.tg_compatible(r.thumb_url),
                             duration=v.duration or 0,
                             width=v.width or 0,
                             height=v.height or 0,
                         )
                     )
-                elif isinstance(v, LivePhoto):
+                elif isinstance(v, LivePhotoFile):
                     media.append(
                         InputMediaVideo(
                             v.video_path,
@@ -837,11 +784,8 @@ class MultimediaParseResultOperate(ParseResultOperate):
                             height=v.height or 0,
                         )
                     )
-                elif isinstance(v, Ani):
-                    ani = await msg.reply_animation(
-                        v.path,
-                        caption=f"**{i + 1}/{count}**",
-                    )
+                elif isinstance(v, AniFile):
+                    ani = await msg.reply_animation(v.path, caption=f"**{i + 1}/{count}**")
                     ani_msg.append(ani)
             m = ani_msg + [await msg.reply_media_group(media[i : i + 10]) for i in range(0, count, 10)]
             mm = m[0][0] if isinstance(m[0], list) else m[0]
@@ -874,7 +818,7 @@ class RichTextParseResultOperate(ParseResultOperate):
         )
 
     async def download(
-        self, callback: Callable = None, callback_args: tuple = (), downloader_config: DownloadConfig = None
+        self, callback: Callable = None, callback_args: tuple = (), proxy: str | None = None
     ) -> DownloadResult:
         # 直接发布到 telegraph, 不需要下载媒体
         ...

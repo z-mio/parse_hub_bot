@@ -13,7 +13,10 @@ async def start(_, msg: Message):
 
 
 def get_supported_platforms():
-    return "\n".join(ParseHub().get_supported_platforms())
+    text = []
+    for i in ParseHub().get_platforms():
+        text.append(f"{i['name']}: {'|'.join(i['supported_types'])}")
+    return "\n".join(text)
 
 
 @Client.on_message(filters.command("menu"))

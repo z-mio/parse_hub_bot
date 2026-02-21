@@ -1,6 +1,6 @@
 import asyncio
 
-from parsehub.types import Video
+from parsehub.types import ProgressUnit, VideoFile, VideoRef
 from pyrogram import Client
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import (
@@ -15,8 +15,8 @@ from pyrogram.types import (
 from log import logger
 from methods import TgParseHub
 from plugins.start import get_supported_platforms
-from utiles.filters import platform_filter
-from utiles.utile import progress
+from utils.filters import platform_filter
+from utils.util import progress
 
 
 @Client.on_inline_query(~platform_filter)
@@ -38,8 +38,8 @@ async def call_inline_parse(_, iq: InlineQuery):
     await pp.inline_upload(iq)
 
 
-async def callback(current, total, status: str, client: Client, inline_message_id, pp: TgParseHub):
-    text = progress(current, total, status)
+async def callback(current: int, total: int, unit: ProgressUnit, client: Client, inline_message_id, pp: TgParseHub):
+    text = progress(current, total, unit)
     if not text:
         return
     text = f"{pp.operate.content_and_url}\n\n{text}"
@@ -71,10 +71,7 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
 
     try:
         await client.edit_inline_text(imid, "下 载 中...", reply_markup=pp.operate.button(hide_summary=True))
-        await pp.download(
-            callback,
-            (client, imid, pp),
-        )
+        await pp.download_(callback, (client, imid, pp))
     except Exception as e:
         logger.exception(e)
         logger.error("内联下载失败, 以上为错误信息")
@@ -96,18 +93,22 @@ async def inline_result_jx(client: Client, cir: ChosenInlineResult):
         f"{pp.operate.content_and_url}\n\n上 传 中...",
         reply_markup=pp.operate.button(hide_summary=True),
     )
-    v: Video = (
+    v: VideoFile = (
         pp.operate.download_result.media[index]
         if isinstance(pp.operate.download_result.media, list)
         else pp.operate.download_result.media
     )
+    r: VideoRef = (
+        pp.operate.result.media[index] if isinstance(pp.operate.result.media, list) else pp.operate.result.media
+    )
+    thumb_url = r.thumb_url if r else None
     try:
         await client.edit_inline_media(
             imid,
             media=InputMediaVideo(
                 v.path,
                 caption=pp.operate.content_and_url,
-                video_cover=v.thumb_url,
+                video_cover=thumb_url,
                 duration=v.duration or 0,
                 width=v.width or 0,
                 height=v.height or 0,
