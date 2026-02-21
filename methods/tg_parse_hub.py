@@ -153,6 +153,7 @@ class TgParseHub(ParseHub):
             return await self.operate.download(
                 callback,
                 callback_args,
+                proxy=self.downloader_proxy,
             )
 
     async def delete(self):
