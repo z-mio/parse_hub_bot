@@ -2,13 +2,15 @@ from parsehub import ParseHub
 from pyrogram import filters
 from pyrogram.types import InlineQuery, Message
 
+ph = ParseHub()
+
 
 async def _platform_filter(_, __, update: Message | InlineQuery):
     if isinstance(update, Message):
         t = update.caption or update.text
     else:
         t = update.query
-    return bool(ParseHub().get_parser(t))
+    return bool(ph._select_parser(t))
 
 
 platform_filter = filters.create(_platform_filter)
