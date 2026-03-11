@@ -589,6 +589,7 @@ class VideoParseResultOperate(ParseResultOperate):
                     width=drm.width or 0,
                     height=drm.height or 0,
                     duration=drm.duration or 0,
+                    supports_streaming=True,
                 )
                 shutil.rmtree(str(op), ignore_errors=True)
                 return m
@@ -601,6 +602,7 @@ class VideoParseResultOperate(ParseResultOperate):
                             video_cover=thumb_url if i == 0 else None,
                             width=drm.width or 0,
                             height=drm.height or 0,
+                            supports_streaming=True,
                         )
                     )
                 m = [await msg.reply_media_group(media[i : i + 10]) for i in range(0, len(handle_video), 10)]
@@ -668,6 +670,7 @@ class ImageParseResultOperate(ParseResultOperate):
                     width=m.width or 0,
                     height=m.height or 0,
                     duration=m.duration or 0,
+                    supports_streaming=True,
                     **k,
                 )
             else:
@@ -686,6 +689,7 @@ class ImageParseResultOperate(ParseResultOperate):
                             height=v.height,
                             width=v.width,
                             video_cover=await self.tg_compatible(v.path),
+                            supports_streaming=True,
                         )
                     )
             m = await msg.reply_media_group(media_group)
@@ -742,6 +746,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                     width=m.width or 0,
                     height=m.height or 0,
                     duration=m.duration or 0,
+                    supports_streaming=True,
                     **k,
                 )
             elif isinstance(m, LivePhotoFile):
@@ -751,6 +756,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                     width=m.width or 0,
                     height=m.height or 0,
                     duration=m.duration or 0,
+                    supports_streaming=True,
                     **k,
                 )
             elif isinstance(m, AniFile):
@@ -774,6 +780,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                             duration=v.duration or 0,
                             width=v.width or 0,
                             height=v.height or 0,
+                            supports_streaming=True,
                         )
                     )
                 elif isinstance(v, LivePhotoFile):
@@ -784,6 +791,7 @@ class MultimediaParseResultOperate(ParseResultOperate):
                             duration=v.duration or 0,
                             width=v.width or 0,
                             height=v.height or 0,
+                            supports_streaming=True,
                         )
                     )
                 elif isinstance(v, AniFile):
