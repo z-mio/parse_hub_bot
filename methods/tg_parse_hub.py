@@ -62,7 +62,7 @@ from log import logger
 from utils.converter import clean_article_html
 from utils.img_host import ImgHost
 from utils.ph import Telegraph
-from utils.util import encrypt, img2webp, split_video
+from utils.util import encrypt, ensure_h264, img2webp, split_video
 
 CACHE = SimpleMemoryCache(plugins=[TimingPlugin()])
 
@@ -634,6 +634,8 @@ class VideoParseResultOperate(ParseResultOperate):
 
     @staticmethod
     async def handle_video(video: str | Path, op: Path) -> list[Path]:
+        # Ensure H.264 codec for Telegram mobile compatibility
+        video = await ensure_h264(str(video))
         video_size = os.path.getsize(video)
         if video_size > 1024 * 1024 * 2:
             return await split_video(str(video), str(op))
@@ -740,8 +742,9 @@ class MultimediaParseResultOperate(ParseResultOperate):
             if isinstance(m, ImageFile):
                 return await msg.reply_photo(await self.tg_compatible(m.path), **k)
             elif isinstance(m, VideoFile):
+                video_path = await ensure_h264(m.path)
                 return await msg.reply_video(
-                    m.path,
+                    video_path,
                     video_cover=await self.tg_compatible(r.thumb_url),
                     width=m.width or 0,
                     height=m.height or 0,
@@ -773,9 +776,10 @@ class MultimediaParseResultOperate(ParseResultOperate):
                 if isinstance(v, ImageFile):
                     media.append(InputMediaPhoto(await self.tg_compatible(v.path)))
                 elif isinstance(v, VideoFile):
+                    video_path = await ensure_h264(v.path)
                     media.append(
                         InputMediaVideo(
-                            v.path,
+                            video_path,
                             video_cover=await self.tg_compatible(r.thumb_url),
                             duration=v.duration or 0,
                             width=v.width or 0,
