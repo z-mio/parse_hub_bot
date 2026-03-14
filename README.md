@@ -2,6 +2,10 @@
 
 ---
 
+> [!WARNING]
+> 🚧 本项目正在重构中.
+
+
 **Telegram聚合解析Bot, 支持AI总结, 支持内联模式**  
 **Telegram aggregation analysis Bot, supports AI summary, supports inline mode**
 
@@ -40,18 +44,7 @@
 | `API_HASH`, `API_ID`      | 登录 https://my.telegram.org 获取                  |
 | `BOT_TOKEN`               | 在 @BotFather 获取                                |
 | `BOT_PROXY`               | 海外服务器无需填写                                      |
-| `PARSER_PROXY`            | 解析时使用的代理                                       |
-| `DOWNLOADER_PROXY`        | 下载时使用的代理                                       |
 | `DOUYIN_API`              | 你部署的抖音API地址, 默认: https://douyin.wtf            |
-| `AI_SUMMARY`              | 是否开启AI总结                                       |
-| `API_KEY`                 | openai 密钥                                      |
-| `BASE_URL`                | openai api地址                                   |
-| `MODEL`                   | AI总结使用的模型                                      |
-| `PROMPT`                  | AI总结提示词                                        |
-| `TRANSCRIPTIONS_PROVIDER` | 语音转文本模型提供商 支持: `openai`,`azure`,`fast_whisper` | 
-| `TRANSCRIPTIONS_BASE_URL` | 语音转文本 API端点                                    |
-| `TRANSCRIPTIONS_API_KEY`  | 语音转文本 API密钥                                    |
-| `CACHE_TIME`              | 解析结果缓存时间, 单位: 秒, 0为不缓存, 默认缓存 24 小时             |
 
 **修改平台配置:**
 
@@ -101,51 +94,6 @@ sudo sh start.sh restart # 重启 Bot
 
 #### 直接运行:
 
-> [!IMPORTANT]
-><details>
-><summary>注意</summary>
->
->Linux用户在导入skia-python包时可能会遇到以下报错
->
->```bash
->libGL.so.1: cannot open shared object file: No such file or directory
->```
->
->Windows用户在缺少Microsoft Visual C++ Runtime时可能会遇到以下报错
->
->```commandline
->ImportError: DLL load failed while importing skia: The specified module could not be found.
->```
->
->## 解决方法
->
->> ubuntu用户
->
->```bash
-># Ubuntu 22 安装
->apt install libgl1-mesa-glx
-># Ubuntu 24 安装
->apt install libgl1 libglx-mesa0
->```
->
->> ArchLinux用户
->
->```bash
->pacman -S libgl
->```
->
->> centos用户
->
->```bash
->yum install mesa-libGL -y
->```
->
->> Windows用户
->
->下载链接[Microsoft Visual C++ 2015 Redistributable Update 3 RC](microsoft.com/en-US/download/details.aspx?id=52685)
->
->
-></details>
 
 **在项目根目录运行:**
 
@@ -158,9 +106,9 @@ uv sync
 
 **启动bot**
 
-   ```shell
-   uv run bot.py
-   ```
+```shell
+uv run bot.py
+```
 
 **设置命令列表**  
 私聊bot发送指令 `/menu`  
@@ -175,8 +123,3 @@ uv sync
 ## 相关项目
 
 - [z-mio/ParseHub](https://github.com/z-mio/ParseHub)
-
-## 鸣谢
-
-- [OhMyGPT](https://www.ohmygpt.com)
-- [KurimuzonAkuma/pyrogram](https://github.com/KurimuzonAkuma/pyrogram)
