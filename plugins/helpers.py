@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from parsehub.types import AnyMediaFile, ParseResult
+from pyrogram import Client
+
+from utils.ph import Telegraph
 
 
 @dataclass
@@ -47,3 +50,15 @@ def progress(current: int, total: int, unit: str):
         if (current + 1) % 3 == 0 or (current + 1) == total:
             return text
     return None
+
+
+async def create_telegraph_page(html_content: str, cli: Client, parse_result: ParseResult) -> str:
+    """创建 Telegraph 页面，返回页面 URL"""
+    me = await cli.get_me()
+    page = await Telegraph().create_page(
+        parse_result.title or "无标题",
+        html_content=html_content,
+        author_name=me.full_name,
+        author_url=parse_result.raw_url,
+    )
+    return page.url

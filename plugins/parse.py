@@ -8,7 +8,6 @@ from parsehub.types import (
     AnyMediaRef,
     ImageFile,
     LivePhotoFile,
-    ParseResult,
     PostType,
     ProgressUnit,
     VideoFile,
@@ -25,26 +24,11 @@ from pyrogram.types import (
 )
 
 from log import logger
-from plugins.helpers import ProcessedMedia, build_caption, progress
+from plugins.helpers import ProcessedMedia, build_caption, create_telegraph_page, progress
 from services import ParseService
 from utils.converter import clean_article_html
 from utils.filters import platform_filter
 from utils.media_processing_unit import MediaProcessingUnit
-from utils.ph import Telegraph
-
-
-async def send_ph(html_content: str, cli: Client, msg: Message, parse_result: ParseResult) -> Message:
-    me = await cli.get_me()
-    page = await Telegraph().create_page(
-        parse_result.title or "无标题",
-        html_content=html_content,
-        author_name=me.full_name,
-        author_url=parse_result.raw_url,
-    )
-    return await msg.reply_text(
-        build_caption(parse_result, page.url),
-        link_preview_options=LinkPreviewOptions(show_above_text=True),
-    )
 
 
 async def handle_parse(cli: Client, msg: Message, url: str):
@@ -68,25 +52,29 @@ async def handle_parse(cli: Client, msg: Message, url: str):
     if parse_result.type == PostType.RICHTEXT:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
         if parse_result.platform == Platform.WEIXIN:
-            await send_ph(
+            ph_url = await create_telegraph_page(
                 clean_article_html(
                     markdown(parse_result.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))
                 ),
                 cli,
-                msg,
                 parse_result,
             )
         elif parse_result.platform == Platform.COOLAPK:
-            await send_ph(
+            ph_url = await create_telegraph_page(
                 clean_article_html(
                     markdown(parse_result.markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))
                 ),
                 cli,
-                msg,
                 parse_result,
             )
         else:
-            await send_ph(clean_article_html(markdown(parse_result.markdown_content)), cli, msg, parse_result)
+            ph_url = await create_telegraph_page(
+                clean_article_html(markdown(parse_result.markdown_content)), cli, parse_result
+            )
+        await msg.reply_text(
+            build_caption(parse_result, ph_url),
+            link_preview_options=LinkPreviewOptions(show_above_text=True),
+        )
         await status_msg.delete()
         return None
 

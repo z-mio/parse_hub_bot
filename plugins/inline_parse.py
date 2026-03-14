@@ -33,26 +33,14 @@ from pyrogram.types import (
 )
 
 from log import logger
-from plugins.helpers import ProcessedMedia, build_caption, progress
+from plugins.helpers import ProcessedMedia, build_caption, create_telegraph_page, progress
 from plugins.start import get_supported_platforms
 from services import ParseService
 from utils.converter import clean_article_html
 from utils.filters import platform_filter
 from utils.media_processing_unit import MediaProcessingUnit
-from utils.ph import Telegraph
 
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
-
-
-async def send_ph(html_content: str, cli: Client, parse_result: ParseResult) -> str:
-    me = await cli.get_me()
-    page = await Telegraph().create_page(
-        parse_result.title or "无标题",
-        html_content=html_content,
-        author_name=me.full_name,
-        author_url=parse_result.raw_url,
-    )
-    return page.url
 
 
 async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list:
@@ -66,7 +54,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
     # ── 富文本直接 telegraph 发送 ──
     if parse_result.type == PostType.RICHTEXT:
         if parse_result.platform == Platform.WEIXIN:
-            url = await send_ph(
+            url = await create_telegraph_page(
                 clean_article_html(
                     markdown(parse_result.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))
                 ),
@@ -74,7 +62,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                 parse_result,
             )
         elif parse_result.platform == Platform.COOLAPK:
-            url = await send_ph(
+            url = await create_telegraph_page(
                 clean_article_html(
                     markdown(parse_result.markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))
                 ),
@@ -82,7 +70,9 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                 parse_result,
             )
         else:
-            url = await send_ph(clean_article_html(markdown(parse_result.markdown_content)), cli, parse_result)
+            url = await create_telegraph_page(
+                clean_article_html(markdown(parse_result.markdown_content)), cli, parse_result
+            )
         caption = build_caption(parse_result, url)
         results.append(
             InlineQueryResultArticle(
