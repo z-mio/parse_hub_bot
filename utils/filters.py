@@ -6,11 +6,15 @@ ph = ParseHub()
 
 
 async def _platform_filter(_, __, update: Message | InlineQuery):
-    if isinstance(update, Message):
-        t = update.caption or update.text
-    else:
-        t = update.query
-    return bool(ph._select_parser(t))
+    match update:
+        case Message():
+            t = update.caption or update.text
+        case InlineQuery():
+            t = update.query
+    try:
+        return bool(ph.get_platform(t))
+    except Exception:
+        return False
 
 
 platform_filter = filters.create(_platform_filter)

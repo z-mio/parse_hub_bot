@@ -1,12 +1,11 @@
 import os
 import shutil
-from os import getenv
 from pathlib import Path
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 from parsehub.config import GlobalConfig
-from pydantic import Field
+from pydantic import Field, HttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
@@ -17,39 +16,43 @@ if TEMP_DIR.exists():
 TEMP_DIR.mkdir(exist_ok=True)
 
 
-class BotConfig:
-    def __init__(self):
-        self.bot_token = getenv("BOT_TOKEN")
-        self.api_id = getenv("API_ID")
-        self.api_hash = getenv("API_HASH")
-        self.bot_proxy: None | BotConfig._Proxy = self._Proxy(getenv("BOT_PROXY", None))
-        self.parser_proxy: None | str = getenv("PARSER_PROXY", None)
-        self.downloader_proxy: None | str = getenv("DOWNLOADER_PROXY", None)
+class BotSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
-        self.cache_time = int(ct) if (ct := getenv("CACHE_TIME")) else 24 * 60 * 60  # 24 hours
-        self.ai_summary = bool(getenv("AI_SUMMARY").lower() == "true")
-        self.douyin_api = getenv("DOUYIN_API", None)
-        self.debug = bool(getenv("DEBUG", "false").lower() == "true")
+    bot_token: str = Field(...)
+    api_id: str = Field(...)
+    api_hash: str = Field(...)
+    bot_proxy: dict | None = Field(default=None)
+    bot_workdir: Path = Field(default=Path("sessions"))
+    debug: bool = Field(default=False)
 
-        self.bot_workdir: Path = Path("sessions")
+    douyin_api: HttpUrl | None = None
+
+    def model_post_init(self, __context) -> None:
+        """模型初始化后的操作"""
         self.bot_workdir.mkdir(parents=True, exist_ok=True)
 
-    class _Proxy:
-        def __init__(self, url: str):
-            self._url = urlparse(url) if url else None
-            self.url = self._url.geturl() if self._url else None
+    @field_validator("bot_proxy", mode="before")
+    @classmethod
+    def proxy_config(cls, v: str | None = None) -> dict | None:
+        url = urlparse(v) if v else None
+        if not url:
+            return None
+        return {
+            "scheme": url.scheme,
+            "hostname": url.hostname,
+            "port": url.port,
+            "username": url.username,
+            "password": url.password,
+        }
 
-        @property
-        def dict_format(self):
-            if not self._url:
-                return None
-            return {
-                "scheme": self._url.scheme,
-                "hostname": self._url.hostname,
-                "port": self._url.port,
-                "username": self._url.username,
-                "password": self._url.password,
-            }
+    @property
+    def bot_session_name(self) -> str:
+        return f"bot_{self.bot_token.split(':')[0]}"
 
 
 class WatchdogSettings(BaseSettings):
@@ -90,8 +93,8 @@ class WatchdogSettings(BaseSettings):
         os.environ["WD_DISCONNECT_COUNT"] = "0"
 
 
-bot_cfg = BotConfig()
+bs = BotSettings()
 ws = WatchdogSettings()
-if bot_cfg.douyin_api:
-    GlobalConfig.douyin_api = bot_cfg.douyin_api
-GlobalConfig.duration_limit = 0
+
+if bs.douyin_api:
+    GlobalConfig.douyin_api = bs.douyin_api

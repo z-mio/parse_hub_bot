@@ -7,7 +7,7 @@ import aiofiles
 import httpx
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from config.config import TEMP_DIR
+from core.config import TEMP_DIR
 from log import logger
 
 

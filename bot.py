@@ -5,16 +5,16 @@ import pillow_heif
 from pyrogram import Client
 from pyrogram.handlers import ConnectHandler, DisconnectHandler
 
-from config.config import bot_cfg, ws
+from core.config import bs, ws
+from core.watchdog import on_connect, on_disconnect
 from log import logger, logger_format
-from utils.optimized_event_loop import setup_optimized_event_loop
-from utils.watchdog import on_connect, on_disconnect
+from utils.event_loop import setup_optimized_event_loop
 
 pillow_heif.register_heif_opener()
 
 logger.remove()
 
-if bot_cfg.debug:
+if bs.debug:
     logger.add(sys.stderr, level="DEBUG", format=logger_format)
     logger.debug("调试模式已启用")
 else:
@@ -34,7 +34,7 @@ loop = asyncio.new_event_loop()
 
 class Bot(Client):
     def __init__(self):
-        self.cfg = bot_cfg
+        self.cfg = bs
 
         super().__init__(
             f"{self.cfg.bot_token.split(':')[0]}_bot",
@@ -42,7 +42,7 @@ class Bot(Client):
             api_hash=self.cfg.api_hash,
             bot_token=self.cfg.bot_token,
             plugins={"root": "plugins"},
-            proxy=self.cfg.bot_proxy.dict_format,
+            proxy=self.cfg.bot_proxy,
             loop=loop,
             workdir=self.cfg.bot_workdir,
         )
