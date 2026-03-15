@@ -34,7 +34,7 @@ from log import logger
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from plugins.start import get_supported_platforms
 from services import ParseService
-from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, file_id_cache, parse_cache
+from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
@@ -97,9 +97,10 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
             )
         ]
 
+    flat_media = [x for sub in entry.media for x in (sub if isinstance(sub, list) else [sub])]
     results = []
 
-    for m in entry.media:
+    for m in flat_media:
         match m.type:
             case CacheMediaType.PHOTO:
                 results.append(
@@ -257,9 +258,8 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
 
     inline_query.query = raw_url
 
-    logger.debug(f"原始 URL: {raw_url}")
     # 先查 file_id 缓存 → 如有则用 cached 类型直接返回
-    cached = await file_id_cache.get(raw_url)
+    cached = await persistent_cache.get(raw_url)
     if cached:
         logger.debug("inline: file_id 缓存命中, 构建 cached 结果")
         results = build_cached_inline_results(cached, raw_url)
@@ -331,7 +331,7 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
         )
         # 写入 file_id 缓存 (inline 上传后)
         if sent and hasattr(sent, "video") and sent.video:
-            await file_id_cache.set(
+            await persistent_cache.set(
                 query,
                 CacheEntry(
                     parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),

@@ -23,6 +23,7 @@ class BotSettings(BaseSettings):
     bot_proxy: dict | None = Field(default=None)
     bot_workdir: Path = Field(default=Path("sessions"))
     data_path: Path = Path("data")
+    cache_time: int = Field(default=30 * 24 * 60 * 60, description="默认缓存一个月")
     debug: bool = Field(default=False)
 
     douyin_api: HttpUrl | None = None

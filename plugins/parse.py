@@ -22,7 +22,7 @@ from pyrogram.types import (
 from log import logger
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from services import ParseService
-from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, file_id_cache, parse_cache
+from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
@@ -62,9 +62,8 @@ class MessageStatusReporter(StatusReporter):
 async def handle_parse(cli: Client, msg: Message, url: str):
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
     raw_url = await ParseService().get_raw_url(url)
-    logger.debug(f"原始 URL: {raw_url}")
     # ── 检查 file_id 缓存 ──
-    cached = await file_id_cache.get(raw_url)
+    cached = await persistent_cache.get(raw_url)
     if cached:
         logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
         await _send_cached(msg, cached, raw_url)
@@ -99,7 +98,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
             link_preview_options=LinkPreviewOptions(show_above_text=True),
         )
         # 缓存富文本的 telegraph_url
-        await file_id_cache.set(
+        await persistent_cache.set(
             raw_url,
             CacheEntry(
                 parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
@@ -128,7 +127,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
         cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
         # 写入 file_id 缓存
         if cache_entry:
-            await file_id_cache.set(raw_url, cache_entry)
+            await persistent_cache.set(raw_url, cache_entry)
     except Exception as e:
         await reporter.report_error("上传", e)
         return
@@ -271,7 +270,7 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
     """从 file_id 缓存直接发送，跳过解析/下载/转码"""
     logger.debug(f"缓存发送: media={entry.media}")
     caption = build_caption_by_str(entry.parse_result.title, entry.parse_result.content, url, entry.telegraph_url)
-    # 富文本类型 (只有 telegraph_url, 无 file_id)
+    # 富文本类型
     if entry.telegraph_url:
         await msg.reply_text(
             caption,
@@ -285,9 +284,9 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         return
-
-    if len(entry.media) == 1:
-        m: CacheMedia = entry.media[0]
+    flat_media = [x for sub in entry.media for x in (sub if isinstance(sub, list) else [sub])]
+    if len(flat_media) == 1:
+        m: CacheMedia = flat_media[0]
         match m.type:
             case CacheMediaType.PHOTO:
                 await msg.reply_photo(m.file_id, caption=caption)
@@ -298,8 +297,8 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
             case CacheMediaType.DOCUMENT:
                 await msg.reply_document(m.file_id, caption=caption)
     else:
-        animations = [m for m in entry.media if m.type == CacheMediaType.ANIMATION]
-        others = [m for m in entry.media if m.type != CacheMediaType.ANIMATION]
+        animations = [sub for sub in flat_media if sub.type == CacheMediaType.ANIMATION]
+        others = [sub for sub in flat_media if sub.type != CacheMediaType.ANIMATION]
 
         for m in animations:
             await msg.reply_animation(m.file_id)
@@ -323,7 +322,7 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
-        ) if len(entry.media) > 1 else None
+        ) if len(flat_media) > 1 else None
 
 
 @Client.on_message((filters.text | filters.caption) & platform_filter)
