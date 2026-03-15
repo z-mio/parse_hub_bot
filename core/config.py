@@ -22,6 +22,7 @@ class BotSettings(BaseSettings):
     api_hash: str = Field(...)
     bot_proxy: dict | None = Field(default=None)
     bot_workdir: Path = Field(default=Path("sessions"))
+    data_path: Path = Path("data")
     debug: bool = Field(default=False)
 
     douyin_api: HttpUrl | None = None
@@ -47,6 +48,13 @@ class BotSettings(BaseSettings):
     @property
     def bot_session_name(self) -> str:
         return f"bot_{self.bot_token.split(':')[0]}"
+
+    @field_validator("data_path", mode="before")
+    @classmethod
+    def data_path_init(cls, v):
+        p = Path(v) if isinstance(v, str) else v
+        p.mkdir(exist_ok=True, parents=True)
+        return p
 
 
 class WatchdogSettings(BaseSettings):

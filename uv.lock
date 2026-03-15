@@ -7,21 +7,21 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "aiocache"
-version = "0.12.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/7a/64/b945b8025a9d1e6e2138845f4022165d3b337f55f50984fbc6a4c0a1e355/aiocache-0.12.3.tar.gz", hash = "sha256:f528b27bf4d436b497a1d0d1a8f59a542c153ab1e37c3621713cb376d44c4713", size = 132196, upload-time = "2024-09-25T13:20:23.823Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/37/d7/15d67e05b235d1ed8c3ce61688fe4d84130e72af1657acadfaac3479f4cf/aiocache-0.12.3-py2.py3-none-any.whl", hash = "sha256:889086fc24710f431937b87ad3720a289f7fc31c4fd8b68e9f918b9bacd8270d", size = 28199, upload-time = "2024-09-25T13:20:22.688Z" },
-]
-
-[[package]]
 name = "aiofiles"
 version = "23.2.1"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/af/41/cfed10bc64d774f497a86e5ede9248e1d062db675504b41c320954d99641/aiofiles-23.2.1.tar.gz", hash = "sha256:84ec2218d8419404abcb9f0c02df3f34c6e0a68ed41072acfb1cef5cbc29051a", size = 32072, upload-time = "2023-08-09T15:23:11.564Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c5/19/5af6804c4cc0fed83f47bff6e413a98a36618e7d40185cd36e69737f3b0e/aiofiles-23.2.1-py3-none-any.whl", hash = "sha256:19297512c647d4b27a2cf7c34caa7e405c0d60b5560618a29a9fe027b18b0107", size = 15727, upload-time = "2023-08-09T15:23:09.774Z" },
+]
+
+[[package]]
+name = "aiosqlite"
+version = "0.22.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4e/8a/64761f4005f17809769d23e518d915db74e6310474e733e3593cfc854ef1/aiosqlite-0.22.1.tar.gz", hash = "sha256:043e0bd78d32888c0a9ca90fc788b38796843360c855a7262a532813133a0650", size = 14821, upload-time = "2025-12-23T19:25:43.997Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/00/b7/e3bf5133d697a08128598c8d0abc5e16377b51465a33756de24fa7dee953/aiosqlite-0.22.1-py3-none-any.whl", hash = "sha256:21c002eb13823fad740196c5a2e9d8e62f6243bd9e7e4a1f87fb5e44ecb4fceb", size = 17405, upload-time = "2025-12-23T19:25:42.139Z" },
 ]
 
 [[package]]
@@ -697,7 +697,6 @@ name = "parsehubbot"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "aiocache" },
     { name = "apscheduler" },
     { name = "dynrender-skia" },
     { name = "haishoku" },
@@ -707,7 +706,7 @@ dependencies = [
     { name = "lxml-html-clean" },
     { name = "markdown" },
     { name = "parsehub" },
-    { name = "pickledb" },
+    { name = "pickledb", extra = ["sqlite"] },
     { name = "pillow" },
     { name = "pillow-heif" },
     { name = "pydantic" },
@@ -722,7 +721,6 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiocache", specifier = ">=0.12.3" },
     { name = "apscheduler", specifier = "==3.10.4" },
     { name = "dynrender-skia", specifier = ">=0.2.5" },
     { name = "haishoku", specifier = ">=1.1.8" },
@@ -732,7 +730,7 @@ requires-dist = [
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
     { name = "parsehub", specifier = ">=2.0.0" },
-    { name = "pickledb", specifier = ">=1.6" },
+    { name = "pickledb", extras = ["sqlite"], specifier = ">=1.6" },
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "pillow-heif", specifier = ">=1.1.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
@@ -756,6 +754,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/4d/36/62871f6215cc7e1741f2c659d341a3250bf6d88fa2fc98babfbc02c0dff6/pickledb-1.6.tar.gz", hash = "sha256:0a1311e932d92fb66ce6eeb7f6a9af56852dffa2054b6021ba3563402d5219e2", size = 107430, upload-time = "2026-01-05T04:52:07.542Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ba/06/69ec73c5561fb40e4851d58860d1cbba3f603b3eb284ce516e57279091e2/pickledb-1.6-py3-none-any.whl", hash = "sha256:7992862909aca351e93974a35049a4d38e70c459e568a9083ac020b80c0751a6", size = 5224, upload-time = "2026-01-05T04:52:06.032Z" },
+]
+
+[package.optional-dependencies]
+sqlite = [
+    { name = "aiosqlite" },
 ]
 
 [[package]]

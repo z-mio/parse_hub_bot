@@ -1,12 +1,4 @@
 import asyncio
-import hashlib
-
-
-def encrypt(text: str):
-    """hash加密"""
-    md5 = hashlib.md5()
-    md5.update(text.encode("utf-8"))
-    return md5.hexdigest()
 
 
 async def run_cmd(*cmd: str, timeout: float = 30) -> str:

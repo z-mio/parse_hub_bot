@@ -7,6 +7,8 @@ from yaml import safe_load
 
 from log import logger
 
+from .config import bs
+
 logger = logger.bind(name="PlatformConfig")
 
 
@@ -76,4 +78,4 @@ class PlatformsConfig(BaseModel):
         return self.platforms.get(pid)
 
 
-platforms_config = PlatformsConfig.load_config(Path.cwd() / "platform_config.yaml")
+platforms_config = PlatformsConfig.load_config(bs.data_path / "platform_config.yaml")
