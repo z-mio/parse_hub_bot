@@ -104,6 +104,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
         await reporter.report_error("上传", e)
         return
     finally:
+        logger.debug("清理资源")
         result.cleanup()
 
     await reporter.dismiss()
@@ -210,9 +211,9 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str):
 
 
 @Client.on_message((filters.text | filters.caption) & platform_filter)
-async def text_parse(cli: Client, msg: Message):
+async def text_jx(cli: Client, msg: Message):
     url = msg.text or msg.caption
-    logger.debug(f"text_parse 触发: url={url}")
+    logger.debug(f"text_jx 触发: url={url}")
     await handle_parse(cli, msg, url)
 
 

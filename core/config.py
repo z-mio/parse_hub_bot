@@ -1,5 +1,4 @@
 import os
-import shutil
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -9,11 +8,6 @@ from pydantic import Field, HttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
-
-TEMP_DIR = Path("./temp")
-if TEMP_DIR.exists():
-    shutil.rmtree(str(TEMP_DIR), ignore_errors=True)
-TEMP_DIR.mkdir(exist_ok=True)
 
 
 class BotSettings(BaseSettings):
