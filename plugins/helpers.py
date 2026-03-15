@@ -8,9 +8,12 @@ from parsehub import Platform
 from parsehub.types import AnyMediaFile, AnyParseResult, RichTextParseResult
 from pyrogram import Client
 
+from log import logger
 from utils.converter import clean_article_html
 from utils.media_processing_unit import MediaProcessingUnit
 from utils.ph import Telegraph
+
+logger = logger.bind(name="Helpers")
 
 
 @dataclass
@@ -58,6 +61,7 @@ def progress(current: int, total: int, unit: str):
 
 async def create_telegraph_page(html_content: str, cli: Client, parse_result: AnyParseResult) -> str:
     """创建 Telegraph 页面，返回页面 URL"""
+    logger.debug(f"创建 Telegraph 页面: title={parse_result.title}")
     me = await cli.get_me()
     page = await Telegraph().create_page(
         parse_result.title or "无标题",
@@ -65,11 +69,13 @@ async def create_telegraph_page(html_content: str, cli: Client, parse_result: An
         author_name=me.full_name,
         author_url=parse_result.raw_url,
     )
+    logger.debug(f"Telegraph 页面已创建: {page.url}")
     return page.url
 
 
 async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResult) -> str:
     """将富文本解析结果转换为 Telegraph 页面，返回页面 URL"""
+    logger.debug(f"富文本转 Telegraph: platform={parse_result.platform}, md_len={len(parse_result.markdown_content)}")
     md = parse_result.markdown_content
     if parse_result.platform == Platform.WEIXIN:
         md = md.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in")
@@ -84,8 +90,12 @@ async def process_media_files(download_result) -> list[ProcessedMedia]:
     processed_dir = download_result.output_dir.joinpath("processed")
     processor = MediaProcessingUnit(processed_dir)
     media_files = download_result.media if isinstance(download_result.media, list) else [download_result.media]
+    logger.debug(f"开始媒体格式转换: 文件数={len(media_files)}, output_dir={processed_dir}")
     processed_list: list[ProcessedMedia] = []
     for media_file in media_files:
+        logger.debug(f"处理文件: {media_file.path}")
         result = await processor.process(media_file.path)
+        logger.debug(f"处理结果: output_paths={result.output_paths}")
         processed_list.append(ProcessedMedia(media_file, result.output_paths, result.temp_dir))
+    logger.debug(f"媒体格式转换完成: 处理数={len(processed_list)}")
     return processed_list

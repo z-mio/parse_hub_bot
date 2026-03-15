@@ -27,6 +27,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup as Ikm,
 )
 
+from log import logger
 from plugins.helpers import build_caption, create_richtext_telegraph
 from plugins.start import get_supported_platforms
 from services import ParseService
@@ -34,6 +35,7 @@ from services.cache import TTLCache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
+logger = logger.bind(name="InlineParse")
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
 _parse_cache = TTLCache(ttl=300)
 
@@ -77,6 +79,7 @@ class InlineStatusReporter(StatusReporter):
 
 async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list:
     """根据解析结果构建内联查询结果列表"""
+    logger.debug(f"构建 inline 结果: type={parse_result.type}, title={parse_result.title}")
     title = parse_result.title or "无标题"
     media_list = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
     reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
@@ -166,6 +169,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                     )
                 )
 
+    logger.debug(f"inline 结果构建完成: count={len(results)}")
     return results
 
 
@@ -184,9 +188,11 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
 
 @Client.on_inline_query(platform_filter)
 async def call_inline_parse(cli: Client, inline_query: InlineQuery):
+    logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
     parse_result = await ParseService(inline_query.query).parse()
     await _parse_cache.set(inline_query.query, parse_result)
     results = await build_inline_results(parse_result, cli)
+    logger.debug(f"inline 查询完成, 返回 {len(results)} 个结果")
     return await inline_query.answer(results[:50], cache_time=0)
 
 
@@ -198,8 +204,10 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
     media_index = int(chosen_result.result_id.split("_")[1])
     inline_message_id = chosen_result.inline_message_id
     query = chosen_result.query
+    logger.debug(f"inline 下载触发: media_index={media_index}, query={query}")
 
     cached_result = await _parse_cache.pop(query)
+    logger.debug(f"缓存命中: {cached_result is not None}")
 
     caption = build_caption(cached_result) if cached_result else ""
     reporter = InlineStatusReporter(client, inline_message_id, caption)
@@ -221,6 +229,7 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
     try:
         file_paths = processed.output_paths or [processed.source.path]
         file_path_str = str(file_paths[0])
+        logger.debug(f"inline 上传文件: {file_path_str}")
         width, height = processed.source.width, processed.source.height
         duration = getattr(processed.source, "duration", 0)
 
@@ -241,6 +250,8 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
             ),
         )
     except Exception as e:
+        logger.debug(f"inline 上传失败: {e}")
         await reporter.report_error("上传", e)
     finally:
+        logger.debug("inline 下载任务完成, 清理资源")
         result.cleanup()

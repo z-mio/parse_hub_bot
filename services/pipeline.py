@@ -9,6 +9,8 @@ from log import logger
 from plugins.helpers import ProcessedMedia, process_media_files
 from services import ParseService
 
+logger = logger.bind(name="Pipeline")
+
 
 class StatusReporter(Protocol):
     """抽象状态通知，由调用方实现"""
@@ -65,9 +67,11 @@ class ParsePipeline:
 
     async def run(self) -> PipelineResult | None:
         """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
+        logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
 
         # ── 1. 解析 ──
         if self._parse_result is not None:
+            logger.debug("使用缓存的解析结果")
             parse_result = self._parse_result
         else:
             await self._reporter.report("**▎解 析 中...**")
@@ -77,6 +81,7 @@ class ParsePipeline:
 
         # 富文本无需下载
         if parse_result.type == PostType.RICHTEXT:
+            logger.debug("解析结果为富文本, 跳过下载")
             return PipelineResult(parse_result=parse_result)
 
         # ── 2. 下载 ──
@@ -88,6 +93,7 @@ class ParsePipeline:
         )
         if download_result is None:
             return None
+        logger.debug(f"下载完成: output_dir={download_result.output_dir}")
 
         # ── 3. 格式转换 ──
         await self._reporter.report("**▎格式转换中...**")
@@ -99,6 +105,7 @@ class ParsePipeline:
         if processed_list is None:
             return None
 
+        logger.debug(f"流水线完成: processed_count={len(processed_list)}")
         return PipelineResult(
             parse_result=parse_result,
             processed_list=processed_list,
@@ -107,6 +114,7 @@ class ParsePipeline:
 
     async def _step(self, stage: str, action, cleanup=None):
         """执行单个步骤，失败时统一处理"""
+        logger.debug(f"执行步骤: {stage}")
         try:
             return await action()
         except Exception as e:

@@ -24,6 +24,8 @@ from plugins.helpers import build_caption, create_richtext_telegraph
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
+logger = logger.bind(name="Parse")
+
 
 class MessageStatusReporter(StatusReporter):
     """基于 Telegram Message 的状态报告器"""
@@ -56,20 +58,24 @@ class MessageStatusReporter(StatusReporter):
 
 
 async def handle_parse(cli: Client, msg: Message, url: str):
+    logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
     reporter = MessageStatusReporter(msg)
 
     pipeline = ParsePipeline(url, reporter)
     result = await pipeline.run()
 
     if result is None:
+        logger.debug(f"Pipeline 返回 None, 跳过后续处理: url={url}")
         return
 
     parse_result = result.parse_result
 
     # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
+        logger.debug(f"富文本类型, 创建 Telegraph 页面: title={parse_result.title}")
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
         ph_url = await create_richtext_telegraph(cli, parse_result)
+        logger.debug(f"Telegraph 页面创建完成: {ph_url}")
         await msg.reply_text(
             build_caption(parse_result, ph_url),
             link_preview_options=LinkPreviewOptions(show_above_text=True),
@@ -78,12 +84,14 @@ async def handle_parse(cli: Client, msg: Message, url: str):
         return
 
     # ── 上传 ──
+    logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
     await reporter.report("**▎上 传 中...**")
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
         caption = build_caption(parse_result)
 
         if not result.processed_list:
+            logger.debug("无媒体文件, 仅发送文本")
             await msg.reply_text(
                 caption,
                 link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -102,6 +110,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
 
 
 async def _send_media(msg: Message, parse_result, processed_list, caption: str):
+    logger.debug(f"构建媒体列表: processed_count={len(processed_list)}")
     input_photos_videos: list[InputMediaPhoto | InputMediaVideo] = []
     input_animations: list[InputMediaAnimation] = []
 
@@ -152,8 +161,10 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str):
                     )
 
     all_media = input_animations + input_photos_videos
+    logger.debug(f"媒体分类完成: animations={len(input_animations)}, photos_videos={len(input_photos_videos)}")
 
     if len(all_media) == 1:
+        logger.debug("单媒体模式发送")
         try:
             if input_animations:
                 await msg.reply_animation(input_animations[0].media, caption=caption)
@@ -176,6 +187,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str):
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             await msg.reply_document(all_media[0].media, caption=caption)
     else:
+        logger.debug(f"多媒体模式发送: total={len(all_media)}")
         sent_animations = [await msg.reply_animation(ani.media) for ani in input_animations]
         try:
             sent_groups = sent_animations + [
@@ -200,11 +212,13 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str):
 @Client.on_message((filters.text | filters.caption) & platform_filter)
 async def text_parse(cli: Client, msg: Message):
     url = msg.text or msg.caption
+    logger.debug(f"text_parse 触发: url={url}")
     await handle_parse(cli, msg, url)
 
 
 @Client.on_message(filters.command(["jx"]))
 async def cmd_jx(cli: Client, msg: Message):
+    logger.debug(f"cmd_jx 触发: command={msg.command}")
     url = msg.command[1] if msg.command[1:] else ""
 
     if not url and msg.reply_to_message:
