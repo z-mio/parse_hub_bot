@@ -75,7 +75,7 @@ class ParsePipeline:
             parse_result = self._parse_result
         else:
             await self._reporter.report("**▎解 析 中...**")
-            parse_result = await self._step("解析", lambda: ParseService(self._url).parse())
+            parse_result = await self._step("解析", lambda: ParseService().parse(self._url))
             if parse_result is None:
                 return None
 

@@ -31,10 +31,10 @@ from pyrogram.types import (
 )
 
 from log import logger
-from plugins.helpers import build_caption, create_richtext_telegraph
+from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from plugins.start import get_supported_platforms
 from services import ParseService
-from services.cache import CacheEntry, file_id_cache, parse_cache
+from services.cache import CacheEntry, CacheMedia, CacheParseResult, MediaType, file_id_cache, parse_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
@@ -81,9 +81,9 @@ class InlineStatusReporter(StatusReporter):
 
 def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
     """有 file_id 缓存时，构建 cached 类型的 inline 结果（Telegram 服务端直发）"""
-    reply_markup = Ikm([[Ikb("原链接", url=raw_url)]])
-    caption = entry.caption
-    title = entry.title or "无标题"
+    title = entry.parse_result.title or "无标题"
+    content = entry.parse_result.content
+    caption = build_caption_by_str(title, content, raw_url, entry.telegraph_url)
 
     # 富文本
     if entry.telegraph_url:
@@ -94,55 +94,45 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
                     caption,
                     link_preview_options=LinkPreviewOptions(show_above_text=True),
                 ),
-                reply_markup=reply_markup,
             )
         ]
 
     results = []
-    flat_ids: list[str] = []
-    flat_types: list[str] = []
-    for fid, mtype in zip(entry.file_ids, entry.media_types, strict=False):
-        if isinstance(fid, list):
-            flat_ids.extend(fid)
-            flat_types.extend(mtype if isinstance(mtype, list) else [mtype] * len(fid))
-        else:
-            flat_ids.append(fid)
-            flat_types.append(mtype)
 
-    for fid, mtype in zip(flat_ids, flat_types, strict=False):
-        match mtype:
-            case "photo":
+    for m in entry.media:
+        match m.type:
+            case MediaType.PHOTO:
                 results.append(
                     InlineQueryResultCachedPhoto(
-                        photo_file_id=fid,
+                        photo_file_id=m.file_id,
                         caption=caption,
-                        reply_markup=reply_markup,
+                        description=content,
                     )
                 )
-            case "video":
+            case MediaType.VIDEO:
                 results.append(
                     InlineQueryResultCachedVideo(
-                        video_file_id=fid,
+                        video_file_id=m.file_id,
                         caption=caption,
-                        reply_markup=reply_markup,
+                        description=content,
                         title=title,
                     )
                 )
-            case "animation":
+            case MediaType.ANIMATION:
                 results.append(
                     InlineQueryResultCachedDocument(
-                        document_file_id=fid,
+                        document_file_id=m.file_id,
                         caption=caption,
-                        reply_markup=reply_markup,
+                        description=content,
                         title=title,
                     )
                 )
-            case "document":
+            case MediaType.DOCUMENT:
                 results.append(
                     InlineQueryResultCachedDocument(
-                        document_file_id=fid,
+                        document_file_id=m.file_id,
                         caption=caption,
-                        reply_markup=reply_markup,
+                        description=content,
                         title=title,
                     )
                 )
@@ -262,21 +252,24 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
 @Client.on_inline_query(platform_filter)
 async def call_inline_parse(cli: Client, inline_query: InlineQuery):
     logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
-
     url = inline_query.query
+    raw_url = await ParseService().get_raw_url(url)
 
+    inline_query.query = raw_url
+
+    logger.debug(f"原始 URL: {raw_url}")
     # 先查 file_id 缓存 → 如有则用 cached 类型直接返回
-    cached = await file_id_cache.get(url)
+    cached = await file_id_cache.get(raw_url)
     if cached:
         logger.debug("inline: file_id 缓存命中, 构建 cached 结果")
-        results = build_cached_inline_results(cached, url)
+        results = build_cached_inline_results(cached, raw_url)
         return await inline_query.answer(results[:50], cache_time=60)
 
     # 查内存解析缓存
-    parse_result = await parse_cache.get(url)
+    parse_result = await parse_cache.get(raw_url)
     if parse_result is None:
-        parse_result = await ParseService(url).parse()
-        await parse_cache.set(url, parse_result)
+        parse_result = await ParseService().parse(raw_url)
+        await parse_cache.set(raw_url, parse_result)
 
     results = await build_inline_results(parse_result, cli)
     logger.debug(f"inline 查询完成, 返回 {len(results)} 个结果")
@@ -293,7 +286,7 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
     query = chosen_result.query
     logger.debug(f"inline 下载触发: media_index={media_index}, query={query}")
 
-    cached_result = await parse_cache.get(query)  # 改为 get 而非 pop
+    cached_result = await parse_cache.get(query)
     logger.debug(f"缓存命中: {cached_result is not None}")
 
     caption = build_caption(cached_result) if cached_result else ""
@@ -341,10 +334,8 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
             await file_id_cache.set(
                 query,
                 CacheEntry(
-                    file_ids=[sent.video.file_id],
-                    caption=caption,
-                    title=parse_result.title,
-                    media_types=["video"],
+                    parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
+                    media=[CacheMedia(type=MediaType.VIDEO, file_id=sent.video.file_id)],
                 ),
             )
     except Exception as e:

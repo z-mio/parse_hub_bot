@@ -1,10 +1,10 @@
 import asyncio
-import hashlib
 import time
-from dataclasses import asdict, dataclass, field
+from enum import Enum
 from typing import Any
 
 from pickledb import PickleDB
+from pydantic import BaseModel
 
 from core.config import bs
 from log import logger
@@ -51,31 +51,28 @@ class TTLCache:
             return value
 
 
-def encrypt(text: str):
-    """hash加密"""
-    md5 = hashlib.md5()
-    md5.update(text.encode("utf-8"))
-    return md5.hexdigest()[:16]
+class MediaType(str, Enum):
+    PHOTO = "photo"
+    VIDEO = "video"
+    ANIMATION = "animation"
+    DOCUMENT = "document"
 
 
-@dataclass
-class CacheEntry:
-    """file_id 缓存条目"""
-
-    file_ids: list[str | list[str]]
-    """与 media 同索引, 嵌套 list 表示切割图; 单项可为 file_id 字符串"""
+class CacheParseResult(BaseModel):
     title: str = ""
-    caption: str = ""
+    content: str = ""
+
+
+class CacheMedia(BaseModel):
+    type: MediaType
+    file_id: str
+    cover_file_id: str | None = None
+
+
+class CacheEntry(BaseModel):
+    parse_result: CacheParseResult | None = None
+    media: list[CacheMedia | list[CacheMedia]] | None = None
     telegraph_url: str | None = None
-    media_types: list[str] = field(default_factory=list)
-    """与 file_ids 同索引, 记录每个媒体的类型: photo / video / animation / document"""
-
-    def to_dict(self) -> dict:
-        return asdict(self)
-
-    @classmethod
-    def from_dict(cls, data: dict) -> "CacheEntry":
-        return cls(**data)
 
 
 class FileIdCache:
@@ -85,24 +82,21 @@ class FileIdCache:
         self.logger.debug(f"file_id 持久化缓存已加载: {db_path}")
 
     async def get(self, url: str) -> CacheEntry | None:
-        key = encrypt(url)
         async with self._db as db:
-            data = await db.get(key)
+            data = await db.get(url)
         if data is None:
             return None
-        self.logger.debug(f"file_id 缓存命中: key={key} value={data}")
-        return CacheEntry.from_dict(data)
+        self.logger.debug(f"file_id 缓存命中: key={url} value={data}")
+        return CacheEntry.model_validate(data)
 
     async def set(self, url: str, entry: CacheEntry) -> None:
-        key = encrypt(url)
         async with self._db as db:
-            await db.set(key, entry.to_dict())
-            self.logger.debug(f"file_id 缓存写入: key={key} value={entry}")
+            await db.set(url, entry.model_dump())
+            self.logger.debug(f"file_id 缓存写入: key={url} value={entry}")
 
     async def remove(self, url: str) -> None:
-        key = encrypt(url)
         async with self._db as db:
-            await db.remove(key)
+            await db.remove(url)
 
 
 parse_cache = TTLCache(ttl=300)

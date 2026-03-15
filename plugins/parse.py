@@ -20,8 +20,9 @@ from pyrogram.types import (
 )
 
 from log import logger
-from plugins.helpers import build_caption, create_richtext_telegraph
-from services.cache import CacheEntry, file_id_cache, parse_cache
+from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
+from services import ParseService
+from services.cache import CacheEntry, CacheMedia, CacheParseResult, MediaType, file_id_cache, parse_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
@@ -60,30 +61,31 @@ class MessageStatusReporter(StatusReporter):
 
 async def handle_parse(cli: Client, msg: Message, url: str):
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
-
+    raw_url = await ParseService().get_raw_url(url)
+    logger.debug(f"原始 URL: {raw_url}")
     # ── 检查 file_id 缓存 ──
-    cached = await file_id_cache.get(url)
+    cached = await file_id_cache.get(raw_url)
     if cached:
-        logger.debug(f"file_id 缓存命中, 直接发送: url={url}")
-        await _send_cached(msg, cached)
+        logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
+        await _send_cached(msg, cached, raw_url)
         return
 
     reporter = MessageStatusReporter(msg)
 
     # 检查内存中是否有解析结果缓存
-    cached_parse_result = await parse_cache.get(url)
+    cached_parse_result = await parse_cache.get(raw_url)
 
-    pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
+    pipeline = ParsePipeline(raw_url, reporter, parse_result=cached_parse_result)
     result = await pipeline.run()
 
     if result is None:
-        logger.debug(f"Pipeline 返回 None, 跳过后续处理: url={url}")
+        logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
         return
 
     parse_result = result.parse_result
 
     # 写入解析结果到内存缓存 (供其他并发请求使用)
-    await parse_cache.set(url, parse_result)
+    await parse_cache.set(raw_url, parse_result)
 
     # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
@@ -98,11 +100,9 @@ async def handle_parse(cli: Client, msg: Message, url: str):
         )
         # 缓存富文本的 telegraph_url
         await file_id_cache.set(
-            url,
+            raw_url,
             CacheEntry(
-                file_ids=[],
-                caption=caption,
-                title=parse_result.title,
+                parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
                 telegraph_url=ph_url,
             ),
         )
@@ -128,7 +128,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
         cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
         # 写入 file_id 缓存
         if cache_entry:
-            await file_id_cache.set(url, cache_entry)
+            await file_id_cache.set(raw_url, cache_entry)
     except Exception as e:
         await reporter.report_error("上传", e)
         return
@@ -193,23 +193,19 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
     all_media = input_animations + input_photos_videos
     logger.debug(f"媒体分类完成: animations={len(input_animations)}, photos_videos={len(input_photos_videos)}")
 
-    file_ids: list[str | list[str]] = []
-    media_types: list[str] = []
-
+    media_list: list[CacheMedia | list[CacheMedia]] = []
     if len(all_media) == 1:
         logger.debug("单媒体模式发送")
         try:
             if input_animations:
                 sent = await msg.reply_animation(input_animations[0].media, caption=caption)
-                file_ids.append(sent.animation.file_id)
-                media_types.append("animation")
+                media_list.append(CacheMedia(type=MediaType.ANIMATION, file_id=sent.animation.file_id))
             else:
                 single = input_photos_videos[0]
                 match single:
                     case InputMediaPhoto():
                         sent = await msg.reply_photo(single.media, caption=caption)
-                        file_ids.append(sent.photo.file_id)
-                        media_types.append("photo")
+                        media_list.append(CacheMedia(type=MediaType.PHOTO, file_id=sent.photo.file_id))
                     case InputMediaVideo():
                         sent = await msg.reply_video(
                             single.media,
@@ -220,126 +216,104 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
                             height=single.height,
                             supports_streaming=True,
                         )
-                        file_ids.append(sent.video.file_id)
-                        media_types.append("video")
+                        media_list.append(
+                            CacheMedia(
+                                type=MediaType.VIDEO,
+                                file_id=sent.video.file_id,
+                                cover_file_id=sent.video.video_cover.file_id,
+                            )
+                        )
         except Exception as e:
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             sent = await msg.reply_document(all_media[0].media, caption=caption)
-            file_ids.append(sent.document.file_id)
-            media_types.append("document")
+            media_list.append(CacheMedia(type=MediaType.DOCUMENT, file_id=sent.document.file_id))
     else:
         logger.debug(f"多媒体模式发送: total={len(all_media)}")
         for ani in input_animations:
             sent = await msg.reply_animation(ani.media)
-            file_ids.append(sent.animation.file_id)
-            media_types.append("animation")
+            media_list.append(CacheMedia(type=MediaType.ANIMATION, file_id=sent.animation.file_id))
         try:
             for i in range(0, len(input_photos_videos), 10):
                 batch = input_photos_videos[i : i + 10]
                 sent_msgs = await msg.reply_media_group(batch)
-                group_ids = []
-                group_types = []
+                group_media_list = []
                 for m in sent_msgs:
                     if m.photo:
-                        group_ids.append(m.photo.file_id)
-                        group_types.append("photo")
+                        group_media_list.append(CacheMedia(type=MediaType.PHOTO, file_id=m.photo.file_id))
                     elif m.video:
-                        group_ids.append(m.video.file_id)
-                        group_types.append("video")
+                        group_media_list.append(
+                            CacheMedia(
+                                type=MediaType.VIDEO, file_id=m.video.file_id, cover_file_id=m.video.video_cover.file_id
+                            )
+                        )
                     elif m.document:
-                        group_ids.append(m.document.file_id)
-                        group_types.append("document")
-                file_ids.append(group_ids)
-                media_types.append(group_types)
+                        group_media_list.append(CacheMedia(type=MediaType.DOCUMENT, file_id=m.document.file_id))
+                media_list.append(group_media_list)
         except Exception as e:
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-            # 回退时清空之前收集的 photo/video ids, 重新收集 document ids
-            file_ids = file_ids[: len(input_animations)]  # 保留 animation 部分
-            media_types = media_types[: len(input_animations)]
             input_documents = [InputMediaDocument(media=item.media) for item in input_photos_videos]
             for i in range(0, len(input_documents), 10):
                 batch = input_documents[i : i + 10]
-                sent_msgs = await msg.reply_media_group(batch)
-                group_ids = [m.document.file_id for m in sent_msgs]
-                file_ids.append(group_ids)
-                media_types.append(["document"] * len(group_ids))
-
-        # 找到第一条消息来回复 caption
-        # (这部分逻辑需要重新获取 sent_groups，但我们已经在上面处理了)
-        # 为简化，使用 msg.reply_text
+                await msg.reply_media_group(batch)  # type: ignore
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
 
     return CacheEntry(
-        file_ids=file_ids,
-        caption=caption,
-        media_types=media_types,
+        parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content), media=media_list
     )
 
 
-async def _send_cached(msg: Message, entry: CacheEntry):
+async def _send_cached(msg: Message, entry: CacheEntry, url: str):
     """从 file_id 缓存直接发送，跳过解析/下载/转码"""
-    logger.debug(f"缓存发送: file_ids={len(entry.file_ids)}, types={entry.media_types}")
-
+    logger.debug(f"缓存发送: media={entry.media}")
+    caption = build_caption_by_str(entry.parse_result.title, entry.parse_result.content, url, entry.telegraph_url)
     # 富文本类型 (只有 telegraph_url, 无 file_id)
     if entry.telegraph_url:
         await msg.reply_text(
-            entry.caption,
+            caption,
             link_preview_options=LinkPreviewOptions(show_above_text=True),
         )
         return
 
-    caption = entry.caption
-
-    if not entry.file_ids:
+    if not entry.media:
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         return
 
-    # 展平: 将嵌套的 [group_ids] 和单个 id 统一处理
-    flat_ids: list[str] = []
-    flat_types: list[str] = []
-    for fid, mtype in zip(entry.file_ids, entry.media_types, strict=False):
-        if isinstance(fid, list):
-            flat_ids.extend(fid)
-            flat_types.extend(mtype if isinstance(mtype, list) else [mtype] * len(fid))
-        else:
-            flat_ids.append(fid)
-            flat_types.append(mtype)
-
-    if len(flat_ids) == 1:
-        fid, mtype = flat_ids[0], flat_types[0]
-        match mtype:
-            case "photo":
-                await msg.reply_photo(fid, caption=caption)
-            case "video":
-                await msg.reply_video(fid, caption=caption, supports_streaming=True)
-            case "animation":
-                await msg.reply_animation(fid, caption=caption)
-            case "document":
-                await msg.reply_document(fid, caption=caption)
+    if len(entry.media) == 1:
+        m: CacheMedia = entry.media[0]
+        match m.type:
+            case MediaType.PHOTO:
+                await msg.reply_photo(m.file_id, caption=caption)
+            case MediaType.VIDEO:
+                await msg.reply_video(m.file_id, caption=caption, supports_streaming=True, video_cover=m.cover_file_id)
+            case MediaType.ANIMATION:
+                await msg.reply_animation(m.file_id, caption=caption)
+            case MediaType.DOCUMENT:
+                await msg.reply_document(m.file_id, caption=caption)
     else:
-        # 分离 animation 和 photo/video
-        animations = [(fid, t) for fid, t in zip(flat_ids, flat_types, strict=False) if t == "animation"]
-        others = [(fid, t) for fid, t in zip(flat_ids, flat_types, strict=False) if t != "animation"]
+        animations = [m for m in entry.media if m.type == MediaType.ANIMATION]
+        others = [m for m in entry.media if m.type != MediaType.ANIMATION]
 
-        for fid, _ in animations:
-            await msg.reply_animation(fid)
+        for m in animations:
+            await msg.reply_animation(m.file_id)
 
         if others:
             media_group = []
-            for fid, mtype in others:
-                match mtype:
-                    case "photo":
-                        media_group.append(InputMediaPhoto(media=fid))
-                    case "video":
-                        media_group.append(InputMediaVideo(media=fid, supports_streaming=True))
-                    case "document":
-                        media_group.append(InputMediaDocument(media=fid))
+            for m in others:
+                match m.type:
+                    case MediaType.PHOTO:
+                        media_group.append(InputMediaPhoto(media=m.file_id))
+                    case MediaType.VIDEO:
+                        media_group.append(
+                            InputMediaVideo(media=m.file_id, supports_streaming=True, video_cover=m.cover_file_id)
+                        )
+                    case MediaType.DOCUMENT:
+                        media_group.append(InputMediaDocument(media=m.file_id))
 
             for i in range(0, len(media_group), 10):
                 await msg.reply_media_group(media_group[i : i + 10])
@@ -347,7 +321,7 @@ async def _send_cached(msg: Message, entry: CacheEntry):
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
-        ) if len(flat_ids) > 1 else None
+        ) if len(entry.media) > 1 else None
 
 
 @Client.on_message((filters.text | filters.caption) & platform_filter)
