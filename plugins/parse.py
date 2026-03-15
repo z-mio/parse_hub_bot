@@ -20,11 +20,11 @@ from pyrogram.types import (
 )
 
 from log import logger
+from plugins.filters import platform_filter
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
-from utils.filters import platform_filter
 
 logger = logger.bind(name="Parse")
 

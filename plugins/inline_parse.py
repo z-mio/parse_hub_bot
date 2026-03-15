@@ -31,12 +31,12 @@ from pyrogram.types import (
 )
 
 from log import logger
+from plugins.filters import platform_filter
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from plugins.start import get_supported_platforms
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
-from utils.filters import platform_filter
 
 logger = logger.bind(name="InlineParse")
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"

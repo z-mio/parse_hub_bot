@@ -21,19 +21,16 @@ class Platform(BaseModel):
     downloader_proxies: list[HttpUrl] | None = None
     cookies: list[str] | None = None
 
-    @property
     def roll_cookie(self) -> str | None:
         if not self.cookies:
             return None
         return random.choice(self.cookies)
 
-    @property
     def roll_parser_proxy(self) -> str | None:
         if not self.parser_proxies:
             return None
         return random.choice(self.parser_proxies)
 
-    @property
     def roll_downloader_proxy(self) -> str | None:
         if not self.downloader_proxies:
             return None
