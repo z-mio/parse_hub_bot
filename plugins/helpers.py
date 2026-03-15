@@ -30,10 +30,10 @@ def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None
 def build_caption_by_str(title: str, content: str, raw_url: str, telegraph_url: str | None = None) -> str:
     """构建消息正文：标题 + 内容 + 来源链接"""
     if telegraph_url:
-        body = f"**[{title.replace(chr(10), ' ') or '无标题'}]({telegraph_url})**"
+        body = f"**[{title.replace('\n', ' ') or '无标题'}]({telegraph_url})**"
     else:
         body = (format_text(f"**{title}**\n\n{content}") if title or content else "无标题").strip()
-    return f"{body}\n\n<b>▎[Source]({raw_url})</b>".strip()
+    return f"{body}\n\n<b>▎<a href='{raw_url}'>Source</a></b>".strip()
 
 
 def format_text(text: str) -> str:
