@@ -3,9 +3,13 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from parsehub.types import AnyMediaFile, ParseResult
+from markdown import markdown
+from parsehub import Platform
+from parsehub.types import AnyMediaFile, AnyParseResult, RichTextParseResult
 from pyrogram import Client
 
+from utils.converter import clean_article_html
+from utils.media_processing_unit import MediaProcessingUnit
 from utils.ph import Telegraph
 
 
@@ -16,7 +20,7 @@ class ProcessedMedia:
     output_dir: Path | None = None
 
 
-def build_caption(parse_result: ParseResult, telegraph_url: str = None) -> str:
+def build_caption(parse_result: AnyParseResult, telegraph_url: str = None) -> str:
     """构建消息正文：标题 + 内容 + 来源链接"""
     if telegraph_url:
         body = f"**[{parse_result.title.replace(chr(10), ' ') or '无标题'}]({telegraph_url})**"
@@ -52,7 +56,7 @@ def progress(current: int, total: int, unit: str):
     return None
 
 
-async def create_telegraph_page(html_content: str, cli: Client, parse_result: ParseResult) -> str:
+async def create_telegraph_page(html_content: str, cli: Client, parse_result: AnyParseResult) -> str:
     """创建 Telegraph 页面，返回页面 URL"""
     me = await cli.get_me()
     page = await Telegraph().create_page(
@@ -62,3 +66,26 @@ async def create_telegraph_page(html_content: str, cli: Client, parse_result: Pa
         author_url=parse_result.raw_url,
     )
     return page.url
+
+
+async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResult) -> str:
+    """将富文本解析结果转换为 Telegraph 页面，返回页面 URL"""
+    md = parse_result.markdown_content
+    if parse_result.platform == Platform.WEIXIN:
+        md = md.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in")
+    elif parse_result.platform == Platform.COOLAPK:
+        md = md.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com")
+    html = clean_article_html(markdown(md))
+    return await create_telegraph_page(html, cli, parse_result)
+
+
+async def process_media_files(download_result) -> list[ProcessedMedia]:
+    """对下载结果中的媒体文件进行格式转换，返回 ProcessedMedia 列表"""
+    processed_dir = download_result.output_dir.joinpath("processed")
+    processor = MediaProcessingUnit(processed_dir)
+    media_files = download_result.media if isinstance(download_result.media, list) else [download_result.media]
+    processed_list: list[ProcessedMedia] = []
+    for media_file in media_files:
+        result = await processor.process(media_file.path)
+        processed_list.append(ProcessedMedia(media_file, result.output_paths, result.temp_dir))
+    return processed_list

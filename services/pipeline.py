@@ -1,0 +1,118 @@
+import shutil
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Protocol
+
+from parsehub.types import AnyParseResult, PostType, ProgressUnit
+
+from log import logger
+from plugins.helpers import ProcessedMedia, process_media_files
+from services import ParseService
+
+
+class StatusReporter(Protocol):
+    """抽象状态通知，由调用方实现"""
+
+    async def report(self, text: str) -> None: ...
+    async def report_error(self, stage: str, error: Exception) -> None: ...
+    async def dismiss(self) -> None: ...
+
+
+@dataclass
+class PipelineResult:
+    parse_result: AnyParseResult
+    processed_list: list[ProcessedMedia] = field(default_factory=list)
+    output_dir: Path | None = None
+
+    def cleanup(self) -> None:
+        if self.output_dir:
+            shutil.rmtree(self.output_dir, ignore_errors=True)
+
+
+class PipelineProgressCallback:
+    """统一的下载进度回调，依赖 StatusReporter"""
+
+    def __init__(self, reporter: StatusReporter, prefix: str = ""):
+        self._reporter = reporter
+        self._prefix = prefix
+        self._last_text: str | None = None
+
+    async def __call__(self, current: int, total: int, unit: ProgressUnit, *args) -> None:
+        from plugins.helpers import progress as fmt_progress
+
+        text = fmt_progress(current, total, unit)
+        if not text or text == self._last_text:
+            return
+        self._last_text = text
+        await self._reporter.report(f"{self._prefix}**▎{text}**")
+
+
+class ParsePipeline:
+    """
+    将 解析 → 下载 → 格式转换 封装为一条流水线。
+    上传逻辑仍由调用方负责
+    """
+
+    def __init__(
+        self,
+        url: str,
+        reporter: StatusReporter,
+        parse_result: AnyParseResult | None = None,
+    ):
+        self._url = url
+        self._reporter = reporter
+        self._parse_result = parse_result
+
+    async def run(self) -> PipelineResult | None:
+        """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
+
+        # ── 1. 解析 ──
+        if self._parse_result is not None:
+            parse_result = self._parse_result
+        else:
+            await self._reporter.report("**▎解 析 中...**")
+            parse_result = await self._step("解析", lambda: ParseService(self._url).parse())
+            if parse_result is None:
+                return None
+
+        # 富文本无需下载
+        if parse_result.type == PostType.RICHTEXT:
+            return PipelineResult(parse_result=parse_result)
+
+        # ── 2. 下载 ──
+        await self._reporter.report("**▎下 载 中...**")
+        progress_cb = PipelineProgressCallback(self._reporter)
+        download_result = await self._step(
+            "下载",
+            lambda: parse_result.download(callback=progress_cb, callback_args=()),
+        )
+        if download_result is None:
+            return None
+
+        # ── 3. 格式转换 ──
+        await self._reporter.report("**▎格式转换中...**")
+        processed_list = await self._step(
+            "格式转换",
+            lambda: process_media_files(download_result),
+            cleanup=lambda: shutil.rmtree(download_result.output_dir, ignore_errors=True),
+        )
+        if processed_list is None:
+            return None
+
+        return PipelineResult(
+            parse_result=parse_result,
+            processed_list=processed_list,
+            output_dir=download_result.output_dir,
+        )
+
+    async def _step(self, stage: str, action, cleanup=None):
+        """执行单个步骤，失败时统一处理"""
+        try:
+            return await action()
+        except Exception as e:
+            logger.exception(e)
+            logger.error(f"{stage}失败, 以上为错误信息")
+            await self._reporter.report_error(stage, e)
+            if cleanup:
+                cleanup()
+            return None

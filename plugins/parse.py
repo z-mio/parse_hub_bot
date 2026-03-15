@@ -1,15 +1,11 @@
 import asyncio
-import shutil
 
-from markdown import markdown
-from parsehub import Platform
 from parsehub.types import (
     AniFile,
     AnyMediaRef,
     ImageFile,
     LivePhotoFile,
     PostType,
-    ProgressUnit,
     VideoFile,
 )
 from parsehub.utils.media_info import MediaInfoReader
@@ -24,217 +20,181 @@ from pyrogram.types import (
 )
 
 from log import logger
-from plugins.helpers import ProcessedMedia, build_caption, create_telegraph_page, progress
-from services import ParseService
-from utils.converter import clean_article_html
+from plugins.helpers import build_caption, create_richtext_telegraph
+from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
-from utils.media_processing_unit import MediaProcessingUnit
 
 
-async def handle_parse(cli: Client, msg: Message, url: str):
-    status_msg = await msg.reply_text("**▎解 析 中...**")
+class MessageStatusReporter(StatusReporter):
+    """基于 Telegram Message 的状态报告器"""
 
-    # ── 解析 ──
-    try:
-        parse_result = await ParseService(url).parse()
-    except Exception as e:
-        logger.exception(e)
-        logger.error("解析失败, 以上为错误信息")
-        await status_msg.edit_text(
-            f"解析错误: \n```\n{e}```",
+    def __init__(self, user_msg: Message):
+        self._user_msg = user_msg
+        self._msg = None
+
+    async def report(self, text: str) -> None:
+        await self.edit_text(text)
+
+    async def report_error(self, stage: str, error: Exception) -> None:
+        await self.edit_text(
+            f"{stage}错误: \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         await asyncio.sleep(5)
-        await status_msg.delete()
-        return None
+        await self._msg.delete()
 
-    # ── 富文本直接 telegraph 发送 ──
+    async def dismiss(self) -> None:
+        await self._msg.delete()
+
+    async def edit_text(self, text: str, **kwargs):
+        if self._msg is None:
+            self._msg = await self._user_msg.reply_text(text, **kwargs)
+        else:
+            if self._msg.text != text:
+                await self._msg.edit_text(text, **kwargs)
+                self._msg.text = text
+
+
+async def handle_parse(cli: Client, msg: Message, url: str):
+    reporter = MessageStatusReporter(msg)
+
+    pipeline = ParsePipeline(url, reporter)
+    result = await pipeline.run()
+
+    if result is None:
+        return
+
+    parse_result = result.parse_result
+
+    # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-        if parse_result.platform == Platform.WEIXIN:
-            ph_url = await create_telegraph_page(
-                clean_article_html(
-                    markdown(parse_result.markdown_content.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in"))
-                ),
-                cli,
-                parse_result,
-            )
-        elif parse_result.platform == Platform.COOLAPK:
-            ph_url = await create_telegraph_page(
-                clean_article_html(
-                    markdown(parse_result.markdown_content.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com"))
-                ),
-                cli,
-                parse_result,
-            )
-        else:
-            ph_url = await create_telegraph_page(
-                clean_article_html(markdown(parse_result.markdown_content)), cli, parse_result
-            )
+        ph_url = await create_richtext_telegraph(cli, parse_result)
         await msg.reply_text(
             build_caption(parse_result, ph_url),
             link_preview_options=LinkPreviewOptions(show_above_text=True),
         )
-        await status_msg.delete()
-        return None
-
-    # ── 下载 ──
-    await status_msg.edit_text("**▎下 载 中...**")
-
-    try:
-        download_result = await parse_result.download(callback=ProgressCallback(), callback_args=(status_msg,))
-    except Exception as e:
-        logger.exception(e)
-        logger.error("解析或下载失败, 以上为错误信息")
-        await status_msg.edit_text(
-            f"下载错误: \n```\n{e}```",
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
-        await asyncio.sleep(5)
-        await status_msg.delete()
-        return None
-
-    # ── 格式转换 ──
-    await status_msg.edit_text("**▎格式转换中...**")
-
-    try:
-        processed_dir = download_result.output_dir.joinpath("processed")
-        processor = MediaProcessingUnit(processed_dir)
-        media_files = download_result.media if isinstance(download_result.media, list) else [download_result.media]
-        processed_list: list[ProcessedMedia] = []
-        for media_file in media_files:
-            result = await processor.process(media_file.path)
-            processed_list.append(ProcessedMedia(media_file, result.output_paths, result.temp_dir))
-    except Exception as e:
-        await status_msg.edit_text(f"格式转换错误: \n```\n{e}```")
-        logger.exception(e)
-        logger.error("格式转换失败, 以上为错误信息")
-        await asyncio.sleep(5)
-        await status_msg.delete()
-        shutil.rmtree(download_result.output_dir, ignore_errors=True)
-        return None
+        await reporter.dismiss()
+        return
 
     # ── 上传 ──
-    await status_msg.edit_text("**▎上 传 中...**")
-
+    await reporter.report("**▎上 传 中...**")
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-
         caption = build_caption(parse_result)
 
-        if not processed_list:
-            return await msg.reply_text(
+        if not result.processed_list:
+            await msg.reply_text(
                 caption,
                 link_preview_options=LinkPreviewOptions(is_disabled=True),
             )
+            await reporter.dismiss()
+            return
 
-        input_photos_videos: list[InputMediaPhoto | InputMediaVideo] = []
-        input_animations: list[InputMediaAnimation] = []
+        await _send_media(msg, parse_result, result.processed_list, caption)
+    except Exception as e:
+        await reporter.report_error("上传", e)
+        return
+    finally:
+        result.cleanup()
 
-        media_refs: list[AnyMediaRef] = (
-            parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
-        )
+    await reporter.dismiss()
 
-        for media_ref, processed in zip(media_refs, processed_list, strict=False):
-            file_paths = processed.output_paths or [processed.source.path]
-            for file_path in file_paths:
-                file_path_str = str(file_path)
-                width = processed.source.width
-                height = processed.source.height
-                duration = getattr(processed.source, "duration", 0)
 
-                if processed.output_paths:
-                    media_info = MediaInfoReader.read(file_path_str)
-                    width, height, duration = (
-                        media_info.width,
-                        media_info.height,
-                        media_info.duration,
+async def _send_media(msg: Message, parse_result, processed_list, caption: str):
+    input_photos_videos: list[InputMediaPhoto | InputMediaVideo] = []
+    input_animations: list[InputMediaAnimation] = []
+
+    media_refs: list[AnyMediaRef] = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
+
+    for media_ref, processed in zip(media_refs, processed_list, strict=False):
+        file_paths = processed.output_paths or [processed.source.path]
+        for file_path in file_paths:
+            file_path_str = str(file_path)
+            width = processed.source.width
+            height = processed.source.height
+            duration = getattr(processed.source, "duration", 0)
+
+            if processed.output_paths:
+                media_info = MediaInfoReader.read(file_path_str)
+                width, height, duration = (
+                    media_info.width,
+                    media_info.height,
+                    media_info.duration,
+                )
+
+            match processed.source:
+                case ImageFile():
+                    input_photos_videos.append(InputMediaPhoto(media=file_path_str))
+                case AniFile():
+                    input_animations.append(InputMediaAnimation(media=file_path_str))
+                case VideoFile():
+                    input_photos_videos.append(
+                        InputMediaVideo(
+                            media=file_path_str,
+                            video_cover=media_ref.thumb_url,
+                            duration=duration,
+                            width=width,
+                            height=height,
+                            supports_streaming=True,
+                        )
+                    )
+                case LivePhotoFile():
+                    input_photos_videos.append(
+                        InputMediaVideo(
+                            media=processed.source.video_path,
+                            video_cover=file_path_str,
+                            duration=duration,
+                            width=width,
+                            height=height,
+                            supports_streaming=True,
+                        )
                     )
 
-                match processed.source:
-                    case ImageFile():
-                        input_photos_videos.append(InputMediaPhoto(media=file_path_str))
-                    case AniFile():
-                        input_animations.append(InputMediaAnimation(media=file_path_str))
-                    case VideoFile():
-                        input_photos_videos.append(
-                            InputMediaVideo(
-                                media=file_path_str,
-                                video_cover=media_ref.thumb_url,
-                                duration=duration,
-                                width=width,
-                                height=height,
-                                supports_streaming=True,
-                            )
+    all_media = input_animations + input_photos_videos
+
+    if len(all_media) == 1:
+        try:
+            if input_animations:
+                await msg.reply_animation(input_animations[0].media, caption=caption)
+            else:
+                single = input_photos_videos[0]
+                match single:
+                    case InputMediaPhoto():
+                        await msg.reply_photo(single.media, caption=caption)
+                    case InputMediaVideo():
+                        await msg.reply_video(
+                            single.media,
+                            caption=caption,
+                            video_cover=single.video_cover,
+                            duration=single.duration,
+                            width=single.width,
+                            height=single.height,
+                            supports_streaming=True,
                         )
-                    case LivePhotoFile():
-                        input_photos_videos.append(
-                            InputMediaVideo(
-                                media=processed.source.video_path,
-                                video_cover=file_path_str,
-                                duration=duration,
-                                width=width,
-                                height=height,
-                                supports_streaming=True,
-                            )
-                        )
+        except Exception as e:
+            logger.warning(f"上传失败 {e}, 使用兼容模式上传")
+            await msg.reply_document(all_media[0].media, caption=caption)
+    else:
+        sent_animations = [await msg.reply_animation(ani.media) for ani in input_animations]
+        try:
+            sent_groups = sent_animations + [
+                await msg.reply_media_group(input_photos_videos[i : i + 10])
+                for i in range(0, len(input_photos_videos), 10)
+            ]
+        except Exception as e:
+            logger.warning(f"上传失败 {e}, 使用兼容模式上传")
+            input_documents = [InputMediaDocument(media=item.media) for item in input_photos_videos]
+            sent_groups = sent_animations + [
+                await msg.reply_media_group(input_documents[i : i + 10])  # type: ignore
+                for i in range(0, len(input_documents), 10)
+            ]
 
-        all_media = input_animations + input_photos_videos
-
-        if len(all_media) == 1:
-            try:
-                if input_animations:
-                    await msg.reply_animation(input_animations[0].media, caption=caption)
-                else:
-                    single = input_photos_videos[0]
-                    match single:
-                        case InputMediaPhoto():
-                            await msg.reply_photo(single.media, caption=caption)
-                        case InputMediaVideo():
-                            await msg.reply_video(
-                                single.media,
-                                caption=caption,
-                                video_cover=single.video_cover,
-                                duration=single.duration,
-                                width=single.width,
-                                height=single.height,
-                                supports_streaming=True,
-                            )
-            except Exception as e:
-                logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-                await msg.reply_document(all_media[0].media, caption=caption)
-        else:
-            sent_animations = [await msg.reply_animation(ani.media) for ani in input_animations]
-            try:
-                sent_groups = sent_animations + [
-                    await msg.reply_media_group(input_photos_videos[i : i + 10])
-                    for i in range(0, len(input_photos_videos), 10)
-                ]
-            except Exception as e:
-                logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-                input_documents = [InputMediaDocument(media=item.media) for item in input_photos_videos]
-                sent_groups = sent_animations + [
-                    await msg.reply_media_group(input_documents[i : i + 10])  # type: ignore
-                    for i in range(0, len(input_documents), 10)
-                ]
-
-            first_msg = sent_groups[0][0] if isinstance(sent_groups[0], list) else sent_groups[0]
-            await first_msg.reply_text(
-                caption,
-                link_preview_options=LinkPreviewOptions(is_disabled=True),
-            )
-
-    except Exception as e:
-        await status_msg.edit_text("上传失败")
-        logger.exception(e)
-        logger.error("上传失败, 以上为错误信息")
-        await asyncio.sleep(5)
-        await status_msg.delete()
-        return None
-    finally:
-        shutil.rmtree(download_result.output_dir, ignore_errors=True)
-    await status_msg.delete()
-    return None
+        first_msg = sent_groups[0][0] if isinstance(sent_groups[0], list) else sent_groups[0]
+        await first_msg.reply_text(
+            caption,
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
 
 
 @Client.on_message((filters.text | filters.caption) & platform_filter)
@@ -255,13 +215,3 @@ async def cmd_jx(cli: Client, msg: Message):
         return
 
     await handle_parse(cli, msg, url)
-
-
-class ProgressCallback:
-    async def __call__(self, current: int, total: int, unit: ProgressUnit, msg: Message, *args) -> None:
-        text = progress(current, total, unit)
-        if not text or msg.text == text:
-            return
-        text = f"**▎{text}**"
-        await msg.edit_text(text)
-        msg.text = text

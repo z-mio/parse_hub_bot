@@ -1,19 +1,6 @@
 import asyncio
 import hashlib
 
-from pyrogram import Client
-
-
-async def schedule_delete_messages(client: Client, chat_id: int, message_ids: int | list, delay_seconds: int = 2):
-    """定时删除消息"""
-
-    await asyncio.sleep(delay_seconds)
-
-    try:
-        await client.delete_messages(chat_id, message_ids)
-    except Exception:
-        ...
-
 
 def encrypt(text: str):
     """hash加密"""
