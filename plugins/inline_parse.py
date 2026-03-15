@@ -34,7 +34,7 @@ from log import logger
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from plugins.start import get_supported_platforms
 from services import ParseService
-from services.cache import CacheEntry, CacheMedia, CacheParseResult, MediaType, file_id_cache, parse_cache
+from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, file_id_cache, parse_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
@@ -101,7 +101,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
 
     for m in entry.media:
         match m.type:
-            case MediaType.PHOTO:
+            case CacheMediaType.PHOTO:
                 results.append(
                     InlineQueryResultCachedPhoto(
                         photo_file_id=m.file_id,
@@ -109,7 +109,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
                         description=content,
                     )
                 )
-            case MediaType.VIDEO:
+            case CacheMediaType.VIDEO:
                 results.append(
                     InlineQueryResultCachedVideo(
                         video_file_id=m.file_id,
@@ -118,7 +118,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
                         title=title,
                     )
                 )
-            case MediaType.ANIMATION:
+            case CacheMediaType.ANIMATION:
                 results.append(
                     InlineQueryResultCachedDocument(
                         document_file_id=m.file_id,
@@ -127,7 +127,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
                         title=title,
                     )
                 )
-            case MediaType.DOCUMENT:
+            case CacheMediaType.DOCUMENT:
                 results.append(
                     InlineQueryResultCachedDocument(
                         document_file_id=m.file_id,
@@ -335,7 +335,7 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
                 query,
                 CacheEntry(
                     parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
-                    media=[CacheMedia(type=MediaType.VIDEO, file_id=sent.video.file_id)],
+                    media=[CacheMedia(type=CacheMediaType.VIDEO, file_id=sent.video.file_id)],
                 ),
             )
     except Exception as e:

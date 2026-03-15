@@ -22,7 +22,7 @@ from pyrogram.types import (
 from log import logger
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from services import ParseService
-from services.cache import CacheEntry, CacheMedia, CacheParseResult, MediaType, file_id_cache, parse_cache
+from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, file_id_cache, parse_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.filters import platform_filter
 
@@ -199,13 +199,13 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
         try:
             if input_animations:
                 sent = await msg.reply_animation(input_animations[0].media, caption=caption)
-                media_list.append(CacheMedia(type=MediaType.ANIMATION, file_id=sent.animation.file_id))
+                media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
             else:
                 single = input_photos_videos[0]
                 match single:
                     case InputMediaPhoto():
                         sent = await msg.reply_photo(single.media, caption=caption)
-                        media_list.append(CacheMedia(type=MediaType.PHOTO, file_id=sent.photo.file_id))
+                        media_list.append(CacheMedia(type=CacheMediaType.PHOTO, file_id=sent.photo.file_id))
                     case InputMediaVideo():
                         sent = await msg.reply_video(
                             single.media,
@@ -218,7 +218,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
                         )
                         media_list.append(
                             CacheMedia(
-                                type=MediaType.VIDEO,
+                                type=CacheMediaType.VIDEO,
                                 file_id=sent.video.file_id,
                                 cover_file_id=sent.video.video_cover.file_id,
                             )
@@ -226,12 +226,12 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
         except Exception as e:
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             sent = await msg.reply_document(all_media[0].media, caption=caption)
-            media_list.append(CacheMedia(type=MediaType.DOCUMENT, file_id=sent.document.file_id))
+            media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=sent.document.file_id))
     else:
         logger.debug(f"多媒体模式发送: total={len(all_media)}")
         for ani in input_animations:
             sent = await msg.reply_animation(ani.media)
-            media_list.append(CacheMedia(type=MediaType.ANIMATION, file_id=sent.animation.file_id))
+            media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
         try:
             for i in range(0, len(input_photos_videos), 10):
                 batch = input_photos_videos[i : i + 10]
@@ -239,15 +239,17 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
                 group_media_list = []
                 for m in sent_msgs:
                     if m.photo:
-                        group_media_list.append(CacheMedia(type=MediaType.PHOTO, file_id=m.photo.file_id))
+                        group_media_list.append(CacheMedia(type=CacheMediaType.PHOTO, file_id=m.photo.file_id))
                     elif m.video:
                         group_media_list.append(
                             CacheMedia(
-                                type=MediaType.VIDEO, file_id=m.video.file_id, cover_file_id=m.video.video_cover.file_id
+                                type=CacheMediaType.VIDEO,
+                                file_id=m.video.file_id,
+                                cover_file_id=m.video.video_cover.file_id,
                             )
                         )
                     elif m.document:
-                        group_media_list.append(CacheMedia(type=MediaType.DOCUMENT, file_id=m.document.file_id))
+                        group_media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=m.document.file_id))
                 media_list.append(group_media_list)
         except Exception as e:
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
@@ -287,17 +289,17 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
     if len(entry.media) == 1:
         m: CacheMedia = entry.media[0]
         match m.type:
-            case MediaType.PHOTO:
+            case CacheMediaType.PHOTO:
                 await msg.reply_photo(m.file_id, caption=caption)
-            case MediaType.VIDEO:
+            case CacheMediaType.VIDEO:
                 await msg.reply_video(m.file_id, caption=caption, supports_streaming=True, video_cover=m.cover_file_id)
-            case MediaType.ANIMATION:
+            case CacheMediaType.ANIMATION:
                 await msg.reply_animation(m.file_id, caption=caption)
-            case MediaType.DOCUMENT:
+            case CacheMediaType.DOCUMENT:
                 await msg.reply_document(m.file_id, caption=caption)
     else:
-        animations = [m for m in entry.media if m.type == MediaType.ANIMATION]
-        others = [m for m in entry.media if m.type != MediaType.ANIMATION]
+        animations = [m for m in entry.media if m.type == CacheMediaType.ANIMATION]
+        others = [m for m in entry.media if m.type != CacheMediaType.ANIMATION]
 
         for m in animations:
             await msg.reply_animation(m.file_id)
@@ -306,13 +308,13 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
             media_group = []
             for m in others:
                 match m.type:
-                    case MediaType.PHOTO:
+                    case CacheMediaType.PHOTO:
                         media_group.append(InputMediaPhoto(media=m.file_id))
-                    case MediaType.VIDEO:
+                    case CacheMediaType.VIDEO:
                         media_group.append(
                             InputMediaVideo(media=m.file_id, supports_streaming=True, video_cover=m.cover_file_id)
                         )
-                    case MediaType.DOCUMENT:
+                    case CacheMediaType.DOCUMENT:
                         media_group.append(InputMediaDocument(media=m.file_id))
 
             for i in range(0, len(media_group), 10):

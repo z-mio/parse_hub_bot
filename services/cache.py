@@ -51,7 +51,7 @@ class TTLCache:
             return value
 
 
-class MediaType(str, Enum):
+class CacheMediaType(str, Enum):
     PHOTO = "photo"
     VIDEO = "video"
     ANIMATION = "animation"
@@ -64,7 +64,7 @@ class CacheParseResult(BaseModel):
 
 
 class CacheMedia(BaseModel):
-    type: MediaType
+    type: CacheMediaType
     file_id: str
     cover_file_id: str | None = None
 
@@ -100,4 +100,4 @@ class FileIdCache:
 
 
 parse_cache = TTLCache(ttl=300)
-file_id_cache = FileIdCache(bs.data_path / "file_id_cache.json")
+file_id_cache = FileIdCache(bs.data_path / "cache.json")
