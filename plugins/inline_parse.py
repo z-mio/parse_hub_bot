@@ -261,7 +261,7 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
     # 先查 file_id 缓存 → 如有则用 cached 类型直接返回
     cached = await persistent_cache.get(raw_url)
     if cached:
-        logger.debug("inline: file_id 缓存命中, 构建 cached 结果")
+        logger.debug("inline: 缓存命中, 构建 cached 结果")
         results = build_cached_inline_results(cached, raw_url)
         return await inline_query.answer(results[:50], cache_time=60)
 

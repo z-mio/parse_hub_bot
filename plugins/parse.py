@@ -48,7 +48,8 @@ class MessageStatusReporter(StatusReporter):
         await self._msg.delete()
 
     async def dismiss(self) -> None:
-        await self._msg.delete()
+        if self._msg:
+            await self._msg.delete()
 
     async def edit_text(self, text: str, **kwargs):
         if self._msg is None:
