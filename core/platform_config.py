@@ -29,12 +29,12 @@ class Platform(BaseModel):
     def roll_parser_proxy(self) -> str | None:
         if not self.parser_proxies:
             return None
-        return random.choice(self.parser_proxies)
+        return str(random.choice(self.parser_proxies))
 
     def roll_downloader_proxy(self) -> str | None:
         if not self.downloader_proxies:
             return None
-        return random.choice(self.downloader_proxies)
+        return str(random.choice(self.downloader_proxies))
 
 
 class PlatformsConfig(BaseModel):
