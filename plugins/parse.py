@@ -152,6 +152,8 @@ async def handle_parse(cli: Client, msg: Message, url: str):
         if cache_entry:
             await persistent_cache.set(raw_url, cache_entry)
     except Exception as e:
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"上传失败: {e}")
         await reporter.report_error("上传", e)
         return
     finally:
@@ -246,6 +248,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
                             )
                         )
         except Exception as e:
+            logger.opt(exception=e).debug("详细堆栈")
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             await msg.reply_document(all_media[0].media, caption=caption)
     else:
@@ -271,7 +274,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
                     elif m.document:
                         media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=m.document.file_id))
         except Exception as e:
-            logger.exception(e)
+            logger.opt(exception=e).debug("详细堆栈")
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             input_documents = [InputMediaDocument(media=item.media) for item in input_photos_videos]
             for i in range(0, len(input_documents), 10):

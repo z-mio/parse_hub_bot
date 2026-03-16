@@ -330,7 +330,8 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
             ),
         )
     except Exception as e:
-        logger.debug(f"inline 上传失败: {e}")
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"inline 上传失败: {e}")
         await reporter.report_error("上传", e)
     finally:
         logger.debug("inline 下载任务完成, 清理资源")
