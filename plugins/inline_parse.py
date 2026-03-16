@@ -189,8 +189,8 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                 InlineQueryResultPhoto(
                     media_ref.url,
                     thumb_url=media_ref.thumb_url,
-                    photo_width=media_ref.width or 300,
-                    photo_height=media_ref.height or 300,
+                    photo_width=media_ref.width,
+                    photo_height=media_ref.height,
                     caption=caption,
                     title=title,
                     description=parse_result.content,
@@ -201,8 +201,8 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
             results.append(
                 InlineQueryResultPhoto(
                     media_ref.thumb_url or DEFAULT_THUMB_URL,
-                    photo_width=media_ref.width or 300,
-                    photo_height=media_ref.height or 300,
+                    photo_width=media_ref.width,
+                    photo_height=media_ref.height,
                     id=f"download_{index}",
                     title=caption,
                     caption=caption,

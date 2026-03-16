@@ -346,4 +346,4 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
-        ) if len(entry.media) > 1 else None
+        )
