@@ -92,7 +92,11 @@ class CacheEntry(BaseModel):
     parse_result: CacheParseResult | None = None
     media: list[CacheMedia] | None = None
     telegraph_url: str | None = None
-    exp_: int = 0
+
+
+class _StorageWrapper(BaseModel):
+    entry: CacheEntry
+    exp: int = 0
 
 
 class PersistentCache:
@@ -110,18 +114,18 @@ class PersistentCache:
             if data is None:
                 return None
 
-            if (ttl := data.get("exp_", 0)) and time.time() > ttl:
+            if (ttl := data.get("exp", 0)) and time.time() > ttl:
                 self.logger.debug(f"缓存过期: key={url}")
                 await db.remove(url)
                 return None
             self.logger.debug(f"缓存命中: key={url} value={data}")
-            return CacheEntry.model_validate(data)
+            return _StorageWrapper.model_validate(data).entry
 
     async def set(self, url: str, entry: CacheEntry) -> None:
-        entry.exp_ = int(time.time() + self._ttl)
+        sw = _StorageWrapper(entry=entry, exp=int(time.time() + self._ttl))
         async with self._db as db:
-            await db.set(url, entry.model_dump())
-            self.logger.debug(f"缓存写入: key={url} value={entry}")
+            await db.set(url, sw.model_dump())
+            self.logger.debug(f"缓存写入: key={url} value={sw}")
 
     async def remove(self, url: str) -> None:
         async with self._db as db:

@@ -14,6 +14,7 @@ from pyrogram.types import (
     InlineQuery,
     InlineQueryResultAnimation,
     InlineQueryResultArticle,
+    InlineQueryResultCachedAnimation,
     InlineQueryResultCachedDocument,
     InlineQueryResultCachedPhoto,
     InlineQueryResultCachedVideo,
@@ -121,11 +122,10 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
                 )
             case CacheMediaType.ANIMATION:
                 results.append(
-                    InlineQueryResultCachedDocument(
-                        document_file_id=m.file_id,
+                    InlineQueryResultCachedAnimation(
+                        animation_file_id=m.file_id,
                         title=title,
                         caption=caption,
-                        description=content,
                     )
                 )
             case CacheMediaType.DOCUMENT:
