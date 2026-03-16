@@ -35,7 +35,7 @@ from plugins.filters import platform_filter
 from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
 from plugins.start import get_supported_platforms
 from services import ParseService
-from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
+from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
 
 logger = logger.bind(name="InlineParse")
@@ -81,9 +81,9 @@ class InlineStatusReporter(StatusReporter):
 
 def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
     """有 file_id 缓存时，构建 cached 类型的 inline 结果（Telegram 服务端直发）"""
-    title = entry.parse_result.title or "无标题"
     content = entry.parse_result.content
-    caption = build_caption_by_str(title, content, raw_url, entry.telegraph_url)
+    caption = build_caption_by_str(entry.parse_result.title, content, raw_url, entry.telegraph_url)
+    title = entry.parse_result.title or "无标题"
 
     # 富文本
     if entry.telegraph_url:
@@ -97,15 +97,15 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
             )
         ]
 
-    flat_media = [x for sub in entry.media for x in (sub if isinstance(sub, list) else [sub])]
     results = []
 
-    for m in flat_media:
+    for m in entry.media:
         match m.type:
             case CacheMediaType.PHOTO:
                 results.append(
                     InlineQueryResultCachedPhoto(
                         photo_file_id=m.file_id,
+                        title=title,
                         caption=caption,
                         description=content,
                     )
@@ -114,27 +114,27 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
                 results.append(
                     InlineQueryResultCachedVideo(
                         video_file_id=m.file_id,
+                        title=title,
                         caption=caption,
                         description=content,
-                        title=title,
                     )
                 )
             case CacheMediaType.ANIMATION:
                 results.append(
                     InlineQueryResultCachedDocument(
                         document_file_id=m.file_id,
+                        title=title,
                         caption=caption,
                         description=content,
-                        title=title,
                     )
                 )
             case CacheMediaType.DOCUMENT:
                 results.append(
                     InlineQueryResultCachedDocument(
                         document_file_id=m.file_id,
+                        title=title,
                         caption=caption,
                         description=content,
-                        title=title,
                     )
                 )
 
@@ -144,7 +144,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
 async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list:
     """根据解析结果构建内联查询结果列表"""
     logger.debug(f"构建 inline 结果: type={parse_result.type}, title={parse_result.title}")
-    title = parse_result.title or "无标题"
+    title = parse_result.title
     media_list = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
     reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
 
@@ -317,7 +317,7 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
             media_info = MediaInfoReader.read(file_path_str)
             width, height, duration = media_info.width, media_info.height, media_info.duration
 
-        sent = await client.edit_inline_media(
+        await client.edit_inline_media(
             inline_message_id,
             media=InputMediaVideo(
                 file_path_str,
@@ -329,15 +329,6 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
                 supports_streaming=True,
             ),
         )
-        # 写入 file_id 缓存 (inline 上传后)
-        if sent and hasattr(sent, "video") and sent.video:
-            await persistent_cache.set(
-                query,
-                CacheEntry(
-                    parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
-                    media=[CacheMedia(type=CacheMediaType.VIDEO, file_id=sent.video.file_id)],
-                ),
-            )
     except Exception as e:
         logger.debug(f"inline 上传失败: {e}")
         await reporter.report_error("上传", e)

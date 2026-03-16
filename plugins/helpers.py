@@ -27,13 +27,22 @@ def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None
     return build_caption_by_str(parse_result.title, parse_result.content, parse_result.raw_url, telegraph_url)
 
 
-def build_caption_by_str(title: str, content: str, raw_url: str, telegraph_url: str | None = None) -> str:
+def build_caption_by_str(title: str | None, content: str | None, raw_url: str, telegraph_url: str | None = None) -> str:
     """构建消息正文：标题 + 内容 + 来源链接"""
+    title, content = title or "", content or ""
+
     if telegraph_url:
-        body = f"**[{title.replace('\n', ' ') or '无标题'}]({telegraph_url})**"
+        label = (title or content[:15]).replace("\n", " ") or "无标题"
+        body = f"**[{label}]({telegraph_url})**"
     else:
-        body = (format_text(f"**{title}**\n\n{content}") if title or content else "无标题").strip()
-    return f"{body}\n\n<b>▎<a href='{raw_url}'>Source</a></b>".strip()
+        parts = []
+        if title:
+            parts.append(f"**{title}**")
+        if content:
+            parts.append(content)
+        body = format_text("\n\n".join(parts) or "**无标题**")
+
+    return f"{body}\n\n<b>▎<a href='{raw_url}'>Source</a></b>"
 
 
 def format_text(text: str) -> str:

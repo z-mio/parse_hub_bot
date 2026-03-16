@@ -60,6 +60,28 @@ class MessageStatusReporter(StatusReporter):
                 self._msg.text = text
 
 
+@Client.on_message((filters.text | filters.caption) & platform_filter)
+async def text_jx(cli: Client, msg: Message):
+    url = msg.text or msg.caption
+    logger.debug(f"text_jx 触发: url={url}")
+    await handle_parse(cli, msg, url)
+
+
+@Client.on_message(filters.command(["jx"]))
+async def cmd_jx(cli: Client, msg: Message):
+    logger.debug(f"cmd_jx 触发: command={msg.command}")
+    url = msg.command[1] if msg.command[1:] else ""
+
+    if not url and msg.reply_to_message:
+        url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
+
+    if not url:
+        await msg.reply_text("请加上链接或回复一条消息")
+        return
+
+    await handle_parse(cli, msg, url)
+
+
 async def handle_parse(cli: Client, msg: Message, url: str):
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
     raw_url = await ParseService().get_raw_url(url)
@@ -193,7 +215,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
     all_media = input_animations + input_photos_videos
     logger.debug(f"媒体分类完成: animations={len(input_animations)}, photos_videos={len(input_photos_videos)}")
 
-    media_list: list[CacheMedia | list[CacheMedia]] = []
+    media_list: list[CacheMedia] = []
     if len(all_media) == 1:
         logger.debug("单媒体模式发送")
         try:
@@ -220,13 +242,12 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
                             CacheMedia(
                                 type=CacheMediaType.VIDEO,
                                 file_id=sent.video.file_id,
-                                cover_file_id=sent.video.video_cover.file_id,
+                                cover_file_id=sent.video.video_cover.file_id if sent.video.video_cover else None,
                             )
                         )
         except Exception as e:
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-            sent = await msg.reply_document(all_media[0].media, caption=caption)
-            media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=sent.document.file_id))
+            await msg.reply_document(all_media[0].media, caption=caption)
     else:
         logger.debug(f"多媒体模式发送: total={len(all_media)}")
         for ani in input_animations:
@@ -236,22 +257,21 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
             for i in range(0, len(input_photos_videos), 10):
                 batch = input_photos_videos[i : i + 10]
                 sent_msgs = await msg.reply_media_group(batch)
-                group_media_list = []
                 for m in sent_msgs:
                     if m.photo:
-                        group_media_list.append(CacheMedia(type=CacheMediaType.PHOTO, file_id=m.photo.file_id))
+                        media_list.append(CacheMedia(type=CacheMediaType.PHOTO, file_id=m.photo.file_id))
                     elif m.video:
-                        group_media_list.append(
+                        media_list.append(
                             CacheMedia(
                                 type=CacheMediaType.VIDEO,
                                 file_id=m.video.file_id,
-                                cover_file_id=m.video.video_cover.file_id,
+                                cover_file_id=m.video.video_cover.file_id if m.video.video_cover else None,
                             )
                         )
                     elif m.document:
-                        group_media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=m.document.file_id))
-                media_list.append(group_media_list)
+                        media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=m.document.file_id))
         except Exception as e:
+            logger.exception(e)
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             input_documents = [InputMediaDocument(media=item.media) for item in input_photos_videos]
             for i in range(0, len(input_documents), 10):
@@ -285,9 +305,9 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         return
-    flat_media = [x for sub in entry.media for x in (sub if isinstance(sub, list) else [sub])]
-    if len(flat_media) == 1:
-        m: CacheMedia = flat_media[0]
+
+    if len(entry.media) == 1:
+        m: CacheMedia = entry.media[0]
         match m.type:
             case CacheMediaType.PHOTO:
                 await msg.reply_photo(m.file_id, caption=caption)
@@ -298,8 +318,8 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
             case CacheMediaType.DOCUMENT:
                 await msg.reply_document(m.file_id, caption=caption)
     else:
-        animations = [sub for sub in flat_media if sub.type == CacheMediaType.ANIMATION]
-        others = [sub for sub in flat_media if sub.type != CacheMediaType.ANIMATION]
+        animations = [sub for sub in entry.media if sub.type == CacheMediaType.ANIMATION]
+        others = [sub for sub in entry.media if sub.type != CacheMediaType.ANIMATION]
 
         for m in animations:
             await msg.reply_animation(m.file_id)
@@ -323,26 +343,4 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
-        ) if len(flat_media) > 1 else None
-
-
-@Client.on_message((filters.text | filters.caption) & platform_filter)
-async def text_jx(cli: Client, msg: Message):
-    url = msg.text or msg.caption
-    logger.debug(f"text_jx 触发: url={url}")
-    await handle_parse(cli, msg, url)
-
-
-@Client.on_message(filters.command(["jx"]))
-async def cmd_jx(cli: Client, msg: Message):
-    logger.debug(f"cmd_jx 触发: command={msg.command}")
-    url = msg.command[1] if msg.command[1:] else ""
-
-    if not url and msg.reply_to_message:
-        url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
-
-    if not url:
-        await msg.reply_text("请加上链接或回复一条消息")
-        return
-
-    await handle_parse(cli, msg, url)
+        ) if len(entry.media) > 1 else None

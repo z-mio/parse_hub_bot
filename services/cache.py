@@ -90,7 +90,7 @@ class CacheMedia(BaseModel):
 
 class CacheEntry(BaseModel):
     parse_result: CacheParseResult | None = None
-    media: list[CacheMedia | list[CacheMedia]] | None = None
+    media: list[CacheMedia] | None = None
     telegraph_url: str | None = None
     exp_: int = 0
 
