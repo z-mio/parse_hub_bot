@@ -146,7 +146,7 @@ class PersistentCache:
                 all_keys = await db.all()
                 for key in all_keys:
                     data = await db.get(key)
-                    if data and data.get("exp_", 0) and now > data["exp_"]:
+                    if data and data.get("exp", 0) and now > data["exp"]:
                         await db.remove(key)
                         removed += 1
             if removed:

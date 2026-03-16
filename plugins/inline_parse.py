@@ -7,7 +7,6 @@ from parsehub.types import (
     PostType,
     VideoRef,
 )
-from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
 from pyrogram.types import (
     ChosenInlineResult,
@@ -33,7 +32,7 @@ from pyrogram.types import (
 
 from log import logger
 from plugins.filters import platform_filter
-from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph
+from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph, resolve_media_info
 from plugins.start import get_supported_platforms
 from services import ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
@@ -298,12 +297,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
         file_paths = processed.output_paths or [processed.source.path]
         file_path_str = str(file_paths[0])
         logger.debug(f"inline 上传文件: {file_path_str}")
-        width, height = processed.source.width, processed.source.height
-        duration = getattr(processed.source, "duration", 0)
-
-        if processed.output_paths:
-            media_info = MediaInfoReader.read(file_path_str)
-            width, height, duration = media_info.width, media_info.height, media_info.duration
+        width, height, duration = resolve_media_info(processed, file_path_str)
 
         await cli.edit_inline_media(
             inline_message_id,

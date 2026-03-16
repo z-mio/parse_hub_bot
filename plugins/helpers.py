@@ -6,6 +6,7 @@ from pathlib import Path
 from markdown import markdown
 from parsehub import Platform
 from parsehub.types import AnyMediaFile, AnyParseResult, RichTextParseResult
+from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
 
 from log import logger
@@ -21,6 +22,14 @@ class ProcessedMedia:
     source: AnyMediaFile
     output_paths: list[Path] | None = None
     output_dir: Path | None = None
+
+
+def resolve_media_info(processed: "ProcessedMedia", file_path: str) -> tuple[int, int, int]:
+    """获取媒体的宽、高、时长。若经过转码则从文件读取，否则使用源信息。"""
+    if processed.output_paths:
+        info = MediaInfoReader.read(file_path)
+        return info.width, info.height, info.duration
+    return processed.source.width, processed.source.height, getattr(processed.source, "duration", 0)
 
 
 def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None):
