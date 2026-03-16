@@ -137,7 +137,7 @@ class MediaProcessingUnit:
         return w_padding, 0, w_padding, 0
 
     @staticmethod
-    def _get_dominant_color(file_path: Path) -> tuple[int, int, int]:
+    def _get_dominant_color(file_path: Path) -> tuple[int, ...]:
         haishoku = Haishoku.loadHaishoku(str(file_path))
         return tuple(int(v * 0.8) for v in haishoku.palette[0][1])
 

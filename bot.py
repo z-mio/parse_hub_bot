@@ -8,6 +8,7 @@ from pyrogram.handlers import ConnectHandler, DisconnectHandler
 from core.config import bs, ws
 from core.watchdog import on_connect, on_disconnect
 from log import logger, logger_format
+from services import parse_cache, persistent_cache
 from utils.event_loop import setup_optimized_event_loop
 
 pillow_heif.register_heif_opener()
@@ -49,6 +50,8 @@ class Bot(Client):
 
     async def start(self, *args, **kwargs):
         self.init_watchdog()
+        parse_cache.start_cleanup()
+        persistent_cache.start_cleanup()
         await super().start()
 
     async def stop(self, *args, **kwargs):

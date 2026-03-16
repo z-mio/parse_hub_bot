@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass
 
 from telegraph.aio import Telegraph as TelegraphAPI
@@ -51,7 +52,7 @@ class Telegraph:
         """创建 Telegraph 页面"""
         if auto_create_account and not self.token:
             # 随机用户名
-            short_name = "tg_" + str(int(100000 * (1 + 0.5 * (1 + 0.5 * (1 + 0.5 * 1)))))
+            short_name = "tg_" + str(random.randint(100000, 999999))
             await self.create_account(short_name)
         response = await self.telegraph.create_page(
             title,

@@ -98,6 +98,18 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
         ]
 
     results = []
+    if not entry.media:
+        results.append(
+            InlineQueryResultArticle(
+                title=title,
+                description=content,
+                input_message_content=InputTextMessageContent(
+                    caption,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
+                ),
+            )
+        )
+        return results
 
     for m in entry.media:
         match m.type:
