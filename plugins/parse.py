@@ -60,22 +60,17 @@ class MessageStatusReporter(StatusReporter):
                 self._msg.text = text
 
 
-@Client.on_message((filters.text | filters.caption) & platform_filter)
-async def text_jx(cli: Client, msg: Message):
-    url = msg.text or msg.caption
-    await handle_parse(cli, msg, url)
-
-
-@Client.on_message(filters.command(["jx"]))
-async def cmd_jx(cli: Client, msg: Message):
-    url = msg.command[1] if msg.command[1:] else ""
-
-    if not url and msg.reply_to_message:
-        url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
-
-    if not url:
-        await msg.reply_text("请加上链接或回复一条消息")
-        return
+@Client.on_message(filters.command(["jx"]) | ((filters.text | filters.caption) & platform_filter))
+async def jx(cli: Client, msg: Message):
+    if msg.command:
+        url = msg.command[1] if msg.command[1:] else ""
+        if not url and msg.reply_to_message:
+            url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
+        if not url:
+            await msg.reply_text("请加上链接或回复一条消息")
+            return
+    else:
+        url = msg.text or msg.caption
 
     await handle_parse(cli, msg, url)
 
@@ -91,7 +86,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
 
     reporter = MessageStatusReporter(msg)
     cached_parse_result = await parse_cache.get(raw_url)
-    pipeline = ParsePipeline(raw_url, reporter, parse_result=cached_parse_result)
+    pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
 
     if (result := await pipeline.run()) is None:
         logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
@@ -248,6 +243,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
         for ani in input_animations:
             sent = await msg.reply_animation(ani.media)
             media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
+            await asyncio.sleep(0.5)
         try:
             for i in range(0, len(input_photos_videos), 10):
                 batch = input_photos_videos[i : i + 10]
@@ -272,6 +268,7 @@ async def _send_media(msg: Message, parse_result, processed_list, caption: str) 
             for i in range(0, len(input_documents), 10):
                 batch = input_documents[i : i + 10]
                 await msg.reply_media_group(batch)  # type: ignore
+                await asyncio.sleep(0.5)
         await msg.reply_text(
             caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -318,6 +315,7 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
 
         for m in animations:
             await msg.reply_animation(m.file_id)
+            await asyncio.sleep(0.5)
 
         if others:
             media_group = []
@@ -334,6 +332,7 @@ async def _send_cached(msg: Message, entry: CacheEntry, url: str):
 
             for i in range(0, len(media_group), 10):
                 await msg.reply_media_group(media_group[i : i + 10])
+                await asyncio.sleep(0.5)
 
         await msg.reply_text(
             caption,

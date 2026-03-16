@@ -48,10 +48,9 @@ def build_caption_by_str(title: str | None, content: str | None, raw_url: str, t
 def format_text(text: str) -> str:
     """格式化输出内容, 限制长度, 添加折叠块样式"""
     text = text.strip()
-    if len(text) > 1000:
-        text = text[:900] + "......"
-        return f"<blockquote expandable>{text}</blockquote>"
-    elif len(text) > 500 or len(text.splitlines()) > 10:
+    if len(text) > 500 or len(text.splitlines()) > 10:
+        if len(text) > 1000:
+            text = text[:900] + "......"
         return f"<blockquote expandable>{text}</blockquote>"
     else:
         return text

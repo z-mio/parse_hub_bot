@@ -96,7 +96,7 @@ class ParsePipeline:
         logger.debug(f"下载完成: output_dir={download_result.output_dir}")
 
         # ── 3. 格式转换 ──
-        await self._reporter.report("**▎格式转换中...**")
+        await self._reporter.report("**▎处 理 中...**")
         processed_list = await self._step(
             "格式转换",
             lambda: process_media_files(download_result),

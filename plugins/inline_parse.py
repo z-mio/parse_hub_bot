@@ -46,8 +46,8 @@ DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
 class InlineStatusReporter(StatusReporter):
     """基于 inline_message_id 的状态报告器"""
 
-    def __init__(self, client: Client, inline_message_id: str, caption: str = ""):
-        self._client = client
+    def __init__(self, cli: Client, inline_message_id: str, caption: str = ""):
+        self._cli = cli
         self._mid = inline_message_id
         self._caption = caption
         self._last_text: str | None = None
@@ -58,19 +58,19 @@ class InlineStatusReporter(StatusReporter):
             return
         self._last_text = full
         try:
-            await self._client.edit_inline_text(self._mid, full)
+            await self._cli.edit_inline_text(self._mid, full)
         except Exception:
             pass
 
     async def report_error(self, stage: str, error: Exception) -> None:
-        await self._client.edit_inline_text(
+        await self._cli.edit_inline_text(
             self._mid,
             f"{stage}错误: \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         await asyncio.sleep(5)
         # 恢复为 caption
-        await self._client.edit_inline_text(
+        await self._cli.edit_inline_text(
             self._mid,
             self._caption,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -162,7 +162,6 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                     caption,
                     link_preview_options=LinkPreviewOptions(show_above_text=True),
                 ),
-                reply_markup=reply_markup,
             )
         )
         return results
@@ -178,7 +177,6 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                     caption,
                     link_preview_options=LinkPreviewOptions(is_disabled=True),
                 ),
-                reply_markup=reply_markup,
             )
         )
         return results
@@ -194,7 +192,6 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                     caption=caption,
                     title=title,
                     description=parse_result.content,
-                    reply_markup=reply_markup,
                 )
             )
         elif isinstance(media_ref, VideoRef):
@@ -218,7 +215,6 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                         caption=caption,
                         title=title,
                         description=parse_result.content,
-                        reply_markup=reply_markup,
                     )
                 )
             else:
@@ -229,7 +225,6 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                         caption=caption,
                         title=title,
                         description=parse_result.content,
-                        reply_markup=reply_markup,
                     )
                 )
 
@@ -253,9 +248,7 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
 @Client.on_inline_query(platform_filter)
 async def call_inline_parse(cli: Client, inline_query: InlineQuery):
     logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
-    url = inline_query.query
-    raw_url = await ParseService().get_raw_url(url)
-    inline_query.query = raw_url
+    raw_url = await ParseService().get_raw_url(inline_query.query)
 
     if cached := await persistent_cache.get(raw_url):
         logger.debug("inline: 缓存命中, 构建 cached 结果")
@@ -264,7 +257,7 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
 
     parse_result = await parse_cache.get(raw_url)
     if parse_result is None:
-        parse_result = await ParseService().parse(raw_url)
+        parse_result = await ParseService().parse(inline_query.query)
         await parse_cache.set(raw_url, parse_result)
 
     results = await build_inline_results(parse_result, cli)
@@ -273,7 +266,7 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
 
 
 @Client.on_chosen_inline_result()
-async def inline_result_download(client: Client, chosen_result: ChosenInlineResult):
+async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult):
     if not chosen_result.result_id.startswith("download_"):
         return
 
@@ -281,12 +274,13 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
     inline_message_id = chosen_result.inline_message_id
     query = chosen_result.query
     logger.debug(f"inline 下载触发: media_index={media_index}, query={query}")
+    raw_url = await ParseService().get_raw_url(query)
 
-    cached_result = await parse_cache.get(query)
+    cached_result = await parse_cache.get(raw_url)
     logger.debug(f"缓存命中: {cached_result is not None}")
 
     caption = build_caption(cached_result) if cached_result else ""
-    reporter = InlineStatusReporter(client, inline_message_id, caption)
+    reporter = InlineStatusReporter(cli, inline_message_id, caption)
     pipeline = ParsePipeline(query, reporter, parse_result=cached_result)
     if (result := await pipeline.run()) is None:
         return
@@ -311,7 +305,7 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
             media_info = MediaInfoReader.read(file_path_str)
             width, height, duration = media_info.width, media_info.height, media_info.duration
 
-        await client.edit_inline_media(
+        await cli.edit_inline_media(
             inline_message_id,
             media=InputMediaVideo(
                 file_path_str,

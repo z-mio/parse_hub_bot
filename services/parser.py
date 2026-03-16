@@ -26,12 +26,12 @@ class ParseService:
         logger.debug(f"解析完成: {pr}")
         return pr
 
-    async def get_raw_url(self, url: str) -> str:
+    async def get_raw_url(self, url: str, clean_all: bool = True) -> str:
         pid = self.parser.get_platform(url)
         if pc := platforms_config.get(pid.id):
             logger.debug(f"使用平台配置: {pc}")
-            raw_url = await self.parser.get_raw_url(url, proxy=pc.roll_parser_proxy())
+            raw_url = await self.parser.get_raw_url(url, proxy=pc.roll_parser_proxy(), clean_all=clean_all)
         else:
-            raw_url = await self.parser.get_raw_url(url)
+            raw_url = await self.parser.get_raw_url(url, clean_all=clean_all)
         logger.debug(f"原始 URL: {raw_url}")
         return raw_url
