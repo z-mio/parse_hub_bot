@@ -282,7 +282,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     caption = build_caption(cached_result) if cached_result else ""
     reporter = InlineStatusReporter(cli, inline_message_id, caption)
     pipeline = ParsePipeline(query, reporter, parse_result=cached_result)
-    if (result := await pipeline.run()) is None:
+    if (result := await pipeline.run(singleflight=False)) is None:
         return
 
     parse_result = result.parse_result
@@ -324,3 +324,4 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     finally:
         logger.debug("inline 下载任务完成, 清理资源")
         result.cleanup()
+        pipeline.finish()

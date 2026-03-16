@@ -1,3 +1,4 @@
+import asyncio
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -10,6 +11,9 @@ from plugins.helpers import ProcessedMedia, process_media_files
 from services import ParseService
 
 logger = logger.bind(name="Pipeline")
+
+# Singleflight: 同一 URL 只会有一条流水线在执行，后续请求等待 Event 后走缓存
+_inflight: dict[str, asyncio.Event] = {}
 
 
 class StatusReporter(Protocol):
@@ -52,7 +56,11 @@ class PipelineProgressCallback:
 class ParsePipeline:
     """
     将 解析 → 下载 → 格式转换 封装为一条流水线。
-    上传逻辑仍由调用方负责
+    上传逻辑仍由调用方负责。
+
+    内置 Singleflight 机制：对同一 URL 的并发调用只会执行一次流水线，
+    其余调用等待 Event 完成后返回 None（调用方应重新检查缓存）。
+    首个调用方在完成上传+缓存后必须调用 finish() 以释放等待者。
     """
 
     def __init__(
@@ -64,9 +72,47 @@ class ParsePipeline:
         self._url = url
         self._reporter = reporter
         self._parse_result = parse_result
+        self._waited = False
 
-    async def run(self) -> PipelineResult | None:
+    @property
+    def waited(self) -> bool:
+        """是否因 singleflight 而等待了其他流水线"""
+        return self._waited
+
+    def finish(self) -> None:
+        """首个调用方完成上传+缓存后调用，释放所有等待者"""
+        event = _inflight.pop(self._url, None)
+        if event is not None:
+            event.set()
+
+    async def run(self, singleflight: bool = True) -> PipelineResult | None:
         """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
+        if singleflight:
+            key = self._url
+            existing = _inflight.get(key)
+
+            if existing is not None:
+                self._waited = True
+                logger.debug(f"Singleflight 命中, 等待已有流水线: url={key}")
+                await self._reporter.report("**▎已有相同任务正在解析, 等待解析完成...**")
+                await existing.wait()
+                await self._reporter.dismiss()
+                return None
+
+            event = asyncio.Event()
+            _inflight[key] = event
+
+        try:
+            result = await self._execute()
+            if result is None:
+                self.finish()  # 流水线失败，立即释放等待者
+            return result
+        except BaseException:
+            self.finish()  # 流水线异常，立即释放等待者
+            raise
+
+    async def _execute(self) -> PipelineResult | None:
+        """实际执行流水线逻辑"""
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
 
         # ── 1. 解析 ──

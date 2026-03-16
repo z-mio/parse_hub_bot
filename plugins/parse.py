@@ -75,7 +75,7 @@ async def jx(cli: Client, msg: Message):
     await handle_parse(cli, msg, url)
 
 
-async def handle_parse(cli: Client, msg: Message, url: str):
+async def handle_parse(cli: Client, msg: Message, url: str) -> None:
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
     raw_url = await ParseService().get_raw_url(url)
 
@@ -89,7 +89,15 @@ async def handle_parse(cli: Client, msg: Message, url: str):
     pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
 
     if (result := await pipeline.run()) is None:
-        logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
+        if pipeline.waited:
+            logger.debug(f"Singleflight 等待完成, 重新检查缓存: raw_url={raw_url}")
+            if cached := await persistent_cache.get(raw_url):
+                await _send_cached(msg, cached, raw_url)
+            else:
+                await handle_parse(cli, msg, url)
+                return
+        else:
+            logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
         return
 
     parse_result = result.parse_result
@@ -98,22 +106,25 @@ async def handle_parse(cli: Client, msg: Message, url: str):
     # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
         logger.debug(f"富文本类型, 创建 Telegraph 页面: title={parse_result.title}")
-        await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-        ph_url = await create_richtext_telegraph(cli, parse_result)
-        logger.debug(f"Telegraph 页面创建完成: {ph_url}")
-        caption = build_caption(parse_result, ph_url)
-        await msg.reply_text(
-            caption,
-            link_preview_options=LinkPreviewOptions(show_above_text=True),
-        )
-        await persistent_cache.set(
-            raw_url,
-            CacheEntry(
-                parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
-                telegraph_url=ph_url,
-            ),
-        )
-        await reporter.dismiss()
+        try:
+            await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
+            ph_url = await create_richtext_telegraph(cli, parse_result)
+            logger.debug(f"Telegraph 页面创建完成: {ph_url}")
+            caption = build_caption(parse_result, ph_url)
+            await msg.reply_text(
+                caption,
+                link_preview_options=LinkPreviewOptions(show_above_text=True),
+            )
+            await persistent_cache.set(
+                raw_url,
+                CacheEntry(
+                    parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
+                    telegraph_url=ph_url,
+                ),
+            )
+            await reporter.dismiss()
+        finally:
+            pipeline.finish()
         return
 
     # ── 上传 ──
@@ -146,6 +157,7 @@ async def handle_parse(cli: Client, msg: Message, url: str):
     finally:
         logger.debug("清理资源")
         result.cleanup()
+        pipeline.finish()
 
     await reporter.dismiss()
 
