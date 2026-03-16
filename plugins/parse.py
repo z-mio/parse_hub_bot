@@ -145,10 +145,12 @@ async def handle_parse(cli: Client, msg: Message, url: str):
                 link_preview_options=LinkPreviewOptions(is_disabled=True),
             )
             await reporter.dismiss()
-            return
+            cache_entry = CacheEntry(
+                parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content)
+            )
+        else:
+            cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
 
-        cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
-        # 写入 file_id 缓存
         if cache_entry:
             await persistent_cache.set(raw_url, cache_entry)
     except Exception as e:

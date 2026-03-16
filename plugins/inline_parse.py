@@ -144,7 +144,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
 async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list:
     """根据解析结果构建内联查询结果列表"""
     logger.debug(f"构建 inline 结果: type={parse_result.type}, title={parse_result.title}")
-    title = parse_result.title
+    title = parse_result.title or "无标题"
     media_list = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
     reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
 
