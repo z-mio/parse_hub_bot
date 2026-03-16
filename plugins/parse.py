@@ -63,13 +63,11 @@ class MessageStatusReporter(StatusReporter):
 @Client.on_message((filters.text | filters.caption) & platform_filter)
 async def text_jx(cli: Client, msg: Message):
     url = msg.text or msg.caption
-    logger.debug(f"text_jx 触发: url={url}")
     await handle_parse(cli, msg, url)
 
 
 @Client.on_message(filters.command(["jx"]))
 async def cmd_jx(cli: Client, msg: Message):
-    logger.debug(f"cmd_jx 触发: command={msg.command}")
     url = msg.command[1] if msg.command[1:] else ""
 
     if not url and msg.reply_to_message:
@@ -85,28 +83,21 @@ async def cmd_jx(cli: Client, msg: Message):
 async def handle_parse(cli: Client, msg: Message, url: str):
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
     raw_url = await ParseService().get_raw_url(url)
-    # ── 检查 file_id 缓存 ──
-    cached = await persistent_cache.get(raw_url)
-    if cached:
+
+    if cached := await persistent_cache.get(raw_url):
         logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
         await _send_cached(msg, cached, raw_url)
         return
 
     reporter = MessageStatusReporter(msg)
-
-    # 检查内存中是否有解析结果缓存
     cached_parse_result = await parse_cache.get(raw_url)
-
     pipeline = ParsePipeline(raw_url, reporter, parse_result=cached_parse_result)
-    result = await pipeline.run()
 
-    if result is None:
+    if (result := await pipeline.run()) is None:
         logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
         return
 
     parse_result = result.parse_result
-
-    # 写入解析结果到内存缓存 (供其他并发请求使用)
     await parse_cache.set(raw_url, parse_result)
 
     # ── 富文本 → Telegraph ──
@@ -120,7 +111,6 @@ async def handle_parse(cli: Client, msg: Message, url: str):
             caption,
             link_preview_options=LinkPreviewOptions(show_above_text=True),
         )
-        # 缓存富文本的 telegraph_url
         await persistent_cache.set(
             raw_url,
             CacheEntry(

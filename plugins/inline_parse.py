@@ -255,17 +255,13 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
     logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
     url = inline_query.query
     raw_url = await ParseService().get_raw_url(url)
-
     inline_query.query = raw_url
 
-    # 先查 file_id 缓存 → 如有则用 cached 类型直接返回
-    cached = await persistent_cache.get(raw_url)
-    if cached:
+    if cached := await persistent_cache.get(raw_url):
         logger.debug("inline: 缓存命中, 构建 cached 结果")
         results = build_cached_inline_results(cached, raw_url)
         return await inline_query.answer(results[:50], cache_time=60)
 
-    # 查内存解析缓存
     parse_result = await parse_cache.get(raw_url)
     if parse_result is None:
         parse_result = await ParseService().parse(raw_url)
@@ -291,10 +287,8 @@ async def inline_result_download(client: Client, chosen_result: ChosenInlineResu
 
     caption = build_caption(cached_result) if cached_result else ""
     reporter = InlineStatusReporter(client, inline_message_id, caption)
-
     pipeline = ParsePipeline(query, reporter, parse_result=cached_result)
-    result = await pipeline.run()
-    if result is None:
+    if (result := await pipeline.run()) is None:
         return
 
     parse_result = result.parse_result
