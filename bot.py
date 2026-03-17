@@ -4,6 +4,7 @@ import sys
 import pillow_heif
 from pyrogram import Client
 from pyrogram.handlers import ConnectHandler, DisconnectHandler
+from pyrogram.types import BotCommand
 
 from core import bs, on_connect, on_disconnect, ws
 from log import logger, logger_format
@@ -52,6 +53,7 @@ class Bot(Client):
         parse_cache.start_cleanup()
         persistent_cache.start_cleanup()
         await super().start()
+        await self.set_menu()
 
     async def stop(self, *args, **kwargs):
         ws.exit_flag = True
@@ -60,6 +62,15 @@ class Bot(Client):
     def init_watchdog(self):
         self.add_handler(ConnectHandler(on_connect))
         self.add_handler(DisconnectHandler(on_disconnect))
+
+    async def set_menu(self):
+        commands = {
+            "start": "开始",
+            "jx": "解析",
+            "raw": "不处理媒体, 发送原始文件",
+        }
+        await self.set_bot_commands([BotCommand(command=k, description=v) for k, v in commands.items()])
+        logger.debug(f"菜单已设置: {commands}")
 
 
 if __name__ == "__main__":
