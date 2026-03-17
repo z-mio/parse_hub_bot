@@ -75,4 +75,4 @@ class PlatformsConfig(BaseModel):
         return self.platforms.get(pid)
 
 
-platforms_config = PlatformsConfig.load_config(bs.data_path / "platform_config.yaml")
+platforms_config = PlatformsConfig.load_config(bs.config_path / "platform_config.yaml")

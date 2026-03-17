@@ -154,4 +154,4 @@ class PersistentCache:
 
 
 parse_cache = TTLCache(ttl=60 * 60)  # 解析结果缓存 1 小时
-persistent_cache = PersistentCache(bs.data_path / "cache.json", ttl=bs.cache_time)
+persistent_cache = PersistentCache(bs.cache_path / "cache.json", ttl=bs.cache_time)

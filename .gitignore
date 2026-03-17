@@ -4,3 +4,4 @@
 /downloads
 .env
 *.session
+/data/

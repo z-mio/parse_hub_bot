@@ -45,7 +45,7 @@ class Bot(Client):
             plugins={"root": "plugins"},
             proxy=self.cfg.bot_proxy,
             loop=loop,
-            workdir=self.cfg.bot_workdir,
+            workdir=self.cfg.sessions_path,
         )
 
     async def start(self, *args, **kwargs):

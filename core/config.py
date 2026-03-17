@@ -21,7 +21,6 @@ class BotSettings(BaseSettings):
     api_id: str = Field(...)
     api_hash: str = Field(...)
     bot_proxy: dict | None = Field(default=None)
-    bot_workdir: Path = Field(default=Path("sessions"))
     data_path: Path = Path("data")
     cache_time: int = Field(default=30 * 24 * 60 * 60, description="默认缓存一个月")
     debug: bool = Field(default=False)
@@ -30,7 +29,21 @@ class BotSettings(BaseSettings):
 
     def model_post_init(self, __context) -> None:
         """模型初始化后的操作"""
-        self.bot_workdir.mkdir(parents=True, exist_ok=True)
+        self.sessions_path.mkdir(parents=True, exist_ok=True)
+        self.cache_path.mkdir(parents=True, exist_ok=True)
+        self.config_path.mkdir(parents=True, exist_ok=True)
+
+    @property
+    def sessions_path(self) -> Path:
+        return self.data_path / "sessions"
+
+    @property
+    def cache_path(self) -> Path:
+        return self.data_path / "cache"
+
+    @property
+    def config_path(self) -> Path:
+        return self.data_path / "config"
 
     @field_validator("bot_proxy", mode="before")
     @classmethod
