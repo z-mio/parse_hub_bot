@@ -15,3 +15,7 @@ async def run_cmd(*cmd: str, timeout: float = 30) -> str:
         await proc.wait()
         return ""
     return stdout.decode().strip()
+
+
+def to_list(v) -> list:
+    return v if isinstance(v, list) else [v]

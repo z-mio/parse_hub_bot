@@ -11,6 +11,7 @@ from pyrogram import Client
 
 from log import logger
 from utils.converter import clean_article_html
+from utils.helpers import to_list
 from utils.media_processing_unit import MediaProcessingUnit
 from utils.ph import Telegraph
 
@@ -106,10 +107,11 @@ async def process_media_files(download_result) -> list[ProcessedMedia]:
     """对下载结果中的媒体文件进行格式转换，返回 ProcessedMedia 列表"""
     processed_dir = download_result.output_dir.joinpath("processed")
     processor = MediaProcessingUnit(processed_dir, segment_height=1920, logger=logger.bind(name="MediaProcessor").debug)
-    media_files = download_result.media if isinstance(download_result.media, list) else [download_result.media]
+    media_files = to_list(download_result.media)
     logger.debug(f"开始媒体格式转换: 文件数={len(media_files)}, output_dir={processed_dir}")
     processed_list: list[ProcessedMedia] = []
     for media_file in media_files:
+        # 对于实况图片只处理图片, 不处理视频
         logger.debug(f"处理文件: {media_file.path}")
         result = await processor.process(media_file.path)
         logger.debug(f"处理结果: output_paths={result.output_paths}")

@@ -37,6 +37,7 @@ from plugins.start import get_supported_platforms
 from services import ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
+from utils.helpers import to_list
 
 logger = logger.bind(name="InlineParse")
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
@@ -156,7 +157,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
     """根据解析结果构建内联查询结果列表"""
     logger.debug(f"构建 inline 结果: type={parse_result.type}, title={parse_result.title}")
     title = parse_result.title or "无标题"
-    media_list = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
+    media_list = to_list(parse_result.media)
     reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
 
     results = []
@@ -330,4 +331,3 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     finally:
         logger.debug("inline 下载任务完成, 清理资源")
         result.cleanup()
-        pipeline.finish()

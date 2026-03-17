@@ -1,4 +1,5 @@
 import asyncio
+from typing import Literal
 
 from parsehub.types import (
     AniFile,
@@ -29,7 +30,8 @@ from plugins.helpers import (
 )
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
-from services.pipeline import ParsePipeline, StatusReporter
+from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
+from utils.helpers import to_list
 
 logger = logger.bind(name="Parse")
 
@@ -68,9 +70,12 @@ class MessageStatusReporter(StatusReporter):
 # ── Handler ──────────────────────────────────────────────────────────
 
 
-@Client.on_message(filters.command(["jx"]) | ((filters.text | filters.caption) & platform_filter))
+@Client.on_message(filters.command(["jx", "raw"]) | ((filters.text | filters.caption) & platform_filter))
 async def jx(cli: Client, msg: Message):
+    mode = "preview"
     if msg.command:
+        if msg.command[0] == "raw":
+            mode = "raw"
         url = msg.command[1] if msg.command[1:] else ""
         if not url and msg.reply_to_message:
             url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
@@ -80,17 +85,18 @@ async def jx(cli: Client, msg: Message):
     else:
         url = msg.text or msg.caption
 
-    await handle_parse(cli, msg, url)
+    await handle_parse(cli, msg, url, mode)
 
 
 # ── 主流程 ───────────────────────────────────────────────────────────
 
 
-async def handle_parse(cli: Client, msg: Message, url: str) -> None:
-    logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}")
+async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw", "preview"] = "preview") -> None:
+    logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
+    is_raw_mode = mode == "raw"
     raw_url = await ParseService().get_raw_url(url)
 
-    if cached := await persistent_cache.get(raw_url):
+    if not is_raw_mode and (cached := await persistent_cache.get(raw_url)):
         logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
         await _send_cached(msg, cached, raw_url)
         return
@@ -99,7 +105,8 @@ async def handle_parse(cli: Client, msg: Message, url: str) -> None:
     cached_parse_result = await parse_cache.get(raw_url)
     pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
 
-    if (result := await pipeline.run()) is None:
+    singleflight = False if is_raw_mode else True
+    if (result := await pipeline.run(singleflight=singleflight, skip_media_processing=is_raw_mode)) is None:
         if pipeline.waited:
             logger.debug(f"Singleflight 等待完成, 重新检查缓存: raw_url={raw_url}")
             if cached := await persistent_cache.get(raw_url):
@@ -113,6 +120,10 @@ async def handle_parse(cli: Client, msg: Message, url: str) -> None:
 
     parse_result = result.parse_result
     await parse_cache.set(raw_url, parse_result)
+
+    if mode == "raw":
+        await _send_raw(msg, result, reporter)
+        return
 
     # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
@@ -252,6 +263,56 @@ def _make_cache_entry(parse_result, media_list: list[CacheMedia]) -> CacheEntry:
     )
 
 
+# ── Raw 模式上传 ──────────────────────────────────────────────────────
+
+
+async def _send_raw(
+    msg: Message,
+    result: PipelineResult,
+    reporter: MessageStatusReporter,
+) -> None:
+    """Raw 模式：将文件以原始文档形式上传。"""
+    logger.debug("Raw 模式, 直接上传文件")
+    await reporter.report("**▎上 传 中...**")
+    try:
+        await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
+        caption = build_caption(result.parse_result)
+
+        if not result.processed_list:
+            logger.debug("无媒体文件, 仅发送文本")
+            await msg.reply_text(
+                caption,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
+            )
+        else:
+            all_docs: list[InputMediaDocument] = []
+            for processed in result.processed_list:
+                file_paths = processed.output_paths or [processed.source.path]
+                for fp in file_paths:
+                    all_docs.append(InputMediaDocument(media=str(fp)))
+            if len(all_docs) == 1:
+                await msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
+            else:
+                for i in range(0, len(all_docs), 10):
+                    batch = all_docs[i : i + 10]
+                    await msg.reply_media_group(batch)  # type: ignore
+                    await asyncio.sleep(0.5)
+                await msg.reply_text(
+                    caption,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
+                )
+    except Exception as e:
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"Raw 模式上传失败: {e}")
+        await reporter.report_error("上传", e)
+        return
+    finally:
+        logger.debug("清理资源")
+        result.cleanup()
+
+    await reporter.dismiss()
+
+
 # ── 发送媒体 ─────────────────────────────────────────────────────────
 
 
@@ -348,7 +409,7 @@ async def _send_media(
     """构建、发送媒体，并返回缓存条目。
     返回 None 表示不缓存
     """
-    media_refs: list[AnyMediaRef] = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
+    media_refs: list[AnyMediaRef] = to_list(parse_result.media)
     photos_videos, animations = _build_input_media(media_refs, processed_list)
     all_count = len(photos_videos) + len(animations)
     logger.debug(f"媒体分类完成: animations={len(animations)}, photos_videos={len(photos_videos)}")

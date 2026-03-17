@@ -4,11 +4,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Protocol
 
+from parsehub import DownloadResult
 from parsehub.types import AnyParseResult, PostType, ProgressUnit
 
 from log import logger
 from plugins.helpers import ProcessedMedia, process_media_files
 from services import ParseService
+from utils.helpers import to_list
 
 logger = logger.bind(name="Pipeline")
 
@@ -20,7 +22,9 @@ class StatusReporter(Protocol):
     """抽象状态通知，由调用方实现"""
 
     async def report(self, text: str) -> None: ...
+
     async def report_error(self, stage: str, error: Exception) -> None: ...
+
     async def dismiss(self) -> None: ...
 
 
@@ -85,7 +89,7 @@ class ParsePipeline:
         if event is not None:
             event.set()
 
-    async def run(self, singleflight: bool = True) -> PipelineResult | None:
+    async def run(self, *, singleflight: bool = True, skip_media_processing: bool = False) -> PipelineResult | None:
         """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
         if singleflight:
             key = self._url
@@ -103,7 +107,7 @@ class ParsePipeline:
             _inflight[key] = event
 
         try:
-            result = await self._execute()
+            result = await self._execute(skip_media_processing=skip_media_processing)
             if result is None:
                 self.finish()  # 流水线失败，立即释放等待者
             return result
@@ -111,7 +115,7 @@ class ParsePipeline:
             self.finish()  # 流水线异常，立即释放等待者
             raise
 
-    async def _execute(self) -> PipelineResult | None:
+    async def _execute(self, *, skip_media_processing: bool = False) -> PipelineResult | None:
         """实际执行流水线逻辑"""
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
 
@@ -133,7 +137,7 @@ class ParsePipeline:
         # ── 2. 下载 ──
         await self._reporter.report("**▎下 载 中...**")
         progress_cb = PipelineProgressCallback(self._reporter)
-        download_result = await self._step(
+        download_result: DownloadResult = await self._step(
             "下载",
             lambda: parse_result.download(callback=progress_cb, callback_args=()),
         )
@@ -142,6 +146,13 @@ class ParsePipeline:
         logger.debug(f"下载完成: output_dir={download_result.output_dir}")
 
         # ── 3. 格式转换 ──
+        if skip_media_processing:
+            logger.debug(f"流水线完成: download_result={download_result}")
+            processed_list = [ProcessedMedia(i, [i.path]) for i in to_list(download_result.media)]
+            return PipelineResult(
+                parse_result=parse_result, processed_list=processed_list, output_dir=download_result.output_dir
+            )
+
         await self._reporter.report("**▎处 理 中...**")
         processed_list = await self._step(
             "格式转换",
