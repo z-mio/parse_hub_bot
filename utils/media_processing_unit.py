@@ -73,41 +73,34 @@ class MediaProcessingUnit:
     async def process_image(self, file_path: Path) -> MediaProcessResult:
         ext = file_path.suffix.lower()
         needs_convert = ext in {".heif", ".heic", ".avif"}
-        converted: Path | None = None
-
-        if needs_convert:
-            self.logger(f"图片格式需转换: {ext} -> webp")
-            converted = await asyncio.to_thread(self._img2webp, file_path)
-
-        source = converted or file_path
-
-        downscaled = self._downscale_image(source)
-        if downscaled:
-            if converted and converted.exists():
-                os.remove(converted)
-                converted = None
-            source = downscaled
+        intermediates: list[Path] = []  # 统一收集中间文件
 
         try:
-            result = self._adapt_image(source)
-        except Exception as e:
-            if downscaled and downscaled.exists():
-                os.remove(downscaled)
-            if converted and converted.exists():
-                os.remove(converted)
-            raise Exception(e) from e
+            if needs_convert:
+                self.logger(f"图片格式需转换: {ext} -> webp")
+                source = await asyncio.to_thread(self._img2webp, file_path)
+                intermediates.append(source)
+            else:
+                source = file_path
 
-        if result is None:
-            self.logger(f"图片无需额外处理: {source}")
-            return MediaProcessResult(output_paths=[source])
-        else:
-            if downscaled and downscaled.exists():
-                self.logger(f"删除中间缩放文件: {downscaled}")
-                os.remove(downscaled)
-            if converted and converted.exists():
-                self.logger(f"删除中间 webp 文件: {converted}")
-                os.remove(converted)
+            downscaled = await asyncio.to_thread(self._downscale_image, source)
+            if downscaled:
+                intermediates.append(downscaled)
+                source = downscaled
+
+            result = await asyncio.to_thread(self._adapt_image, source)
+
+            if result is None:
+                self.logger(f"图片无需额外处理: {source}")
+                # source 是最终输出，从清理列表中移除
+                intermediates = [p for p in intermediates if p != source]
+                return MediaProcessResult(output_paths=[source])
             return result
+        finally:
+            for p in intermediates:
+                if p.exists():
+                    self.logger(f"删除中间文件: {p}")
+                    os.remove(p)
 
     def _adapt_image(self, file_path: Path) -> MediaProcessResult | None:
         """分析图片尺寸并做填充 / 切割，返回 None 表示无需处理"""
