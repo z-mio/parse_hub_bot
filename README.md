@@ -10,14 +10,14 @@
 [![Python](https://img.shields.io/badge/Python-3.12+-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Telegram Bot](https://img.shields.io/badge/Telegram-Bot-2CA5E0?style=flat-square&logo=telegram&logoColor=white)](https://t.me/ParseHubBot)
 
-> [!WARNING]
-> 🚧 本项目正在重构中
-
 [实例演示](https://t.me/ParseHubBot) · [相关项目](https://github.com/z-mio/ParseHub) · [问题反馈](https://github.com/z-mio/ParseHubBot/issues)
 
 </div>
 
 ---
+
+> [!WARNING]
+> 🚧 本项目正在重构中
 
 ## ✨ 功能特性
 
