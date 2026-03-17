@@ -681,7 +681,7 @@ requires-dist = [
     { name = "markdown", specifier = ">=3.7" },
     { name = "parsehub", specifier = ">=2.0.0" },
     { name = "pickledb", specifier = ">=1.6" },
-    { name = "pillow", specifier = ">=11.3.0" },
+    { name = "pillow", specifier = ">=12.1.1" },
     { name = "pillow-heif", specifier = ">=1.1.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pydantic-settings", specifier = ">=2.11.0" },
