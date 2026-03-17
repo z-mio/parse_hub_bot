@@ -260,8 +260,10 @@ async def _send_single(
     photos_videos: list[InputMediaPhoto | InputMediaVideo],
     animations: list[InputMediaAnimation],
     caption: str,
-) -> list[CacheMedia]:
-    """发送单个媒体，返回 CacheMedia 列表。上传失败时降级为 document。"""
+) -> list[CacheMedia] | None:
+    """发送单个媒体，返回 CacheMedia 列表。上传失败时降级为 document。
+    返回 None 表示不缓存
+    """
     media_list: list[CacheMedia] = []
     all_media = animations + photos_videos
 
@@ -290,6 +292,7 @@ async def _send_single(
         logger.opt(exception=e).debug("详细堆栈")
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
         await msg.reply_document(all_media[0].media, caption=caption)
+        return None
 
     return media_list
 
@@ -299,13 +302,23 @@ async def _send_multi(
     photos_videos: list[InputMediaPhoto | InputMediaVideo],
     animations: list[InputMediaAnimation],
     caption: str,
-) -> list[CacheMedia]:
-    """发送多个媒体（动图逐条、图片视频分批），返回 CacheMedia 列表。"""
+) -> list[CacheMedia] | None:
+    """发送多个媒体（动图逐条、图片视频分批），返回 CacheMedia 列表。
+    返回 None 表示不缓存
+    """
     media_list: list[CacheMedia] = []
+    not_cache = False
 
     for ani in animations:
-        sent = await msg.reply_animation(ani.media)
-        media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
+        try:
+            sent = await msg.reply_animation(ani.media)
+        except Exception as e:
+            logger.opt(exception=e).debug("详细堆栈")
+            logger.warning(f"上传失败 {e}, 使用兼容模式上传")
+            not_cache = True
+            await msg.reply_document(ani.media)
+        else:
+            media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
         await asyncio.sleep(0.5)
 
     try:
@@ -323,16 +336,21 @@ async def _send_multi(
             batch = input_documents[i : i + 10]
             await msg.reply_media_group(batch)  # type: ignore
             await asyncio.sleep(0.5)
+        return None
 
     await msg.reply_text(
         caption,
         link_preview_options=LinkPreviewOptions(is_disabled=True),
     )
-    return media_list
+    return None if not_cache else media_list
 
 
-async def _send_media(msg: Message, parse_result, processed_list: list[ProcessedMedia], caption: str) -> CacheEntry:
-    """构建、发送媒体，并返回缓存条目。"""
+async def _send_media(
+    msg: Message, parse_result, processed_list: list[ProcessedMedia], caption: str
+) -> CacheEntry | None:
+    """构建、发送媒体，并返回缓存条目。
+    返回 None 表示不缓存
+    """
     media_refs: list[AnyMediaRef] = parse_result.media if isinstance(parse_result.media, list) else [parse_result.media]
     photos_videos, animations = _build_input_media(media_refs, processed_list)
     all_count = len(photos_videos) + len(animations)
@@ -345,6 +363,8 @@ async def _send_media(msg: Message, parse_result, processed_list: list[Processed
         logger.debug(f"多媒体模式发送: total={all_count}")
         media_list = await _send_multi(msg, photos_videos, animations, caption)
 
+    if media_list is None:
+        return None
     return _make_cache_entry(parse_result, media_list)
 
 
