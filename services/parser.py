@@ -3,7 +3,7 @@ from parsehub.types import (
     AnyParseResult,
 )
 
-from core.platform_config import platforms_config
+from core import platforms_config
 from log import logger
 
 logger = logger.bind(name="ParseService")

@@ -6,7 +6,7 @@ from typing import Any
 from pickledb import PickleDB
 from pydantic import BaseModel
 
-from core.config import bs
+from core import bs
 from log import logger
 
 

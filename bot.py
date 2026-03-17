@@ -5,8 +5,7 @@ import pillow_heif
 from pyrogram import Client
 from pyrogram.handlers import ConnectHandler, DisconnectHandler
 
-from core.config import bs, ws
-from core.watchdog import on_connect, on_disconnect
+from core import bs, on_connect, on_disconnect, ws
 from log import logger, logger_format
 from services import parse_cache, persistent_cache
 from utils.event_loop import setup_optimized_event_loop
