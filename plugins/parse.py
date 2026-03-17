@@ -289,9 +289,8 @@ async def _send_single(
         if sent and (cm := _cache_media_from_message(sent)):
             media_list.append(cm)
     except Exception as e:
-        logger.opt(exception=e).debug("详细堆栈")
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-        await msg.reply_document(all_media[0].media, caption=caption)
+        await msg.reply_document(all_media[0].media, caption=caption, force_document=True)
         return None
 
     return media_list
@@ -313,10 +312,9 @@ async def _send_multi(
         try:
             sent = await msg.reply_animation(ani.media)
         except Exception as e:
-            logger.opt(exception=e).debug("详细堆栈")
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             not_cache = True
-            await msg.reply_document(ani.media)
+            await msg.reply_document(ani.media, force_document=True)
         else:
             media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
         await asyncio.sleep(0.5)
@@ -329,7 +327,6 @@ async def _send_multi(
                 if cm := _cache_media_from_message(m):
                     media_list.append(cm)
     except Exception as e:
-        logger.opt(exception=e).debug("详细堆栈")
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
         input_documents = [InputMediaDocument(media=item.media) for item in photos_videos]
         for i in range(0, len(input_documents), 10):
@@ -407,7 +404,7 @@ async def _send_cached_single(msg: Message, m: CacheMedia, caption: str) -> None
         case CacheMediaType.ANIMATION:
             await msg.reply_animation(m.file_id, caption=caption)
         case CacheMediaType.DOCUMENT:
-            await msg.reply_document(m.file_id, caption=caption)
+            await msg.reply_document(m.file_id, caption=caption, force_document=True)
 
 
 async def _send_cached_multi(msg: Message, media: list[CacheMedia], caption: str) -> None:

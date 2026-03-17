@@ -12,6 +12,7 @@ from pathlib import Path
 from haishoku.haishoku import Haishoku
 from loguru import logger
 from PIL import Image, ImageOps
+from PIL.Image import Resampling
 
 from utils.helpers import run_cmd
 
@@ -79,9 +80,19 @@ class MediaProcessingUnit:
             converted = await asyncio.to_thread(self._img2webp, file_path)
 
         source = converted or file_path
+
+        downscaled = self._downscale_image(source)
+        if downscaled:
+            if converted and converted.exists():
+                os.remove(converted)
+                converted = None
+            source = downscaled
+
         try:
             result = self._adapt_image(source)
         except Exception as e:
+            if downscaled and downscaled.exists():
+                os.remove(downscaled)
             if converted and converted.exists():
                 os.remove(converted)
             raise Exception(e) from e
@@ -90,6 +101,9 @@ class MediaProcessingUnit:
             self.logger(f"图片无需额外处理: {source}")
             return MediaProcessResult(output_paths=[source])
         else:
+            if downscaled and downscaled.exists():
+                self.logger(f"删除中间缩放文件: {downscaled}")
+                os.remove(downscaled)
             if converted and converted.exists():
                 self.logger(f"删除中间 webp 文件: {converted}")
                 os.remove(converted)
@@ -137,6 +151,20 @@ class MediaProcessingUnit:
             pil_img.save(output, format="WEBP")
         self.logger(f"webp 转换完成: {output}")
         return output
+
+    def _downscale_image(self, file_path: Path, max_side: int = 2560) -> Path | None:
+        """若图片任一边超过 max_side，等比缩放至长边为 max_side，返回新文件路径；无需缩放返回 None"""
+        with Image.open(file_path) as img:
+            w, h = img.size
+            if max(w, h) <= max_side:
+                return None
+            scale = max_side / max(w, h)
+            new_w, new_h = int(w * scale), int(h * scale)
+            self.logger(f"图片长边超限({max(w, h)}px > {max_side}px)，缩放: {w}x{h} -> {new_w}x{new_h}")
+            resized = img.resize((new_w, new_h), Resampling.LANCZOS)
+            out_path = self.output_dir / f"downscaled_{time.time_ns()}{file_path.suffix}"
+            resized.save(out_path)
+        return out_path
 
     # -- 图片辅助 --------------------------------------------------------- #
 
