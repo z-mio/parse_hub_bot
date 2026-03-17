@@ -43,7 +43,7 @@ class PipelineProgressCallback:
         self._prefix = prefix
         self._last_text: str | None = None
 
-    async def __call__(self, current: int, total: int, unit: ProgressUnit, *args) -> None:
+    async def __call__(self, current: int, total: int, unit: ProgressUnit, *args, **kwargs) -> None:
         from plugins.helpers import progress as fmt_progress
 
         text = fmt_progress(current, total, unit)

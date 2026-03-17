@@ -1,8 +1,7 @@
-from parsehub import ParseHub
 from pyrogram import filters
 from pyrogram.types import InlineQuery, Message
 
-ph = ParseHub()
+from services import ParseService
 
 
 async def _platform_filter(_, __, update: Message | InlineQuery):
@@ -12,7 +11,7 @@ async def _platform_filter(_, __, update: Message | InlineQuery):
         case InlineQuery():
             t = update.query
     try:
-        return bool(ph.get_platform(t))
+        return bool(ParseService().parser.get_platform(t))
     except Exception:
         return False
 

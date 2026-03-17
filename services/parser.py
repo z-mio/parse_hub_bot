@@ -8,12 +8,17 @@ from log import logger
 
 logger = logger.bind(name="ParseService")
 
-_parse_hub = ParseHub()
-
 
 class ParseService:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
-        self.parser = _parse_hub
+        self.parser = ParseHub()
 
     async def parse(self, url: str) -> AnyParseResult:
         logger.debug(f"开始解析 {url}")
