@@ -105,7 +105,7 @@ async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResu
 async def process_media_files(download_result) -> list[ProcessedMedia]:
     """对下载结果中的媒体文件进行格式转换，返回 ProcessedMedia 列表"""
     processed_dir = download_result.output_dir.joinpath("processed")
-    processor = MediaProcessingUnit(processed_dir, logger=logger.bind(name="MediaProcessor").debug)
+    processor = MediaProcessingUnit(processed_dir, segment_height=1920, logger=logger.bind(name="MediaProcessor").debug)
     media_files = download_result.media if isinstance(download_result.media, list) else [download_result.media]
     logger.debug(f"开始媒体格式转换: 文件数={len(media_files)}, output_dir={processed_dir}")
     processed_list: list[ProcessedMedia] = []

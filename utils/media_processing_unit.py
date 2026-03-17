@@ -83,19 +83,16 @@ class MediaProcessingUnit:
             else:
                 source = file_path
 
-            downscaled = await asyncio.to_thread(self._downscale_image, source)
-            if downscaled:
+            if result := await asyncio.to_thread(self._adapt_image, source):
+                return result
+
+            # _adapt_image 无需处理，尝试 downscale
+            if downscaled := await asyncio.to_thread(self._downscale_image, source):
                 intermediates.append(downscaled)
                 source = downscaled
 
-            result = await asyncio.to_thread(self._adapt_image, source)
-
-            if result is None:
-                self.logger(f"图片无需额外处理: {source}")
-                # source 是最终输出，从清理列表中移除
-                intermediates = [p for p in intermediates if p != source]
-                return MediaProcessResult(output_paths=[source])
-            return result
+            intermediates = [p for p in intermediates if p != source]
+            return MediaProcessResult(output_paths=[source])
         finally:
             for p in intermediates:
                 if p.exists():
