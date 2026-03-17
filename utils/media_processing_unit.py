@@ -78,18 +78,22 @@ class MediaProcessingUnit:
             self.logger(f"图片格式需转换: {ext} -> webp")
             converted = await asyncio.to_thread(self._img2webp, file_path)
 
+        source = converted or file_path
         try:
-            source = converted or file_path
             result = self._adapt_image(source)
-            if result is None:
-                self.logger(f"图片无需额外处理: {source}")
-                return MediaProcessResult(output_paths=[source])
-            return result
-        finally:
-            # 无论成功与否，中间 webp 文件都要清理
+        except Exception as e:
+            if converted and converted.exists():
+                os.remove(converted)
+            raise Exception(e) from e
+
+        if result is None:
+            self.logger(f"图片无需额外处理: {source}")
+            return MediaProcessResult(output_paths=[source])
+        else:
             if converted and converted.exists():
                 self.logger(f"删除中间 webp 文件: {converted}")
                 os.remove(converted)
+            return result
 
     def _adapt_image(self, file_path: Path) -> MediaProcessResult | None:
         """分析图片尺寸并做填充 / 切割，返回 None 表示无需处理"""
