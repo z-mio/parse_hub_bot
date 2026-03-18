@@ -95,10 +95,11 @@ async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResu
     """将富文本解析结果转换为 Telegraph 页面，返回页面 URL"""
     logger.debug(f"富文本转 Telegraph: platform={parse_result.platform}, md_len={len(parse_result.markdown_content)}")
     md = parse_result.markdown_content
-    if parse_result.platform == Platform.WEIXIN:
-        md = md.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in")
-    elif parse_result.platform == Platform.COOLAPK:
-        md = md.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com")
+    match parse_result.platform:
+        case Platform.WEIXIN:
+            md = md.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in")
+        case Platform.COOLAPK:
+            md = md.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com")
     html = clean_article_html(markdown(md))
     return await create_telegraph_page(html, cli, parse_result)
 

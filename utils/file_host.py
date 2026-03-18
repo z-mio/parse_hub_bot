@@ -7,11 +7,10 @@ import aiofiles
 import httpx
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from core.config import TEMP_DIR
 from log import logger
 
 
-class ImgHost:
+class FileHost:
     def __init__(self, proxy: httpx.Proxy | str = None):
         self.proxy = proxy
         self._client: httpx.AsyncClient | None = None
@@ -31,7 +30,7 @@ class ImgHost:
                 await f.write(response.content)
             return filename
         else:
-            tmp_name = TEMP_DIR / f"tmp_{Path(filename_or_url).name}"
+            tmp_name = Path.cwd() / f"tmp_{Path(filename_or_url).name}"
             shutil.copy2(filename_or_url, tmp_name)
             return tmp_name
 
@@ -50,7 +49,7 @@ class ImgHost:
             response.raise_for_status()
             return response.text
         except Exception as e:
-            logger.error("catbox 图片上传失败, 以下为错误信息")
+            logger.error("catbox 文件上传失败, 以下为错误信息")
             raise e
         finally:
             file.close()
@@ -71,7 +70,7 @@ class ImgHost:
             response.raise_for_status()
             return response.text
         except Exception as e:
-            logger.error("litterbox 图片上传失败, 以下为错误信息")
+            logger.error("litterbox 文件上传失败, 以下为错误信息")
             raise e
         finally:
             file.close()
@@ -115,4 +114,4 @@ class ImgHost:
 
 
 if __name__ == "__main__":
-    print(asyncio.run(ImgHost().zioooo("https://i.iij.li/i/20250928/68d8f26f7b571.png")))
+    print(asyncio.run(FileHost().litterbox(r"D:\Downloads\36749117818-1-30077.mp4")))

@@ -1,4 +1,5 @@
 import asyncio
+from typing import overload
 
 
 async def run_cmd(*cmd: str, timeout: float = 30) -> str:
@@ -17,5 +18,13 @@ async def run_cmd(*cmd: str, timeout: float = 30) -> str:
     return stdout.decode().strip()
 
 
-def to_list(v) -> list:
+@overload
+def to_list[T](v: list[T]) -> list[T]: ...
+
+
+@overload
+def to_list[T](v: T) -> list[T]: ...
+
+
+def to_list(v):
     return v if isinstance(v, list) else [v]

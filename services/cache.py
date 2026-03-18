@@ -122,7 +122,7 @@ class PersistentCache:
             return _StorageWrapper.model_validate(data).entry
 
     async def set(self, url: str, entry: CacheEntry) -> None:
-        sw = _StorageWrapper(entry=entry, exp=int(time.time() + self._ttl))
+        sw = _StorageWrapper(entry=entry, exp=int(time.time() + self._ttl) if self._ttl else 0)
         async with self._db as db:
             await db.set(url, sw.model_dump())
             self.logger.debug(f"缓存写入: key={url} value={sw}")

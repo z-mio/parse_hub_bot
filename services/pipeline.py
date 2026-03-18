@@ -89,7 +89,14 @@ class ParsePipeline:
         if event is not None:
             event.set()
 
-    async def run(self, *, singleflight: bool = True, skip_media_processing: bool = False) -> PipelineResult | None:
+    async def run(
+        self,
+        *,
+        singleflight: bool = True,
+        skip_media_processing: bool = False,
+        skip_download_threshold: int = 0,
+        richtext_skip_download: bool = True,
+    ) -> PipelineResult | None:
         """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
         if singleflight:
             key = self._url
@@ -107,7 +114,11 @@ class ParsePipeline:
             _inflight[key] = event
 
         try:
-            result = await self._execute(skip_media_processing=skip_media_processing)
+            result = await self._execute(
+                skip_media_processing=skip_media_processing,
+                skip_download_threshold=skip_download_threshold,
+                richtext_skip_download=richtext_skip_download,
+            )
             if result is None:
                 self.finish()  # 流水线失败，立即释放等待者
             return result
@@ -115,7 +126,9 @@ class ParsePipeline:
             self.finish()  # 流水线异常，立即释放等待者
             raise
 
-    async def _execute(self, *, skip_media_processing: bool = False) -> PipelineResult | None:
+    async def _execute(
+        self, *, skip_media_processing: bool, skip_download_threshold: int, richtext_skip_download: bool
+    ) -> PipelineResult | None:
         """实际执行流水线逻辑"""
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
 
@@ -129,9 +142,12 @@ class ParsePipeline:
             if parse_result is None:
                 return None
 
-        # 富文本无需下载
-        if parse_result.type == PostType.RICHTEXT:
-            logger.debug("解析结果为富文本, 跳过下载")
+        if richtext_skip_download and parse_result.type == PostType.RICHTEXT:
+            logger.debug("富文本跳过下载")
+            return PipelineResult(parse_result=parse_result)
+
+        if skip_download_threshold and len(to_list(parse_result.media)) > skip_download_threshold:
+            logger.debug(f"媒体数量({len(to_list(parse_result.media))})大于设定值({skip_download_threshold}), 跳过下载")
             return PipelineResult(parse_result=parse_result)
 
         # ── 2. 下载 ──

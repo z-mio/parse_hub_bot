@@ -34,6 +34,7 @@ from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
 from utils.helpers import to_list
 
 logger = logger.bind(name="Parse")
+SKIP_DOWNLOAD_THRESHOLD = 0
 
 
 class MessageStatusReporter(StatusReporter):
@@ -106,7 +107,13 @@ async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw",
     pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
 
     singleflight = False if is_raw_mode else True
-    if (result := await pipeline.run(singleflight=singleflight, skip_media_processing=is_raw_mode)) is None:
+    if (
+        result := await pipeline.run(
+            singleflight=singleflight,
+            skip_media_processing=is_raw_mode,
+            skip_download_threshold=SKIP_DOWNLOAD_THRESHOLD,
+        )
+    ) is None:
         if pipeline.waited:
             logger.debug(f"Singleflight 等待完成, 重新检查缓存: raw_url={raw_url}")
             if cached := await persistent_cache.get(raw_url):
@@ -145,9 +152,9 @@ async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw",
                 ),
             )
             await reporter.dismiss()
+            return
         finally:
             pipeline.finish()
-        return
 
     # ── 上传媒体 ──
     logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
