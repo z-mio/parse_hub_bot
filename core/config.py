@@ -24,6 +24,7 @@ class BotSettings(BaseSettings):
     data_path: Path = Path("data")
     cache_time: int = Field(default=30 * 24 * 60 * 60, description="0 为永久缓存, 默认缓存一个月")
     debug: bool = Field(default=False)
+    debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")
 
     douyin_api: HttpUrl | None = None
 

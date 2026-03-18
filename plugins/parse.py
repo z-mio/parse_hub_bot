@@ -77,7 +77,7 @@ async def jx(cli: Client, msg: Message):
     if msg.command:
         if msg.command[0] == "raw":
             mode = "raw"
-        url = msg.command[1] if msg.command[1:] else ""
+        url = " ".join(msg.command[1:]) if msg.command[1:] else ""
         if not url and msg.reply_to_message:
             url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
         if not url:
@@ -293,21 +293,32 @@ async def _send_raw(
             )
         else:
             all_docs: list[InputMediaDocument] = []
-            for processed in result.processed_list:
-                file_paths = processed.output_paths or [processed.source.path]
-                for fp in file_paths:
-                    all_docs.append(InputMediaDocument(media=str(fp)))
+            livephoto_videos: dict[int, InputMediaDocument] = {}
+            for idx, processed in enumerate(result.processed_list):
+                # raw 模式下 processed.output_paths 只有一个文件
+                file_path = processed.output_paths[0]
+                all_docs.append(InputMediaDocument(media=str(file_path)))
+                if isinstance(processed.source, LivePhotoFile):
+                    livephoto_videos[idx] = InputMediaDocument(media=str(processed.source.video_path))
             if len(all_docs) == 1:
-                await msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
+                m = await msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
+                await m.reply_document(livephoto_videos[0].media, force_document=True)
             else:
+                msgs: list[Message] = []
                 for i in range(0, len(all_docs), 10):
                     batch = all_docs[i : i + 10]
-                    await msg.reply_media_group(batch)  # type: ignore
+                    mg = await msg.reply_media_group(batch)  # type: ignore
+                    msgs.extend(mg)
                     await asyncio.sleep(0.5)
+                if livephoto_videos:
+                    for idx, m in livephoto_videos.items():
+                        await msgs[idx].reply_document(m.media, force_document=True)
+                        await asyncio.sleep(0.5)
                 await msg.reply_text(
                     caption,
                     link_preview_options=LinkPreviewOptions(is_disabled=True),
                 )
+
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"Raw 模式上传失败: {e}")

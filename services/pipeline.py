@@ -7,7 +7,7 @@ from typing import Protocol
 from parsehub import DownloadResult
 from parsehub.types import AnyParseResult, PostType, ProgressUnit
 
-from core import pl_cfg
+from core import bs, pl_cfg
 from log import logger
 from plugins.helpers import ProcessedMedia, process_media_files
 from services import ParseService
@@ -36,6 +36,9 @@ class PipelineResult:
     output_dir: Path | None = None
 
     def cleanup(self) -> None:
+        if bs.debug_skip_cleanup:
+            logger.debug("debug_skip_cleanup=True 跳过清理")
+            return
         if self.output_dir:
             shutil.rmtree(self.output_dir, ignore_errors=True)
 
