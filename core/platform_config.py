@@ -92,14 +92,16 @@ class PlatformsConfig(BaseModel):
         return self.platforms.get(platform_id)
 
     def roll_cookie(self, platform_id: str) -> str | None:
-        if not self.get(platform_id):
+        if not (pc := self.get(platform_id)):
             return None
-        return self.get(platform_id).roll_cookie()
+        return pc.roll_cookie()
 
     def roll_parser_proxy(self, platform_id: str) -> str | None:
-        if not self.get(platform_id):
+        if not (pc := self.get(platform_id)):
             return None
-        platform_proxy = self.get(platform_id).roll_parser_proxy()
+        if pc.disable_parser_proxy:
+            return None
+        platform_proxy = pc.roll_parser_proxy()
         if platform_proxy:
             return platform_proxy
         if self.default_parser_proxies:
@@ -107,9 +109,11 @@ class PlatformsConfig(BaseModel):
         return None
 
     def roll_downloader_proxy(self, platform_id: str) -> str | None:
-        if not self.get(platform_id):
+        if not (pc := self.get(platform_id)):
             return None
-        platform_proxy = self.get(platform_id).roll_downloader_proxy()
+        if pc.disable_downloader_proxy:
+            return None
+        platform_proxy = pc.roll_downloader_proxy()
         if platform_proxy:
             return platform_proxy
         if self.default_downloader_proxies:
