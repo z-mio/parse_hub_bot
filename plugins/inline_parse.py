@@ -65,7 +65,7 @@ class InlineStatusReporter(StatusReporter):
     async def report_error(self, stage: str, error: Exception) -> None:
         await self._cli.edit_inline_text(
             self._mid,
-            f"{stage}错误: \n```\n{error}```",
+            f"**▎{stage}错误:** \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         await asyncio.sleep(5)

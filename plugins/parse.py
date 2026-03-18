@@ -49,7 +49,7 @@ class MessageStatusReporter(StatusReporter):
 
     async def report_error(self, stage: str, error: Exception) -> None:
         await self._edit_text(
-            f"{stage}错误: \n```\n{error}```",
+            f"**▎{stage}错误:** \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
         await asyncio.sleep(5)
@@ -81,7 +81,7 @@ async def jx(cli: Client, msg: Message):
         if not url and msg.reply_to_message:
             url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
         if not url:
-            await msg.reply_text("请加上链接或回复一条消息")
+            await msg.reply_text("**▎请加上链接或回复一条消息**")
             return
     else:
         url = msg.text or msg.caption
