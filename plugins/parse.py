@@ -91,7 +91,7 @@ async def jx(cli: Client, msg: Message):
 # ── 主流程 ───────────────────────────────────────────────────────────
 
 
-async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw", "preview"] = "preview") -> None:
+async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw", "preview"] | str = "preview") -> None:
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
     is_raw_mode = mode == "raw"
     raw_url = await ParseService().get_raw_url(url)
