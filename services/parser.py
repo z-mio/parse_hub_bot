@@ -23,23 +23,45 @@ class ParseService:
     async def parse(self, url: str) -> AnyParseResult:
         logger.debug(f"开始解析 {url}")
         p = self.parser.get_platform(url)
-        if pl_cfg.get(p.id):
-            cookie = pl_cfg.roll_cookie(p.id)
-            proxy = pl_cfg.roll_parser_proxy(p.id)
-            logger.debug(f"使用配置: proxy={proxy}, cookie={cookie}")
-            pr = await self.parser.parse(url, cookie=cookie, proxy=proxy)
-        else:
-            pr = await self.parser.parse(url)
-        logger.debug(f"解析完成: {pr}")
-        return pr
+
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                if pl_cfg.get(p.id):
+                    cookie = pl_cfg.roll_cookie(p.id)
+                    proxy = pl_cfg.roll_parser_proxy(p.id)
+                    logger.debug(f"使用配置: proxy={proxy}, cookie={cookie}, attempt={attempt}/{max_retries}")
+                    pr = await self.parser.parse(url, cookie=cookie, proxy=proxy)
+                else:
+                    logger.debug(f"未启用平台配置, attempt={attempt}/{max_retries}")
+                    pr = await self.parser.parse(url)
+
+                logger.debug(f"解析完成: {pr}")
+                return pr
+            except Exception as e:
+                logger.warning(f"解析失败, attempt={attempt}/{max_retries}, err={e}")
+                if attempt >= max_retries:
+                    raise Exception(e) from e
+        raise
 
     async def get_raw_url(self, url: str, clean_all: bool = True) -> str:
         p = self.parser.get_platform(url)
-        if pl_cfg.get(p.id):
-            proxy = pl_cfg.roll_parser_proxy(p.id)
-            logger.debug(f"使用配置: proxy={proxy}")
-            raw_url = await self.parser.get_raw_url(url, proxy=proxy, clean_all=clean_all)
-        else:
-            raw_url = await self.parser.get_raw_url(url, clean_all=clean_all)
-        logger.debug(f"原始 URL: {raw_url}")
-        return raw_url
+
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                if pl_cfg.get(p.id):
+                    proxy = pl_cfg.roll_parser_proxy(p.id)
+                    logger.debug(f"使用配置: proxy={proxy}, attempt={attempt}/{max_retries}")
+                    raw_url = await self.parser.get_raw_url(url, proxy=proxy, clean_all=clean_all)
+                else:
+                    logger.debug(f"未启用平台配置, attempt={attempt}/{max_retries}")
+                    raw_url = await self.parser.get_raw_url(url, clean_all=clean_all)
+
+                logger.debug(f"原始 URL: {raw_url}")
+                return raw_url
+            except Exception as e:
+                logger.warning(f"获取原始 URL 失败, attempt={attempt}/{max_retries}, err={e}")
+                if attempt >= max_retries:
+                    raise Exception(e) from e
+        raise
