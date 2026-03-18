@@ -68,6 +68,7 @@ class Bot(Client):
             "start": "开始",
             "jx": "解析",
             "raw": "不处理媒体, 发送原始文件",
+            "zip": "不处理媒体, 保存解析结果, 发送压缩包",
         }
         await self.set_bot_commands([BotCommand(command=k, description=v) for k, v in commands.items()])
         logger.debug(f"菜单已设置: {commands}")

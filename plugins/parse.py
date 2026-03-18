@@ -1,4 +1,5 @@
 import asyncio
+import os
 from typing import Literal
 
 from parsehub.types import (
@@ -19,6 +20,7 @@ from pyrogram.types import (
     Message,
 )
 
+from core import bs
 from log import logger
 from plugins.filters import platform_filter
 from plugins.helpers import (
@@ -26,12 +28,13 @@ from plugins.helpers import (
     build_caption,
     build_caption_by_str,
     create_richtext_telegraph,
+    del_msg,
     resolve_media_info,
 )
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
-from utils.helpers import to_list
+from utils.helpers import pack_dir_to_tar_gz, to_list
 
 logger = logger.bind(name="Parse")
 SKIP_DOWNLOAD_THRESHOLD = 0
@@ -52,8 +55,7 @@ class MessageStatusReporter(StatusReporter):
             f"**▎{stage}错误:** \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        await asyncio.sleep(5)
-        await self._msg.delete()
+        await del_msg(self._msg, 5)
 
     async def dismiss(self) -> None:
         if self._msg:
@@ -71,12 +73,18 @@ class MessageStatusReporter(StatusReporter):
 # ── Handler ──────────────────────────────────────────────────────────
 
 
-@Client.on_message(filters.command(["jx", "raw"]) | ((filters.text | filters.caption) & platform_filter))
+@Client.on_message(filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & platform_filter))
 async def jx(cli: Client, msg: Message):
     mode = "preview"
     if msg.command:
-        if msg.command[0] == "raw":
-            mode = "raw"
+        match msg.command[0]:
+            case "raw":
+                mode = "raw"
+            case "jx":
+                mode = "preview"
+            case "zip":
+                mode = "zip"
+
         url = " ".join(msg.command[1:]) if msg.command[1:] else ""
         if not url and msg.reply_to_message:
             url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
@@ -92,12 +100,30 @@ async def jx(cli: Client, msg: Message):
 # ── 主流程 ───────────────────────────────────────────────────────────
 
 
-async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw", "preview"] | str = "preview") -> None:
+async def handle_parse(
+    cli: Client, msg: Message, url: str, mode: Literal["raw", "preview", "zip"] | str = "preview"
+) -> None:
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
-    is_raw_mode = mode == "raw"
+    match mode:
+        case "raw":
+            use_caching = False
+            skip_media_processing = True
+            singleflight = False
+            save_metadata = False
+        case "zip":
+            use_caching = False
+            skip_media_processing = True
+            singleflight = False
+            save_metadata = True
+        case _:
+            use_caching = True
+            skip_media_processing = False
+            singleflight = True
+            save_metadata = False
+
     raw_url = await ParseService().get_raw_url(url)
 
-    if not is_raw_mode and (cached := await persistent_cache.get(raw_url)):
+    if use_caching and (cached := await persistent_cache.get(raw_url)):
         logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
         await _send_cached(msg, cached, raw_url)
         return
@@ -106,12 +132,12 @@ async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw",
     cached_parse_result = await parse_cache.get(raw_url)
     pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
 
-    singleflight = False if is_raw_mode else True
     if (
         result := await pipeline.run(
             singleflight=singleflight,
-            skip_media_processing=is_raw_mode,
+            skip_media_processing=skip_media_processing,
             skip_download_threshold=SKIP_DOWNLOAD_THRESHOLD,
+            save_metadata=save_metadata,
         )
     ) is None:
         if pipeline.waited:
@@ -128,15 +154,30 @@ async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw",
     parse_result = result.parse_result
     await parse_cache.set(raw_url, parse_result)
 
+    caption = build_caption(parse_result)
+    if not result.processed_list:
+        logger.debug("无媒体文件, 仅发送文本")
+        await msg.reply_chat_action(enums.ChatAction.TYPING)
+        await msg.reply_text(
+            caption,
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        cache_entry = CacheEntry(parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content))
+        await persistent_cache.set(raw_url, cache_entry)
+        return
+
     if mode == "raw":
         await _send_raw(msg, result, reporter)
+        return
+    if mode == "zip":
+        await _send_zip(msg, result, reporter)
         return
 
     # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
         logger.debug(f"富文本类型, 创建 Telegraph 页面: title={parse_result.title}")
         try:
-            await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
+            await msg.reply_chat_action(enums.ChatAction.TYPING)
             ph_url = await create_richtext_telegraph(cli, parse_result)
             logger.debug(f"Telegraph 页面创建完成: {ph_url}")
             caption = build_caption(parse_result, ph_url)
@@ -161,21 +202,7 @@ async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw",
     await reporter.report("**▎上 传 中...**")
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-        caption = build_caption(parse_result)
-
-        if not result.processed_list:
-            logger.debug("无媒体文件, 仅发送文本")
-            await msg.reply_text(
-                caption,
-                link_preview_options=LinkPreviewOptions(is_disabled=True),
-            )
-            await reporter.dismiss()
-            cache_entry = CacheEntry(
-                parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content)
-            )
-        else:
-            cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
-
+        cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
         if cache_entry:
             await persistent_cache.set(raw_url, cache_entry)
     except Exception as e:
@@ -184,7 +211,6 @@ async def handle_parse(cli: Client, msg: Message, url: str, mode: Literal["raw",
         await reporter.report_error("上传", e)
         return
     finally:
-        logger.debug("清理资源")
         result.cleanup()
         pipeline.finish()
 
@@ -285,39 +311,32 @@ async def _send_raw(
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
         caption = build_caption(result.parse_result)
 
-        if not result.processed_list:
-            logger.debug("无媒体文件, 仅发送文本")
+        all_docs: list[InputMediaDocument] = []
+        livephoto_videos: dict[int, InputMediaDocument] = {}
+        for idx, processed in enumerate(result.processed_list):
+            # raw 模式下 processed.output_paths 只有一个文件
+            file_path = processed.output_paths[0]
+            all_docs.append(InputMediaDocument(media=str(file_path)))
+            if isinstance(processed.source, LivePhotoFile):
+                livephoto_videos[idx] = InputMediaDocument(media=str(processed.source.video_path))
+        if len(all_docs) == 1:
+            m = await msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
+            await m.reply_document(livephoto_videos[0].media, force_document=True)
+        else:
+            msgs: list[Message] = []
+            for i in range(0, len(all_docs), 10):
+                batch = all_docs[i : i + 10]
+                mg = await msg.reply_media_group(batch)  # type: ignore
+                msgs.extend(mg)
+                await asyncio.sleep(0.5)
+            if livephoto_videos:
+                for idx, m in livephoto_videos.items():
+                    await msgs[idx].reply_document(m.media, force_document=True)
+                    await asyncio.sleep(0.5)
             await msg.reply_text(
                 caption,
                 link_preview_options=LinkPreviewOptions(is_disabled=True),
             )
-        else:
-            all_docs: list[InputMediaDocument] = []
-            livephoto_videos: dict[int, InputMediaDocument] = {}
-            for idx, processed in enumerate(result.processed_list):
-                # raw 模式下 processed.output_paths 只有一个文件
-                file_path = processed.output_paths[0]
-                all_docs.append(InputMediaDocument(media=str(file_path)))
-                if isinstance(processed.source, LivePhotoFile):
-                    livephoto_videos[idx] = InputMediaDocument(media=str(processed.source.video_path))
-            if len(all_docs) == 1:
-                m = await msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
-                await m.reply_document(livephoto_videos[0].media, force_document=True)
-            else:
-                msgs: list[Message] = []
-                for i in range(0, len(all_docs), 10):
-                    batch = all_docs[i : i + 10]
-                    mg = await msg.reply_media_group(batch)  # type: ignore
-                    msgs.extend(mg)
-                    await asyncio.sleep(0.5)
-                if livephoto_videos:
-                    for idx, m in livephoto_videos.items():
-                        await msgs[idx].reply_document(m.media, force_document=True)
-                        await asyncio.sleep(0.5)
-                await msg.reply_text(
-                    caption,
-                    link_preview_options=LinkPreviewOptions(is_disabled=True),
-                )
 
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
@@ -325,8 +344,42 @@ async def _send_raw(
         await reporter.report_error("上传", e)
         return
     finally:
-        logger.debug("清理资源")
         result.cleanup()
+
+    await reporter.dismiss()
+
+
+async def _send_zip(
+    msg: Message,
+    result: PipelineResult,
+    reporter: MessageStatusReporter,
+) -> None:
+    logger.debug("Zip 模式, 开始打包")
+    await reporter.report("**▎打 包 中...**")
+    try:
+        caption = build_caption(result.parse_result)
+        pack_path = pack_dir_to_tar_gz(result.output_dir)
+    except Exception as e:
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"打包失败: {e}")
+        await reporter.report_error("打包", Exception("..."))
+        return
+    finally:
+        result.cleanup()
+
+    await reporter.report("**▎上 传 中...**")
+    try:
+        await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
+        await msg.reply_document(str(pack_path), caption=caption)
+    except Exception as e:
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"上传失败: {e}")
+        await reporter.report_error("上传", e)
+        return
+    finally:
+        if not bs.debug_skip_cleanup:
+            logger.debug("清理压缩包")
+            os.remove(pack_path)
 
     await reporter.dismiss()
 

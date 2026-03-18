@@ -40,6 +40,7 @@ class PipelineResult:
             logger.debug("debug_skip_cleanup=True 跳过清理")
             return
         if self.output_dir:
+            logger.debug("清理资源")
             shutil.rmtree(self.output_dir, ignore_errors=True)
 
 
@@ -100,6 +101,7 @@ class ParsePipeline:
         skip_media_processing: bool = False,
         skip_download_threshold: int = 0,
         richtext_skip_download: bool = True,
+        save_metadata: bool = False,
     ) -> PipelineResult | None:
         """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
         if singleflight:
@@ -122,6 +124,7 @@ class ParsePipeline:
                 skip_media_processing=skip_media_processing,
                 skip_download_threshold=skip_download_threshold,
                 richtext_skip_download=richtext_skip_download,
+                save_metadata=save_metadata,
             )
             if result is None:
                 self.finish()  # 流水线失败，立即释放等待者
@@ -131,7 +134,12 @@ class ParsePipeline:
             raise
 
     async def _execute(
-        self, *, skip_media_processing: bool, skip_download_threshold: int, richtext_skip_download: bool
+        self,
+        *,
+        skip_media_processing: bool,
+        skip_download_threshold: int,
+        richtext_skip_download: bool,
+        save_metadata: bool,
     ) -> PipelineResult | None:
         """实际执行流水线逻辑"""
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
@@ -163,7 +171,9 @@ class ParsePipeline:
             progress_cb = PipelineProgressCallback(self._reporter)
         download_result: DownloadResult = await self._step(
             "下载",
-            lambda: parse_result.download(callback=progress_cb, callback_args=(), proxy=proxy),
+            lambda: parse_result.download(
+                callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=save_metadata
+            ),
         )
         if download_result is None:
             return None

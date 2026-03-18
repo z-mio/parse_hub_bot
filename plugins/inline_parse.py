@@ -329,5 +329,5 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
         logger.error(f"inline 上传失败: {e}")
         await reporter.report_error("上传", e)
     finally:
-        logger.debug("inline 下载任务完成, 清理资源")
+        logger.debug("inline 下载任务完成")
         result.cleanup()

@@ -11,7 +11,8 @@ async def start(_, msg: Message):
         f"<blockquote expandable>{get_supported_platforms()}</blockquote>\n\n"
         f"**命令列表:**\n"
         f"`/jx <链接>` - 解析并发送媒体\n"
-        f"`/raw <链接>` - 不处理媒体, 发送原始文件\n\n"
+        f"`/raw <链接>` - 不处理媒体, 发送原始文件\n"
+        f"`/zip <链接>` - 不处理媒体, 保存解析结果, 发送压缩包\n\n"
         f"**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**",
         link_preview_options=LinkPreviewOptions(is_disabled=True),
     )
@@ -20,5 +21,6 @@ async def start(_, msg: Message):
 def get_supported_platforms():
     text = []
     for i in ParseHub().get_platforms():
-        text.append(f"{i['name']}: {'|'.join(i['supported_types'])}")
+        text.append(f"**{i['name']}** __({'__, __'.join(i['supported_types'])})__")
+    text.sort(reverse=True)
     return "\n".join(text)
