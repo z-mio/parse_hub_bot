@@ -330,7 +330,8 @@ async def _send_raw(
                 livephoto_videos[idx] = InputMediaDocument(media=str(processed.source.video_path))
         if len(all_docs) == 1:
             m = await msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
-            await m.reply_document(livephoto_videos[0].media, force_document=True)
+            if livephoto_videos:
+                await m.reply_document(livephoto_videos[0].media, force_document=True)
         else:
             msgs: list[Message] = []
             for i in range(0, len(all_docs), 10):
