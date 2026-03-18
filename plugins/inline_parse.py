@@ -53,6 +53,7 @@ class InlineStatusReporter(StatusReporter):
         self._last_text: str | None = None
 
     async def report(self, text: str) -> None:
+        text = f"**▎{text}**"
         full = f"{self._caption}\n{text}" if self._caption else text
         if full == self._last_text:
             return
@@ -305,7 +306,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     caption = build_caption(parse_result)
 
     # ── 上传 ──
-    await reporter.report("**▎上 传 中...**")
+    await reporter.report("上 传 中...")
 
     processed = result.processed_list[media_index]
     video_ref = parse_result.media[media_index] if isinstance(parse_result.media, list) else parse_result.media

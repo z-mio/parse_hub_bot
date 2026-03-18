@@ -47,7 +47,7 @@ class MessageStatusReporter(StatusReporter):
         self._msg = None
 
     async def report(self, text: str) -> None:
-        await self._edit_text(text)
+        await self._edit_text(f"**▎{text}**")
 
     async def report_error(self, stage: str, error: Exception) -> None:
         await self._edit_text(
@@ -208,7 +208,7 @@ async def handle_parse(
 
     # ── 上传媒体 ──
     logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
-    await reporter.report("**▎上 传 中...**")
+    await reporter.report("上 传 中...")
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
         cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
@@ -315,7 +315,7 @@ async def _send_raw(
 ) -> None:
     """Raw 模式：将文件以原始文档形式上传。"""
     logger.debug("Raw 模式, 直接上传文件")
-    await reporter.report("**▎上 传 中...**")
+    await reporter.report("上 传 中...")
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
         caption = build_caption(result.parse_result)
@@ -364,7 +364,7 @@ async def _send_zip(
     reporter: MessageStatusReporter,
 ) -> None:
     logger.debug("Zip 模式, 开始打包")
-    await reporter.report("**▎打 包 中...**")
+    await reporter.report("打 包 中...")
     try:
         caption = build_caption(result.parse_result)
         pack_path = pack_dir_to_tar_gz(result.output_dir)
@@ -376,7 +376,7 @@ async def _send_zip(
     finally:
         result.cleanup()
 
-    await reporter.report("**▎上 传 中...**")
+    await reporter.report("上 传 中...")
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
         await msg.reply_document(str(pack_path), caption=caption)

@@ -47,9 +47,8 @@ class PipelineResult:
 class PipelineProgressCallback:
     """统一的下载进度回调，依赖 StatusReporter"""
 
-    def __init__(self, reporter: StatusReporter, prefix: str = ""):
+    def __init__(self, reporter: StatusReporter):
         self._reporter = reporter
-        self._prefix = prefix
         self._last_text: str | None = None
 
     async def __call__(self, current: int, total: int, unit: ProgressUnit, *args, **kwargs) -> None:
@@ -59,7 +58,7 @@ class PipelineProgressCallback:
         if not text or text == self._last_text:
             return
         self._last_text = text
-        await self._reporter.report(f"{self._prefix}**▎{text}**")
+        await self._reporter.report(text)
 
 
 class ParsePipeline:
@@ -114,7 +113,7 @@ class ParsePipeline:
             if existing is not None:
                 self._waited = True
                 logger.debug(f"Singleflight 命中, 等待已有流水线: url={key}")
-                await self._reporter.report("**▎已有相同任务正在解析, 等待解析完成...**")
+                await self._reporter.report("已有相同任务正在解析, 等待解析完成...")
                 await existing.wait()
                 await self._reporter.dismiss()
                 return None
@@ -140,7 +139,7 @@ class ParsePipeline:
             logger.debug("使用缓存的解析结果")
             parse_result = self._parse_result
         else:
-            await self._reporter.report("**▎解 析 中...**")
+            await self._reporter.report("解 析 中...")
             parse_result = await self._step("解析", lambda: ps.parse(self._url))
             if parse_result is None:
                 return None
@@ -156,7 +155,7 @@ class ParsePipeline:
             return PipelineResult(parse_result=parse_result)
 
         # ── 2. 下载 ──
-        await self._reporter.report("**▎下 载 中...**")
+        await self._reporter.report("下 载 中...")
         p = ps.parser.get_platform(self._url)
         if pl_cfg.get(p.id):
             proxy = pl_cfg.roll_downloader_proxy(p.id)
@@ -180,7 +179,7 @@ class ParsePipeline:
                 parse_result=parse_result, processed_list=processed_list, output_dir=download_result.output_dir
             )
 
-        await self._reporter.report("**▎处 理 中...**")
+        await self._reporter.report("处 理 中...")
         processed_list = await self._step(
             "格式转换",
             lambda: process_media_files(download_result),
