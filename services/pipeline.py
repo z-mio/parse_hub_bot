@@ -7,6 +7,7 @@ from typing import Protocol
 from parsehub import DownloadResult
 from parsehub.types import AnyParseResult, PostType, ProgressUnit
 
+from core import pl_cfg
 from log import logger
 from plugins.helpers import ProcessedMedia, process_media_files
 from services import ParseService
@@ -131,14 +132,14 @@ class ParsePipeline:
     ) -> PipelineResult | None:
         """实际执行流水线逻辑"""
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
-
+        ps = ParseService()
         # ── 1. 解析 ──
         if self._parse_result is not None:
             logger.debug("使用缓存的解析结果")
             parse_result = self._parse_result
         else:
             await self._reporter.report("**▎解 析 中...**")
-            parse_result = await self._step("解析", lambda: ParseService().parse(self._url))
+            parse_result = await self._step("解析", lambda: ps.parse(self._url))
             if parse_result is None:
                 return None
 
@@ -152,10 +153,14 @@ class ParsePipeline:
 
         # ── 2. 下载 ──
         await self._reporter.report("**▎下 载 中...**")
-        progress_cb = PipelineProgressCallback(self._reporter)
+        p = ps.parser.get_platform(self._url)
+        if pl_cfg.get(p.id):
+            proxy = pl_cfg.roll_downloader_proxy(p.id)
+            logger.debug(f"使用配置: proxy={proxy}")
+            progress_cb = PipelineProgressCallback(self._reporter)
         download_result: DownloadResult = await self._step(
             "下载",
-            lambda: parse_result.download(callback=progress_cb, callback_args=()),
+            lambda: parse_result.download(callback=progress_cb, callback_args=(), proxy=proxy),
         )
         if download_result is None:
             return None

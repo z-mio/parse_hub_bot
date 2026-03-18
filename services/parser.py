@@ -23,9 +23,11 @@ class ParseService:
     async def parse(self, url: str) -> AnyParseResult:
         logger.debug(f"开始解析 {url}")
         p = self.parser.get_platform(url)
-        if pc := pl_cfg.get(p.id):
-            logger.debug(f"使用平台配置: {pc}")
-            pr = await self.parser.parse(url, cookie=pl_cfg.roll_cookie(p.id), proxy=pl_cfg.roll_parser_proxy(p.id))
+        if pl_cfg.get(p.id):
+            cookie = pl_cfg.roll_cookie(p.id)
+            proxy = pl_cfg.roll_parser_proxy(p.id)
+            logger.debug(f"使用配置: proxy={proxy}, cookie={cookie}")
+            pr = await self.parser.parse(url, cookie=cookie, proxy=proxy)
         else:
             pr = await self.parser.parse(url)
         logger.debug(f"解析完成: {pr}")
@@ -33,9 +35,10 @@ class ParseService:
 
     async def get_raw_url(self, url: str, clean_all: bool = True) -> str:
         p = self.parser.get_platform(url)
-        if pc := pl_cfg.get(p.id):
-            logger.debug(f"使用平台配置: {pc}")
-            raw_url = await self.parser.get_raw_url(url, proxy=pl_cfg.roll_parser_proxy(p.id), clean_all=clean_all)
+        if pl_cfg.get(p.id):
+            proxy = pl_cfg.roll_parser_proxy(p.id)
+            logger.debug(f"使用配置: proxy={proxy}")
+            raw_url = await self.parser.get_raw_url(url, proxy=proxy, clean_all=clean_all)
         else:
             raw_url = await self.parser.get_raw_url(url, clean_all=clean_all)
         logger.debug(f"原始 URL: {raw_url}")
