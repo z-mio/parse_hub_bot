@@ -1,4 +1,4 @@
-from parsehub import ParseHub
+from parsehub import ParseHub, Platform
 from parsehub.types import (
     AnyParseResult,
 )
@@ -20,9 +20,15 @@ class ParseService:
     def __init__(self):
         self.parser = ParseHub()
 
+    def get_platform(self, url: str) -> Platform:
+        p = self.parser.get_platform(url)
+        if not p:
+            raise ValueError("不支持的平台")
+        return p
+
     async def parse(self, url: str) -> AnyParseResult:
         logger.debug(f"开始解析 {url}")
-        p = self.parser.get_platform(url)
+        p = self.get_platform(url)
 
         max_retries = 3
         for attempt in range(1, max_retries + 1):
@@ -45,7 +51,7 @@ class ParseService:
         raise
 
     async def get_raw_url(self, url: str, clean_all: bool = True) -> str:
-        p = self.parser.get_platform(url)
+        p = self.get_platform(url)
 
         max_retries = 3
         for attempt in range(1, max_retries + 1):

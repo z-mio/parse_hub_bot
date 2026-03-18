@@ -28,7 +28,6 @@ from plugins.helpers import (
     build_caption,
     build_caption_by_str,
     create_richtext_telegraph,
-    del_msg,
     resolve_media_info,
 )
 from services import ParseService
@@ -55,7 +54,13 @@ class MessageStatusReporter(StatusReporter):
             f"**▎{stage}错误:** \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        await del_msg(self._msg, 5)
+
+        async def fn():
+            await asyncio.sleep(15)
+            await self._msg.delete()
+
+        loop = asyncio.get_running_loop()
+        loop.create_task(fn())
 
     async def dismiss(self) -> None:
         if self._msg:
@@ -104,6 +109,7 @@ async def handle_parse(
     cli: Client, msg: Message, url: str, mode: Literal["raw", "preview", "zip"] | str = "preview"
 ) -> None:
     logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
+    reporter = MessageStatusReporter(msg)
     match mode:
         case "raw":
             use_caching = False
@@ -120,26 +126,29 @@ async def handle_parse(
             skip_media_processing = False
             singleflight = True
             save_metadata = False
-
-    raw_url = await ParseService().get_raw_url(url)
+    try:
+        raw_url = await ParseService().get_raw_url(url)
+    except Exception as e:
+        await reporter.report_error("获取原始链接", e)
+        return
 
     if use_caching and (cached := await persistent_cache.get(raw_url)):
         logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
         await _send_cached(msg, cached, raw_url)
         return
 
-    reporter = MessageStatusReporter(msg)
     cached_parse_result = await parse_cache.get(raw_url)
-    pipeline = ParsePipeline(url, reporter, parse_result=cached_parse_result)
+    pipeline = ParsePipeline(
+        url,
+        reporter,
+        parse_result=cached_parse_result,
+        singleflight=singleflight,
+        skip_media_processing=skip_media_processing,
+        skip_download_threshold=SKIP_DOWNLOAD_THRESHOLD,
+        save_metadata=save_metadata,
+    )
 
-    if (
-        result := await pipeline.run(
-            singleflight=singleflight,
-            skip_media_processing=skip_media_processing,
-            skip_download_threshold=SKIP_DOWNLOAD_THRESHOLD,
-            save_metadata=save_metadata,
-        )
-    ) is None:
+    if (result := await pipeline.run()) is None:
         if pipeline.waited:
             logger.debug(f"Singleflight 等待完成, 重新检查缓存: raw_url={raw_url}")
             if cached := await persistent_cache.get(raw_url):

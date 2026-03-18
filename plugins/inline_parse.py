@@ -68,13 +68,17 @@ class InlineStatusReporter(StatusReporter):
             f"**▎{stage}错误:** \n```\n{error}```",
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
-        await asyncio.sleep(5)
-        # 恢复为 caption
-        await self._cli.edit_inline_text(
-            self._mid,
-            self._caption,
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
+
+        async def fn():
+            await asyncio.sleep(15)
+            await self._cli.edit_inline_text(
+                self._mid,
+                self._caption,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
+            )
+
+        loop = asyncio.get_running_loop()
+        loop.create_task(fn())
 
     async def dismiss(self) -> None:
         pass
@@ -293,8 +297,8 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
 
     caption = build_caption(cached_result) if cached_result else ""
     reporter = InlineStatusReporter(cli, inline_message_id, caption)
-    pipeline = ParsePipeline(query, reporter, parse_result=cached_result)
-    if (result := await pipeline.run(singleflight=False)) is None:
+    pipeline = ParsePipeline(query, reporter, parse_result=cached_result, singleflight=False)
+    if (result := await pipeline.run()) is None:
         return
 
     parse_result = result.parse_result

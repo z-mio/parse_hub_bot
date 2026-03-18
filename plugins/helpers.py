@@ -1,6 +1,5 @@
 """plugins 共用的工具函数和数据类"""
 
-import asyncio
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -9,7 +8,6 @@ from parsehub import Platform
 from parsehub.types import AnyMediaFile, AnyParseResult, RichTextParseResult
 from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
-from pyrogram.types import Message
 
 from log import logger
 from utils.converter import clean_article_html
@@ -121,13 +119,3 @@ async def process_media_files(download_result) -> list[ProcessedMedia]:
         processed_list.append(ProcessedMedia(media_file, result.output_paths, result.temp_dir))
     logger.debug(f"媒体格式转换完成: 处理数={len(processed_list)}")
     return processed_list
-
-
-async def del_msg(msg: Message, ttl: int):
-    loop = asyncio.get_running_loop()
-
-    async def fn():
-        await asyncio.sleep(ttl)
-        await msg.delete()
-
-    loop.create_task(fn())

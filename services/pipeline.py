@@ -77,11 +77,22 @@ class ParsePipeline:
         url: str,
         reporter: StatusReporter,
         parse_result: AnyParseResult | None = None,
+        *,
+        singleflight: bool = True,
+        skip_media_processing: bool = False,
+        skip_download_threshold: int = 0,
+        richtext_skip_download: bool = True,
+        save_metadata: bool = False,
     ):
         self._url = url
         self._reporter = reporter
         self._parse_result = parse_result
         self._waited = False
+        self._singleflight = singleflight
+        self._skip_media_processing = skip_media_processing
+        self._skip_download_threshold = skip_download_threshold
+        self._richtext_skip_download = richtext_skip_download
+        self._save_metadata = save_metadata
 
     @property
     def waited(self) -> bool:
@@ -94,17 +105,9 @@ class ParsePipeline:
         if event is not None:
             event.set()
 
-    async def run(
-        self,
-        *,
-        singleflight: bool = True,
-        skip_media_processing: bool = False,
-        skip_download_threshold: int = 0,
-        richtext_skip_download: bool = True,
-        save_metadata: bool = False,
-    ) -> PipelineResult | None:
+    async def run(self) -> PipelineResult | None:
         """执行流水线，返回 PipelineResult 或 None（失败时已通知）"""
-        if singleflight:
+        if self._singleflight:
             key = self._url
             existing = _inflight.get(key)
 
@@ -120,12 +123,7 @@ class ParsePipeline:
             _inflight[key] = event
 
         try:
-            result = await self._execute(
-                skip_media_processing=skip_media_processing,
-                skip_download_threshold=skip_download_threshold,
-                richtext_skip_download=richtext_skip_download,
-                save_metadata=save_metadata,
-            )
+            result = await self._execute()
             if result is None:
                 self.finish()  # 流水线失败，立即释放等待者
             return result
@@ -133,14 +131,7 @@ class ParsePipeline:
             self.finish()  # 流水线异常，立即释放等待者
             raise
 
-    async def _execute(
-        self,
-        *,
-        skip_media_processing: bool,
-        skip_download_threshold: int,
-        richtext_skip_download: bool,
-        save_metadata: bool,
-    ) -> PipelineResult | None:
+    async def _execute(self) -> PipelineResult | None:
         """实际执行流水线逻辑"""
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
         ps = ParseService()
@@ -154,12 +145,14 @@ class ParsePipeline:
             if parse_result is None:
                 return None
 
-        if richtext_skip_download and parse_result.type == PostType.RICHTEXT:
+        if self._richtext_skip_download and parse_result.type == PostType.RICHTEXT:
             logger.debug("富文本跳过下载")
             return PipelineResult(parse_result=parse_result)
 
-        if skip_download_threshold and len(to_list(parse_result.media)) > skip_download_threshold:
-            logger.debug(f"媒体数量({len(to_list(parse_result.media))})大于设定值({skip_download_threshold}), 跳过下载")
+        if self._skip_download_threshold and len(to_list(parse_result.media)) > self._skip_download_threshold:
+            logger.debug(
+                f"媒体数量({len(to_list(parse_result.media))})大于设定值({self._skip_download_threshold}), 跳过下载"
+            )
             return PipelineResult(parse_result=parse_result)
 
         # ── 2. 下载 ──
@@ -172,7 +165,7 @@ class ParsePipeline:
         download_result: DownloadResult = await self._step(
             "下载",
             lambda: parse_result.download(
-                callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=save_metadata
+                callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=self._save_metadata
             ),
         )
         if download_result is None:
@@ -180,7 +173,7 @@ class ParsePipeline:
         logger.debug(f"下载完成: output_dir={download_result.output_dir}")
 
         # ── 3. 格式转换 ──
-        if skip_media_processing:
+        if self._skip_media_processing:
             logger.debug(f"流水线完成: download_result={download_result}")
             processed_list = [ProcessedMedia(i, [i.path]) for i in to_list(download_result.media)]
             return PipelineResult(
