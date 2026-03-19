@@ -97,7 +97,7 @@ async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResu
     md = parse_result.markdown_content
     match parse_result.platform:
         case Platform.WEIXIN:
-            md = md.replace("mmbiz.qpic.cn", "mmbiz.qpic.cn.in")
+            md = md.replace("mmbiz.qpic.cn", "qpic.cn.in/mmbiz.qpic.cn")
         case Platform.COOLAPK:
             md = md.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com")
     html = clean_article_html(markdown(md))

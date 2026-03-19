@@ -163,25 +163,6 @@ async def handle_parse(
     parse_result = result.parse_result
     await parse_cache.set(raw_url, parse_result)
 
-    caption = build_caption(parse_result)
-    if not result.processed_list:
-        logger.debug("无媒体文件, 仅发送文本")
-        await msg.reply_chat_action(enums.ChatAction.TYPING)
-        await msg.reply_text(
-            caption,
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
-        cache_entry = CacheEntry(parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content))
-        await persistent_cache.set(raw_url, cache_entry)
-        return
-
-    if mode == "raw":
-        await _send_raw(msg, result, reporter)
-        return
-    if mode == "zip":
-        await _send_zip(msg, result, reporter)
-        return
-
     # ── 富文本 → Telegraph ──
     if parse_result.type == PostType.RICHTEXT:
         logger.debug(f"富文本类型, 创建 Telegraph 页面: title={parse_result.title}")
@@ -206,6 +187,27 @@ async def handle_parse(
         finally:
             pipeline.finish()
 
+    caption = build_caption(parse_result)
+    if not result.processed_list:
+        logger.debug("无媒体文件, 仅发送文本")
+        await msg.reply_chat_action(enums.ChatAction.TYPING)
+        await msg.reply_text(
+            caption,
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+        cache_entry = CacheEntry(parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content))
+        await persistent_cache.set(raw_url, cache_entry)
+        await reporter.dismiss()
+        pipeline.finish()
+        return
+
+    if mode == "raw":
+        await _send_raw(msg, result, reporter)
+        return
+    if mode == "zip":
+        await _send_zip(msg, result, reporter)
+        return
+
     # ── 上传媒体 ──
     logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
     await reporter.report("上 传 中...")
@@ -214,6 +216,7 @@ async def handle_parse(
         cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
         if cache_entry:
             await persistent_cache.set(raw_url, cache_entry)
+        await reporter.dismiss()
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"上传失败: {e}")
@@ -222,8 +225,6 @@ async def handle_parse(
     finally:
         result.cleanup()
         pipeline.finish()
-
-    await reporter.dismiss()
 
 
 # ── 构建 InputMedia ──────────────────────────────────────────────────
