@@ -1,5 +1,9 @@
+default_parser_proxies: http://127.0.0.1:7890
+default_downloader_proxies:
+  - http://127.0.0.1:7890
 platforms:
   twitter:
+    disable_downloader_proxy: true
     parser_proxies: []
     downloader_proxies: []
     cookies:

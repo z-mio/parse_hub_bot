@@ -2,58 +2,74 @@
 
 # 🔗 ParseHubBot
 
-**Telegram 聚合解析 Bot，支持 AI 总结 & 内联模式**
+**Telegram 多平台聚合解析 Bot，支持 AI 总结 & 内联模式**
 
-**Telegram Aggregation Parsing Bot with AI Summary & Inline Mode**
+<p align="center">
+  <a href="https://github.com/z-mio/Parse_Hub_Bot/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/z-mio/Parse_Hub_Bot?style=flat-square&color=5D6D7E" alt="License">
+  </a>
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Python-3.12+-blue?style=flat-square&logo=python&logoColor=white" alt="Python">
+  </a>
+  <a href="https://t.me/ParseHubot">
+    <img src="https://img.shields.io/badge/Telegram-Bot-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram Bot">
+  </a>
+  <a href="https://github.com/astral-sh/uv">
+    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=flat-square" alt="uv">
+  </a>
+</p>
 
-[![License](https://img.shields.io/github/license/z-mio/Parse_Hub_Bot?style=flat-square)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.12+-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Telegram Bot](https://img.shields.io/badge/Telegram-Bot-2CA5E0?style=flat-square&logo=telegram&logoColor=white)](https://t.me/ParseHubot)
-
-[实例演示](https://t.me/ParseHubot) · [相关项目](https://github.com/z-mio/ParseHub) · [问题反馈](https://github.com/z-mio/ParseHubBot/issues)
+[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈
+**](https://github.com/z-mio/Parse_Hub_Bot/issues)
 
 </div>
 
 ---
 
-> [!WARNING]
-> 🚧 本项目正在重构中
-
-> **实例：[@ParseHubot](https://t.me/ParseHubot)**
+> [!WARNING]  
+> 🚧 **本项目正在重构中，部分功能可能存在变动。**
+>
+> 体验最新功能，请访问官方实例：[@ParseHubot](https://t.me/ParseHubot)
 
 ## ✨ 功能特性
 
-- 🎬 **多平台支持** — 抖音 / 哔哩哔哩 / YouTube / TikTok / 小红书 / Twitter 等
-- 🤖 **AI 总结** — 自动生成内容摘要
-- ⚡ **内联模式** — 在任意聊天窗口直接调用解析
-- 🐳 **Docker 部署** — 一键启动，开箱即用
+- 🎬 **多平台解析** — 抖音、B站、YouTube、TikTok、小红书、Twitter 等主流平台一站搞定
+- 🤖 **AI 总结** — 自动提取视频/图文核心内容，生成结构化摘要
+- ⚡ **内联模式** — 在任意聊天窗口输入 `@BotUsername <链接>` 即可解析
+- 📦 **多种模式** — 在线预览, 原始文件, 打包下载
+- 🐳 **Docker 部署** — 开箱即用
 
-## 📦 支持平台
+## 📦 支持平台一览
 
-| 平台            | 支持内容    |
-|---------------|---------|
-| 抖音            | 视频 / 图文 |
-| 哔哩哔哩          | 视频 / 动态 |
-| YouTube       | 视频      |
-| YouTube Music | 音乐      |
-| TikTok        | 视频 / 图文 |
-| 小红书           | 视频 / 图文 |
-| Twitter       | 视频 / 图文 |
-| 百度贴吧          | 图文 / 视频 |
-| Facebook      | 视频      |
-| 微博            | 视频 / 图文 |
-| Instagram     | 视频 / 图文 |
+| 平台                   | 支持内容    |
+|:---------------------|:--------|
+| 🎵 **抖音**            | 视频 / 图文 |
+| 📺 **哔哩哔哩**          | 视频 / 动态 |
+| 🟥 **YouTube**       | 视频      |
+| 🎧 **YouTube Music** | 音乐      |
+| 🎵 **TikTok**        | 视频 / 图文 |
+| 📕 **小红书**           | 视频 / 图文 |
+| 🐦 **Twitter**       | 视频 / 图文 |
+| 🐾 **百度贴吧**          | 图文 / 视频 |
+| 📘 **Facebook**      | 视频      |
+| 👁️ **微博**           | 视频 / 图文 |
+| 📷 **Instagram**     | 视频 / 图文 |
+| ...                  | ...     |
 
-> 📎 更多平台支持请查看 [ParseHub](https://github.com/z-mio/ParseHub)
+> 更多平台支持详见核心库 [ParseHub](https://github.com/z-mio/ParseHub)。
 
-## 📸 截图预览
+## 📸 预览
 
 <details>
-<summary>点击展开</summary>
+<summary><b>点击展开查看运行效果</b></summary>
 
-![](https://img.155155155.xyz/i/2024/09/66f2d4b70416c.webp)
-![](https://img.155155155.xyz/i/2024/09/66f2d4d6ca7ec.webp)
-![](https://img.155155155.xyz/i/2024/09/66f3f92973ad1.webp)
+<br>
+
+<div align="center">
+  <img src="https://img.155155155.xyz/i/2024/09/66f2d4b70416c.webp" width="30%" />
+  <img src="https://img.155155155.xyz/i/2024/09/66f2d4d6ca7ec.webp" width="30%" />
+  <img src="https://img.155155155.xyz/i/2024/09/66f3f92973ad1.webp" width="30%" />
+</div>
 
 </details>
 
@@ -61,18 +77,19 @@
 
 ### 1. 前置条件
 
-- Python `3.12+`
-- 推荐使用 `uv` 管理依赖
-- 若使用 Docker：Docker `20+`
-- 若手动运行：请确保系统可用 `ffmpeg`（媒体处理依赖）
+- **Python**: `>= 3.12`
+- **包管理器**: 推荐使用 [uv](https://docs.astral.sh/uv/) 进行依赖管理。
+- **手动运行**: 需确保系统已安装 `ffmpeg` (用于音视频处理)。
 
 ### 2. 配置文件
 
-#### 2.1 环境变量（`.env`）
+配置主要分为**环境变量**与**平台规则配置**两部分。
 
-先复制模板：
+#### 2.1 环境变量 (`.env`)
 
-```shell
+首先复制配置文件模板：
+
+```bash
 # Linux / macOS
 cp .env.exa .env
 
@@ -80,23 +97,25 @@ cp .env.exa .env
 Copy-Item .env.exa .env
 ```
 
-再按需填写：
+根据需求编辑 `.env` 文件：
 
-| 参数           | 必填 | 说明                                                                 |
-|--------------|----|--------------------------------------------------------------------|
-| `API_ID`     | ✅  | Telegram API ID，登录 [my.telegram.org](https://my.telegram.org) 获取   |
-| `API_HASH`   | ✅  | Telegram API Hash，登录 [my.telegram.org](https://my.telegram.org) 获取 |
-| `BOT_TOKEN`  | ✅  | Bot Token，向 [@BotFather](https://t.me/BotFather) 申请                |
-| `BOT_PROXY`  | 可选 | Bot 连接 Telegram 使用的代理，例如 `http://127.0.0.1:7890`                   |
-| `DATA_PATH`  | 可选 | 数据目录，默认 `data`                                                     |
-| `CACHE_TIME` | 可选 | 缓存秒数，默认 `2592000`（30 天），`0` 表示永久缓存                                 |
-| `DOUYIN_API` | 可选 | 自定义抖音 API 地址                                                       |
+| 参数           | 必填 | 说明                                                               |
+|:-------------|:--:|:-----------------------------------------------------------------|
+| `API_ID`     | ✅  | Telegram API ID，登录 [my.telegram.org](https://my.telegram.org) 获取 |
+| `API_HASH`   | ✅  | Telegram API Hash，同上获取                                           |
+| `BOT_TOKEN`  | ✅  | 机器人 Token，向 [@BotFather](https://t.me/BotFather) 申请              |
+| `BOT_PROXY`  | 🔲 | Bot 连接 TG 使用的代理，例：`http://127.0.0.1:7890`                        |
+| `DATA_PATH`  | 🔲 | 数据存储目录，默认 `data`                                                 |
+| `CACHE_TIME` | 🔲 | 缓存有效时间（秒），默认 `2592000`（30 天），`0` 为永久缓存                           |
+| `DOUYIN_API` | 🔲 | 自定义抖音 API 解析服务地址                                                 |
 
-#### 2.2 平台配置（`platform_config.yaml`）
+#### 2.2 平台代理与 Cookie (`platform_config.yaml`)
 
-先复制模板：
+用于配置各平台的代理和 Cookie。
 
-```shell
+复制模板：
+
+```bash
 # Linux / macOS
 cp data/config/platform_config.yaml.exa data/config/platform_config.yaml
 
@@ -104,88 +123,88 @@ cp data/config/platform_config.yaml.exa data/config/platform_config.yaml
 Copy-Item data/config/platform_config.yaml.exa data/config/platform_config.yaml
 ```
 
-配置结构说明：
+**核心配置逻辑：**
+
+- **代理优先级**：`禁用代理` > `平台代理` > `全局默认代理` > `直连`
+
+<details>
+<summary><b>点击查看配置示例</b></summary>
 
 ```yaml
-default_parser_proxies: [ ]        # 全局解析代理池（可选）
-default_downloader_proxies: [ ]    # 全局下载代理池（可选）
-
-platforms:
-  twitter: # 平台 id
-    disable_parser_proxy: false   # true 时该平台解析强制不走代理
-    disable_downloader_proxy: false
-    parser_proxies: [ ]            # 平台解析代理池（随机选择）
-    downloader_proxies: [ ]        # 平台下载代理池（随机选择）
-    cookies: [ ]                   # 平台 cookies（部分内容需要登录）
-```
-
-代理生效逻辑：
-
-- 解析代理：`platform.parser_proxies` > `default_parser_proxies` > 不使用代理
-- 下载代理：`platform.downloader_proxies` > `default_downloader_proxies` > 不使用代理
-- 若 `disable_*_proxy: true`，对应阶段会强制不使用代理
-
-配置示例：
-
-```yaml
-default_parser_proxies:
+default_parser_proxies: http://127.0.0.1:7890
+default_downloader_proxies:
   - http://127.0.0.1:7890
 
 platforms:
   twitter:
     cookies:
-      - auth_token=xxxx; ct0=xxxx
-
+      - auth_token=xxxx; ct0=xxxx  # 配置 Cookie
   bilibili:
-    disable_parser_proxy: true
+    disable_parser_proxy: true     # B站解析不走代理
     downloader_proxies:
-      - http://127.0.0.1:7890
-      - http://127.0.0.1:7891
+      - http://127.0.0.1:7890      # B站下载指定代理池
 ```
 
-### 3. 部署运行
+</details>
 
-#### 3.1 Docker（推荐）
+### 3. 开始运行
 
-`start.sh` 支持以下命令：`start`（默认）/ `stop` / `restart` / `logs` / `status`。
+#### 🐳 方式一：Docker 镜像部署（推荐）
 
-```shell
-bash start.sh            # 构建并启动（等价于 start）
-bash start.sh stop       # 停止并移除容器
-bash start.sh restart    # 重启容器
-bash start.sh logs       # 查看容器日志
-bash start.sh status     # 查看容器状态
-bash start.sh -h         # 查看帮助
-```
+```bash
+docker pull ghcr.io/z-mio/parse_hub_bot:latest
 
-如果你不使用脚本，也可手动执行 Docker：
-
-```shell
-docker build -t parse-hub-bot .
 docker run -d \
-  --restart=on-failure:2 \
+  --restart=always \
   --env-file .env \
   -v ./logs:/app/logs \
   -v ./data:/app/data \
   --name parse-hub-bot \
-  parse-hub-bot
+  ghcr.io/z-mio/parse_hub_bot:latest
 ```
 
-#### 3.2 手动运行
+常用容器管理命令：
 
-```shell
-# 1) 安装 uv（任选其一，详见 https://docs.astral.sh/uv/ ）
-# 2) 安装项目依赖
+| 操作    | 命令                                                        |
+|:------|:----------------------------------------------------------|
+| 查看日志  | `docker logs -f parse-hub-bot`                            |
+| 查看状态  | `docker ps -a --filter "name=parse-hub-bot"`              |
+| 停止并移除 | `docker stop parse-hub-bot && docker rm -f parse-hub-bot` |
+| 更新镜像  | `docker pull ghcr.io/z-mio/parse_hub_bot:latest`          |
+
+#### 🛠️ 方式二：本地构建 Docker 镜像
+
+基于当前仓库代码构建，可使用 `start.sh` 管理脚本：
+
+```bash
+bash start.sh            # 🚀 构建并启动（等价于 start）
+bash start.sh stop       # ⏹️ 停止并移除容器
+bash start.sh restart    # 🔄 重启容器
+bash start.sh logs       # 📝 实时查看日志
+bash start.sh status     # 📊 查看容器运行状态
+```
+
+#### 💻 方式三：手动运行
+
+```bash
+# 1. 安装项目依赖 (基于 uv)
 uv sync
 
-# 3) 启动 Bot
+# 2. 启动机器人
 uv run bot.py
 ```
 
-## 🔗 相关项目
+## 🌟 Star History
 
-- [z-mio/ParseHub](https://github.com/z-mio/ParseHub) — 聚合解析核心库
+[![Star History Chart](https://api.star-history.com/svg?repos=z-mio/Parse_Hub_Bot&type=Date)](https://star-history.com/#z-mio/Parse_Hub_Bot&Date)
 
-## 📄 许可证
+## 🤝 参与贡献
 
-本项目基于 [MIT License](LICENSE) 开源。
+欢迎提交 Pull Request 或 Issue！
+
+- 核心解析相关请前往 [ParseHub](https://github.com/z-mio/ParseHub)。
+- Bug 反馈请附上相关 URL 和日志信息。
+
+## 📄 开源协议
+
+本项目基于 [MIT License](LICENSE) 协议开源。
