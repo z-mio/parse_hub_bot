@@ -101,8 +101,8 @@ class PlatformsConfig(BaseModel):
             return None
         if pc.disable_parser_proxy:
             return None
-        platform_proxy = pc.roll_parser_proxy()
-        if platform_proxy:
+
+        if platform_proxy := pc.roll_parser_proxy():
             return platform_proxy
         if self.default_parser_proxies:
             return str(random.choice(self.default_parser_proxies))
@@ -113,8 +113,8 @@ class PlatformsConfig(BaseModel):
             return None
         if pc.disable_downloader_proxy:
             return None
-        platform_proxy = pc.roll_downloader_proxy()
-        if platform_proxy:
+
+        if platform_proxy := pc.roll_downloader_proxy():
             return platform_proxy
         if self.default_downloader_proxies:
             return str(random.choice(self.default_downloader_proxies))

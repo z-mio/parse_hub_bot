@@ -157,10 +157,9 @@ class ParsePipeline:
         # ── 2. 下载 ──
         await self._reporter.report("下 载 中...")
         p = ps.parser.get_platform(self._url)
-        if pl_cfg.get(p.id):
-            proxy = pl_cfg.roll_downloader_proxy(p.id)
-            logger.debug(f"使用配置: proxy={proxy}")
-            progress_cb = PipelineProgressCallback(self._reporter)
+        proxy = pl_cfg.roll_downloader_proxy(p.id)
+        logger.debug(f"使用配置: proxy={proxy}")
+        progress_cb = PipelineProgressCallback(self._reporter)
         download_result: DownloadResult = await self._step(
             "下载",
             lambda: parse_result.download(

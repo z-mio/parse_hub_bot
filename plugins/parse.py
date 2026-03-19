@@ -459,7 +459,11 @@ async def _send_multi(
             not_cache = True
             await msg.reply_document(ani.media, force_document=True)
         else:
-            media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
+            # 过大的 GIF 会返回 document
+            if sent.document:
+                media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=sent.document.file_id))
+            else:
+                media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
         await asyncio.sleep(0.5)
 
     try:

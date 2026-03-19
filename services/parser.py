@@ -33,15 +33,10 @@ class ParseService:
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
-                if pl_cfg.get(p.id):
-                    cookie = pl_cfg.roll_cookie(p.id)
-                    proxy = pl_cfg.roll_parser_proxy(p.id)
-                    logger.debug(f"使用配置: proxy={proxy}, cookie={cookie}, attempt={attempt}/{max_retries}")
-                    pr = await self.parser.parse(url, cookie=cookie, proxy=proxy)
-                else:
-                    logger.debug(f"未启用平台配置, attempt={attempt}/{max_retries}")
-                    pr = await self.parser.parse(url)
-
+                cookie = pl_cfg.roll_cookie(p.id)
+                proxy = pl_cfg.roll_parser_proxy(p.id)
+                logger.debug(f"使用配置: proxy={proxy}, cookie={cookie}, attempt={attempt}/{max_retries}")
+                pr = await self.parser.parse(url, cookie=cookie, proxy=proxy)
                 logger.debug(f"解析完成: {pr}")
                 return pr
             except Exception as e:
@@ -56,14 +51,9 @@ class ParseService:
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
-                if pl_cfg.get(p.id):
-                    proxy = pl_cfg.roll_parser_proxy(p.id)
-                    logger.debug(f"使用配置: proxy={proxy}, attempt={attempt}/{max_retries}")
-                    raw_url = await self.parser.get_raw_url(url, proxy=proxy, clean_all=clean_all)
-                else:
-                    logger.debug(f"未启用平台配置, attempt={attempt}/{max_retries}")
-                    raw_url = await self.parser.get_raw_url(url, clean_all=clean_all)
-
+                proxy = pl_cfg.roll_parser_proxy(p.id)
+                logger.debug(f"使用配置: proxy={proxy}, attempt={attempt}/{max_retries}")
+                raw_url = await self.parser.get_raw_url(url, proxy=proxy, clean_all=clean_all)
                 logger.debug(f"原始 URL: {raw_url}")
                 return raw_url
             except Exception as e:
