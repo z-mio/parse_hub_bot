@@ -29,7 +29,7 @@
 > [!WARNING]  
 > 🚧 **本项目正在重构中，部分功能可能存在变动。**
 >
-> 体验最新功能，请访问官方实例：[@ParseHubot](https://t.me/ParseHubot)
+> 官方实例：[@ParseHubot](https://t.me/ParseHubot)
 
 ## ✨ 功能特性
 
