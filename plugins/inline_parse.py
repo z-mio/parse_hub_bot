@@ -32,8 +32,13 @@ from pyrogram.types import (
 
 from log import logger
 from plugins.filters import platform_filter
-from plugins.helpers import build_caption, build_caption_by_str, create_richtext_telegraph, resolve_media_info
-from plugins.start import get_supported_platforms
+from plugins.helpers import (
+    build_caption,
+    build_caption_by_str,
+    build_start_text,
+    create_richtext_telegraph,
+    resolve_media_info,
+)
 from services import ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
@@ -255,7 +260,9 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
         InlineQueryResultArticle(
             title="聚合解析",
             description="请在聊天框输入链接",
-            input_message_content=InputTextMessageContent(get_supported_platforms()),
+            input_message_content=InputTextMessageContent(
+                build_start_text(), link_preview_options=LinkPreviewOptions(is_disabled=True)
+            ),
             thumb_url="https://i.imgloc.com/2023/06/15/Vbfazk.png",
         )
     ]

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from markdown import markdown
-from parsehub import Platform
+from parsehub import ParseHub, Platform
 from parsehub.types import AnyMediaFile, AnyParseResult, RichTextParseResult
 from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
@@ -119,3 +119,24 @@ async def process_media_files(download_result) -> list[ProcessedMedia]:
         processed_list.append(ProcessedMedia(media_file, result.output_paths, result.temp_dir))
     logger.debug(f"媒体格式转换完成: 处理数={len(processed_list)}")
     return processed_list
+
+
+def get_supported_platforms():
+    text = []
+    for i in ParseHub().get_platforms():
+        text.append(f"**{i['name']}** __({'__, __'.join(i['supported_types'])})__")
+    text.sort(reverse=True)
+    return "\n".join(text)
+
+
+def build_start_text():
+    return (
+        f"**发送分享链接以进行解析**\n\n"
+        f"**支持的平台:**\n"
+        f"<blockquote expandable>{get_supported_platforms()}</blockquote>\n\n"
+        f"**命令列表:**\n"
+        f"`/jx <链接>` - 解析并发送媒体\n"
+        f"`/raw <链接>` - 不处理媒体, 发送原始文件\n"
+        f"`/zip <链接>` - 不处理媒体, 保存解析结果, 发送压缩包\n\n"
+        f"**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
+    )
