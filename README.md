@@ -19,7 +19,8 @@
   </a>
 </p>
 
-[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈**](https://github.com/z-mio/Parse_Hub_Bot/issues)
+[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈
+**](https://github.com/z-mio/Parse_Hub_Bot/issues)
 
 </div>
 
@@ -49,7 +50,7 @@
 | 🎵 **TikTok**        | 视频 / 图文 |
 | 📕 **小红书**           | 视频 / 图文 |
 | 🐦 **Twitter**       | 视频 / 图文 |
-| 🐾 **百度贴吧**          | 图文 / 视频 |
+| 🐾 **百度贴吧**          | 视频 / 图文 |
 | 📘 **Facebook**      | 视频      |
 | 👁️ **微博**           | 视频 / 图文 |
 | 📷 **Instagram**     | 视频 / 图文 |
