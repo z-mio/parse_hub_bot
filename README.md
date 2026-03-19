@@ -61,7 +61,7 @@
 ## 📸 预览
 
 <details>
-<summary><b>点击展开查看运行效果</b></summary>
+<summary><b>点击展开</b></summary>
 
 <br>
 
