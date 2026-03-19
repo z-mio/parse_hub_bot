@@ -25,7 +25,6 @@ logger.add(
     rotation="10 MB",
     level="INFO",
     format=logger_format,
-    # serialize=True,
     enqueue=True,
 )
 
