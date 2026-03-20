@@ -19,8 +19,7 @@
   </a>
 </p>
 
-[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈
-**](https://github.com/z-mio/Parse_Hub_Bot/issues)
+[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈**](https://github.com/z-mio/Parse_Hub_Bot/issues)
 
 </div>
 
