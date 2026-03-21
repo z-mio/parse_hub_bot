@@ -165,6 +165,7 @@ class ParsePipeline:
             lambda: parse_result.download(
                 callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=self._save_metadata
             ),
+            timeout=60 * 30,  # 30分钟
         )
         if download_result is None:
             return None
@@ -194,11 +195,20 @@ class ParsePipeline:
             output_dir=download_result.output_dir,
         )
 
-    async def _step(self, stage: str, action, cleanup=None):
+    async def _step(self, stage: str, action, cleanup=None, timeout: float | None = None):
         """执行单个步骤，失败时统一处理"""
         logger.debug(f"执行步骤: {stage}")
         try:
-            return await action()
+            coro = action()
+            if timeout is not None:
+                return await asyncio.wait_for(coro, timeout=timeout)
+            return await coro
+        except TimeoutError:
+            logger.error(f"{stage}超时 (>{timeout}s)")
+            await self._reporter.report_error(stage, TimeoutError(f"{stage}超时 (>{timeout}s)"))
+            if cleanup:
+                cleanup()
+            return None
         except Exception as e:
             logger.exception(e)
             logger.error(f"{stage}失败, 以上为错误信息")
