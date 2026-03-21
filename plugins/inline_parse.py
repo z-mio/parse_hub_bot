@@ -42,7 +42,7 @@ from plugins.helpers import (
 from services import ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
-from utils.helpers import to_list
+from utils.helpers import to_list, with_request_id
 
 logger = logger.bind(name="InlineParse")
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
@@ -270,6 +270,7 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
 
 
 @Client.on_inline_query(platform_filter)
+@with_request_id
 async def call_inline_parse(cli: Client, inline_query: InlineQuery):
     logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
     raw_url = await ParseService().get_raw_url(inline_query.query)
@@ -290,6 +291,7 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
 
 
 @Client.on_chosen_inline_result()
+@with_request_id
 async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult):
     if not chosen_result.result_id.startswith("download_"):
         return

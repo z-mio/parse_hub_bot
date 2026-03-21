@@ -1,7 +1,11 @@
 import asyncio
+import functools
 import tarfile
+import uuid
 from pathlib import Path
 from typing import overload
+
+from log import logger
 
 
 async def run_cmd(*cmd: str, timeout: float = 30) -> str:
@@ -56,3 +60,13 @@ def pack_dir_to_tar_gz(dir_path: str | Path, output_path: str | Path | None = No
         tar.add(source_dir, arcname=source_dir.name)
 
     return output_path
+
+
+def with_request_id(func):
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        request_id = str(uuid.uuid4())[:8]
+        with logger.contextualize(req_id=request_id):
+            return await func(*args, **kwargs)
+
+    return wrapper

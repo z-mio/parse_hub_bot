@@ -33,7 +33,7 @@ from plugins.helpers import (
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
-from utils.helpers import pack_dir_to_tar_gz, to_list
+from utils.helpers import pack_dir_to_tar_gz, to_list, with_request_id
 
 logger = logger.bind(name="Parse")
 SKIP_DOWNLOAD_THRESHOLD = 0
@@ -105,6 +105,7 @@ async def jx(cli: Client, msg: Message):
 # ── 主流程 ───────────────────────────────────────────────────────────
 
 
+@with_request_id
 async def handle_parse(
     cli: Client, msg: Message, url: str, mode: Literal["raw", "preview", "zip"] | str = "preview"
 ) -> None:
@@ -133,7 +134,7 @@ async def handle_parse(
         return
 
     if use_caching and (cached := await persistent_cache.get(raw_url)):
-        logger.debug(f"file_id 缓存命中, 直接发送: raw_url={raw_url}")
+        logger.debug("file_id 缓存命中, 直接发送")
         await _send_cached(msg, cached, raw_url)
         return
 
@@ -150,14 +151,14 @@ async def handle_parse(
 
     if (result := await pipeline.run()) is None:
         if pipeline.waited:
-            logger.debug(f"Singleflight 等待完成, 重新检查缓存: raw_url={raw_url}")
+            logger.debug("Singleflight 等待完成, 重新检查缓存")
             if cached := await persistent_cache.get(raw_url):
                 await _send_cached(msg, cached, raw_url)
             else:
                 await handle_parse(cli, msg, url, mode=mode)
                 return
         else:
-            logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
+            logger.debug("Pipeline 返回 None, 跳过后续处理")
         return
 
     parse_result = result.parse_result
