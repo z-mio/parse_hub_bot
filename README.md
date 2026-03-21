@@ -58,21 +58,6 @@
 
 > 更多平台支持详见核心库 [ParseHub](https://github.com/z-mio/ParseHub)。
 
-## 📸 预览
-
-<details>
-<summary><b>点击展开</b></summary>
-
-<br>
-
-<div align="center">
-  <img src="https://img.155155155.xyz/i/2024/09/66f2d4b70416c.webp" width="30%" />
-  <img src="https://img.155155155.xyz/i/2024/09/66f2d4d6ca7ec.webp" width="30%" />
-  <img src="https://img.155155155.xyz/i/2024/09/66f3f92973ad1.webp" width="30%" />
-</div>
-
-</details>
-
 ## 🚀 部署与配置
 
 ### 1. 前置条件
