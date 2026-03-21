@@ -37,143 +37,217 @@
 
 ## 📦 支持平台一览
 
-| 平台                   | 支持内容    |
-|:---------------------|:--------|
-| 🎵 **抖音**            | 视频 / 图文 |
-| 📺 **哔哩哔哩**          | 视频 / 动态 |
-| 🟥 **YouTube**       | 视频      |
-| 🎧 **YouTube Music** | 音乐      |
-| 🎵 **TikTok**        | 视频 / 图文 |
-| 📕 **小红书**           | 视频 / 图文 |
-| 🐦 **Twitter**       | 视频 / 图文 |
-| 🐾 **百度贴吧**          | 视频 / 图文 |
-| 📘 **Facebook**      | 视频      |
-| 👁️ **微博**           | 视频 / 图文 |
-| 📷 **Instagram**     | 视频 / 图文 |
-| ...                  | ...     |
 
-> 更多平台支持详见核心库 [ParseHub](https://github.com/z-mio/ParseHub)。
+| 平台              | 视频 | 图文 |  其他   |
+|:----------------|:--:|:--:|:-----:|
+| **Twitter / X** | ✅  | ✅  | 📝 文章 |
+| **Instagram**   | ✅  | ✅  |       |
+| **YouTube**     | ✅  |    | 🎵 音乐 |
+| **Facebook**    | ✅  |    |       |
+| **Threads**     | ✅  | ✅  |       |
+| **Bilibili**    | ✅  |    | 📝 动态 |
+| **抖音 / TikTok** | ✅  | ✅  |       |
+| **微博**          | ✅  | ✅  |       |
+| **小红书**         | ✅  | ✅  |       |
+| **贴吧**          | ✅  | ✅  |       |
+| **微信公众号**       |    | ✅  |       |
+| **快手**          | ✅  |    |       |
+| **酷安**          | ✅  | ✅  |       |
+| **皮皮虾**         | ✅  | ✅  |       |
+| **最右**          | ✅  | ✅  |       |
+| **小黑盒**         | ✅  | ✅  |       |
 
-## 🚀 部署与配置
+> 🔧 更多平台持续接入中...
 
-### 1. 前置条件
+## 🚀 快速开始
 
-- **Python**: `>= 3.12`
-- **包管理器**: 推荐使用 [uv](https://docs.astral.sh/uv/) 进行依赖管理。
-- **手动运行**: 需确保系统已安装 `ffmpeg` (用于音视频处理)。
-
-### 2. 配置文件
-
-配置主要分为**环境变量**与**平台规则配置**两部分。
-
-#### 2.1 环境变量 (`.env`)
-
-首先复制配置文件模板：
+### 🐳 Docker 运行 (推荐)
 
 ```bash
-# Linux / macOS
-cp .env.exa .env
-
-# Windows PowerShell
-Copy-Item .env.exa .env
-```
-
-根据需求编辑 `.env` 文件：
-
-| 参数           | 必填 | 说明                                                               |
-|:-------------|:--:|:-----------------------------------------------------------------|
-| `API_ID`     | ✅  | Telegram API ID，登录 [my.telegram.org](https://my.telegram.org) 获取 |
-| `API_HASH`   | ✅  | Telegram API Hash，同上获取                                           |
-| `BOT_TOKEN`  | ✅  | 机器人 Token，向 [@BotFather](https://t.me/BotFather) 申请              |
-| `BOT_PROXY`  | 🔲 | Bot 连接 TG 使用的代理，例：`http://127.0.0.1:7890`                        |
-| `DATA_PATH`  | 🔲 | 数据存储目录，默认 `data`                                                 |
-| `CACHE_TIME` | 🔲 | 缓存有效时间（秒），默认 `2592000`（30 天），`0` 为永久缓存                           |
-| `DOUYIN_API` | 🔲 | 自定义抖音 API 解析服务地址                                                 |
-
-#### 2.2 平台代理与 Cookie (`platform_config.yaml`)
-
-用于配置各平台的代理和 Cookie。
-
-复制模板：
-
-```bash
-# Linux / macOS
-cp data/config/platform_config.yaml.exa data/config/platform_config.yaml
-
-# Windows PowerShell
-Copy-Item data/config/platform_config.yaml.exa data/config/platform_config.yaml
-```
-
-**核心配置逻辑：**
-
-- **代理优先级**：`禁用代理` > `平台代理` > `全局默认代理` > `直连`
-
-<details>
-<summary><b>点击查看配置示例</b></summary>
-
-```yaml
-default_parser_proxies: http://127.0.0.1:7890
-default_downloader_proxies:
-  - http://127.0.0.1:7890
-
-platforms:
-  twitter:
-    cookies:
-      - auth_token=xxxx; ct0=xxxx  # 配置 Cookie
-  bilibili:
-    disable_parser_proxy: true     # B站解析不走代理
-    downloader_proxies:
-      - http://127.0.0.1:7890      # B站下载指定代理池
-```
-
-</details>
-
-### 3. 开始运行
-
-#### 🐳 方式一：Docker 镜像部署（推荐）
-
-```bash
-docker pull ghcr.io/z-mio/parse_hub_bot:latest
+mkdir parse_hub_bot && cd parse_hub_bot
 
 docker run -d \
   --restart=always \
-  --env-file .env \
+  -e API_ID=你的API_ID \
+  -e API_HASH=你的API_HASH \
+  -e BOT_TOKEN=你的BOT_TOKEN \
   -v ./logs:/app/logs \
   -v ./data:/app/data \
   --name parse-hub-bot \
   ghcr.io/z-mio/parse_hub_bot:latest
 ```
 
-常用容器管理命令：
 
-| 操作    | 命令                                                        |
-|:------|:----------------------------------------------------------|
-| 查看日志  | `docker logs -f parse-hub-bot`                            |
-| 查看状态  | `docker ps -a --filter "name=parse-hub-bot"`              |
-| 停止并移除 | `docker stop parse-hub-bot && docker rm -f parse-hub-bot` |
-| 更新镜像  | `docker pull ghcr.io/z-mio/parse_hub_bot:latest`          |
 
-#### 🛠️ 方式二：本地构建 Docker 镜像
-
-基于当前仓库代码构建，可使用 `start.sh` 管理脚本：
+### 💻 源码运行
 
 ```bash
-bash start.sh            # 🚀 构建并启动（等价于 start）
-bash start.sh stop       # ⏹️ 停止并移除容器
-bash start.sh restart    # 🔄 重启容器
-bash start.sh logs       # 📝 实时查看日志
-bash start.sh status     # 📊 查看容器运行状态
-```
-
-#### 💻 方式三：Python 环境运行
-
-```bash
-# 1. 安装项目依赖 (基于 uv)
 uv sync
-
-# 2. 启动机器人
 uv run bot.py
 ```
+
+---
+
+## ⚙️ 配置说明
+
+- **环境变量:** 基础配置  
+- **平台配置 (可选):** 平台代理和 Cookie  
+
+### 📝 环境变量
+
+```dotenv
+# ✅ 必填
+API_ID=        # Telegram API ID，登录 https://my.telegram.org 获取
+API_HASH=      # Telegram API Hash，同上获取
+BOT_TOKEN=     # 机器人 Token，向 @BotFather 申请
+
+# 🔲 可选
+BOT_PROXY=     # Bot 连接 TG 使用的代理，例：http://127.0.0.1:7890
+CACHE_TIME=    # 缓存有效时间（秒），默认 2592000（30 天），0 为永久缓存
+DOUYIN_API=    # 自定义抖音 API 解析服务地址
+```
+
+### 🌐 平台配置
+
+用于为各解析平台单独配置**代理**和 **Cookie**，位于 `data/config/platform_config.yaml`
+
+```yaml
+# ═══════════════════════ 全局默认代理 ═══════════════════════
+# 当某平台未单独配置代理时，会使用全局默认代理
+# 支持填写单个地址(字符串)或多个地址(列表，随机选取)
+
+default_parser_proxies: http://127.0.0.1:7890        # 解析代理（单个）
+default_downloader_proxies:                           # 下载代理（代理池）
+  - http://127.0.0.1:7890
+  - http://127.0.0.1:7891
+
+# ═══════════════════════ 平台独立配置 ═══════════════════════
+platforms:
+  <platform_id>:                        # 平台 ID，见下方支持列表
+    disable_parser_proxy: false          # 是否禁用解析代理（直连）
+    disable_downloader_proxy: false      # 是否禁用下载代理（直连）
+    parser_proxies:                      # 该平台专用解析代理池
+      - http://proxy1:port
+    downloader_proxies:                  # 该平台专用下载代理池
+      - http://proxy2:port
+    cookies:                             # 该平台 Cookie 列表（随机选取）
+      - "cookie_string_1"
+      - "cookie_string_2"
+```
+
+
+### 🔀 代理优先级
+
+解析代理和下载代理各自遵循相同的优先级逻辑：
+
+```
+禁用代理 (disable_*_proxy: true)
+  ↓ 未禁用
+平台专用代理 (parser_proxies / downloader_proxies)
+  ↓ 未配置
+全局默认代理 (default_parser_proxies / default_downloader_proxies)
+  ↓ 未配置
+直连（不使用代理）
+```
+
+
+> 💡 当代理池中有多个地址时，每次请求会**随机选取**一个
+
+### 🔑 支持的平台 ID
+
+`<platform_id>` 必须是以下合法的平台 ID：
+
+| 平台 ID | 对应平台 |
+|:---|:---|
+| `twitter` | Twitter / X |
+| `instagram` | Instagram |
+| `youtube` | YouTube |
+| `facebook` | Facebook |
+| `threads` | Threads |
+| `bilibili` | 哔哩哔哩 |
+| `douyin` | 抖音 |
+| `tiktok` | TikTok |
+| `weibo` | 微博 |
+| `xhs` | 小红书 |
+| `tieba` | 百度贴吧 |
+| `wechat` | 微信公众号 |
+| `kuaishou` | 快手 |
+| `coolapk` | 酷安 |
+| `pipixia` | 皮皮虾 |
+| `zuiyou` | 最右 |
+| `xiaoheihe` | 小黑盒 |
+
+### 🍪 支持 Cookie 的平台
+
+ - `Twitter`
+ - `Instagram`
+ - `Kuaishou`
+ - `Bilibili`
+ - `YouTube`
+
+### 📌 配置示例
+
+##### 示例 1：国内平台直连，海外平台走代理
+
+```yaml
+default_parser_proxies: http://127.0.0.1:7890
+default_downloader_proxies: http://127.0.0.1:7890
+
+platforms:
+  bilibili:
+    disable_parser_proxy: true
+    disable_downloader_proxy: true
+  douyin:
+    disable_parser_proxy: true
+    disable_downloader_proxy: true
+  xhs:
+    disable_parser_proxy: true
+    disable_downloader_proxy: true
+```
+
+
+#### 示例 2：Twitter 配置 Cookie + 使用全局代理
+
+```yaml
+default_parser_proxies: http://127.0.0.1:7890
+default_downloader_proxies: http://127.0.0.1:7890
+
+platforms:
+  twitter:
+    cookies:
+      - "auth_token=your_token_here; ct0=your_ct0_here"
+```
+
+
+#### 示例 3：YouTube 使用独立代理池
+
+```yaml
+platforms:
+  youtube:
+    parser_proxies:
+      - http://proxy-us-1:8080
+      - http://proxy-us-2:8080
+      - http://proxy-eu-1:8080
+    downloader_proxies:
+      - http://proxy-us-1:8080
+      - http://proxy-eu-1:8080
+```
+
+
+#### 示例 4：B站指定 Cookie 轮换 + 解析直连 + 下载走代理
+
+```yaml
+platforms:
+  bilibili:
+    disable_parser_proxy: true
+    downloader_proxies:
+      - http://127.0.0.1:7890
+    cookies:
+      - "SESSDATA=xxx; bili_jct=xxx; buvid3=xxx"
+      - "SESSDATA=yyy; bili_jct=yyy; buvid3=yyy"
+```
+
+
 
 ## 🌟 Star History
 
@@ -189,3 +263,12 @@ uv run bot.py
 ## 📄 开源协议
 
 本项目基于 [MIT License](LICENSE) 协议开源。
+
+---
+
+<div align="center">
+
+**如果这个项目对你有帮助，欢迎点个 ⭐ Star！**
+
+</div>
+
