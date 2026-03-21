@@ -154,7 +154,7 @@ async def handle_parse(
             if cached := await persistent_cache.get(raw_url):
                 await _send_cached(msg, cached, raw_url)
             else:
-                await handle_parse(cli, msg, url)
+                await handle_parse(cli, msg, url, mode=mode)
                 return
         else:
             logger.debug(f"Pipeline 返回 None, 跳过后续处理: raw_url={raw_url}")
