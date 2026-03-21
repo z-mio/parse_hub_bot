@@ -4,7 +4,7 @@ import sys
 
 from pyrogram import Client
 
-from config.config import bot_cfg, ws
+from core.config import bs, ws
 from log import logger
 
 logger = logger.bind(name="Watchdog")
@@ -55,7 +55,7 @@ async def on_disconnect(cli: Client, __) -> None:
         logger.warning(f"Bot 已断开连接... | {ws.disconnect_count}/{ws.max_disconnect_count}")
         return
 
-    if bot_cfg.debug:
+    if bs.debug:
         exit("Bot 已断开连接, 目前处于调试模式, 已跳过重启")
 
     try:

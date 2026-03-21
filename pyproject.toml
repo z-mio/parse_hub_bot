@@ -5,17 +5,17 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "aiocache>=0.12.3",
-    "apscheduler==3.10.4",
-    "dynrender-skia>=0.2.5",
+    "haishoku>=1.1.8",
     "httpx>=0.28.1",
     "kurigram>=2.2.7",
-    "loguru>=0.6.0,<0.7.0",
+    "loguru>=0.6.0",
     "lxml-html-clean>=0.4.1",
     "markdown>=3.7",
     "parsehub>=2.0.0",
-    "pillow>=11.3.0",
+    "pickledb>=1.6",
+    "pillow>=12.1.1",
     "pillow-heif>=1.1.1",
+    "pydantic>=2.12.5",
     "pydantic-settings>=2.11.0",
     "python-dotenv>=1.0.1",
     "pyyaml>=6.0.3",

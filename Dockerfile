@@ -1,6 +1,6 @@
 FROM python:3.12-slim AS build
 
-COPY --from=ghcr.io/astral-sh/uv:0.9.5 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.10.11 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -23,9 +23,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM python:3.12-slim AS runtime
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libegl1 libgl1 libglib2.0-0 \
+        libglib2.0-0 \
         ffmpeg \
-        fonts-noto-cjk fonts-noto-cjk-extra fonts-noto-color-emoji \
+        media-types \
         curl unzip ca-certificates \
     && curl -fsSL https://deno.land/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*

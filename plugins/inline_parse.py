@@ -1,131 +1,347 @@
 import asyncio
 
-from parsehub.types import ProgressUnit, VideoFile, VideoRef
+from parsehub import AnyParseResult
+from parsehub.types import (
+    AniRef,
+    ImageRef,
+    PostType,
+    VideoRef,
+)
 from pyrogram import Client
-from pyrogram.errors import MessageNotModified
 from pyrogram.types import (
     ChosenInlineResult,
     InlineQuery,
+    InlineQueryResultAnimation,
     InlineQueryResultArticle,
+    InlineQueryResultCachedAnimation,
+    InlineQueryResultCachedDocument,
+    InlineQueryResultCachedPhoto,
+    InlineQueryResultCachedVideo,
+    InlineQueryResultPhoto,
+    InlineQueryResultVideo,
     InputMediaVideo,
     InputTextMessageContent,
     LinkPreviewOptions,
 )
+from pyrogram.types import (
+    InlineKeyboardButton as Ikb,
+)
+from pyrogram.types import (
+    InlineKeyboardMarkup as Ikm,
+)
 
 from log import logger
-from methods import TgParseHub
-from plugins.start import get_supported_platforms
-from utils.filters import platform_filter
-from utils.util import progress
+from plugins.filters import platform_filter
+from plugins.helpers import (
+    build_caption,
+    build_caption_by_str,
+    build_start_text,
+    create_richtext_telegraph,
+    resolve_media_info,
+)
+from services import ParseService
+from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
+from services.pipeline import ParsePipeline, StatusReporter
+from utils.helpers import to_list, with_request_id
+
+logger = logger.bind(name="InlineParse")
+DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
+
+
+class InlineStatusReporter(StatusReporter):
+    """基于 inline_message_id 的状态报告器"""
+
+    def __init__(self, cli: Client, inline_message_id: str, caption: str = ""):
+        self._cli = cli
+        self._mid = inline_message_id
+        self._caption = caption
+        self._last_text: str | None = None
+
+    async def report(self, text: str) -> None:
+        text = f"**▎{text}**"
+        full = f"{self._caption}\n{text}" if self._caption else text
+        if full == self._last_text:
+            return
+        self._last_text = full
+        try:
+            await self._cli.edit_inline_text(self._mid, full)
+        except Exception:
+            pass
+
+    async def report_error(self, stage: str, error: Exception) -> None:
+        await self._cli.edit_inline_text(
+            self._mid,
+            f"**▎{stage}错误:** \n```\n{error}```",
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        )
+
+        async def fn():
+            await asyncio.sleep(15)
+            await self._cli.edit_inline_text(
+                self._mid,
+                self._caption,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
+            )
+
+        loop = asyncio.get_running_loop()
+        loop.create_task(fn())
+
+    async def dismiss(self) -> None:
+        pass
+
+
+def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
+    """有 file_id 缓存时，构建 cached 类型的 inline 结果（Telegram 服务端直发）"""
+    content = entry.parse_result.content
+    caption = build_caption_by_str(entry.parse_result.title, content, raw_url, entry.telegraph_url)
+    title = entry.parse_result.title or "无标题"
+
+    # 富文本
+    if entry.telegraph_url:
+        return [
+            InlineQueryResultArticle(
+                title=title,
+                input_message_content=InputTextMessageContent(
+                    caption,
+                    link_preview_options=LinkPreviewOptions(show_above_text=True),
+                ),
+            )
+        ]
+
+    results = []
+    if not entry.media:
+        results.append(
+            InlineQueryResultArticle(
+                title=title,
+                description=content,
+                input_message_content=InputTextMessageContent(
+                    caption,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
+                ),
+            )
+        )
+        return results
+
+    for m in entry.media:
+        match m.type:
+            case CacheMediaType.PHOTO:
+                results.append(
+                    InlineQueryResultCachedPhoto(
+                        photo_file_id=m.file_id,
+                        title=title,
+                        caption=caption,
+                        description=content,
+                    )
+                )
+            case CacheMediaType.VIDEO:
+                results.append(
+                    InlineQueryResultCachedVideo(
+                        video_file_id=m.file_id,
+                        title=title,
+                        caption=caption,
+                        description=content,
+                    )
+                )
+            case CacheMediaType.ANIMATION:
+                results.append(
+                    InlineQueryResultCachedAnimation(
+                        animation_file_id=m.file_id,
+                        title=title,
+                        caption=caption,
+                    )
+                )
+            case CacheMediaType.DOCUMENT:
+                results.append(
+                    InlineQueryResultCachedDocument(
+                        document_file_id=m.file_id,
+                        title=title,
+                        caption=caption,
+                        description=content,
+                    )
+                )
+
+    return results
+
+
+async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list:
+    """根据解析结果构建内联查询结果列表"""
+    logger.debug(f"构建 inline 结果: type={parse_result.type}, title={parse_result.title}")
+    title = parse_result.title or "无标题"
+    media_list = to_list(parse_result.media)
+    reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
+
+    results = []
+
+    # ── 富文本直接 telegraph 发送 ──
+    if parse_result.type == PostType.RICHTEXT:
+        url = await create_richtext_telegraph(cli, parse_result)
+        caption = build_caption(parse_result, url)
+        results.append(
+            InlineQueryResultArticle(
+                title=title,
+                description=parse_result.content,
+                input_message_content=InputTextMessageContent(
+                    caption,
+                    link_preview_options=LinkPreviewOptions(show_above_text=True),
+                ),
+            )
+        )
+        return results
+
+    caption = build_caption(parse_result)
+
+    if not media_list:
+        results.append(
+            InlineQueryResultArticle(
+                title=title,
+                description=parse_result.content,
+                input_message_content=InputTextMessageContent(
+                    caption,
+                    link_preview_options=LinkPreviewOptions(is_disabled=True),
+                ),
+            )
+        )
+        return results
+
+    for index, media_ref in enumerate(media_list):
+        if isinstance(media_ref, ImageRef):
+            results.append(
+                InlineQueryResultPhoto(
+                    media_ref.url,
+                    thumb_url=media_ref.thumb_url,
+                    photo_width=media_ref.width,
+                    photo_height=media_ref.height,
+                    caption=caption,
+                    title=title,
+                    description=parse_result.content,
+                )
+            )
+        elif isinstance(media_ref, VideoRef):
+            results.append(
+                InlineQueryResultPhoto(
+                    media_ref.thumb_url or DEFAULT_THUMB_URL,
+                    photo_width=media_ref.width,
+                    photo_height=media_ref.height,
+                    id=f"download_{index}",
+                    title=caption,
+                    caption=caption,
+                    reply_markup=reply_markup,
+                )
+            )
+        elif isinstance(media_ref, AniRef):
+            if media_ref.ext != "gif":
+                results.append(
+                    InlineQueryResultVideo(
+                        media_ref.url,
+                        media_ref.thumb_url or DEFAULT_THUMB_URL,
+                        caption=caption,
+                        title=title,
+                        description=parse_result.content,
+                    )
+                )
+            else:
+                results.append(
+                    InlineQueryResultAnimation(
+                        media_ref.url,
+                        thumb_url=media_ref.thumb_url,
+                        caption=caption,
+                        title=title,
+                        description=parse_result.content,
+                    )
+                )
+
+    logger.debug(f"inline 结果构建完成: count={len(results)}")
+    return results
 
 
 @Client.on_inline_query(~platform_filter)
-async def inline_parse_tip(_, iq: InlineQuery):
+async def inline_parse_tip(_, inline_query: InlineQuery):
     results = [
         InlineQueryResultArticle(
             title="聚合解析",
             description="请在聊天框输入链接",
-            input_message_content=InputTextMessageContent(get_supported_platforms()),
+            input_message_content=InputTextMessageContent(
+                build_start_text(), link_preview_options=LinkPreviewOptions(is_disabled=True)
+            ),
             thumb_url="https://i.imgloc.com/2023/06/15/Vbfazk.png",
         )
     ]
-    await iq.answer(results=results, cache_time=1)
+    await inline_query.answer(results=results, cache_time=1)
 
 
 @Client.on_inline_query(platform_filter)
-async def call_inline_parse(_, iq: InlineQuery):
-    pp = await TgParseHub().parse(iq.query)
-    await pp.inline_upload(iq)
+@with_request_id
+async def call_inline_parse(cli: Client, inline_query: InlineQuery):
+    logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
+    raw_url = await ParseService().get_raw_url(inline_query.query)
 
+    if cached := await persistent_cache.get(raw_url):
+        logger.debug("inline: 缓存命中, 构建 cached 结果")
+        results = build_cached_inline_results(cached, raw_url)
+        return await inline_query.answer(results[:50], cache_time=60)
 
-async def callback(current: int, total: int, unit: ProgressUnit, client: Client, inline_message_id, pp: TgParseHub):
-    text = progress(current, total, unit)
-    if not text:
-        return
-    text = f"{pp.operate.content_and_url}\n\n{text}"
-    try:
-        await client.edit_inline_text(inline_message_id, text, reply_markup=pp.operate.button(hide_summary=True))
-    except MessageNotModified:
-        ...
+    parse_result = await parse_cache.get(raw_url)
+    if parse_result is None:
+        parse_result = await ParseService().parse(inline_query.query)
+        await parse_cache.set(raw_url, parse_result)
+
+    results = await build_inline_results(parse_result, cli)
+    logger.debug(f"inline 查询完成, 返回 {len(results)} 个结果")
+    return await inline_query.answer(results[:50], cache_time=0)
 
 
 @Client.on_chosen_inline_result()
-async def inline_result_jx(client: Client, cir: ChosenInlineResult):
-    """只用于下载视频"""
-
-    if not cir.result_id.startswith("download_"):
-        return
-    index = int(cir.result_id.split("_")[1])
-    imid = cir.inline_message_id
-    try:
-        pp = await TgParseHub().parse(cir.query)
-    except Exception as e:
-        logger.exception(e)
-        logger.error("内联解析失败, 以上为错误信息")
-        await client.edit_inline_text(
-            imid,
-            f"解析错误: \n```\n{e}```",
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
+@with_request_id
+async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult):
+    if not chosen_result.result_id.startswith("download_"):
         return
 
-    try:
-        await client.edit_inline_text(imid, "下 载 中...", reply_markup=pp.operate.button(hide_summary=True))
-        await pp.download_(callback, (client, imid, pp))
-    except Exception as e:
-        logger.exception(e)
-        logger.error("内联下载失败, 以上为错误信息")
-        await client.edit_inline_text(
-            imid,
-            f"下载错误: \n```\n{e}```",
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
-        await asyncio.sleep(3)
-        await client.edit_inline_text(
-            imid,
-            pp.operate.content_and_url,
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
+    media_index = int(chosen_result.result_id.split("_")[1])
+    inline_message_id = chosen_result.inline_message_id
+    query = chosen_result.query
+    logger.debug(f"inline 下载触发: media_index={media_index}, query={query}")
+    raw_url = await ParseService().get_raw_url(query)
+
+    cached_result = await parse_cache.get(raw_url)
+    logger.debug(f"缓存命中: {cached_result is not None}")
+
+    caption = build_caption(cached_result) if cached_result else ""
+    reporter = InlineStatusReporter(cli, inline_message_id, caption)
+    pipeline = ParsePipeline(query, reporter, parse_result=cached_result, singleflight=False)
+    if (result := await pipeline.run()) is None:
         return
 
-    await client.edit_inline_text(
-        imid,
-        f"{pp.operate.content_and_url}\n\n上 传 中...",
-        reply_markup=pp.operate.button(hide_summary=True),
-    )
-    v: VideoFile = (
-        pp.operate.download_result.media[index]
-        if isinstance(pp.operate.download_result.media, list)
-        else pp.operate.download_result.media
-    )
-    r: VideoRef = (
-        pp.operate.result.media[index] if isinstance(pp.operate.result.media, list) else pp.operate.result.media
-    )
-    thumb_url = r.thumb_url if r else None
+    parse_result = result.parse_result
+    caption = build_caption(parse_result)
+
+    # ── 上传 ──
+    await reporter.report("上 传 中...")
+
+    processed = result.processed_list[media_index]
+    video_ref = parse_result.media[media_index] if isinstance(parse_result.media, list) else parse_result.media
+
     try:
-        await client.edit_inline_media(
-            imid,
+        file_paths = processed.output_paths or [processed.source.path]
+        file_path_str = str(file_paths[0])
+        logger.debug(f"inline 上传文件: {file_path_str}")
+        width, height, duration = resolve_media_info(processed, file_path_str)
+
+        await cli.edit_inline_media(
+            inline_message_id,
             media=InputMediaVideo(
-                v.path,
-                caption=pp.operate.content_and_url,
-                video_cover=thumb_url,
-                duration=v.duration or 0,
-                width=v.width or 0,
-                height=v.height or 0,
+                file_path_str,
+                caption=caption,
+                video_cover=video_ref.thumb_url if video_ref else None,
+                duration=duration or 0,
+                width=width or 0,
+                height=height or 0,
+                supports_streaming=True,
             ),
-            reply_markup=pp.operate.button(),
         )
     except Exception as e:
-        logger.exception(e)
-        logger.error("内联上传失败, 以上为错误信息")
-        await client.edit_inline_text(
-            imid,
-            f"上传错误: \n```\n{e}```",
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
-        await asyncio.sleep(3)
-        await client.edit_inline_text(
-            imid,
-            pp.operate.content_and_url,
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"inline 上传失败: {e}")
+        await reporter.report_error("上传", e)
+    finally:
+        logger.debug("inline 下载任务完成")
+        result.cleanup()

@@ -1,5 +1,6 @@
 import inspect
 import logging
+import sys
 from typing import TYPE_CHECKING
 
 import loguru
@@ -9,12 +10,41 @@ if TYPE_CHECKING:
 
 logger: "Logger" = loguru.logger.bind(name="Main")
 
-logger_format = (
-    "<green>{time:HH:mm:ss}</green> | "
-    "<level>{level: <8}</level> | "
-    "<cyan>{name}:{function}:{line}</cyan> | "
-    "<level>[{extra[name]}] {message}</level>"
-)
+
+def formatter(record):
+    rid = record["extra"].get("req_id")
+    if rid:
+        return (
+            "<green>{time:HH:mm:ss}</green> | "
+            "<level>{level: <8}</level> | "
+            "<cyan>{name}:{function}:{line}</cyan> | "
+            "<level>[{extra[name]}][{extra[req_id]}] {message}</level>\n"
+        )
+    else:
+        return (
+            "<green>{time:HH:mm:ss}</green> | "
+            "<level>{level: <8}</level> | "
+            "<cyan>{name}:{function}:{line}</cyan> | "
+            "<level>[{extra[name]}] {message}</level>\n"
+        )
+
+
+def setup_logging(debug: bool = False) -> None:
+    logger.remove()
+
+    level = "DEBUG" if debug else "INFO"
+    logger.add(sys.stderr, level=level, format=formatter)
+
+    logger.add(
+        "logs/bot.log",
+        rotation="10 MB",
+        level="INFO",
+        format=formatter,
+        enqueue=True,
+    )
+
+    if debug:
+        logger.debug("调试模式已启用")
 
 
 class InterceptHandler(logging.Handler):
