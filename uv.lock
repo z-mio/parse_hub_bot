@@ -641,6 +641,7 @@ dependencies = [
     { name = "urlextract" },
     { name = "yt-dlp", extra = ["default"] },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/1b/01/95ffac26f2b5ccc70d9c880e543d8893acda75a59369ae9f7c8306fd4473/parsehub-2.0.13.tar.gz", hash = "sha256:a2df0f719f2843750a1fbf14dab4e438bd60fbf77cd5c1419678d9652f90a00e", size = 57677, upload-time = "2026-03-21T19:18:48.725Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/3a/9424ec0ab8c31878c20065a515f50fc3446517ac5f8c19696095492234a5/parsehub-2.0.13-py3-none-any.whl", hash = "sha256:b2392ca548cd890dc84987e57493fb6db56ff1e076aef78f4bced953d0d51021", size = 75192, upload-time = "2026-03-21T19:18:47.459Z" },
 ]

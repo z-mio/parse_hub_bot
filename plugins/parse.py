@@ -90,16 +90,24 @@ async def jx(cli: Client, msg: Message):
             case "zip":
                 mode = "zip"
 
-        url = " ".join(msg.command[1:]) if msg.command[1:] else ""
-        if not url and msg.reply_to_message:
-            url = msg.reply_to_message.text or msg.reply_to_message.caption or ""
-        if not url:
+        text = " ".join(msg.command[1:]) if msg.command[1:] else ""
+        if not text and msg.reply_to_message:
+            text = msg.reply_to_message.text or msg.reply_to_message.caption or ""
+        if not text:
             await msg.reply_text("**▎请加上链接或回复一条消息**")
             return
     else:
-        url = msg.text or msg.caption
+        text = msg.text or msg.caption
 
-    await handle_parse(cli, msg, url, mode)
+    text = text.strip().split()
+    urls = list({i for i in text if ParseService().parser.get_platform(i)})[:10]
+
+    if not urls:
+        await msg.reply_text("**▎不支持的平台**")
+        return
+
+    tasks = [handle_parse(cli, msg, url, mode) for url in urls]
+    await asyncio.gather(*tasks)
 
 
 # ── 主流程 ───────────────────────────────────────────────────────────
