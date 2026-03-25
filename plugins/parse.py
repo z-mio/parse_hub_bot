@@ -354,15 +354,16 @@ async def _send_raw(
     await reporter.report("上 传 中...")
     try:
         caption = build_caption(result.parse_result)
-
         all_docs: list[InputMediaDocument] = []
         livephoto_videos: dict[int, InputMediaDocument] = {}
+
         for idx, processed in enumerate(result.processed_list):
             # raw 模式下 processed.output_paths 只有一个文件
             file_path = processed.output_paths[0]
             all_docs.append(InputMediaDocument(media=str(file_path)))
             if isinstance(processed.source, LivePhotoFile):
                 livephoto_videos[idx] = InputMediaDocument(media=str(processed.source.video_path))
+
         if len(all_docs) == 1:
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
             m = await _send_with_rate_limit(
@@ -502,13 +503,21 @@ async def _send_multi(
 
     for ani in animations:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
+        caption_ = caption if ani == animations[-1] and not photos_videos else ""
         try:
-            sent = await _send_with_rate_limit(lambda a=ani: msg.reply_animation(a.media))
+            sent = await _send_with_rate_limit(
+                lambda a=ani, c=caption_: msg.reply_animation(
+                    a.media,
+                    caption=c,
+                )
+            )
         except Exception as e:
             logger.warning(f"上传失败 {e}, 使用兼容模式上传")
             not_cache = True
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
-            await _send_with_rate_limit(lambda a=ani: msg.reply_document(a.media, force_document=True))
+            await _send_with_rate_limit(
+                lambda a=ani, c=caption_: msg.reply_document(a.media, caption=c, force_document=True)
+            )
         else:
             # 过大的 GIF 会返回 document
             if sent.document:
@@ -518,6 +527,9 @@ async def _send_multi(
 
     try:
         for batch in batched(photos_videos, 10):
+            if batch[-1] == photos_videos[-1]:
+                batch[0].caption = caption
+
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
             # noinspection PyDefaultArgument
             sent_msgs = await _send_with_rate_limit(lambda b=list(batch): msg.reply_media_group(media=b))
@@ -528,17 +540,14 @@ async def _send_multi(
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
         input_documents = [InputMediaDocument(media=item.media) for item in photos_videos]
         for batch in batched(input_documents, 10):
+            if batch[-1] == input_documents[-1]:
+                batch[0].caption = caption
+
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
             # noinspection PyDefaultArgument
-            await _send_with_rate_limit(lambda b=list(batch): msg.reply_document(document=b))  # type: ignore
+            await _send_with_rate_limit(lambda b=list(batch): msg.reply_media_group(media=b))  # type: ignore
         return None
 
-    await _send_with_rate_limit(
-        lambda: msg.reply_text(
-            caption,
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
-        )
-    )
     return None if not_cache else media_list
 
 
@@ -622,21 +631,21 @@ async def _send_cached_multi(msg: Message, media: list[CacheMedia], caption: str
 
     for ani in animations:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-        await _send_with_rate_limit(lambda a=ani: msg.reply_animation(a.file_id))
-
-    if others:
-        media_group = _build_cached_media_group(others)
-        for batch in batched(media_group, 10):
-            await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-            # noinspection PyDefaultArgument
-            await _send_with_rate_limit(lambda m=list(batch): msg.reply_media_group(m))
-
-    await _send_with_rate_limit(
-        lambda: msg.reply_text(
-            caption,
-            link_preview_options=LinkPreviewOptions(is_disabled=True),
+        await _send_with_rate_limit(
+            lambda a=ani: msg.reply_animation(
+                a.file_id,
+                caption=caption if a == animations[-1] and not others else "",
+            )
         )
-    )
+
+    media_group = _build_cached_media_group(others)
+    for batch in batched(media_group, 10):
+        if batch[-1] == media_group[-1]:
+            batch[0].caption = caption
+
+        await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
+        # noinspection PyDefaultArgument
+        await _send_with_rate_limit(lambda m=list(batch): msg.reply_media_group(m))
 
 
 def _build_cached_media_group(
