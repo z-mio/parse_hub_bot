@@ -91,12 +91,15 @@ class MessageStatusReporter(StatusReporter):
             await self._msg.delete()
 
     async def _edit_text(self, text: str, **kwargs):
-        if self._msg is None:
-            self._msg = await self._user_msg.reply_text(text, **kwargs)
-        else:
-            if self._msg.text != text:
-                await self._msg.edit_text(text, **kwargs)
-                self._msg.text = text
+        try:
+            if self._msg is None:
+                self._msg = await self._user_msg.reply_text(text, **kwargs)
+            else:
+                if self._msg.text != text:
+                    await self._msg.edit_text(text, **kwargs)
+                    self._msg.text = text
+        except FloodWait:
+            pass
 
 
 # ── Handler ──────────────────────────────────────────────────────────
