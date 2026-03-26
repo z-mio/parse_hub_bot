@@ -8,6 +8,7 @@ from parsehub.types import (
     VideoRef,
 )
 from pyrogram import Client
+from pyrogram.errors import FloodWait
 from pyrogram.types import (
     ChosenInlineResult,
     InlineQuery,
@@ -65,7 +66,7 @@ class InlineStatusReporter(StatusReporter):
         self._last_text = full
         try:
             await self._cli.edit_inline_text(self._mid, full)
-        except Exception:
+        except FloodWait:
             pass
 
     async def report_error(self, stage: str, error: Exception) -> None:
