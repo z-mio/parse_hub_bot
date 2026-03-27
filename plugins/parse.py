@@ -13,7 +13,7 @@ from parsehub.types import (
     VideoFile,
 )
 from pyrogram import Client, enums, filters
-from pyrogram.errors import FloodWait
+from pyrogram.errors import FloodWait, SlowmodeWait
 from pyrogram.types import (
     InputMediaAnimation,
     InputMediaDocument,
@@ -54,9 +54,9 @@ async def _send_with_rate_limit[T](
     for attempt in range(MAX_RETRIES):
         try:
             return await send_coro_fn()
-        except FloodWait as e:
+        except (FloodWait, SlowmodeWait) as e:
             if attempt < MAX_RETRIES - 1:
-                logger.warning(f"FloodWait 重试 ({attempt + 1}/{MAX_RETRIES})，等待 {e.value}s")
+                logger.warning(f"{e.ID} 重试 ({attempt + 1}/{MAX_RETRIES})，等待 {e.value}s")
                 await asyncio.sleep(e.value)
             else:
                 raise e from e
