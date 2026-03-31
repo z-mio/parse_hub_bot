@@ -88,16 +88,17 @@ class PlatformsConfig(BaseModel):
             return [v]
         return v
 
-    def get(self, platform_id: str) -> Platform:
-        return self.platforms.get(platform_id, Platform())
+    def get(self, platform_id: str) -> Platform | None:
+        return self.platforms.get(platform_id)
 
     def roll_cookie(self, platform_id: str) -> str | None:
-        pc = self.get(platform_id)
+        if not (pc := self.get(platform_id)):
+            return None
         return pc.roll_cookie()
 
     def roll_parser_proxy(self, platform_id: str) -> str | None:
-        pc = self.get(platform_id)
-
+        if not (pc := self.get(platform_id)):
+            pc = Platform()
         if pc.disable_parser_proxy:
             return None
 
@@ -108,8 +109,8 @@ class PlatformsConfig(BaseModel):
         return None
 
     def roll_downloader_proxy(self, platform_id: str) -> str | None:
-        pc = self.get(platform_id)
-
+        if not (pc := self.get(platform_id)):
+            pc = Platform()
         if pc.disable_downloader_proxy:
             return None
 
