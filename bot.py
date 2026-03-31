@@ -1,4 +1,5 @@
 import asyncio
+import shutil
 
 import pillow_heif
 from pyrogram import Client
@@ -43,6 +44,9 @@ class Bot(Client):
     async def stop(self, *args, **kwargs):
         ws.exit_flag = True
         await super().stop()
+        # 结束时清理下载残留
+        if self.cfg.download_dir.exists():
+            shutil.rmtree(self.cfg.download_dir)
 
     def init_watchdog(self):
         self.add_handler(ConnectHandler(on_connect))

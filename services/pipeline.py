@@ -163,7 +163,7 @@ class ParsePipeline:
         download_result: DownloadResult = await self._step(
             "下载",
             lambda: parse_result.download(
-                callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=self._save_metadata
+                bs.download_dir, callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=self._save_metadata
             ),
             timeout=60 * 30,  # 30分钟
         )
