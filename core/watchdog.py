@@ -3,6 +3,7 @@ import os
 import sys
 
 from pyrogram import Client
+from pyrogram.session import Session
 
 from core.config import bs, ws
 from log import logger
@@ -23,8 +24,12 @@ async def reset_count_task():
     logger.info("已稳定运行 10 分钟, 次数已重置")
 
 
-async def on_connect(_, __) -> None:
+async def on_connect(_, session: Session) -> None:
     """Bot 连接成功回调函数"""
+
+    if session.is_media:
+        return
+
     ws.is_running = True
     logger.success("Bot 开始运行...")
 
@@ -32,8 +37,12 @@ async def on_connect(_, __) -> None:
         asyncio.create_task(reset_count_task())
 
 
-async def on_disconnect(cli: Client, __) -> None:
+async def on_disconnect(cli: Client, session: Session) -> None:
     """Bot 断开连接回调函数"""
+
+    if session.is_media:
+        return
+
     if ws.exit_flag:
         ws.is_running = False
 
