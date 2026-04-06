@@ -15,7 +15,6 @@ from utils.helpers import to_list
 
 logger = logger.bind(name="Pipeline")
 
-# Singleflight: 同一 URL 只会有一条流水线在执行，后续请求等待 Event 后走缓存
 _inflight: dict[str, asyncio.Event] = {}
 
 

@@ -144,7 +144,7 @@ async def jx(cli: Client, msg: Message):
 async def handle_parse(
     cli: Client, msg: Message, url: str, mode: Literal["raw", "preview", "zip"] | str = "preview"
 ) -> None:
-    logger.debug(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
+    logger.info(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
     reporter = MessageStatusReporter(msg)
     match mode:
         case "raw":

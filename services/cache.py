@@ -1,6 +1,6 @@
 import asyncio
 import time
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pickledb import PickleDB
@@ -70,7 +70,7 @@ class TTLCache:
                     self.logger.debug(f"定时清理过期缓存: {len(expired_keys)} 条")
 
 
-class CacheMediaType(str, Enum):
+class CacheMediaType(StrEnum):
     PHOTO = "photo"
     VIDEO = "video"
     ANIMATION = "animation"

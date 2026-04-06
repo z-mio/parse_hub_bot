@@ -273,7 +273,7 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
 @Client.on_inline_query(platform_filter)
 @with_request_id
 async def call_inline_parse(cli: Client, inline_query: InlineQuery):
-    logger.debug(f"inline 查询触发: query={inline_query.query}, from_user={inline_query.from_user.id}")
+    logger.info(f"收到内联解析请求: query={inline_query.query}, from_user={inline_query.from_user.id}")
     raw_url = await ParseService().get_raw_url(inline_query.query)
 
     if cached := await persistent_cache.get(raw_url):
