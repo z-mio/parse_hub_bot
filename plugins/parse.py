@@ -98,7 +98,7 @@ class MessageStatusReporter(StatusReporter):
                 if self._msg.text != text:
                     await self._msg.edit_text(text, **kwargs)
                     self._msg.text = text
-        except FloodWait:
+        except (FloodWait, SlowmodeWait):
             pass
 
 
