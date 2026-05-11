@@ -19,7 +19,8 @@
   </a>
 </p>
 
-[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈**](https://github.com/z-mio/Parse_Hub_Bot/issues)
+[**🤖 实例演示**](https://t.me/ParseHubot) · [**📚 相关项目**](https://github.com/z-mio/ParseHub) · [**🐛 问题反馈
+**](https://github.com/z-mio/Parse_Hub_Bot/issues)
 
 </div>
 
@@ -37,7 +38,6 @@
 
 ## 📦 支持平台一览
 
-
 | 平台              | 视频 | 图文 |  其他   |
 |:----------------|:--:|:--:|:-----:|
 | **Twitter / X** | ✅  | ✅  | 📝 文章 |
@@ -46,7 +46,8 @@
 | **Facebook**    | ✅  |    |       |
 | **Threads**     | ✅  | ✅  |       |
 | **Bilibili**    | ✅  |    | 📝 动态 |
-| **抖音 / TikTok** | ✅  | ✅  |       |
+| **抖音**          | ✅  | ✅  |       |
+| **TikTok**      | ✅  | ✅  |       |
 | **微博**          | ✅  | ✅  |       |
 | **小红书**         | ✅  | ✅  |       |
 | **贴吧**          | ✅  | ✅  |       |
@@ -77,8 +78,6 @@ docker run -d \
   ghcr.io/z-mio/parse_hub_bot:latest
 ```
 
-
-
 ### 💻 源码运行
 
 ```bash
@@ -90,8 +89,8 @@ uv run bot.py
 
 ## ⚙️ 配置说明
 
-- **环境变量:** 基础配置  
-- **平台配置 (可选):** 平台代理和 Cookie  
+- **环境变量:** 基础配置
+- **平台配置 (可选):** 平台代理和 Cookie
 
 ### 📝 环境变量
 
@@ -104,7 +103,6 @@ BOT_TOKEN=     # 机器人 Token，向 @BotFather 申请
 # 🔲 可选
 BOT_PROXY=     # Bot 连接 TG 使用的代理，例：http://127.0.0.1:7890
 CACHE_TIME=    # 缓存有效时间（秒），默认 2592000（30 天），0 为永久缓存
-DOUYIN_API=    # 自定义抖音 API 解析服务地址
 ```
 
 ### 🌐 平台配置
@@ -117,24 +115,23 @@ DOUYIN_API=    # 自定义抖音 API 解析服务地址
 # 支持填写单个地址(字符串)或多个地址(列表，随机选取)
 
 default_parser_proxies: http://127.0.0.1:7890        # 解析代理（单个）
-default_downloader_proxies:                           # 下载代理（代理池）
+default_downloader_proxies: # 下载代理（代理池）
   - http://127.0.0.1:7890
   - http://127.0.0.1:7891
 
 # ═══════════════════════ 平台独立配置 ═══════════════════════
 platforms:
-  <platform_id>:                        # 平台 ID，见下方支持列表
+  <platform_id>: # 平台 ID，见下方支持列表
     disable_parser_proxy: false          # 是否禁用解析代理（直连）
     disable_downloader_proxy: false      # 是否禁用下载代理（直连）
-    parser_proxies:                      # 该平台专用解析代理池
+    parser_proxies: # 该平台专用解析代理池
       - http://proxy1:port
-    downloader_proxies:                  # 该平台专用下载代理池
+    downloader_proxies: # 该平台专用下载代理池
       - http://proxy2:port
-    cookies:                             # 该平台 Cookie 列表（随机选取）
+    cookies: # 该平台 Cookie 列表（随机选取）
       - "cookie_string_1"
       - "cookie_string_2"
 ```
-
 
 ### 🔀 代理优先级
 
@@ -150,40 +147,41 @@ platforms:
 直连（不使用代理）
 ```
 
-
 > 💡 当代理池中有多个地址时，每次请求会**随机选取**一个
 
 ### 🔑 支持的平台 ID
 
 `<platform_id>` 必须是以下合法的平台 ID：
 
-| 平台 ID | 对应平台 |
-|:---|:---|
-| `twitter` | Twitter / X |
-| `instagram` | Instagram |
-| `youtube` | YouTube |
-| `facebook` | Facebook |
-| `threads` | Threads |
-| `bilibili` | 哔哩哔哩 |
-| `douyin` | 抖音 |
-| `tiktok` | TikTok |
-| `weibo` | 微博 |
-| `xhs` | 小红书 |
-| `tieba` | 百度贴吧 |
-| `wechat` | 微信公众号 |
-| `kuaishou` | 快手 |
-| `coolapk` | 酷安 |
-| `pipixia` | 皮皮虾 |
-| `zuiyou` | 最右 |
-| `xiaoheihe` | 小黑盒 |
+| 平台 ID       | 对应平台        |
+|:------------|:------------|
+| `twitter`   | Twitter / X |
+| `instagram` | Instagram   |
+| `youtube`   | YouTube     |
+| `facebook`  | Facebook    |
+| `threads`   | Threads     |
+| `bilibili`  | 哔哩哔哩        |
+| `douyin`    | 抖音          |
+| `tiktok`    | TikTok      |
+| `weibo`     | 微博          |
+| `xhs`       | 小红书         |
+| `tieba`     | 百度贴吧        |
+| `wechat`    | 微信公众号       |
+| `kuaishou`  | 快手          |
+| `coolapk`   | 酷安          |
+| `pipixia`   | 皮皮虾         |
+| `zuiyou`    | 最右          |
+| `xiaoheihe` | 小黑盒         |
 
 ### 🍪 支持 Cookie 的平台
 
- - `Twitter`
- - `Instagram`
- - `Kuaishou`
- - `Bilibili`
- - `YouTube`
+- `Twitter`
+- `Instagram`
+- `Kuaishou`
+- `Bilibili`
+- `YouTube`
+- `抖音`
+- `TikTok`
 
 ### 📌 配置示例
 
@@ -205,7 +203,6 @@ platforms:
     disable_downloader_proxy: true
 ```
 
-
 #### 示例 2：Twitter 配置 Cookie + 使用全局代理
 
 ```yaml
@@ -217,7 +214,6 @@ platforms:
     cookies:
       - "auth_token=your_token_here; ct0=your_ct0_here"
 ```
-
 
 #### 示例 3：YouTube 使用独立代理池
 
@@ -233,7 +229,6 @@ platforms:
       - http://proxy-eu-1:8080
 ```
 
-
 #### 示例 4：B站指定 Cookie 轮换 + 解析直连 + 下载走代理
 
 ```yaml
@@ -246,8 +241,6 @@ platforms:
       - "SESSDATA=xxx; bili_jct=xxx; buvid3=xxx"
       - "SESSDATA=yyy; bili_jct=yyy; buvid3=yyy"
 ```
-
-
 
 ## 🌟 Star History
 
