@@ -3,8 +3,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
-from parsehub.config import GlobalConfig
-from pydantic import Field, HttpUrl, field_validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
@@ -26,8 +25,6 @@ class BotSettings(BaseSettings):
     download_dir: Path = Path("downloads")
     debug: bool = Field(default=False)
     debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")
-
-    douyin_api: HttpUrl | None = None
 
     def model_post_init(self, __context) -> None:
         """模型初始化后的操作"""
@@ -113,6 +110,3 @@ class WatchdogSettings(BaseSettings):
 
 bs = BotSettings()
 ws = WatchdogSettings()
-
-if bs.douyin_api:
-    GlobalConfig.douyin_api = bs.douyin_api
