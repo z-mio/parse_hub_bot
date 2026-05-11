@@ -67,11 +67,15 @@ def format_text(text: str) -> str:
 
 
 def progress(current: int, total: int, unit: str):
-    text = f"下 载 中... | {f'{current * 100 / total:.0f}%' if unit == 'bytes' else f'{current}/{total}'}"
     if unit == "bytes":
+        if total <= 0:
+            return None
+
+        text = f"下 载 中... | {current * 100 / total:.0f}%"
         if round(current * 100 / total, 1) % 25 == 0:
             return text
     else:
+        text = f"下 载 中... | {current}/{total}"
         if (current + 1) % 3 == 0 or (current + 1) == total:
             return text
     return None
