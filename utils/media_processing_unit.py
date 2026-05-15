@@ -152,7 +152,8 @@ class MediaProcessingUnit:
             new_w, new_h = int(w * scale), int(h * scale)
             self.logger(f"图片长边超限({max(w, h)}px > {max_side}px)，缩放: {w}x{h} -> {new_w}x{new_h}")
             resized = img.resize((new_w, new_h), Resampling.LANCZOS)
-            out_path = self.output_dir / f"downscaled_{time.time_ns()}{file_path.suffix}"
+            ext = (img.format and f".{img.format.lower()}") or file_path.suffix
+            out_path = self.output_dir / f"downscaled_{time.time_ns()}{ext}"
             resized.save(out_path)
         return out_path
 
