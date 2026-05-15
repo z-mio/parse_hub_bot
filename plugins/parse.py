@@ -411,7 +411,7 @@ async def _send_zip(
     await reporter.report("打 包 中...")
     try:
         caption = build_caption(result.parse_result)
-        pack_path = pack_dir_to_tar_gz(result.output_dir)
+        pack_path = await asyncio.to_thread(pack_dir_to_tar_gz, result.output_dir)
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"打包失败: {e}")
