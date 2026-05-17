@@ -43,6 +43,7 @@ class Bot(Client):
 
     async def stop(self, *args, **kwargs):
         ws.exit_flag = True
+        await persistent_cache.close()
         await super().stop()
         # 结束时清理下载残留
         if self.cfg.download_dir.exists():
