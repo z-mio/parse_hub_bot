@@ -42,3 +42,18 @@ ignore = [
     "B008", # 不在参数默认值中执行函数调用
     "C901", # 函数复杂度过高
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.1.0",
+]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["./"]
+ignore_missing_imports = true
+warn_return_any = false
+warn_unused_ignores = true
+check_untyped_defs = false
+disallow_untyped_defs = false
+no_implicit_optional = false

@@ -257,9 +257,9 @@ class PersistentCache:
         return overflow
 
 
-parse_cache = TTLCache(ttl=60 * 60, maxsize=1000)  # 解析结果缓存 1 小时
+parse_cache = TTLCache(ttl=30 * 60, maxsize=1000)  # 解析结果缓存 30 分钟
 persistent_cache = PersistentCache(
-    bs.cache_path / "cache.json",
+    str(bs.cache_path / "cache.json"),
     ttl=bs.cache_time * 60,
     save_interval=bs.cache_save_interval * 60,
     cleanup_interval=bs.cache_cleanup_interval * 60,

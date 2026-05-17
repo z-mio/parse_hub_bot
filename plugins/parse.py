@@ -7,6 +7,7 @@ from typing import Literal
 from parsehub.types import (
     AniFile,
     AnyMediaRef,
+    AnyParseResult,
     ImageFile,
     LivePhotoFile,
     PostType,
@@ -60,7 +61,7 @@ async def _send_with_rate_limit[T](
                 await asyncio.sleep(e.value)
             else:
                 raise e from e
-    return None
+    raise RuntimeError("发送重试失败")
 
 
 class MessageStatusReporter(StatusReporter):
@@ -68,7 +69,7 @@ class MessageStatusReporter(StatusReporter):
 
     def __init__(self, user_msg: Message):
         self._user_msg = user_msg
-        self._msg = None
+        self._msg: Message | None = None
 
     async def report(self, text: str) -> None:
         await self._edit_text(f"**▎{text}**")
@@ -81,7 +82,8 @@ class MessageStatusReporter(StatusReporter):
 
         async def fn():
             await asyncio.sleep(15)
-            await self._msg.delete()
+            if self._msg:
+                await self._msg.delete()
 
         loop = asyncio.get_running_loop()
         loop.create_task(fn())
@@ -97,7 +99,6 @@ class MessageStatusReporter(StatusReporter):
             else:
                 if self._msg.text != text:
                     await self._msg.edit_text(text, **kwargs)
-                    self._msg.text = text
         except (FloodWait, SlowmodeWait):
             pass
 
@@ -124,10 +125,10 @@ async def jx(cli: Client, msg: Message):
             await msg.reply_text("**▎请加上链接或回复一条消息**")
             return
     else:
-        text = msg.text or msg.caption
+        text = msg.text or msg.caption or ""
 
-    text = text.strip().split()
-    urls = list({i for i in text if ParseService().parser.get_platform(i)})[:10]
+    tokens = text.strip().split()
+    urls = list({i for i in tokens if ParseService().parser.get_platform(i)})[:10]
 
     if not urls:
         await msg.reply_text("**▎不支持的平台**")
@@ -144,7 +145,8 @@ async def jx(cli: Client, msg: Message):
 async def handle_parse(
     cli: Client, msg: Message, url: str, mode: Literal["raw", "preview", "zip"] | str = "preview"
 ) -> None:
-    logger.info(f"收到解析请求: url={url}, chat_id={msg.chat.id}, msg_id={msg.id}, mode={mode}")
+    chat_id = msg.chat.id if msg.chat else None
+    logger.info(f"收到解析请求: url={url}, chat_id={chat_id}, msg_id={msg.id}, mode={mode}")
     reporter = MessageStatusReporter(msg)
     match mode:
         case "raw":
@@ -248,9 +250,9 @@ async def handle_parse(
     logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
     await reporter.report("上 传 中...")
     try:
-        cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
-        if cache_entry:
-            await persistent_cache.set(raw_url, cache_entry)
+        media_cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
+        if media_cache_entry:
+            await persistent_cache.set(raw_url, media_cache_entry)
         await reporter.dismiss()
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
@@ -334,7 +336,7 @@ def _cache_media_from_message(m: Message) -> CacheMedia | None:
     return None
 
 
-def _make_cache_entry(parse_result, media_list: list[CacheMedia]) -> CacheEntry:
+def _make_cache_entry(parse_result: AnyParseResult, media_list: list[CacheMedia]) -> CacheEntry:
     return CacheEntry(
         parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
         media=media_list,
@@ -358,19 +360,21 @@ async def _send_raw(
         livephoto_videos: dict[int, InputMediaDocument] = {}
 
         for idx, processed in enumerate(result.processed_list):
-            # raw 模式下 processed.output_paths 只有一个文件
-            file_path = processed.output_paths[0]
+            file_paths = processed.output_paths or [processed.source.path]
+            file_path = file_paths[0]
             all_docs.append(InputMediaDocument(media=str(file_path)))
             if isinstance(processed.source, LivePhotoFile):
                 livephoto_videos[idx] = InputMediaDocument(media=str(processed.source.video_path))
 
         if len(all_docs) == 1:
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
-            m = await _send_with_rate_limit(
+            sent_msg = await _send_with_rate_limit(
                 lambda: msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
             )
-            if livephoto_videos:
-                await _send_with_rate_limit(lambda: m.reply_document(livephoto_videos[0].media, force_document=True))
+            if livephoto_videos and sent_msg:
+                await _send_with_rate_limit(
+                    lambda: sent_msg.reply_document(livephoto_videos[0].media, force_document=True)
+                )
         else:
             msgs: list[Message] = []
             for batch in batched(all_docs, 10):
@@ -379,10 +383,10 @@ async def _send_raw(
                 mg = await _send_with_rate_limit(lambda b=list(batch): msg.reply_media_group(b))  # type: ignore
                 msgs.extend(mg)
             if livephoto_videos:
-                for idx, m in livephoto_videos.items():
+                for idx, media_doc in livephoto_videos.items():
                     await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
                     await _send_with_rate_limit(
-                        lambda m_=m, idx_=idx: msgs[idx_].reply_document(m_.media, force_document=True)
+                        lambda m_=media_doc, idx_=idx: msgs[idx_].reply_document(m_.media, force_document=True)  # type: ignore[misc]
                     )
             await _send_with_rate_limit(
                 lambda: msg.reply_text(
@@ -411,6 +415,8 @@ async def _send_zip(
     await reporter.report("打 包 中...")
     try:
         caption = build_caption(result.parse_result)
+        if result.output_dir is None:
+            raise ValueError("缺少打包目录")
         pack_path = await asyncio.to_thread(pack_dir_to_tar_gz, result.output_dir)
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
@@ -453,6 +459,7 @@ async def _send_single(
     all_media = animations + photos_videos
 
     try:
+        sent: Message | None = None
         if animations:
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
             sent = await _send_with_rate_limit(lambda: msg.reply_animation(animations[0].media, caption=caption))
@@ -506,7 +513,7 @@ async def _send_multi(
         caption_ = caption if ani == animations[-1] and not photos_videos else ""
         try:
             sent = await _send_with_rate_limit(
-                lambda a=ani, c=caption_: msg.reply_animation(
+                lambda a=ani, c=caption_: msg.reply_animation(  # type: ignore[misc]
                     a.media,
                     caption=c,
                 )
@@ -516,13 +523,13 @@ async def _send_multi(
             not_cache = True
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
             await _send_with_rate_limit(
-                lambda a=ani, c=caption_: msg.reply_document(a.media, caption=c, force_document=True)
+                lambda a=ani, c=caption_: msg.reply_document(a.media, caption=c, force_document=True)  # type: ignore[misc]
             )
         else:
             # 过大的 GIF 会返回 document
-            if sent.document:
+            if sent and sent.document:
                 media_list.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=sent.document.file_id))
-            else:
+            elif sent and sent.animation:
                 media_list.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=sent.animation.file_id))
 
     try:
@@ -532,27 +539,27 @@ async def _send_multi(
 
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
             # noinspection PyDefaultArgument
-            sent_msgs = await _send_with_rate_limit(lambda b=list(batch): msg.reply_media_group(media=b))
+            sent_msgs = await _send_with_rate_limit(lambda b=list(batch): msg.reply_media_group(media=b))  # type: ignore[misc]
             for m in sent_msgs:
                 if cm := _cache_media_from_message(m):
                     media_list.append(cm)
     except Exception as e:
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-        input_documents = [InputMediaDocument(media=item.media) for item in photos_videos]
-        for batch in batched(input_documents, 10):
-            if batch[-1] == input_documents[-1]:
-                batch[0].caption = caption
+        input_documents: list[InputMediaDocument] = [InputMediaDocument(media=item.media) for item in photos_videos]
+        for document_batch in batched(input_documents, 10):
+            if document_batch[-1] == input_documents[-1]:
+                document_batch[0].caption = caption
 
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
             # noinspection PyDefaultArgument
-            await _send_with_rate_limit(lambda b=list(batch): msg.reply_media_group(media=b))  # type: ignore
+            await _send_with_rate_limit(lambda b=list(document_batch): msg.reply_media_group(media=b))  # type: ignore
         return None
 
     return None if not_cache else media_list
 
 
 async def _send_media(
-    msg: Message, parse_result, processed_list: list[ProcessedMedia], caption: str
+    msg: Message, parse_result: AnyParseResult, processed_list: list[ProcessedMedia], caption: str
 ) -> CacheEntry | None:
     """构建、发送媒体，并返回缓存条目。
     返回 None 表示不缓存
@@ -580,6 +587,9 @@ async def _send_media(
 async def _send_cached(msg: Message, entry: CacheEntry, url: str):
     """从 file_id 缓存直接发送，跳过解析/下载/转码"""
     logger.debug(f"缓存发送: media={entry.media}")
+    if entry.parse_result is None:
+        await persistent_cache.remove(url)
+        return
     caption = build_caption_by_str(entry.parse_result.title, entry.parse_result.content, url, entry.telegraph_url)
 
     # 富文本类型
@@ -632,7 +642,7 @@ async def _send_cached_multi(msg: Message, media: list[CacheMedia], caption: str
     for ani in animations:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
         await _send_with_rate_limit(
-            lambda a=ani: msg.reply_animation(
+            lambda a=ani: msg.reply_animation(  # type: ignore[misc]
                 a.file_id,
                 caption=caption if a == animations[-1] and not others else "",
             )
@@ -645,7 +655,7 @@ async def _send_cached_multi(msg: Message, media: list[CacheMedia], caption: str
 
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
         # noinspection PyDefaultArgument
-        await _send_with_rate_limit(lambda m=list(batch): msg.reply_media_group(m))
+        await _send_with_rate_limit(lambda m=list(batch): msg.reply_media_group(m))  # type: ignore[misc]
 
 
 def _build_cached_media_group(

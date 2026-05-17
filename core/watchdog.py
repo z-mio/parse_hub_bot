@@ -85,7 +85,8 @@ async def remove_session_file(cli: Client) -> None:
     """删除会话文件"""
     logger.warning("尝试删除会话文件...")
     try:
-        await cli.session.stop()
+        if cli.session is not None:
+            await cli.session.stop()
         await cli.storage.close()
         if (session := cli.workdir / f"{cli.name}.session") and session.exists():
             os.remove(session)

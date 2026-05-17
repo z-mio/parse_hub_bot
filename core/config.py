@@ -117,5 +117,5 @@ class WatchdogSettings(BaseSettings):
         os.environ["WD_DISCONNECT_COUNT"] = "0"
 
 
-bs = BotSettings()
+bs = BotSettings()  # type: ignore[call-arg]
 ws = WatchdogSettings()

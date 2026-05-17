@@ -12,6 +12,7 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import (
     ChosenInlineResult,
     InlineQuery,
+    InlineQueryResult,
     InlineQueryResultAnimation,
     InlineQueryResultArticle,
     InlineQueryResultCachedAnimation,
@@ -91,8 +92,10 @@ class InlineStatusReporter(StatusReporter):
         pass
 
 
-def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
+def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list[InlineQueryResult]:
     """有 file_id 缓存时，构建 cached 类型的 inline 结果（Telegram 服务端直发）"""
+    if entry.parse_result is None:
+        return []
     content = entry.parse_result.content
     caption = build_caption_by_str(entry.parse_result.title, content, raw_url, entry.telegraph_url)
     title = entry.parse_result.title or "无标题"
@@ -109,7 +112,7 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
             )
         ]
 
-    results = []
+    results: list[InlineQueryResult] = []
     if not entry.media:
         results.append(
             InlineQueryResultArticle(
@@ -164,14 +167,14 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list:
     return results
 
 
-async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list:
+async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> list[InlineQueryResult]:
     """根据解析结果构建内联查询结果列表"""
     logger.debug(f"构建 inline 结果: type={parse_result.type}, title={parse_result.title}")
     title = parse_result.title or "无标题"
     media_list = to_list(parse_result.media)
     reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
 
-    results = []
+    results: list[InlineQueryResult] = []
 
     # ── 富文本直接 telegraph 发送 ──
     if parse_result.type == PostType.RICHTEXT:
@@ -257,7 +260,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
 
 @Client.on_inline_query(~platform_filter)
 async def inline_parse_tip(_, inline_query: InlineQuery):
-    results = [
+    results: list[InlineQueryResult] = [
         InlineQueryResultArticle(
             title="聚合解析",
             description="请在聊天框输入链接",
@@ -299,6 +302,8 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
 
     media_index = int(chosen_result.result_id.split("_")[1])
     inline_message_id = chosen_result.inline_message_id
+    if inline_message_id is None:
+        return
     query = chosen_result.query
     logger.debug(f"inline 下载触发: media_index={media_index}, query={query}")
     raw_url = await ParseService().get_raw_url(query)
