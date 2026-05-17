@@ -103,7 +103,6 @@ BOT_TOKEN=     # 机器人 Token，向 @BotFather 申请
 
 # 🔲 可选
 BOT_PROXY=     # Bot 连接 TG 使用的代理，例：http://127.0.0.1:7890
-CACHE_TIME=    # 缓存有效时间（秒），默认 2592000（30 天），0 为永久缓存
 ```
 
 ### 🌐 平台配置
@@ -176,13 +175,14 @@ platforms:
 
 ### 🍪 支持 Cookie 的平台
 
-- `Twitter`
+- `Twitter / X`
 - `Instagram`
-- `Kuaishou`
-- `Bilibili`
 - `YouTube`
+- `Bilibili`
 - `抖音`
 - `TikTok`
+- `快手`
+- `小红书`
 
 ### 📌 配置示例
 

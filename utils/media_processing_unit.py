@@ -135,10 +135,9 @@ class MediaProcessingUnit:
 
     def _img2webp(self, file_path: Path) -> Path:
         with Image.open(file_path) as pil_img:
-            if pil_img.mode != "RGBA":
-                pil_img = pil_img.convert("RGBA")
+            img = pil_img.convert("RGBA") if pil_img.mode != "RGBA" else pil_img
             output = self.output_dir / file_path.with_suffix(".webp").name
-            pil_img.save(output, format="WEBP")
+            img.save(output, format="WEBP")
         self.logger(f"webp 转换完成: {output}")
         return output
 
