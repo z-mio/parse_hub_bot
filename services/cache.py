@@ -11,13 +11,14 @@ from log import logger
 
 
 class TTLCache:
-    def __init__(self, ttl: float = 300, cleanup_interval: float = 60):
+    def __init__(self, ttl: float = 300, cleanup_interval: float = 60, maxsize: int = 0):
         self._ttl = ttl
         self._store: dict[str, tuple[Any, float]] = {}
         self._lock = asyncio.Lock()
         self.logger = logger.bind(name="TTLCache")
         self._cleanup_interval = cleanup_interval
         self._cleanup_task: asyncio.Task | None = None
+        self._maxsize = maxsize
 
     async def get(self, key: str) -> Any | None:
         async with self._lock:
@@ -37,7 +38,20 @@ class TTLCache:
         async with self._lock:
             effective_ttl = ttl or self._ttl
             self.logger.debug(f"缓存写入: key={key}, ttl={effective_ttl}s")
+            if key in self._store:
+                del self._store[key]
             self._store[key] = (value, time.monotonic() + effective_ttl)
+            await self._evict_overflow_locked()
+
+    async def _evict_overflow_locked(self) -> None:
+        if self._maxsize <= 0:
+            return
+        overflow = len(self._store) - self._maxsize
+        if overflow <= 0:
+            return
+        for key in list(self._store)[:overflow]:
+            del self._store[key]
+        self.logger.debug(f"缓存数量超限, 淘汰最旧缓存: {overflow} 条")
 
     async def pop(self, key: str) -> Any | None:
         async with self._lock:
@@ -153,5 +167,5 @@ class PersistentCache:
                 self.logger.debug(f"定时清理过期缓存: {removed} 条")
 
 
-parse_cache = TTLCache(ttl=60 * 60)  # 解析结果缓存 1 小时
+parse_cache = TTLCache(ttl=60 * 60, maxsize=5000)  # 解析结果缓存 1 小时
 persistent_cache = PersistentCache(bs.cache_path / "cache.json", ttl=bs.cache_time)
