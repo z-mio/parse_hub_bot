@@ -15,8 +15,10 @@ pillow_heif.register_heif_opener()
 
 setup_logging(debug=bs.debug)
 
-setup_optimized_event_loop()
 loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+
+setup_optimized_event_loop()
 
 
 class Bot(Client):
