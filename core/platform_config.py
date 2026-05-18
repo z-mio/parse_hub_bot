@@ -83,10 +83,12 @@ class PlatformsConfig(BaseModel):
         return pc
 
     @staticmethod
-    def _2l(v) -> list | None:
-        if v and not isinstance(v, list):
-            return [v]
-        return v
+    def _2l[T](v: T | list[T] | None) -> list[T] | None:
+        if v is None:
+            return None
+        if isinstance(v, list):
+            return v
+        return [v]
 
     def get(self, platform_id: str) -> Platform | None:
         return self.platforms.get(platform_id)

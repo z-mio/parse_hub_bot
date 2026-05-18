@@ -332,18 +332,28 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
         logger.debug(f"inline 上传文件: {file_path_str}")
         width, height, duration = resolve_media_info(processed, file_path_str)
 
-        await cli.edit_inline_media(
-            inline_message_id,
-            media=InputMediaVideo(
+        video_cover = str(video_ref.thumb_url) if video_ref and video_ref.thumb_url else None
+        media = (
+            InputMediaVideo(
                 file_path_str,
                 caption=caption,
-                video_cover=video_ref.thumb_url if video_ref else None,
+                video_cover=video_cover,
                 duration=duration or 0,
                 width=width or 0,
                 height=height or 0,
                 supports_streaming=True,
-            ),
+            )
+            if video_cover
+            else InputMediaVideo(
+                file_path_str,
+                caption=caption,
+                duration=duration or 0,
+                width=width or 0,
+                height=height or 0,
+                supports_streaming=True,
+            )
         )
+        await cli.edit_inline_media(inline_message_id, media=media)
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"inline 上传失败: {e}")

@@ -668,7 +668,10 @@ def _build_cached_media_group(
             case CacheMediaType.PHOTO:
                 group.append(InputMediaPhoto(media=m.file_id))
             case CacheMediaType.VIDEO:
-                group.append(InputMediaVideo(media=m.file_id, supports_streaming=True, video_cover=m.cover_file_id))
+                if m.cover_file_id:
+                    group.append(InputMediaVideo(media=m.file_id, supports_streaming=True, video_cover=m.cover_file_id))
+                else:
+                    group.append(InputMediaVideo(media=m.file_id, supports_streaming=True))
             case CacheMediaType.DOCUMENT:
                 group.append(InputMediaDocument(media=m.file_id))
     return group

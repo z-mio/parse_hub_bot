@@ -1,3 +1,4 @@
+
 from parsehub import ParseHub, Platform
 from parsehub.types import (
     AnyParseResult,
@@ -55,7 +56,7 @@ class ParseService:
                 logger.debug(f"使用配置: proxy={proxy}, attempt={attempt}/{max_retries}")
                 raw_url = await self.parser.get_raw_url(url, proxy=proxy, clean_all=clean_all)
                 logger.debug(f"原始 URL: {raw_url}")
-                return raw_url
+                return str(raw_url)
             except Exception as e:
                 logger.warning(f"获取原始 URL 失败, attempt={attempt}/{max_retries}, err={e}")
                 if attempt >= max_retries:

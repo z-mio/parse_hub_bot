@@ -7,13 +7,13 @@ from telegraph.aio import Telegraph as TelegraphAPI
 class Telegraph:
     """Telegraph API 封装"""
 
-    def __init__(self, token: str = None, domain: str = "telegra.ph"):
+    def __init__(self, token: str | None = None, domain: str = "telegra.ph"):
         self.token = token
         self.domain = domain
         self.telegraph = TelegraphAPI(access_token=token, domain=domain)
 
     async def create_account(
-        self, short_name: str, author_name: str = None, author_url: str = None
+        self, short_name: str, author_name: str | None = None, author_url: str | None = None
     ) -> "TelegraphAccount":
         """创建 Telegraph 账户"""
         account = await self.telegraph.create_account(short_name, author_name, author_url)
@@ -21,7 +21,7 @@ class Telegraph:
         self.token = acc_info.access_token
         return acc_info
 
-    async def get_account_info(self, account_info: dict = None) -> "TelegraphAccount":
+    async def get_account_info(self, account_info: dict[str, str] | None = None) -> "TelegraphAccount":
         """获取 Telegraph 账户信息"""
         account_info = account_info or await self.telegraph.get_account_info(
             [
