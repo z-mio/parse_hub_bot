@@ -1,5 +1,6 @@
 import asyncio
 import shutil
+from typing import Any
 
 import pillow_heif
 from pyrogram import Client
@@ -22,7 +23,7 @@ setup_optimized_event_loop()
 
 
 class Bot(Client):
-    def __init__(self):
+    def __init__(self) -> None:
         self.cfg = bs
 
         super().__init__(
@@ -36,14 +37,15 @@ class Bot(Client):
             workdir=self.cfg.sessions_path,
         )
 
-    async def start(self, *args, **kwargs):
+    async def start(self, *args: Any, **kwargs: Any) -> "Bot":
         self.init_watchdog()
         parse_cache.start_cleanup()
         persistent_cache.start_cleanup()
         await super().start()
         await self.set_menu()
+        return self
 
-    async def stop(self, *args, **kwargs):
+    async def stop(self, *args: Any, **kwargs: Any) -> None:
         ws.exit_flag = True
         await persistent_cache.close()
         await super().stop()
@@ -51,11 +53,11 @@ class Bot(Client):
         if self.cfg.download_dir.exists():
             shutil.rmtree(self.cfg.download_dir)
 
-    def init_watchdog(self):
+    def init_watchdog(self) -> None:
         self.add_handler(ConnectHandler(on_connect))
         self.add_handler(DisconnectHandler(on_disconnect))
 
-    async def set_menu(self):
+    async def set_menu(self) -> None:
         commands = {
             "start": "开始",
             "jx": "解析",

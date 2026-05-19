@@ -2,7 +2,7 @@ import asyncio
 import os
 from collections.abc import Awaitable, Callable
 from itertools import batched
-from typing import Literal
+from typing import Any, Literal
 
 from parsehub.types import (
     AniFile,
@@ -80,7 +80,7 @@ class MessageStatusReporter(StatusReporter):
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
 
-        async def fn():
+        async def fn() -> None:
             await asyncio.sleep(15)
             if self._msg:
                 await self._msg.delete()
@@ -92,7 +92,7 @@ class MessageStatusReporter(StatusReporter):
         if self._msg:
             await self._msg.delete()
 
-    async def _edit_text(self, text: str, **kwargs):
+    async def _edit_text(self, text: str, **kwargs: Any) -> None:
         try:
             if self._msg is None:
                 self._msg = await self._user_msg.reply_text(text, **kwargs)
@@ -107,7 +107,7 @@ class MessageStatusReporter(StatusReporter):
 
 
 @Client.on_message(filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & platform_filter))
-async def jx(cli: Client, msg: Message):
+async def jx(cli: Client, msg: Message) -> None:
     mode = "preview"
     if msg.command:
         match msg.command[0]:
@@ -584,7 +584,7 @@ async def _send_media(
 # ── 缓存发送 ─────────────────────────────────────────────────────────
 
 
-async def _send_cached(msg: Message, entry: CacheEntry, url: str):
+async def _send_cached(msg: Message, entry: CacheEntry, url: str) -> None:
     """从 file_id 缓存直接发送，跳过解析/下载/转码"""
     logger.debug(f"缓存发送: media={entry.media}")
     if entry.parse_result is None:

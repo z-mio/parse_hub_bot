@@ -77,7 +77,7 @@ class InlineStatusReporter(StatusReporter):
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
 
-        async def fn():
+        async def fn() -> None:
             await asyncio.sleep(15)
             await self._cli.edit_inline_text(
                 self._mid,
@@ -259,7 +259,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
 
 
 @Client.on_inline_query(~platform_filter)
-async def inline_parse_tip(_, inline_query: InlineQuery):
+async def inline_parse_tip(_: Client, inline_query: InlineQuery) -> None:
     results: list[InlineQueryResult] = [
         InlineQueryResultArticle(
             title="聚合解析",
@@ -275,14 +275,15 @@ async def inline_parse_tip(_, inline_query: InlineQuery):
 
 @Client.on_inline_query(platform_filter)
 @with_request_id
-async def call_inline_parse(cli: Client, inline_query: InlineQuery):
+async def call_inline_parse(cli: Client, inline_query: InlineQuery) -> None:
     logger.info(f"收到内联解析请求: query={inline_query.query}, from_user={inline_query.from_user.id}")
     raw_url = await ParseService().get_raw_url(inline_query.query)
 
     if cached := await persistent_cache.get(raw_url):
         logger.debug("inline: 缓存命中, 构建 cached 结果")
         results = build_cached_inline_results(cached, raw_url)
-        return await inline_query.answer(results[:50], cache_time=60)
+        await inline_query.answer(results[:50], cache_time=60)
+        return
 
     parse_result = await parse_cache.get(raw_url)
     if parse_result is None:
@@ -291,12 +292,12 @@ async def call_inline_parse(cli: Client, inline_query: InlineQuery):
 
     results = await build_inline_results(parse_result, cli)
     logger.debug(f"inline 查询完成, 返回 {len(results)} 个结果")
-    return await inline_query.answer(results[:50], cache_time=0)
+    await inline_query.answer(results[:50], cache_time=0)
 
 
 @Client.on_chosen_inline_result()
 @with_request_id
-async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult):
+async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult) -> None:
     if not chosen_result.result_id.startswith("download_"):
         return
 

@@ -1,3 +1,4 @@
+from typing import Self
 
 from parsehub import ParseHub, Platform
 from parsehub.types import (
@@ -11,14 +12,14 @@ logger = logger.bind(name="ParseService")
 
 
 class ParseService:
-    _instance = None
+    _instance: Self | None = None
 
-    def __new__(cls):
+    def __new__(cls) -> Self:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.parser = ParseHub()
 
     def get_platform(self, url: str) -> Platform:

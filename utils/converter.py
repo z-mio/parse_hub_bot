@@ -39,7 +39,7 @@ line_breaks_and_empty_strings = re.compile(r"(\s{2,}|\s*\r?\n\s*)")
 header_re = re.compile(r"<head[^a-z][\s\S]*</head>")
 
 
-def clean_article_html(html_string):
+def clean_article_html(html_string: str) -> str:
     html_string = html_string.replace("<h1", "<h3").replace("</h1>", "</h3>")
     # telegram will convert <b> anyway
     html_string = re.sub(r"<(/?)b(?=\s|>)", r"<\1strong", html_string)
@@ -75,7 +75,7 @@ def clean_article_html(html_string):
     return html_string.strip(" \t")
 
 
-def replace_line_breaks_except_pre(html_string, replace_by=" "):
+def replace_line_breaks_except_pre(html_string: str, replace_by: str = " ") -> str:
     # Remove all line breaks and empty strings, except pre tag
     # how to make it in one string? :\
     pre_ranges = [0]

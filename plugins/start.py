@@ -5,7 +5,7 @@ from plugins.helpers import build_start_text
 
 
 @Client.on_message(filters.command(["start", "help"]))
-async def start(_, msg: Message):
+async def start(_: Client, msg: Message) -> None:
     await msg.reply(
         build_start_text(),
         link_preview_options=LinkPreviewOptions(is_disabled=True),

@@ -66,13 +66,13 @@ class TTLCache:
             self.logger.debug(f"缓存 pop 命中: key={key}")
             return value
 
-    def start_cleanup(self):
+    def start_cleanup(self) -> None:
         """启动后台清理任务（需在事件循环运行后调用）"""
         if self._cleanup_task is None:
             self._cleanup_task = asyncio.create_task(self._periodic_cleanup())
             self.logger.debug(f"后台清理任务已启动, interval={self._cleanup_interval}s")
 
-    async def _periodic_cleanup(self):
+    async def _periodic_cleanup(self) -> None:
         while True:
             await asyncio.sleep(self._cleanup_interval)
             async with self._lock:
@@ -194,7 +194,7 @@ class PersistentCache:
             if await self._db.remove(url):
                 self._dirty = True
 
-    def start_cleanup(self):
+    def start_cleanup(self) -> None:
         """启动后台清理任务"""
         if not self.enabled:
             self.logger.debug("持久缓存已禁用, 跳过后台任务")
@@ -218,7 +218,7 @@ class PersistentCache:
         async with self._lock:
             await self._save_locked()
 
-    async def _periodic_cleanup(self):
+    async def _periodic_cleanup(self) -> None:
         while True:
             await asyncio.sleep(self._save_interval)
             if not self._loaded:

@@ -1,7 +1,7 @@
 import inspect
 import logging
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import loguru
 
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 logger: "Logger" = loguru.logger.bind(name="Main")
 
 
-def formatter(record):
+def formatter(record: Any) -> str:
     rid = record["extra"].get("req_id")
     if rid:
         return (

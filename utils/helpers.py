@@ -2,8 +2,9 @@ import asyncio
 import functools
 import tarfile
 import uuid
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import overload
+from typing import Any, overload
 
 from log import logger
 
@@ -32,7 +33,7 @@ def to_list[T](v: list[T]) -> list[T]: ...
 def to_list[T](v: T) -> list[T]: ...
 
 
-def to_list(v):
+def to_list[T](v: T | list[T]) -> list[T]:
     return v if isinstance(v, list) else [v]
 
 
@@ -62,9 +63,9 @@ def pack_dir_to_tar_gz(dir_path: str | Path, output_path: str | Path | None = No
     return output_path
 
 
-def with_request_id(func):
+def with_request_id[T](func: Callable[..., Awaitable[T]]) -> Callable[..., Awaitable[T]]:
     @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
+    async def wrapper(*args: Any, **kwargs: Any) -> T:
         request_id = str(uuid.uuid4())[:8]
         with logger.contextualize(req_id=request_id):
             return await func(*args, **kwargs)

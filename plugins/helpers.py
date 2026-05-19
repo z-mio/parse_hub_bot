@@ -5,7 +5,7 @@ from pathlib import Path
 
 from markdown import markdown
 from parsehub import ParseHub, Platform
-from parsehub.types import AnyMediaFile, AnyParseResult, RichTextParseResult
+from parsehub.types import AnyMediaFile, AnyParseResult, DownloadResult, RichTextParseResult
 from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
 
@@ -33,7 +33,7 @@ def resolve_media_info(processed: "ProcessedMedia", file_path: str) -> tuple[int
     return processed.source.width, processed.source.height, getattr(processed.source, "duration", 0)
 
 
-def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None):
+def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None) -> str:
     return build_caption_by_str(parse_result.title, parse_result.content, parse_result.raw_url, telegraph_url)
 
 
@@ -66,7 +66,7 @@ def format_text(text: str) -> str:
         return text
 
 
-def progress(current: int, total: int, unit: str):
+def progress(current: int, total: int, unit: str) -> str | None:
     if unit == "bytes":
         if total <= 0:
             return None
@@ -108,7 +108,7 @@ async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResu
     return await create_telegraph_page(html, cli, parse_result)
 
 
-async def process_media_files(download_result) -> list[ProcessedMedia]:
+async def process_media_files(download_result: DownloadResult) -> list[ProcessedMedia]:
     """对下载结果中的媒体文件进行格式转换，返回 ProcessedMedia 列表"""
     processed_dir = download_result.output_dir.joinpath("processed")
     processor = MediaProcessingUnit(processed_dir, segment_height=1920, logger=logger.bind(name="MediaProcessor").debug)
@@ -125,15 +125,15 @@ async def process_media_files(download_result) -> list[ProcessedMedia]:
     return processed_list
 
 
-def get_supported_platforms():
-    text = []
+def get_supported_platforms() -> str:
+    text: list[str] = []
     for i in ParseHub().get_platforms():
         text.append(f"**{i['name']}** __({'__, __'.join(i['supported_types'])})__")
     text.sort(reverse=True)
     return "\n".join(text)
 
 
-def build_start_text():
+def build_start_text() -> str:
     return (
         f"**发送分享链接以进行解析**\n\n"
         f"**支持的平台:**\n"

@@ -1,8 +1,9 @@
 import asyncio
 import shutil
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 from parsehub import DownloadResult
 from parsehub.types import AnyParseResult, PostType, ProgressUnit
@@ -50,7 +51,7 @@ class PipelineProgressCallback:
         self._reporter = reporter
         self._last_text: str | None = None
 
-    async def __call__(self, current: int, total: int, unit: ProgressUnit, *args, **kwargs) -> None:
+    async def __call__(self, current: int, total: int, unit: ProgressUnit, *args: Any, **kwargs: Any) -> None:
         from plugins.helpers import progress as fmt_progress
 
         text = fmt_progress(current, total, unit)
@@ -179,13 +180,14 @@ class ParsePipeline:
             )
 
         await self._reporter.report("处 理 中...")
-        processed_list = await self._step(
+        maybe_processed_list = await self._step(
             "格式转换",
             lambda: process_media_files(download_result),
             cleanup=lambda: shutil.rmtree(download_result.output_dir, ignore_errors=True),
         )
-        if processed_list is None:
+        if maybe_processed_list is None:
             return None
+        processed_list = maybe_processed_list
 
         logger.debug(f"流水线完成: processed_count={len(processed_list)}")
         return PipelineResult(
@@ -194,7 +196,13 @@ class ParsePipeline:
             output_dir=download_result.output_dir,
         )
 
-    async def _step(self, stage: str, action, cleanup=None, timeout: float | None = None):
+    async def _step[T](
+        self,
+        stage: str,
+        action: Callable[[], Awaitable[T]],
+        cleanup: Callable[[], None] | None = None,
+        timeout: float | None = None,
+    ) -> T | None:
         """执行单个步骤，失败时统一处理"""
         logger.debug(f"执行步骤: {stage}")
         try:

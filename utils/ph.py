@@ -1,5 +1,6 @@
 import random
 from dataclasses import dataclass
+from typing import Any
 
 from telegraph.aio import Telegraph as TelegraphAPI
 
@@ -41,13 +42,13 @@ class Telegraph:
 
     async def create_page(
         self,
-        title,
-        content=None,
-        html_content=None,
-        author_name=None,
-        author_url=None,
-        return_content=False,
-        auto_create_account=True,
+        title: str,
+        content: list[dict[str, Any]] | None = None,
+        html_content: str | None = None,
+        author_name: str | None = None,
+        author_url: str | None = None,
+        return_content: bool = False,
+        auto_create_account: bool = True,
     ) -> "TelegraphPage":
         """创建 Telegraph 页面"""
         if auto_create_account and not self.token:

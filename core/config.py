@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
@@ -30,12 +31,12 @@ class BotSettings(BaseSettings):
     debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")
 
     @model_validator(mode="after")
-    def cache_config_validate(self):
+    def cache_config_validate(self) -> "BotSettings":
         if self.cache_time and self.cache_cleanup_interval > self.cache_time:
             raise ValueError("CACHE_CLEANUP_INTERVAL 不能大于 CACHE_TIME")
         return self
 
-    def model_post_init(self, __context) -> None:
+    def model_post_init(self, __context: Any) -> None:
         """模型初始化后的操作"""
         self.sessions_path.mkdir(parents=True, exist_ok=True)
         self.cache_path.mkdir(parents=True, exist_ok=True)
@@ -73,7 +74,7 @@ class BotSettings(BaseSettings):
 
     @field_validator("data_path", mode="before")
     @classmethod
-    def data_path_init(cls, v):
+    def data_path_init(cls, v: str | Path) -> Path:
         p = Path(v) if isinstance(v, str) else v
         p.mkdir(exist_ok=True, parents=True)
         return p
@@ -100,19 +101,19 @@ class WatchdogSettings(BaseSettings):
     exit_flag: bool = Field(default=False)
     """退出标志"""
 
-    def update_bot_restart_count(self):
+    def update_bot_restart_count(self) -> None:
         self.restart_count += 1
         os.environ["WD_RESTART_COUNT"] = str(self.restart_count)
 
-    def reset_bot_restart_count(self):
+    def reset_bot_restart_count(self) -> None:
         self.restart_count = 0
         os.environ["WD_RESTART_COUNT"] = "0"
 
-    def update_bot_disconnect_count(self):
+    def update_bot_disconnect_count(self) -> None:
         self.disconnect_count += 1
         os.environ["WD_DISCONNECT_COUNT"] = str(self.disconnect_count)
 
-    def reset_bot_disconnect_count(self):
+    def reset_bot_disconnect_count(self) -> None:
         self.disconnect_count = 0
         os.environ["WD_DISCONNECT_COUNT"] = "0"
 

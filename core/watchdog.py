@@ -11,7 +11,7 @@ from log import logger
 logger = logger.bind(name="Watchdog")
 
 
-async def reset_count_task():
+async def reset_count_task() -> None:
     """重置重启次数任务"""
     if ws.restart_count:
         logger.info(f"第 {ws.restart_count} 次重启成功, 稳定运行 10 分钟后重置重启次数")
@@ -24,7 +24,7 @@ async def reset_count_task():
     logger.info("已稳定运行 10 分钟, 次数已重置")
 
 
-async def on_connect(_, session: Session) -> None:
+async def on_connect(_: Client, session: Session) -> None:
     """Bot 连接成功回调函数"""
 
     if session.is_media:

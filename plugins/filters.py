@@ -1,10 +1,12 @@
+from typing import Any
+
 from pyrogram import filters
 from pyrogram.types import InlineQuery, Message
 
 from services import ParseService
 
 
-async def _platform_filter(_, __, update: Message | InlineQuery):
+async def _platform_filter(_: Any, __: Any, update: Message | InlineQuery) -> bool:
     t: str | None = None
     match update:
         case Message():

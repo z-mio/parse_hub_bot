@@ -45,7 +45,7 @@ class PlatformsConfig(BaseModel):
     platforms: dict[str, Platform] = {}
 
     @classmethod
-    def load_config(cls, file: Path):
+    def load_config(cls, file: Path) -> "PlatformsConfig":
         if not file.exists():
             logger.info("未找到 platform_config.yaml, 跳过加载")
             return cls()

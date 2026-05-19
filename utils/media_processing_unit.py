@@ -409,7 +409,7 @@ class MediaProcessingUnit:
         return "unknown"
 
 
-async def main():
+async def main() -> None:
     mpu = MediaProcessingUnit(output_dir=Path(r"D:\Downloads\新建文件夹"))
     result = await mpu.process(r"D:\Downloads\36751083810-1-30066.mp4")
     print(result.output_paths)

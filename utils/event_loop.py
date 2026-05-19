@@ -4,7 +4,7 @@ import sys
 from log import logger
 
 
-def setup_optimized_event_loop():
+def setup_optimized_event_loop() -> bool:
     """配置优化的事件循环，自动选择winloop或uvloop"""
     is_windows = sys.platform == "win32"
     loop_module = "winloop" if is_windows else "uvloop"
