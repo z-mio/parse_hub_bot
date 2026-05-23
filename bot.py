@@ -20,7 +20,6 @@ setup_optimized_event_loop()
 loop = asyncio.new_event_loop()
 
 
-
 class Bot(Client):
     def __init__(self) -> None:
         self.cfg = bs
