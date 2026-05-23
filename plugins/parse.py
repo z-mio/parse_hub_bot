@@ -2,7 +2,7 @@ import asyncio
 import os
 from collections.abc import Awaitable, Callable
 from itertools import batched
-from typing import Any, Literal
+from typing import Any, BinaryIO, Literal, cast
 
 from parsehub.types import (
     AniFile,
@@ -42,6 +42,11 @@ from utils.helpers import pack_dir_to_tar_gz, to_list, with_request_id
 logger = logger.bind(name="Parse")
 SKIP_DOWNLOAD_THRESHOLD = 0
 MAX_RETRIES = 5
+MediaInput = str | BinaryIO
+
+
+def _media_input(media: str | BinaryIO | None) -> MediaInput:
+    return cast(MediaInput, media)
 
 
 async def _send_with_rate_limit[T](
@@ -369,11 +374,11 @@ async def _send_raw(
         if len(all_docs) == 1:
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
             sent_msg = await _send_with_rate_limit(
-                lambda: msg.reply_document(all_docs[0].media, caption=caption, force_document=True)
+                lambda: msg.reply_document(_media_input(all_docs[0].media), caption=caption, force_document=True)
             )
             if livephoto_videos and sent_msg:
                 await _send_with_rate_limit(
-                    lambda: sent_msg.reply_document(livephoto_videos[0].media, force_document=True)
+                    lambda: sent_msg.reply_document(_media_input(livephoto_videos[0].media), force_document=True)
                 )
         else:
             msgs: list[Message] = []
@@ -386,7 +391,7 @@ async def _send_raw(
                 for idx, media_doc in livephoto_videos.items():
                     await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
                     await _send_with_rate_limit(
-                        lambda m_=media_doc, idx_=idx: msgs[idx_].reply_document(m_.media, force_document=True)  # type: ignore[misc]
+                        lambda m_=media_doc, idx_=idx: msgs[idx_].reply_document(_media_input(m_.media), force_document=True)  # type: ignore[misc]
                     )
             await _send_with_rate_limit(
                 lambda: msg.reply_text(
@@ -462,18 +467,18 @@ async def _send_single(
         sent: Message | None = None
         if animations:
             await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-            sent = await _send_with_rate_limit(lambda: msg.reply_animation(animations[0].media, caption=caption))
+            sent = await _send_with_rate_limit(lambda: msg.reply_animation(_media_input(animations[0].media), caption=caption))
         else:
             single = photos_videos[0]
             match single:
                 case InputMediaPhoto():
                     await msg.reply_chat_action(enums.ChatAction.UPLOAD_PHOTO)
-                    sent = await _send_with_rate_limit(lambda: msg.reply_photo(single.media, caption=caption))
+                    sent = await _send_with_rate_limit(lambda: msg.reply_photo(_media_input(single.media), caption=caption))
                 case InputMediaVideo():
                     await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
                     sent = await _send_with_rate_limit(
                         lambda: msg.reply_video(
-                            single.media,
+                            _media_input(single.media),
                             caption=caption,
                             video_cover=single.video_cover,
                             duration=single.duration,
@@ -489,7 +494,7 @@ async def _send_single(
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
         await _send_with_rate_limit(
-            lambda: msg.reply_document(all_media[0].media, caption=caption, force_document=True)
+            lambda: msg.reply_document(_media_input(all_media[0].media), caption=caption, force_document=True)
         )
         return None
 
@@ -545,7 +550,7 @@ async def _send_multi(
                     media_list.append(cm)
     except Exception as e:
         logger.warning(f"上传失败 {e}, 使用兼容模式上传")
-        input_documents: list[InputMediaDocument] = [InputMediaDocument(media=item.media) for item in photos_videos]
+        input_documents: list[InputMediaDocument] = [InputMediaDocument(media=_media_input(item.media)) for item in photos_videos]
         for document_batch in batched(input_documents, 10):
             if document_batch[-1] == input_documents[-1]:
                 document_batch[0].caption = caption
