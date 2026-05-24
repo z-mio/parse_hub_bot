@@ -23,7 +23,7 @@ class BotSettings(BaseSettings):
     bot_proxy: dict | None = Field(default=None)
     data_path: Path = Path("data")
     cache_time: int = Field(default=14 * 24 * 60, ge=0, description="缓存时间, 单位分钟, 0 为禁用")
-    cache_max_entries: int = Field(default=30000, ge=0, description="缓存最大条数, 0 为不限制")
+    cache_max_entries: int = Field(default=15000, ge=0, description="缓存最大条数, 0 为不限制")
     cache_save_interval: int = Field(default=5, gt=0, description="缓存保存间隔, 单位分钟")
     cache_cleanup_interval: int = Field(default=60, gt=0, description="缓存过期清理间隔, 单位分钟")
     download_dir: Path = Path("downloads")
