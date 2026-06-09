@@ -171,7 +171,7 @@ class ParsePipeline:
             return None
         logger.debug(f"下载完成: output_dir={download_result.output_dir}")
 
-        # ── 3. 格式转换 ──
+        # ── 3. 媒体处理 ──
         if self._skip_media_processing:
             logger.debug(f"流水线完成: download_result={download_result}")
             processed_list = [ProcessedMedia(i, [i.path]) for i in to_list(download_result.media)]
@@ -179,9 +179,8 @@ class ParsePipeline:
                 parse_result=parse_result, processed_list=processed_list, output_dir=download_result.output_dir
             )
 
-        await self._reporter.report("处 理 中...")
         maybe_processed_list = await self._step(
-            "格式转换",
+            "媒体处理",
             lambda: process_media_files(download_result),
             cleanup=lambda: shutil.rmtree(download_result.output_dir, ignore_errors=True),
         )
