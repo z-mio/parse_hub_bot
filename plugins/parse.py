@@ -1,6 +1,6 @@
 import asyncio
 import os
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from itertools import batched
 from typing import Any, BinaryIO, Literal, cast
 
@@ -14,7 +14,7 @@ from parsehub.types import (
     VideoFile,
 )
 from pyrogram import Client, enums, filters
-from pyrogram.errors import FloodWait, SlowmodeWait
+from pyrogram.errors import FloodWait, SlowmodeWait, WebpageMediaEmpty
 from pyrogram.types import (
     InputMediaAnimation,
     InputMediaDocument,
@@ -273,7 +273,7 @@ async def handle_parse(
 
 
 def _build_input_media(
-    media_refs: list[AnyMediaRef],
+    media_refs: Sequence[AnyMediaRef],
     processed_list: list[ProcessedMedia],
 ) -> tuple[list[InputMediaPhoto | InputMediaVideo], list[InputMediaAnimation]]:
     """根据处理结果和媒体引用构建 Telegram InputMedia 列表。
@@ -391,9 +391,9 @@ async def _send_raw(
                 for idx, media_doc in livephoto_videos.items():
                     await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
                     await _send_with_rate_limit(
-                        lambda m_=media_doc, idx_=idx: msgs[idx_].reply_document(
+                        lambda m_=media_doc, idx_=idx: msgs[idx_].reply_document(  # type: ignore
                             _media_input(m_.media), force_document=True
-                        )  # type: ignore[misc]
+                        )
                     )
             await _send_with_rate_limit(
                 lambda: msg.reply_text(
@@ -482,17 +482,30 @@ async def _send_single(
                     )
                 case InputMediaVideo():
                     await msg.reply_chat_action(enums.ChatAction.UPLOAD_VIDEO)
-                    sent = await _send_with_rate_limit(
-                        lambda: msg.reply_video(
-                            _media_input(single.media),
-                            caption=caption,
-                            video_cover=single.video_cover,
-                            duration=single.duration,
-                            width=single.width,
-                            height=single.height,
-                            supports_streaming=True,
+                    try:
+                        sent = await _send_with_rate_limit(
+                            lambda: msg.reply_video(
+                                _media_input(single.media),
+                                caption=caption,
+                                video_cover=single.video_cover,
+                                duration=single.duration,
+                                width=single.width,
+                                height=single.height,
+                                supports_streaming=True,
+                            )
                         )
-                    )
+                    except WebpageMediaEmpty:
+                        logger.warning("Tg 获取封面失败, 移除封面上传")
+                        sent = await _send_with_rate_limit(
+                            lambda: msg.reply_video(
+                                _media_input(single.media),
+                                caption=caption,
+                                duration=single.duration,
+                                width=single.width,
+                                height=single.height,
+                                supports_streaming=True,
+                            )
+                        )
 
         if sent and (cm := _cache_media_from_message(sent)):
             media_list.append(cm)
@@ -577,7 +590,7 @@ async def _send_media(
     """构建、发送媒体，并返回缓存条目。
     返回 None 表示不缓存
     """
-    media_refs: list[AnyMediaRef] = to_list(parse_result.media)
+    media_refs = to_list(parse_result.media)
     photos_videos, animations = _build_input_media(media_refs, processed_list)
     all_count = len(photos_videos) + len(animations)
     logger.debug(f"媒体分类完成: animations={len(animations)}, photos_videos={len(photos_videos)}")

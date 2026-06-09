@@ -1,4 +1,5 @@
 import asyncio
+from collections.abc import Sequence
 
 from parsehub import AnyParseResult
 from parsehub.types import (
@@ -325,7 +326,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     await reporter.report("上 传 中...")
 
     processed = result.processed_list[media_index]
-    video_ref = parse_result.media[media_index] if isinstance(parse_result.media, list) else parse_result.media
+    video_ref = parse_result.media[media_index] if isinstance(parse_result.media, Sequence) else parse_result.media
 
     try:
         file_paths = processed.output_paths or [processed.source.path]

@@ -2,7 +2,7 @@ import asyncio
 import functools
 import tarfile
 import uuid
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from pathlib import Path
 from typing import Any, overload
 
@@ -26,15 +26,15 @@ async def run_cmd(*cmd: str, timeout: float = 30) -> str:
 
 
 @overload
-def to_list[T](v: list[T]) -> list[T]: ...
+def to_list[T](v: Sequence[T]) -> Sequence[T]: ...
 
 
 @overload
-def to_list[T](v: T) -> list[T]: ...
+def to_list[T](v: T) -> Sequence[T]: ...
 
 
-def to_list[T](v: T | list[T]) -> list[T]:
-    return v if isinstance(v, list) else [v]
+def to_list[T](v: T | Sequence[T]) -> Sequence[T]:
+    return v if isinstance(v, Sequence) else [v]
 
 
 def pack_dir_to_tar_gz(dir_path: str | Path, output_path: str | Path | None = None) -> Path:

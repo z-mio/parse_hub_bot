@@ -37,7 +37,9 @@ def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None
     return build_caption_by_str(parse_result.title, parse_result.content, parse_result.raw_url, telegraph_url)
 
 
-def build_caption_by_str(title: str | None, content: str | None, raw_url: str, telegraph_url: str | None = None) -> str:
+def build_caption_by_str(
+    title: str | None, content: str | None, raw_url: str | None, telegraph_url: str | None = None
+) -> str:
     """构建消息正文：标题 + 内容 + 来源链接"""
     title, content = title or "", content or ""
 
@@ -51,7 +53,8 @@ def build_caption_by_str(title: str | None, content: str | None, raw_url: str, t
         if content:
             parts.append(content)
         body = format_text("\n\n".join(parts) or "**无标题**")
-
+    if not raw_url:
+        return body
     return f"{body}\n\n<b>▎<a href='{raw_url}'>Source</a></b>"
 
 
