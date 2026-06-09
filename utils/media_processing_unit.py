@@ -1,6 +1,7 @@
 """媒体处理器 — 将图片/视频转换为 Telegram 兼容格式"""
 
 import asyncio
+import json
 import math
 import mimetypes
 import os
@@ -218,14 +219,14 @@ class MediaProcessingUnit:
     # ------------------------------------------------------------------ #
 
     async def process_video(self, file_path: Path) -> MediaProcessResult:
-        codec = await self.get_video_codec(file_path)
-        self.logger(f"视频编码: codec={codec}, path={file_path}")
+        container = await self.get_container(file_path)
+        self.logger(f"视频容器: container={container}, path={file_path}")
 
         converted: Path | None = None
-        if codec != "h264":
-            self.logger("编码非 h264，开始转码")
-            converted = await self.ensure_h264(file_path)
-            self.logger(f"转码完成: {converted}")
+        if "mp4" not in container:
+            self.logger("容器非 mp4，开始重新封装")
+            converted = await self.remux_to_mp4(file_path)
+            self.logger(f"封装完成: {converted}")
 
         source = converted or file_path
         video_size = source.stat().st_size
@@ -257,6 +258,16 @@ class MediaProcessingUnit:
         return out.strip().lower() if out else ""
 
     @staticmethod
+    async def get_container(file_path: Path) -> str:
+        result = await run_cmd(
+            "ffprobe", "-v", "error", "-show_entries", "format=format_name", "-of", "json", str(file_path)
+        )
+        r: dict[str, dict[str, str]] = json.loads(result)
+        if not (f := r.get("format", {})):
+            raise ValueError(f"ffprobe failed to get container: {result}")
+        return f["format_name"]
+
+    @staticmethod
     async def get_duration(file_path: Path) -> float:
         out = await run_cmd(
             "ffprobe",
@@ -269,6 +280,17 @@ class MediaProcessingUnit:
             str(file_path),
         )
         return float(out.strip()) if out else 0.0
+
+    async def remux_to_mp4(self, file_path: Path) -> Path:
+        out = self.output_dir / (file_path.stem + "_remux" + ".mp4")
+        cmd = ["ffmpeg", "-i", str(file_path), "-c", "copy", "-movflags", "+faststart", "-y", str(out)]
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.DEVNULL,
+        )
+        await proc.wait()
+        return out
 
     async def ensure_h264(self, file_path: Path) -> Path:
         out = self.output_dir / (file_path.stem + "_h264" + file_path.suffix)
