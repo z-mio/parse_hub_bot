@@ -14,7 +14,7 @@ from parsehub.types import (
     VideoFile,
 )
 from pyrogram import Client, enums, filters
-from pyrogram.errors import FloodWait, SlowmodeWait, WebpageMediaEmpty
+from pyrogram.errors import FloodWait, SlowmodeWait, WebpageCurlFailed, WebpageMediaEmpty
 from pyrogram.types import (
     InputMediaAnimation,
     InputMediaDocument,
@@ -494,7 +494,7 @@ async def _send_single(
                                 supports_streaming=True,
                             )
                         )
-                    except WebpageMediaEmpty:
+                    except (WebpageCurlFailed, WebpageMediaEmpty):
                         logger.warning("Tg 获取封面失败, 移除封面上传")
                         sent = await _send_with_rate_limit(
                             lambda: msg.reply_video(
