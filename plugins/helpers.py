@@ -91,7 +91,7 @@ async def create_telegraph_page(html_content: str, cli: Client, parse_result: An
     page = await Telegraph().create_page(
         parse_result.title or "无标题",
         html_content=html_content,
-        author_name=me.full_name,
+        author_name=f"{me.full_name} | @{me.username}",
         author_url=parse_result.raw_url,
     )
     logger.debug(f"Telegraph 页面已创建: {page.url}")
