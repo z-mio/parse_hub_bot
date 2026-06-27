@@ -20,3 +20,10 @@ async def _platform_filter(_: Any, __: Any, update: Message | InlineQuery) -> bo
 
 
 platform_filter = filters.create(_platform_filter)
+
+
+async def _via_me(_: Any, __: Any, update: Message) -> bool:
+    return bool(update.via_bot and update.via_bot.is_self)
+
+
+via_me_filter = filters.create(_via_me)

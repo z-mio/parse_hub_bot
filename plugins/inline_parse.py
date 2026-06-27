@@ -175,7 +175,18 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
     media_list = to_list(parse_result.media)
     reply_markup = Ikm([[Ikb("原链接", url=parse_result.raw_url)]])
 
-    results: list[InlineQueryResult] = []
+    results: list[InlineQueryResult] = [
+        InlineQueryResultArticle(
+            title="原始链接",
+            description=parse_result.raw_url,
+            input_message_content=InputTextMessageContent(
+                parse_result.raw_url, link_preview_options=LinkPreviewOptions(is_disabled=True)
+            ),
+            thumb_url="https://i.iij.li/i/20260627/6a3fb12066abb.png",
+            thumb_width=72,
+            thumb_height=72,
+        )
+    ]
 
     # ── 富文本直接 telegraph 发送 ──
     if parse_result.type == PostType.RICHTEXT:

@@ -26,7 +26,7 @@ from pyrogram.types import (
 
 from core import bs
 from log import logger
-from plugins.filters import platform_filter
+from plugins.filters import platform_filter, via_me_filter
 from plugins.helpers import (
     ProcessedMedia,
     build_caption,
@@ -111,7 +111,9 @@ class MessageStatusReporter(StatusReporter):
 # ── Handler ──────────────────────────────────────────────────────────
 
 
-@Client.on_message(filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & platform_filter))
+@Client.on_message(
+    filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & ~via_me_filter & platform_filter)
+)
 async def jx(cli: Client, msg: Message) -> None:
     mode = "preview"
     if msg.command:
