@@ -49,6 +49,7 @@ from utils.helpers import to_list, with_request_id
 
 logger = logger.bind(name="InlineParse")
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
+LINK_ICON_URL = 'https://i.iij.li/i/20260627/6a3fb12066abb.png'
 
 
 class InlineStatusReporter(StatusReporter):
@@ -101,9 +102,22 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list[InlineQ
     caption = build_caption_by_str(entry.parse_result.title, content, raw_url, entry.telegraph_url)
     title = entry.parse_result.title or "无标题"
 
+    results: list[InlineQueryResult] = [
+        InlineQueryResultArticle(
+            title="原始链接",
+            description=raw_url,
+            input_message_content=InputTextMessageContent(
+                raw_url, link_preview_options=LinkPreviewOptions(is_disabled=True)
+            ),
+            thumb_url=LINK_ICON_URL,
+            thumb_width=72,
+            thumb_height=72,
+        )
+    ]
+
     # 富文本
     if entry.telegraph_url:
-        return [
+        results.append(
             InlineQueryResultArticle(
                 title=title,
                 input_message_content=InputTextMessageContent(
@@ -111,9 +125,9 @@ def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list[InlineQ
                     link_preview_options=LinkPreviewOptions(show_above_text=True),
                 ),
             )
-        ]
+        )
+        return results
 
-    results: list[InlineQueryResult] = []
     if not entry.media:
         results.append(
             InlineQueryResultArticle(
@@ -182,7 +196,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
             input_message_content=InputTextMessageContent(
                 parse_result.raw_url, link_preview_options=LinkPreviewOptions(is_disabled=True)
             ),
-            thumb_url="https://i.iij.li/i/20260627/6a3fb12066abb.png",
+            thumb_url=LINK_ICON_URL,
             thumb_width=72,
             thumb_height=72,
         )
