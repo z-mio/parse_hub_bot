@@ -253,7 +253,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
                     photo_width=media_ref.width,
                     photo_height=media_ref.height,
                     id=f"download_{index}",
-                    title=caption,
+                    title=title,
                     caption=caption,
                     reply_markup=reply_markup,
                 )
