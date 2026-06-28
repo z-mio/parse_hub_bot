@@ -166,7 +166,7 @@ class ParsePipeline:
             )
 
         progress_cb = PipelineProgressCallback(self._reporter)
-        download_result = await self._step(
+        download_result: DownloadResult = await self._step(
             "下载",
             lambda: fn(),
             timeout=60 * 30,  # 30分钟
