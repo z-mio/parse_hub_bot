@@ -157,6 +157,7 @@ class ParsePipeline:
         # ── 2. 下载 ──
         await self._reporter.report("下 载 中...")
         p = ps.parser.get_platform(self._url)
+        progress_cb = PipelineProgressCallback(self._reporter)
 
         async def fn() -> DownloadResult:
             proxy = pl_cfg.roll_downloader_proxy(p.id)
@@ -165,7 +166,6 @@ class ParsePipeline:
                 bs.download_dir, callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=self._save_metadata
             )
 
-        progress_cb = PipelineProgressCallback(self._reporter)
         download_result: DownloadResult = await self._step(
             "下载",
             lambda: fn(),
@@ -222,7 +222,7 @@ class ParsePipeline:
                 error = TimeoutError(f"[{stage}] 超时 (>{timeout}s)")
                 logger.error(str(error))
                 if attempt < max_attempts:
-                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
+                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试")
                     await asyncio.sleep(retry_delay)
                     continue
                 await self._reporter.report_error(stage, error)
@@ -233,7 +233,7 @@ class ParsePipeline:
                 logger.exception(e)
                 logger.error(f"[{stage}] 失败, 以上为错误信息")
                 if attempt < max_attempts:
-                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
+                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试")
                     await asyncio.sleep(retry_delay)
                     continue
                 await self._reporter.report_error(stage, e)
