@@ -49,7 +49,7 @@ from utils.helpers import to_list, with_request_id
 
 logger = logger.bind(name="InlineParse")
 DEFAULT_THUMB_URL = "https://telegra.ph/file/cdfdb65b83a4b7b2b6078.png"
-LINK_ICON_URL = 'https://i.iij.li/i/20260627/6a3fb12066abb.png'
+LINK_ICON_URL = "https://i.iij.li/i/20260627/6a3fb12066abb.png"
 
 
 class InlineStatusReporter(StatusReporter):

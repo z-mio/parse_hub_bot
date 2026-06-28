@@ -135,7 +135,7 @@ class ParsePipeline:
         logger.debug(f"流水线启动: url={self._url}, has_cached_result={self._parse_result is not None}")
         ps = ParseService()
         # ── 1. 解析 ──
-        if self._parse_result is not None:
+        if self._parse_result:
             logger.debug("使用缓存的解析结果")
             parse_result = self._parse_result
         else:
@@ -157,15 +157,20 @@ class ParsePipeline:
         # ── 2. 下载 ──
         await self._reporter.report("下 载 中...")
         p = ps.parser.get_platform(self._url)
-        proxy = pl_cfg.roll_downloader_proxy(p.id)
-        logger.debug(f"使用配置: proxy={proxy}")
-        progress_cb = PipelineProgressCallback(self._reporter)
-        download_result: DownloadResult = await self._step(
-            "下载",
-            lambda: parse_result.download(
+
+        async def fn() -> DownloadResult:
+            proxy = pl_cfg.roll_downloader_proxy(p.id)
+            logger.debug(f"使用配置: proxy={proxy}")
+            return await parse_result.download(
                 bs.download_dir, callback=progress_cb, callback_args=(), proxy=proxy, save_metadata=self._save_metadata
-            ),
+            )
+
+        progress_cb = PipelineProgressCallback(self._reporter)
+        download_result = await self._step(
+            "下载",
+            lambda: fn(),
             timeout=60 * 30,  # 30分钟
+            retries=2,
         )
         if download_result is None:
             return None
@@ -201,24 +206,38 @@ class ParsePipeline:
         action: Callable[[], Awaitable[T]],
         cleanup: Callable[[], None] | None = None,
         timeout: float | None = None,
+        retries: int = 0,
+        retry_delay: float = 1,
     ) -> T | None:
         """执行单个步骤，失败时统一处理"""
-        logger.debug(f"执行步骤: {stage}")
-        try:
-            coro = action()
-            if timeout is not None:
-                return await asyncio.wait_for(coro, timeout=timeout)
-            return await coro
-        except TimeoutError:
-            logger.error(f"{stage}超时 (>{timeout}s)")
-            await self._reporter.report_error(stage, TimeoutError(f"{stage}超时 (>{timeout}s)"))
-            if cleanup:
-                cleanup()
-            return None
-        except Exception as e:
-            logger.exception(e)
-            logger.error(f"{stage}失败, 以上为错误信息")
-            await self._reporter.report_error(stage, e)
-            if cleanup:
-                cleanup()
-            return None
+        max_attempts = retries + 1
+        for attempt in range(1, max_attempts + 1):
+            logger.debug(f"执行步骤: [{stage}] attempt={attempt}/{max_attempts}")
+            try:
+                coro = action()
+                if timeout is not None:
+                    return await asyncio.wait_for(coro, timeout=timeout)
+                return await coro
+            except TimeoutError:
+                error = TimeoutError(f"[{stage}] 超时 (>{timeout}s)")
+                logger.error(str(error))
+                if attempt < max_attempts:
+                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
+                    await asyncio.sleep(retry_delay)
+                    continue
+                await self._reporter.report_error(stage, error)
+                if cleanup:
+                    cleanup()
+                return None
+            except Exception as e:
+                logger.exception(e)
+                logger.error(f"[{stage}] 失败, 以上为错误信息")
+                if attempt < max_attempts:
+                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
+                    await asyncio.sleep(retry_delay)
+                    continue
+                await self._reporter.report_error(stage, e)
+                if cleanup:
+                    cleanup()
+                return None
+        return None
