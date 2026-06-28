@@ -222,7 +222,7 @@ class ParsePipeline:
                 error = TimeoutError(f"[{stage}] 超时 (>{timeout}s)")
                 logger.error(str(error))
                 if attempt < max_attempts:
-                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试")
+                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
                     await asyncio.sleep(retry_delay)
                     continue
                 await self._reporter.report_error(stage, error)
@@ -233,7 +233,7 @@ class ParsePipeline:
                 logger.exception(e)
                 logger.error(f"[{stage}] 失败, 以上为错误信息")
                 if attempt < max_attempts:
-                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试")
+                    logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
                     await asyncio.sleep(retry_delay)
                     continue
                 await self._reporter.report_error(stage, e)
