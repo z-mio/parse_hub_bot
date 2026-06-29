@@ -2,14 +2,21 @@ import random
 from pathlib import Path
 
 from parsehub.types import Platform as PPlatform
-from pydantic import BaseModel, ConfigDict, HttpUrl
+from pydantic import BaseModel, ConfigDict, HttpUrl, SecretStr, field_serializer
 from yaml import safe_load
 
 from log import logger
+from utils.helpers import mask_secret
 
 from .config import bs
 
 logger = logger.bind(name="PlatformConfig")
+
+
+class MaskedSecretStr(SecretStr):
+    def _display(self) -> str:
+        value = self._secret_value
+        return mask_secret(value)
 
 
 class Platform(BaseModel):
@@ -19,9 +26,15 @@ class Platform(BaseModel):
     disable_downloader_proxy: bool = False
     parser_proxies: list[HttpUrl] | None = None
     downloader_proxies: list[HttpUrl] | None = None
-    cookies: list[str] | None = None
+    cookies: list[MaskedSecretStr] | None = None
 
-    def roll_cookie(self) -> str | None:
+    @field_serializer("cookies")
+    def serialize_cookies(self, cookies: list[SecretStr] | None) -> list[str] | None:
+        if cookies is None:
+            return None
+        return [str(cookie) for cookie in cookies]
+
+    def roll_cookie(self) -> MaskedSecretStr | None:
         if not self.cookies:
             return None
         return random.choice(self.cookies)
@@ -93,7 +106,7 @@ class PlatformsConfig(BaseModel):
     def get(self, platform_id: str) -> Platform | None:
         return self.platforms.get(platform_id)
 
-    def roll_cookie(self, platform_id: str) -> str | None:
+    def roll_cookie(self, platform_id: str) -> MaskedSecretStr | None:
         if not (pc := self.get(platform_id)):
             return None
         return pc.roll_cookie()

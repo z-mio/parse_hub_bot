@@ -38,7 +38,7 @@ class ParseService:
                 cookie = pl_cfg.roll_cookie(p.id)
                 proxy = pl_cfg.roll_parser_proxy(p.id)
                 logger.debug(f"使用配置: proxy={proxy}, cookie={cookie}, attempt={attempt}/{max_retries}")
-                pr = await self.parser.parse(url, cookie=cookie, proxy=proxy)
+                pr = await self.parser.parse(url, cookie=cookie.get_secret_value() if cookie else None, proxy=proxy)
                 logger.debug(f"解析完成: {pr}")
                 return pr
             except Exception as e:

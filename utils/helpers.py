@@ -71,3 +71,10 @@ def with_request_id[T](func: Callable[..., Awaitable[T]]) -> Callable[..., Await
             return await func(*args, **kwargs)
 
     return wrapper
+
+
+def mask_secret(value: str) -> str:
+    if not value:
+        return ""
+    c = min(len(value) // 3, 4)
+    return f"{value[:c]}******{value[-c:]}"
