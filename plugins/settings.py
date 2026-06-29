@@ -150,7 +150,12 @@ async def switch_auto_delete_url(_: Client, msg: Message) -> None:
         user_config.auto_delete_url = not user_config.auto_delete_url
         await usr.save_config(msg.from_user.id, user_config)
 
-    await msg.reply_text(t_[lang](f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**"))
+    await msg.reply_text(
+        t_[lang](
+            f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**\n"
+            f"{'▎**群内使用需要授予 Bot 删除消息权限**' if user_config.auto_delete_url else ''}"
+        )
+    )
 
 
 @Client.on_message(filters.command("switch_platform"))
