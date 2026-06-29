@@ -79,11 +79,11 @@ def progress(current: int, total: int, unit: str, _t: PreLocaleSelector) -> str 
 
         text = _t(f"下 载 中... | {current * 100 / total:.0f}%")
         if round(current * 100 / total, 1) % 25 == 0:
-            return text
+            return str(text)
     else:
         text = _t(f"下 载 中... | {current}/{total}")
         if (current + 1) % 3 == 0 or (current + 1) == total:
-            return text
+            return str(text)
     return None
 
 

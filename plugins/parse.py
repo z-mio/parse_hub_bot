@@ -279,10 +279,10 @@ async def handle_parse(
         return
 
     if mode == "raw":
-        await _send_raw(msg, result, reporter)
+        await _send_raw(msg, result, reporter, _t)
         return
     if mode == "zip":
-        await _send_zip(msg, result, reporter)
+        await _send_zip(msg, result, reporter, _t)
         return
 
     # ── 上传媒体 ──
