@@ -3,12 +3,14 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from easy_ai18n.core import LocaleContent
 from markdown import markdown
 from parsehub import ParseHub, Platform
 from parsehub.types import AnyMediaFile, AnyParseResult, DownloadResult, RichTextParseResult
 from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
 
+from i18n import t_
 from log import logger
 from utils.converter import clean_article_html
 from utils.helpers import to_list
@@ -136,8 +138,8 @@ def get_supported_platforms() -> str:
     return "\n".join(text)
 
 
-def build_start_text() -> str:
-    return (
+def build_start_text() -> LocaleContent:
+    return t_(
         f"**发送分享链接以进行解析**\n\n"
         f"**支持的平台:**\n"
         f"<blockquote expandable>{get_supported_platforms()}</blockquote>\n\n"

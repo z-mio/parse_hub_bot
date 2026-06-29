@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
 
+from easy_ai18n import PreLocaleSelector
 from parsehub import DownloadResult
 from parsehub.types import AnyParseResult, PostType, ProgressUnit
 
@@ -82,6 +83,7 @@ class ParsePipeline:
         skip_download_threshold: int = 0,
         richtext_skip_download: bool = True,
         save_metadata: bool = False,
+        _t: PreLocaleSelector,
     ):
         self._url = url
         self._reporter = reporter
@@ -92,6 +94,7 @@ class ParsePipeline:
         self._skip_download_threshold = skip_download_threshold
         self._richtext_skip_download = richtext_skip_download
         self._save_metadata = save_metadata
+        self._t = _t
 
     @property
     def waited(self) -> bool:
@@ -113,7 +116,7 @@ class ParsePipeline:
             if existing is not None:
                 self._waited = True
                 logger.debug(f"Singleflight 命中, 等待已有流水线: url={key}")
-                await self._reporter.report("已有相同任务正在解析, 等待解析完成...")
+                await self._reporter.report(self._t("已有相同任务正在解析, 等待解析完成..."))
                 await existing.wait()
                 await self._reporter.dismiss()
                 return None
@@ -139,7 +142,7 @@ class ParsePipeline:
             logger.debug("使用缓存的解析结果")
             parse_result = self._parse_result
         else:
-            await self._reporter.report("解 析 中...")
+            await self._reporter.report(self._t("解 析 中..."))
             parse_result = await self._step("解析", lambda: ps.parse(self._url))
             if parse_result is None:
                 return None
@@ -155,7 +158,7 @@ class ParsePipeline:
             return PipelineResult(parse_result=parse_result)
 
         # ── 2. 下载 ──
-        await self._reporter.report("下 载 中...")
+        await self._reporter.report(self._t("下 载 中..."))
         p = ps.parser.get_platform(self._url)
         progress_cb = PipelineProgressCallback(self._reporter)
 

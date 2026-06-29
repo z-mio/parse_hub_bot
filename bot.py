@@ -10,6 +10,7 @@ from pyrogram.types import BotCommand
 from core import bs, on_connect, on_disconnect, ws
 from db.engine import close_db
 from db.init import init_db
+from i18n import t_
 from log import logger, setup_logging
 from services import parse_cache, persistent_cache
 from utils.event_loop import setup_optimized_event_loop
@@ -68,13 +69,23 @@ class Bot(Client):
 
     async def set_menu(self) -> None:
         commands = {
-            "start": "开始",
-            "jx": "解析",
-            "raw": "不处理媒体, 发送原始文件",
-            "zip": "不处理媒体, 保存解析结果, 发送压缩包",
+            "start": t_("开始"),
+            "jx": t_("解析"),
+            "raw": t_("不处理媒体, 发送原始文件"),
+            "zip": t_("不处理媒体, 保存解析结果, 发送压缩包"),
+            "lang": t_("修改语言"),
+            "mode": t_("修改默认解析模式"),
+            "switch_auto_delete": t_("开/关 自动删除分享链接消息"),
+            "switch_platform": t_("启用/禁用 平台解析"),
         }
-        await self.set_bot_commands([BotCommand(command=k, description=v) for k, v in commands.items()])
-        logger.debug(f"菜单已设置: {commands}")
+        lang_code_map = {"ja": "ja-jp", "en": "en-us", "": "zh-hans"}
+        for iso639, bcp47 in lang_code_map.items():
+            tc = {k: v[bcp47] for k, v in commands.items()}
+            await self.set_bot_commands(
+                [BotCommand(command=k, description=v) for k, v in tc.items()],
+                language_code=iso639,
+            )
+            logger.debug(f"{iso639 or '默认'} 菜单已设置: {tc}")
 
 
 if __name__ == "__main__":

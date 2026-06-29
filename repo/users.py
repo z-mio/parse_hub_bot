@@ -33,3 +33,11 @@ class UsersRepo:
         user = Users(telegram_user_id=user_id)
         self._session.add(user)
         return user
+
+
+async def get_user_lang(telegram_user_id: int, session: AsyncSession) -> str:
+    ur = UsersRepo(session)
+    user = await ur.get_or_create_by_telegram_user_id(telegram_user_id)
+    if not user:
+        raise ValueError("User not found")
+    return str(user.language_code)

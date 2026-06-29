@@ -4,6 +4,7 @@ from collections.abc import Awaitable, Callable, Sequence
 from itertools import batched
 from typing import Any, BinaryIO, Literal, cast
 
+from easy_ai18n import PreLocaleSelector
 from parsehub.types import (
     AniFile,
     AnyMediaRef,
@@ -26,6 +27,7 @@ from pyrogram.types import (
 
 from core import bs
 from db import get_session
+from i18n import t_
 from log import logger
 from plugins.filters import platform_filter, via_me_filter
 from plugins.helpers import (
@@ -36,6 +38,7 @@ from plugins.helpers import (
     resolve_media_info,
 )
 from repo import UserSettingsRepo
+from repo.users import get_user_lang
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
@@ -74,16 +77,17 @@ async def _send_with_rate_limit[T](
 class MessageStatusReporter(StatusReporter):
     """基于 Telegram Message 的状态报告器"""
 
-    def __init__(self, user_msg: Message):
+    def __init__(self, user_msg: Message, _t: PreLocaleSelector):
         self._user_msg = user_msg
         self._msg: Message | None = None
+        self._t = _t
 
     async def report(self, text: str) -> None:
         await self._edit_text(f"**▎{text}**")
 
     async def report_error(self, stage: str, error: Exception) -> None:
         await self._edit_text(
-            f"**▎{stage}错误:** \n```\n{error}```",
+            self._t(f"**▎{stage}错误:** \n```\n{error}```"),
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
 
@@ -121,6 +125,8 @@ async def jx(cli: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
+        lang = await get_user_lang(msg.from_user.id, session)
+        _t = t_[lang]
         user_config = await UserSettingsRepo(session).get_config(msg.from_user.id)
 
     mode = user_config.default_mode
@@ -137,7 +143,7 @@ async def jx(cli: Client, msg: Message) -> None:
         if not text and msg.reply_to_message:
             text = msg.reply_to_message.text or msg.reply_to_message.caption or ""
         if not text:
-            await msg.reply_text("**▎请加上链接或回复一条消息**")
+            await msg.reply_text(_t("**▎请加上链接或回复一条消息**"))
             return
     else:
         text = msg.text or msg.caption or ""
@@ -146,11 +152,12 @@ async def jx(cli: Client, msg: Message) -> None:
     urls = list({i for i in tokens if ParseService().parser.get_platform(i)})[:10]
 
     if not urls:
-        await msg.reply_text("**▎不支持的平台**")
+        await msg.reply_text(_t("**▎不支持的平台**"))
         return
 
     tasks = [
-        handle_parse(cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url) for url in urls
+        handle_parse(cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url, _t=_t)
+        for url in urls
     ]
     await asyncio.gather(*tasks)
 
@@ -166,6 +173,7 @@ async def handle_parse(
     url: str,
     mode: Literal["raw", "preview", "zip"] | str = "preview",
     delete_share_url_msg: bool = False,
+    _t: PreLocaleSelector,
 ) -> None:
 
     chat_id = msg.chat.id if msg.chat else None
@@ -177,7 +185,7 @@ async def handle_parse(
         except Exception as e:
             logger.warning(f"删除分享链接消息失败: chat_id={chat_id}, msg_id: {msg.id}, error: {e}")
 
-    reporter = MessageStatusReporter(msg)
+    reporter = MessageStatusReporter(msg, _t)
     match mode:
         case "raw":
             use_caching = False
@@ -197,7 +205,7 @@ async def handle_parse(
     try:
         raw_url = await ParseService().get_raw_url(url)
     except Exception as e:
-        await reporter.report_error("获取原始链接", e)
+        await reporter.report_error(_t("获取原始链接"), e)
         return
 
     if use_caching and (cached := await persistent_cache.get(raw_url)):
@@ -214,6 +222,7 @@ async def handle_parse(
         skip_media_processing=skip_media_processing,
         skip_download_threshold=SKIP_DOWNLOAD_THRESHOLD,
         save_metadata=save_metadata,
+        _t=_t,
     )
 
     if (result := await pipeline.run()) is None:
@@ -278,7 +287,7 @@ async def handle_parse(
 
     # ── 上传媒体 ──
     logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
-    await reporter.report("上 传 中...")
+    await reporter.report(_t("上 传 中..."))
     try:
         media_cache_entry = await _send_media(msg, parse_result, result.processed_list, caption)
         if media_cache_entry:
@@ -287,7 +296,7 @@ async def handle_parse(
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"上传失败: {e}")
-        await reporter.report_error("上传", e)
+        await reporter.report_error(_t("上传"), e)
         return
     finally:
         result.cleanup()
@@ -377,13 +386,11 @@ def _make_cache_entry(parse_result: AnyParseResult, media_list: list[CacheMedia]
 
 
 async def _send_raw(
-    msg: Message,
-    result: PipelineResult,
-    reporter: MessageStatusReporter,
+    msg: Message, result: PipelineResult, reporter: MessageStatusReporter, _t: PreLocaleSelector
 ) -> None:
     """Raw 模式：将文件以原始文档形式上传。"""
     logger.debug("Raw 模式, 直接上传文件")
-    await reporter.report("上 传 中...")
+    await reporter.report(_t("上 传 中..."))
     try:
         caption = build_caption(result.parse_result)
         all_docs: list[InputMediaDocument] = []
@@ -430,7 +437,7 @@ async def _send_raw(
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"Raw 模式上传失败: {e}")
-        await reporter.report_error("上传", e)
+        await reporter.report_error(_t("上传"), e)
         return
     finally:
         result.cleanup()
@@ -439,12 +446,10 @@ async def _send_raw(
 
 
 async def _send_zip(
-    msg: Message,
-    result: PipelineResult,
-    reporter: MessageStatusReporter,
+    msg: Message, result: PipelineResult, reporter: MessageStatusReporter, _t: PreLocaleSelector
 ) -> None:
     logger.debug("Zip 模式, 开始打包")
-    await reporter.report("打 包 中...")
+    await reporter.report(_t("打 包 中..."))
     try:
         caption = build_caption(result.parse_result)
         if result.output_dir is None:
@@ -453,19 +458,19 @@ async def _send_zip(
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"打包失败: {e}")
-        await reporter.report_error("打包", Exception("..."))
+        await reporter.report_error(_t("打包"), Exception("..."))
         return
     finally:
         result.cleanup()
 
-    await reporter.report("上 传 中...")
+    await reporter.report(_t("上 传 中..."))
     try:
         await msg.reply_chat_action(enums.ChatAction.UPLOAD_DOCUMENT)
         await _send_with_rate_limit(lambda: msg.reply_document(str(pack_path), caption=caption))
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"上传失败: {e}")
-        await reporter.report_error("上传", e)
+        await reporter.report_error(_t("上传"), e)
         return
     finally:
         if not bs.debug_skip_cleanup:

@@ -9,8 +9,10 @@ from pyrogram.types import InlineKeyboardButton as Ikb
 from pyrogram.types import InlineKeyboardMarkup as Ikm
 
 from db import get_session
+from i18n import t_
 from repo import UserSettingsRepo, UsersRepo
 from repo.user_settings import DefaultMode
+from repo.users import get_user_lang
 
 
 @dataclass
@@ -66,16 +68,19 @@ async def select_lang(_: Client, msg: Message) -> None:
     ]
 
     reply_markup = Ikm([ikbs[i : i + 2] for i in range(0, len(ikbs), 2)])
-    await msg.reply_text("**▎选择语言**", reply_markup=reply_markup)
+    await msg.reply_text("**▎选择语言 / Select Language**", reply_markup=reply_markup)
 
 
 @Client.on_callback_query(filters.regex(r"^lang"))
 async def selected_lang(_: Client, cq: CallbackQuery) -> None:
     if not cq.data:
         return
+
     cqdata = CQData.parse(cq.data)
     if cq.from_user.id != cqdata.uid:
-        await cq.answer("这不是你的操作", show_alert=True)
+        async with get_session() as session:
+            lang = await get_user_lang(cq.from_user.id, session)
+        await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
         return
 
     selected = cqdata.value
@@ -85,13 +90,13 @@ async def selected_lang(_: Client, cq: CallbackQuery) -> None:
             raise ValueError("User not found")
         user.language_code = selected
 
-    await cq.message.edit(f"**▎已切换为: {LANG_MAP[selected]}**")
+    await cq.message.edit(t_[user.language_code](f"**▎已切换为: {LANG_MAP[selected]}**"))
 
 
 MODE_MAP = {
-    "preview": "预览",
-    "raw": "原始",
-    "zip": "压缩",
+    "preview": t_("预览"),
+    "raw": t_("原始"),
+    "zip": t_("压缩"),
 }
 
 
@@ -102,19 +107,20 @@ async def select_mode(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
+        lang = await get_user_lang(msg.from_user.id, session)
         usr = UserSettingsRepo(session)
         user_config = await usr.get_config(msg.from_user.id)
 
     ikbs = [
         Ikb(
-            v,
+            v[lang],
             callback_data=CQData(uid=msg.from_user.id, key="mode", value=k).unparse(),
             style=ButtonStyle.SUCCESS if k == user_config.default_mode else ButtonStyle.DEFAULT,
         )
         for k, v in MODE_MAP.items()
     ]
     reply_markup = Ikm([ikbs])
-    await msg.reply_text("**▎选择默认解析模式**", reply_markup=reply_markup)
+    await msg.reply_text(t_[lang]("**▎选择默认解析模式**"), reply_markup=reply_markup)
 
 
 @Client.on_callback_query(filters.regex(r"^mode"))
@@ -124,17 +130,20 @@ async def selected_mode(_: Client, cq: CallbackQuery) -> None:
 
     cqdata = CQData.parse(cq.data)
     if cq.from_user.id != cqdata.uid:
-        await cq.answer("这不是你的操作", show_alert=True)
+        async with get_session() as session:
+            lang = await get_user_lang(cq.from_user.id, session)
+        await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
         return
 
     selected = cast(DefaultMode, cqdata.value)
     async with get_session() as session:
+        lang = await get_user_lang(cq.from_user.id, session)
         usr = UserSettingsRepo(session)
         user_config = await usr.get_config(cq.from_user.id)
         user_config.default_mode = selected
         await usr.save_config(cq.from_user.id, user_config)
 
-    await cq.message.edit(f"**▎已切换为: {MODE_MAP[selected]}**")
+    await cq.message.edit(t_[lang](f"**▎已切换为: {MODE_MAP[selected]}**"))
 
 
 @Client.on_message(filters.command("switch_auto_delete"))
@@ -143,12 +152,13 @@ async def switch_auto_delete_url(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
+        lang = await get_user_lang(msg.from_user.id, session)
         usr = UserSettingsRepo(session)
         user_config = await usr.get_config(msg.from_user.id)
         user_config.auto_delete_url = not user_config.auto_delete_url
         await usr.save_config(msg.from_user.id, user_config)
 
-    await msg.reply_text(f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**")
+    await msg.reply_text(t_[lang](f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**"))
 
 
 @Client.on_message(filters.command("switch_platform"))
@@ -157,6 +167,7 @@ async def switch_platform(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
+        lang = await get_user_lang(msg.from_user.id, session)
         usr = UserSettingsRepo(session)
         user_config = await usr.get_config(msg.from_user.id)
 
@@ -169,7 +180,7 @@ async def switch_platform(_: Client, msg: Message) -> None:
         for p in list(Platform)
     ]
     reply_markup = Ikm([ikbs[i : i + 2] for i in range(0, len(ikbs), 2)])
-    await msg.reply_text("**▎启用 / 禁用 要解析的平台**", reply_markup=reply_markup)
+    await msg.reply_text(t_[lang]("**▎启用 / 禁用 平台解析**"), reply_markup=reply_markup)
 
 
 @Client.on_callback_query(filters.regex(r"^switch_platform"))
@@ -179,7 +190,9 @@ async def switch_platform_callback(_: Client, cq: CallbackQuery) -> None:
 
     cqdata = CQData.parse(cq.data)
     if cq.from_user.id != cqdata.uid:
-        await cq.answer("这不是你的操作", show_alert=True)
+        async with get_session() as session:
+            lang = await get_user_lang(cq.from_user.id, session)
+        await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
         return
 
     selected = cqdata.value

@@ -1,6 +1,7 @@
 import asyncio
 from collections.abc import Sequence
 
+from easy_ai18n import PreLocaleSelector
 from parsehub import AnyParseResult
 from parsehub.types import (
     AniRef,
@@ -33,6 +34,8 @@ from pyrogram.types import (
     InlineKeyboardMarkup as Ikm,
 )
 
+from db import get_session
+from i18n import t_
 from log import logger
 from plugins.filters import platform_filter
 from plugins.helpers import (
@@ -42,6 +45,7 @@ from plugins.helpers import (
     create_richtext_telegraph,
     resolve_media_info,
 )
+from repo.users import get_user_lang
 from services import ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
@@ -55,11 +59,12 @@ LINK_ICON_URL = "https://i.iij.li/i/20260627/6a3fb12066abb.png"
 class InlineStatusReporter(StatusReporter):
     """基于 inline_message_id 的状态报告器"""
 
-    def __init__(self, cli: Client, inline_message_id: str, caption: str = ""):
+    def __init__(self, cli: Client, inline_message_id: str, caption: str = "", *, _t: PreLocaleSelector):
         self._cli = cli
         self._mid = inline_message_id
         self._caption = caption
         self._last_text: str | None = None
+        self._t = _t
 
     async def report(self, text: str) -> None:
         text = f"**▎{text}**"
@@ -75,7 +80,7 @@ class InlineStatusReporter(StatusReporter):
     async def report_error(self, stage: str, error: Exception) -> None:
         await self._cli.edit_inline_text(
             self._mid,
-            f"**▎{stage}错误:** \n```\n{error}```",
+            self._t(f"**▎{stage}错误:** \n```\n{error}```"),
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
 
@@ -286,12 +291,15 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
 
 @Client.on_inline_query(~platform_filter(False))
 async def inline_parse_tip(_: Client, inline_query: InlineQuery) -> None:
+    async with get_session() as session:
+        lang = await get_user_lang(inline_query.from_user.id, session)
+        _t = t_[lang]
     results: list[InlineQueryResult] = [
         InlineQueryResultArticle(
-            title="聚合解析",
-            description="请在聊天框输入链接",
+            title=_t("聚合解析"),
+            description=_t("请在聊天框输入链接"),
             input_message_content=InputTextMessageContent(
-                build_start_text(), link_preview_options=LinkPreviewOptions(is_disabled=True)
+                build_start_text()[lang], link_preview_options=LinkPreviewOptions(is_disabled=True)
             ),
             thumb_url="https://i.imgloc.com/2023/06/15/Vbfazk.png",
         )
@@ -327,6 +335,9 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     if not chosen_result.result_id.startswith("download_"):
         return
 
+    async with get_session() as session:
+        lang = await get_user_lang(chosen_result.from_user.id, session)
+        _t = t_[lang]
     media_index = int(chosen_result.result_id.split("_")[1])
     inline_message_id = chosen_result.inline_message_id
     if inline_message_id is None:
@@ -339,8 +350,8 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     logger.debug(f"缓存命中: {cached_result is not None}")
 
     caption = build_caption(cached_result) if cached_result else ""
-    reporter = InlineStatusReporter(cli, inline_message_id, caption)
-    pipeline = ParsePipeline(query, reporter, parse_result=cached_result, singleflight=False)
+    reporter = InlineStatusReporter(cli, inline_message_id, caption, _t=_t)
+    pipeline = ParsePipeline(query, reporter, parse_result=cached_result, singleflight=False, _t=_t)
     if (result := await pipeline.run()) is None:
         return
 
@@ -348,7 +359,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     caption = build_caption(parse_result)
 
     # ── 上传 ──
-    await reporter.report("上 传 中...")
+    await reporter.report(_t("上 传 中..."))
 
     processed = result.processed_list[media_index]
     video_ref = parse_result.media[media_index] if isinstance(parse_result.media, Sequence) else parse_result.media
@@ -384,7 +395,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     except Exception as e:
         logger.opt(exception=e).debug("详细堆栈")
         logger.error(f"inline 上传失败: {e}")
-        await reporter.report_error("上传", e)
+        await reporter.report_error(_t("上传"), e)
     finally:
         logger.debug("inline 下载任务完成")
         result.cleanup()
