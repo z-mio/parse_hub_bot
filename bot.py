@@ -8,6 +8,8 @@ from pyrogram.handlers import ConnectHandler, DisconnectHandler
 from pyrogram.types import BotCommand
 
 from core import bs, on_connect, on_disconnect, ws
+from db.engine import close_db
+from db.init import init_db
 from log import logger, setup_logging
 from services import parse_cache, persistent_cache
 from utils.event_loop import setup_optimized_event_loop
@@ -35,7 +37,15 @@ class Bot(Client):
             workdir=self.cfg.sessions_path,
         )
 
+    @staticmethod
+    async def bootstrap() -> None:
+        logger.debug("初始化数据库...")
+        await init_db()
+        logger.debug("数据库初始化完成")
+
     async def start(self, *args: Any, **kwargs: Any) -> "Bot":
+        await self.bootstrap()
+
         self.init_watchdog()
         parse_cache.start_cleanup()
         persistent_cache.start_cleanup()
@@ -47,6 +57,7 @@ class Bot(Client):
         ws.exit_flag = True
         await persistent_cache.close()
         await super().stop()
+        await close_db()
         # 结束时清理下载残留
         if self.cfg.download_dir.exists():
             shutil.rmtree(self.cfg.download_dir)

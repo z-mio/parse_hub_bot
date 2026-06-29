@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aiosqlite>=0.22.1",
     "haishoku>=1.1.8",
     "httpx>=0.28.1",
     "kurigram>=2.2.7",
@@ -19,6 +20,7 @@ dependencies = [
     "pydantic-settings>=2.11.0",
     "python-dotenv>=1.0.1",
     "pyyaml>=6.0.3",
+    "sqlalchemy>=2.0.51,<2.1",
     "telegraph>=2.2.0",
     "tgcrypto>=1.2.5",
     "uvloop>=0.22.1 ; sys_platform != 'win32'",
