@@ -27,6 +27,7 @@ LANG_MAP = {
 
 ISO639_MAP = {
     "": "zh-hans",
+    "zh": "zh-hans",
     "ja": "ja-jp",
     "en": "en-us",
     "ko": "ko-kr",
