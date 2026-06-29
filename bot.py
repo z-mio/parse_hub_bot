@@ -39,18 +39,16 @@ class Bot(Client):
             workdir=self.cfg.sessions_path,
         )
 
-    @staticmethod
-    async def bootstrap() -> None:
+    async def bootstrap(self) -> None:
         logger.debug("初始化数据库...")
         await init_db()
         logger.debug("数据库初始化完成")
+        parse_cache.start_cleanup()
+        persistent_cache.start_cleanup()
+        self.init_watchdog()
 
     async def start(self, *args: Any, **kwargs: Any) -> "Bot":
         await self.bootstrap()
-
-        self.init_watchdog()
-        parse_cache.start_cleanup()
-        persistent_cache.start_cleanup()
         await super().start()
         await self.set_menu()
         return self
