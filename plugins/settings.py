@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Self, cast
 
+from parsehub.types import Platform
 from pyrogram import Client, filters
 from pyrogram.enums import ButtonStyle
 from pyrogram.types import CallbackQuery, Message
@@ -148,3 +149,56 @@ async def switch_auto_delete_url(_: Client, msg: Message) -> None:
         await usr.save_config(msg.from_user.id, user_config)
 
     await msg.reply_text(f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**")
+
+
+@Client.on_message(filters.command("switch_platform"))
+async def switch_platform(_: Client, msg: Message) -> None:
+    if not msg.from_user:
+        return
+
+    async with get_session() as session:
+        usr = UserSettingsRepo(session)
+        user_config = await usr.get_config(msg.from_user.id)
+
+    ikbs = [
+        Ikb(
+            p.display_name,
+            callback_data=CQData(key="switch_platform", value=p.id, uid=msg.from_user.id).unparse(),
+            style=ButtonStyle.DANGER if p.id in user_config.disabled_platforms else ButtonStyle.SUCCESS,
+        )
+        for p in list(Platform)
+    ]
+    reply_markup = Ikm([ikbs[i : i + 2] for i in range(0, len(ikbs), 2)])
+    await msg.reply_text("**▎启用 / 禁用 要解析的平台**", reply_markup=reply_markup)
+
+
+@Client.on_callback_query(filters.regex(r"^switch_platform"))
+async def switch_platform_callback(_: Client, cq: CallbackQuery) -> None:
+    if not cq.data:
+        return
+
+    cqdata = CQData.parse(cq.data)
+    if cq.from_user.id != cqdata.uid:
+        await cq.answer("这不是你的操作", show_alert=True)
+        return
+
+    selected = cqdata.value
+    async with get_session() as session:
+        usr = UserSettingsRepo(session)
+        user_config = await usr.get_config(cq.from_user.id)
+        if selected in user_config.disabled_platforms:
+            user_config.disabled_platforms.remove(selected)
+        else:
+            user_config.disabled_platforms.append(selected)
+        await usr.save_config(cq.from_user.id, user_config)
+
+    ikbs = [
+        Ikb(
+            p.display_name,
+            callback_data=CQData(key="switch_platform", value=p.id, uid=cqdata.uid).unparse(),
+            style=ButtonStyle.DANGER if p.id in user_config.disabled_platforms else ButtonStyle.SUCCESS,
+        )
+        for p in list(Platform)
+    ]
+    reply_markup = Ikm([ikbs[i : i + 2] for i in range(0, len(ikbs), 2)])
+    await cq.message.edit_reply_markup(reply_markup)
