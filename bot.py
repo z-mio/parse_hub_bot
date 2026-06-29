@@ -73,9 +73,9 @@ class Bot(Client):
             "jx": t_("解析"),
             "raw": t_("不处理媒体, 发送原始文件"),
             "zip": t_("不处理媒体, 保存解析结果, 发送压缩包"),
-            "lang": t_("修改语言"),
-            "mode": t_("修改默认解析模式"),
-            "switch_auto_delete": t_("开/关 自动删除分享链接消息"),
+            "lang": t_("选择语言"),
+            "mode": t_("设置默认解析模式"),
+            "switch_auto_delete": t_("启用/禁用 自动删除分享链接消息"),
             "switch_platform": t_("启用/禁用 平台解析"),
         }
         for iso639, bcp47 in ISO639_MAP.items():

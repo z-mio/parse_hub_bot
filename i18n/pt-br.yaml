@@ -6,24 +6,16 @@
 3065ed13e5f9: Obter link original
 36c680f6f5b0: Ativar/Desativar análise da plataforma
 460ce129a523: Baixando...
-47ca28a6369b: Ativar/Desativar exclusão automática de mensagens de link compartilhado
-4f573d1850a1: Modificar modo de análise padrão
 569c1f28ab00: Empacotando...
 5713cae37816: '**▎Plataforma não suportada**'
 5861d620c41d: Baixando... | {current}/{total}
 5a9f36a77173: Empacotar
 5fcfdc5f95ad: '**▎Selecionar modo de análise padrão**'
 645dbc5504e7: Visualizar
+6536e2506f73: Ativar/Desativar exclusão automática de mensagens de link compartilhado
 6612548ad85b: Comprimir
 68957ac274c5: Baixando... | {current * 100 / total:.0f}%
-816de50b9e0e: Por favor, insira o link na caixa de chat
-8c028b35f75a: '**▎Alternado para: {MODE_MAP[selected]}**'
-929107a1e13c: '**▎Por favor, adicione um link ou responda a uma mensagem**'
-a3e3b88377c8: Iniciar
-aa357cb96ee8: Analisar
-b8918b19e2a1: '**▎Ativar / Desativar análise da plataforma**'
-b8a95e74574c: Não processar mídia, enviar arquivo original
-bd19acb3024c: '**Envie um link compartilhado para análise**
+7612b9a15f41: '**Envie o link compartilhado para análise**
 
 
   **Plataformas suportadas:**
@@ -33,20 +25,36 @@ bd19acb3024c: '**Envie um link compartilhado para análise**
 
   **Lista de comandos:**
 
-  `/jx <link>` - Analisar e enviar mídia
+  <blockquote expandable>`/jx <link>` - Analisa e envia mídia
 
-  `/raw <link>` - Não processar mídia, enviar arquivo original
+  `/raw <link>` - Não processa mídia, envia arquivo original
 
-  `/zip <link>` - Não processar mídia, salvar resultado da análise, enviar arquivo
-  compactado
+  `/zip <link>` - Não processa mídia, salva resultado da análise, envia arquivo compactado
+
+  `/lang` - Selecionar idioma
+
+  `/mode` - Definir modo padrão de análise
+
+  `/switch_auto_delete` - Ativar/Desativar exclusão automática de mensagens de link
+  compartilhado
+
+  `/switch_platform` - Ativar/Desativar análise da plataforma</blockquote>
 
 
   **Código aberto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+816de50b9e0e: Por favor, insira o link na caixa de chat
+8c028b35f75a: '**▎Alternado para: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Por favor, adicione um link ou responda a uma mensagem**'
+a3e3b88377c8: Iniciar
+aa357cb96ee8: Analisar
+b8918b19e2a1: '**▎Ativar / Desativar análise da plataforma**'
+b8a95e74574c: Não processar mídia, enviar arquivo original
 c039b80e17dd: Análise agregada
 c1ecedab11bc: Original
 d59c948c471c: Analisando...
 d5a73b0c7f2f: Enviar
 d5bfcc66db65: '**▎Mensagem de link compartilhado {''启用'' if user_config.auto_delete_url
   else ''禁用''} excluída automaticamente**'
+d6fa702190b6: Definir modo padrão de análise
 d915366ac40b: Não processar mídia, salvar resultado da análise, enviar arquivo compactado
-db13dfb7e345: Alterar idioma
+ff71243806c8: Selecionar idioma

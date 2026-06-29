@@ -7,17 +7,44 @@
 3065ed13e5f9: Obtenir le lien original
 36c680f6f5b0: Activer/Désactiver l'analyse de la plateforme
 460ce129a523: Téléchargement en cours...
-47ca28a6369b: Activer/Désactiver la suppression automatique des messages de lien de
-  partage
-4f573d1850a1: Modifier le mode d'analyse par défaut
 569c1f28ab00: Emballage en cours...
 5713cae37816: '**▎Plateforme non prise en charge**'
 5861d620c41d: Téléchargement en cours... | {current}/{total}
 5a9f36a77173: Emballer
 5fcfdc5f95ad: '**▎Choisir le mode d''analyse par défaut**'
 645dbc5504e7: Aperçu
+6536e2506f73: Activer/Désactiver la suppression automatique des messages de lien de
+  partage
 6612548ad85b: Compression
 68957ac274c5: Téléchargement en cours... | {current * 100 / total:.0f}%
+7612b9a15f41: '**Envoyer un lien de partage pour analyse**
+
+
+  **Plateformes supportées :**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Liste des commandes :**
+
+  <blockquote expandable>`/jx <lien>` - Analyser et envoyer le média
+
+  `/raw <lien>` - Ne pas traiter le média, envoyer le fichier brut
+
+  `/zip <lien>` - Ne pas traiter le média, sauvegarder le résultat de l''analyse,
+  envoyer une archive compressée
+
+  `/lang` - Choisir la langue
+
+  `/mode` - Définir le mode d''analyse par défaut
+
+  `/switch_auto_delete` - Activer/Désactiver la suppression automatique des messages
+  de lien de partage
+
+  `/switch_platform` - Activer/Désactiver l''analyse de la plateforme</blockquote>
+
+
+  **Code source : [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 816de50b9e0e: Veuillez entrer un lien dans la zone de chat
 8c028b35f75a: '**▎Passé à : {MODE_MAP[selected]}**'
 929107a1e13c: '**▎Veuillez ajouter un lien ou répondre à un message**'
@@ -25,31 +52,13 @@ a3e3b88377c8: Démarrer
 aa357cb96ee8: Analyser
 b8918b19e2a1: '**▎Activer / Désactiver l''analyse de la plateforme**'
 b8a95e74574c: Ne pas traiter les médias, envoyer le fichier original
-bd19acb3024c: '**Envoyez un lien de partage pour analyse**
-
-
-  **Plateformes prises en charge :**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Liste des commandes :**
-
-  `/jx <lien>` - Analyser et envoyer les médias
-
-  `/raw <lien>` - Ne pas traiter les médias, envoyer le fichier original
-
-  `/zip <lien>` - Ne pas traiter les médias, enregistrer le résultat de l''analyse,
-  envoyer une archive compressée
-
-
-  **Code source : [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 c039b80e17dd: Analyse agrégée
 c1ecedab11bc: Original
 d59c948c471c: Analyse en cours...
 d5a73b0c7f2f: Téléverser
 d5bfcc66db65: '**▎Suppression automatique des messages de lien de partage {''启用''
   if user_config.auto_delete_url else ''禁用''}**'
+d6fa702190b6: Définir le mode d'analyse par défaut
 d915366ac40b: Ne pas traiter les médias, enregistrer le résultat de l'analyse, envoyer
   une archive compressée
-db13dfb7e345: Modifier la langue
+ff71243806c8: Choisir la langue

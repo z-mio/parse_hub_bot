@@ -6,24 +6,17 @@
 3065ed13e5f9: Ottieni link originale
 36c680f6f5b0: Abilita/Disabilita analisi piattaforma
 460ce129a523: Download in corso...
-47ca28a6369b: Attiva/Disattiva eliminazione automatica dei messaggi con link condivisi
-4f573d1850a1: Modifica modalità di analisi predefinita
 569c1f28ab00: Impacchettamento in corso...
 5713cae37816: '**▎Piattaforma non supportata**'
 5861d620c41d: Download in corso... | {current}/{total}
 5a9f36a77173: Impacchetta
 5fcfdc5f95ad: '**▎Seleziona modalità di analisi predefinita**'
 645dbc5504e7: Anteprima
+6536e2506f73: Abilita/disabilita l'eliminazione automatica dei messaggi con link di
+  condivisione
 6612548ad85b: Compressione
 68957ac274c5: Download in corso... | {current * 100 / total:.0f}%
-816de50b9e0e: Inserisci il link nella chat
-8c028b35f75a: '**▎Passato a: {MODE_MAP[selected]}**'
-929107a1e13c: '**▎Per favore aggiungi un link o rispondi a un messaggio**'
-a3e3b88377c8: Inizia
-aa357cb96ee8: Analizza
-b8918b19e2a1: '**▎Abilita / Disabilita analisi piattaforma**'
-b8a95e74574c: Non elaborare i media, invia il file originale
-bd19acb3024c: '**Invia un link condiviso per l''analisi**
+7612b9a15f41: '**Invia un link di condivisione per l''analisi**
 
 
   **Piattaforme supportate:**
@@ -33,21 +26,38 @@ bd19acb3024c: '**Invia un link condiviso per l''analisi**
 
   **Elenco comandi:**
 
-  `/jx <link>` - Analizza e invia media
+  <blockquote expandable>`/jx <link>` - Analizza e invia media
 
-  `/raw <link>` - Non elaborare i media, invia il file originale
+  `/raw <link>` - Non elabora i media, invia il file originale
 
-  `/zip <link>` - Non elaborare i media, salva il risultato dell''analisi, invia un
+  `/zip <link>` - Non elabora i media, salva il risultato dell''analisi, invia un
   archivio compresso
+
+  `/lang` - Seleziona la lingua
+
+  `/mode` - Imposta la modalità di analisi predefinita
+
+  `/switch_auto_delete` - Abilita/disabilita l''eliminazione automatica dei messaggi
+  con link di condivisione
+
+  `/switch_platform` - Abilita/disabilita l''analisi della piattaforma</blockquote>
 
 
   **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+816de50b9e0e: Inserisci il link nella chat
+8c028b35f75a: '**▎Passato a: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Per favore aggiungi un link o rispondi a un messaggio**'
+a3e3b88377c8: Inizia
+aa357cb96ee8: Analizza
+b8918b19e2a1: '**▎Abilita / Disabilita analisi piattaforma**'
+b8a95e74574c: Non elaborare i media, invia il file originale
 c039b80e17dd: Analisi aggregata
 c1ecedab11bc: Originale
 d59c948c471c: Analisi in corso...
 d5a73b0c7f2f: Carica
 d5bfcc66db65: '**▎Messaggi con link condivisi eliminati automaticamente: {''启用'' if
   user_config.auto_delete_url else ''禁用''}**'
+d6fa702190b6: Imposta la modalità di analisi predefinita
 d915366ac40b: Non elaborare i media, salva il risultato dell'analisi, invia un archivio
   compresso
-db13dfb7e345: Modifica lingua
+ff71243806c8: Seleziona la lingua

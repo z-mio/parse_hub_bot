@@ -7,24 +7,16 @@
 3065ed13e5f9: Original-Link abrufen
 36c680f6f5b0: Plattform-Parsing aktivieren/deaktivieren
 460ce129a523: Herunterladen...
-47ca28a6369b: Automatisches Löschen von Freigabelink-Nachrichten ein-/ausschalten
-4f573d1850a1: Standard-Parsing-Modus ändern
 569c1f28ab00: Verpacken...
 5713cae37816: '**▎Nicht unterstützte Plattform**'
 5861d620c41d: Herunterladen... | {current}/{total}
 5a9f36a77173: Verpacken
 5fcfdc5f95ad: '**▎Standard-Parsing-Modus auswählen**'
 645dbc5504e7: Vorschau
+6536e2506f73: Automatisches Löschen von Freigabelink-Nachrichten aktivieren/deaktivieren
 6612548ad85b: Komprimieren
 68957ac274c5: Herunterladen... | {current * 100 / total:.0f}%
-816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
-8c028b35f75a: '**▎Bereits gewechselt zu: {MODE_MAP[selected]}**'
-929107a1e13c: '**▎Bitte fügen Sie einen Link hinzu oder antworten Sie auf eine Nachricht**'
-a3e3b88377c8: Start
-aa357cb96ee8: Analysieren
-b8918b19e2a1: '**▎Plattform-Parsing aktivieren/deaktivieren**'
-b8a95e74574c: Medien nicht verarbeiten, Originaldatei senden
-bd19acb3024c: '**Senden Sie einen Freigabelink zur Analyse**
+7612b9a15f41: '**Freigabelink zum Parsen senden**
 
 
   **Unterstützte Plattformen:**
@@ -34,19 +26,36 @@ bd19acb3024c: '**Senden Sie einen Freigabelink zur Analyse**
 
   **Befehlsliste:**
 
-  `/jx <Link>` - Medien analysieren und senden
+  <blockquote expandable>`/jx <Link>` - Medien parsen und senden
 
   `/raw <Link>` - Medien nicht verarbeiten, Originaldatei senden
 
-  `/zip <Link>` - Medien nicht verarbeiten, Analyseergebnis speichern, ZIP-Datei senden
+  `/zip <Link>` - Medien nicht verarbeiten, Parsing-Ergebnis speichern, ZIP-Archiv
+  senden
+
+  `/lang` - Sprache auswählen
+
+  `/mode` - Standard-Parsing-Modus einstellen
+
+  `/switch_auto_delete` - Automatisches Löschen von Freigabelink-Nachrichten aktivieren/deaktivieren
+
+  `/switch_platform` - Plattform-Parsing aktivieren/deaktivieren</blockquote>
 
 
-  **Open-Source-Adresse: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+  **Quellcode: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
+8c028b35f75a: '**▎Bereits gewechselt zu: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Bitte fügen Sie einen Link hinzu oder antworten Sie auf eine Nachricht**'
+a3e3b88377c8: Start
+aa357cb96ee8: Analysieren
+b8918b19e2a1: '**▎Plattform-Parsing aktivieren/deaktivieren**'
+b8a95e74574c: Medien nicht verarbeiten, Originaldatei senden
 c039b80e17dd: Aggregiertes Parsing
 c1ecedab11bc: Original
 d59c948c471c: Analysiere...
 d5a73b0c7f2f: Hochladen
 d5bfcc66db65: '**▎Automatisches Löschen von Freigabelink-Nachrichten {''启用'' if user_config.auto_delete_url
   else ''禁用''}**'
+d6fa702190b6: Standard-Parsing-Modus einstellen
 d915366ac40b: Medien nicht verarbeiten, Analyseergebnis speichern, ZIP-Datei senden
-db13dfb7e345: Sprache ändern
+ff71243806c8: Sprache auswählen

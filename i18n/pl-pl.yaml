@@ -6,24 +6,16 @@
 3065ed13e5f9: Pobierz oryginalny link
 36c680f6f5b0: Włącz/Wyłącz analizę platformy
 460ce129a523: Pobieranie...
-47ca28a6369b: Włącz/Wyłącz automatyczne usuwanie wiadomości z linkami do udostępniania
-4f573d1850a1: Zmień domyślny tryb analizy
 569c1f28ab00: Pakowanie...
 5713cae37816: '**▎Platforma nieobsługiwana**'
 5861d620c41d: Pobieranie... | {current}/{total}
 5a9f36a77173: Pakuj
 5fcfdc5f95ad: '**▎Wybierz domyślny tryb analizy**'
 645dbc5504e7: Podgląd
+6536e2506f73: Włącz/Wyłącz automatyczne usuwanie wiadomości z linkami do udostępniania
 6612548ad85b: Kompresuj
 68957ac274c5: Pobieranie... | {current * 100 / total:.0f}%
-816de50b9e0e: Wpisz link w polu czatu
-8c028b35f75a: '**▎Przełączono na: {MODE_MAP[selected]}**'
-929107a1e13c: '**▎Dodaj link lub odpowiedz na wiadomość**'
-a3e3b88377c8: Start
-aa357cb96ee8: Analizuj
-b8918b19e2a1: '**▎Włącz / Wyłącz analizę platformy**'
-b8a95e74574c: Nie przetwarzaj mediów, wyślij oryginalny plik
-bd19acb3024c: '**Wyślij link do udostępniania do analizy**
+7612b9a15f41: '**Wyślij link do udostępniania do analizy**
 
 
   **Obsługiwane platformy:**
@@ -33,19 +25,36 @@ bd19acb3024c: '**Wyślij link do udostępniania do analizy**
 
   **Lista poleceń:**
 
-  `/jx <link>` - analizuj i wyślij media
+  <blockquote expandable>`/jx <link>` - analizuj i wyślij media
 
   `/raw <link>` - nie przetwarzaj mediów, wyślij oryginalny plik
 
   `/zip <link>` - nie przetwarzaj mediów, zapisz wynik analizy, wyślij archiwum
 
+  `/lang` - wybierz język
+
+  `/mode` - ustaw domyślny tryb analizy
+
+  `/switch_auto_delete` - włącz/wyłącz automatyczne usuwanie wiadomości z linkami
+  do udostępniania
+
+  `/switch_platform` - włącz/wyłącz analizę platformy</blockquote>
+
 
   **Repozytorium open source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+816de50b9e0e: Wpisz link w polu czatu
+8c028b35f75a: '**▎Przełączono na: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Dodaj link lub odpowiedz na wiadomość**'
+a3e3b88377c8: Start
+aa357cb96ee8: Analizuj
+b8918b19e2a1: '**▎Włącz / Wyłącz analizę platformy**'
+b8a95e74574c: Nie przetwarzaj mediów, wyślij oryginalny plik
 c039b80e17dd: Agreguj analizę
 c1ecedab11bc: Oryginalny
 d59c948c471c: Analizowanie...
 d5a73b0c7f2f: Przesyłanie
 d5bfcc66db65: '**▎Automatycznie usunięto wiadomość z linkiem do udostępniania: {''启用''
   if user_config.auto_delete_url else ''禁用''}**'
+d6fa702190b6: Ustaw domyślny tryb analizy
 d915366ac40b: Nie przetwarzaj mediów, zapisz wynik analizy, wyślij archiwum
-db13dfb7e345: Zmień język
+ff71243806c8: Wybierz język
