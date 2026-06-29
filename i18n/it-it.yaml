@@ -11,6 +11,10 @@
 5861d620c41d: Download in corso... | {current}/{total}
 5a9f36a77173: Impacchetta
 5fcfdc5f95ad: '**▎Seleziona modalità di analisi predefinita**'
+609a04710e91: '**▎Sono stati eliminati automaticamente {''启用'' if user_config.auto_delete_url
+  else ''禁用''} messaggi di link condivisi**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: Anteprima
 6536e2506f73: Abilita/disabilita l'eliminazione automatica dei messaggi con link di
   condivisione
@@ -55,8 +59,6 @@ c039b80e17dd: Analisi aggregata
 c1ecedab11bc: Originale
 d59c948c471c: Analisi in corso...
 d5a73b0c7f2f: Carica
-d5bfcc66db65: '**▎Messaggi con link condivisi eliminati automaticamente: {''启用'' if
-  user_config.auto_delete_url else ''禁用''}**'
 d6fa702190b6: Imposta la modalità di analisi predefinita
 d915366ac40b: Non elaborare i media, salva il risultato dell'analisi, invia un archivio
   compresso

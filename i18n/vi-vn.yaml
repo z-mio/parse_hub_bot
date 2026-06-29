@@ -11,6 +11,10 @@
 5861d620c41d: Đang tải xuống... | {current}/{total}
 5a9f36a77173: Đóng gói
 5fcfdc5f95ad: '**▎Chọn chế độ phân tích mặc định**'
+609a04710e91: '**▎Đã tự động xóa {''启用'' if user_config.auto_delete_url else ''禁用''}
+  tin nhắn liên kết chia sẻ**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: Xem trước
 6536e2506f73: Bật/tắt tự động xóa tin nhắn liên kết chia sẻ
 6612548ad85b: Nén
@@ -52,8 +56,6 @@ c039b80e17dd: Phân tích tổng hợp
 c1ecedab11bc: Gốc
 d59c948c471c: Đang phân tích...
 d5a73b0c7f2f: Tải lên
-d5bfcc66db65: '**▎Đã {''启用'' if user_config.auto_delete_url else ''禁用''} tự động xóa
-  tin nhắn liên kết chia sẻ**'
 d6fa702190b6: Đặt chế độ phân tích mặc định
 d915366ac40b: Không xử lý media, lưu kết quả phân tích, gửi file nén
 ff71243806c8: Chọn ngôn ngữ

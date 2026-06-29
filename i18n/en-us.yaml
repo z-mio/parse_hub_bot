@@ -12,6 +12,10 @@
 5861d620c41d: Downloading... | {current}/{total}
 5a9f36a77173: Package
 5fcfdc5f95ad: '**▎Select default parsing mode**'
+609a04710e91: '**▎Automatically deleted {''启用'' if user_config.auto_delete_url else
+  ''禁用''} shared link messages**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: Preview
 6536e2506f73: Enable/Disable Auto Delete Share Link Messages
 6612548ad85b: Compress
@@ -53,8 +57,6 @@ c039b80e17dd: Aggregate Parsing
 c1ecedab11bc: Original
 d59c948c471c: Parsing...
 d5a73b0c7f2f: Upload
-d5bfcc66db65: '**▎Auto-delete share link messages {''启用'' if user_config.auto_delete_url
-  else ''禁用''}**'
 d6fa702190b6: Set Default Parsing Mode
 d915366ac40b: Do not process media, save parsing results, send compressed package
 ff71243806c8: Select Language

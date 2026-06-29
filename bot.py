@@ -69,7 +69,7 @@ class Bot(Client):
     async def set_menu(self) -> None:
         commands = await self.get_bot_commands()
         if len(commands) == len(COMMANDS) and all(c.description in str(COMMANDS.values()) for c in commands):
-            logger.debug("菜单未更新, 跳过设置")
+            logger.debug("菜单无变化, 跳过设置")
             return
 
         for iso639, bcp47 in ISO639_MAP.items():

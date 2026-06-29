@@ -11,6 +11,10 @@
 5861d620c41d: 다운로드 중... | {current}/{total}
 5a9f36a77173: 패키지
 5fcfdc5f95ad: '**▎기본 분석 모드 선택**'
+609a04710e91: '**▎이미 {''启用'' if user_config.auto_delete_url else ''禁用''} 자동으로 공유 링크
+  메시지가 삭제되었습니다**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: 미리보기
 6536e2506f73: 자동 삭제 공유 링크 메시지 활성화/비활성화
 6612548ad85b: 압축
@@ -52,7 +56,6 @@ c039b80e17dd: 통합 분석
 c1ecedab11bc: 원본
 d59c948c471c: 분석 중...
 d5a73b0c7f2f: 업로드
-d5bfcc66db65: '**▎자동 공유 링크 메시지 삭제 {''启用'' if user_config.auto_delete_url else ''禁用''}**'
 d6fa702190b6: 기본 파싱 모드 설정
 d915366ac40b: 미디어를 처리하지 않고 분석 결과 저장, 압축 파일 전송
 ff71243806c8: 언어 선택

@@ -11,6 +11,9 @@
 5861d620c41d: 下載中... | {current}/{total}
 5a9f36a77173: 打包
 5fcfdc5f95ad: '**▎選擇默認解析模式**'
+609a04710e91: '**▎已 {''启用'' if user_config.auto_delete_url else ''禁用''} 自動刪除分享連結訊息**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: 預覽
 6536e2506f73: 啟用/禁用 自動刪除分享連結訊息
 6612548ad85b: 壓縮
@@ -52,7 +55,6 @@ c039b80e17dd: 聚合解析
 c1ecedab11bc: 原始
 d59c948c471c: 解 析 中...
 d5a73b0c7f2f: 上傳
-d5bfcc66db65: '**▎已 {''启用'' if user_config.auto_delete_url else ''禁用''} 自動刪除分享連結消息**'
 d6fa702190b6: 設定預設解析模式
 d915366ac40b: 不處理媒體，保存解析結果，發送壓縮包
 ff71243806c8: 選擇語言

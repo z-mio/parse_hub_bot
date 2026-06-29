@@ -11,6 +11,9 @@
 5861d620c41d: 下 载 中... | {current}/{total}
 5a9f36a77173: 打包
 5fcfdc5f95ad: '**▎选择默认解析模式**'
+609a04710e91: '**▎已 {''启用'' if user_config.auto_delete_url else ''禁用''} 自动删除分享链接消息**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: 预览
 6536e2506f73: 启用/禁用 自动删除分享链接消息
 6612548ad85b: 压缩
@@ -52,7 +55,6 @@ c039b80e17dd: 聚合解析
 c1ecedab11bc: 原始
 d59c948c471c: 解 析 中...
 d5a73b0c7f2f: 上传
-d5bfcc66db65: '**▎已 {''启用'' if user_config.auto_delete_url else ''禁用''} 自动删除分享链接消息**'
 d6fa702190b6: 设置默认解析模式
 d915366ac40b: 不处理媒体, 保存解析结果, 发送压缩包
 ff71243806c8: 选择语言
