@@ -8,33 +8,42 @@ from repo import UserSettingsRepo
 from services import ParseService
 
 
-async def _platform_filter(_: Any, __: Any, update: Message | InlineQuery) -> bool:
-    t: str | None = None
-    match update:
-        case Message():
-            t = update.caption or update.text
-        case InlineQuery():
-            t = update.query
+def platform_filter(use_user_config: bool = False) -> filters.Filter:
+    """
+    平台过滤器
+    Args:
+        use_user_config: 使用用户配置
 
-    try:
-        platform = ParseService().parser.get_platform(t)
-    except Exception:
-        return False
+    Returns:
 
-    if not platform:
-        return False
+    """
 
-    if not update.from_user:
-        return True
+    async def func(flt: Any, __: Any, update: Message | InlineQuery) -> bool:
+        t: str | None = None
+        match update:
+            case Message():
+                t = update.caption or update.text
+            case InlineQuery():
+                t = update.query
 
-    async with get_session() as session:
-        user_config = await UserSettingsRepo(session).get_config(update.from_user.id)
-        if platform.id in user_config.disabled_platforms:
+        try:
+            platform = ParseService().parser.get_platform(t)
+        except Exception:
             return False
-        return True
 
+        if not platform:
+            return False
 
-platform_filter = filters.create(_platform_filter)
+        if flt.use_user_config is False or not update.from_user:
+            return True
+
+        async with get_session() as session:
+            user_config = await UserSettingsRepo(session).get_config(update.from_user.id)
+            if platform.id in user_config.disabled_platforms:
+                return False
+            return True
+
+    return filters.create(func, use_user_config=use_user_config)
 
 
 async def _via_me(_: Any, __: Any, update: Message) -> bool:

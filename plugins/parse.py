@@ -114,7 +114,7 @@ class MessageStatusReporter(StatusReporter):
 
 
 @Client.on_message(
-    filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & ~via_me_filter & platform_filter)
+    filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & ~via_me_filter & platform_filter(True))
 )
 async def jx(cli: Client, msg: Message) -> None:
     if not msg.from_user:

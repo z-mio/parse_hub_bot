@@ -284,7 +284,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
     return results
 
 
-@Client.on_inline_query(~platform_filter)
+@Client.on_inline_query(~platform_filter(False))
 async def inline_parse_tip(_: Client, inline_query: InlineQuery) -> None:
     results: list[InlineQueryResult] = [
         InlineQueryResultArticle(
@@ -299,7 +299,7 @@ async def inline_parse_tip(_: Client, inline_query: InlineQuery) -> None:
     await inline_query.answer(results=results, cache_time=1)
 
 
-@Client.on_inline_query(platform_filter)
+@Client.on_inline_query(platform_filter(False))
 @with_request_id
 async def call_inline_parse(cli: Client, inline_query: InlineQuery) -> None:
     logger.info(f"收到内联解析请求: query={inline_query.query}, from_user={inline_query.from_user.id}")
