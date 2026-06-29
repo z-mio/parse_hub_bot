@@ -25,6 +25,7 @@ from pyrogram.types import (
 )
 
 from core import bs
+from db import get_session
 from log import logger
 from plugins.filters import platform_filter, via_me_filter
 from plugins.helpers import (
@@ -34,6 +35,7 @@ from plugins.helpers import (
     create_richtext_telegraph,
     resolve_media_info,
 )
+from repo import UserSettingsRepo
 from services import ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
@@ -115,7 +117,13 @@ class MessageStatusReporter(StatusReporter):
     filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & ~via_me_filter & platform_filter)
 )
 async def jx(cli: Client, msg: Message) -> None:
-    mode = "preview"
+    if not msg.from_user:
+        return
+
+    async with get_session() as session:
+        user_config = await UserSettingsRepo(session).get_config(msg.from_user.id)
+
+    mode = user_config.default_mode
     if msg.command:
         match msg.command[0]:
             case "raw":
@@ -141,7 +149,9 @@ async def jx(cli: Client, msg: Message) -> None:
         await msg.reply_text("**▎不支持的平台**")
         return
 
-    tasks = [handle_parse(cli, msg, url, mode) for url in urls]
+    tasks = [
+        handle_parse(cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url) for url in urls
+    ]
     await asyncio.gather(*tasks)
 
 
@@ -150,10 +160,23 @@ async def jx(cli: Client, msg: Message) -> None:
 
 @with_request_id
 async def handle_parse(
-    cli: Client, msg: Message, url: str, mode: Literal["raw", "preview", "zip"] | str = "preview"
+    cli: Client,
+    msg: Message,
+    *,
+    url: str,
+    mode: Literal["raw", "preview", "zip"] | str = "preview",
+    delete_share_url_msg: bool = False,
 ) -> None:
+
     chat_id = msg.chat.id if msg.chat else None
     logger.info(f"收到解析请求: url={url}, chat_id={chat_id}, msg_id={msg.id}, mode={mode}")
+    if delete_share_url_msg:
+        logger.debug(f"自动删除分享链接消息: chat_id={chat_id}, msg_id: {msg.id}")
+        try:
+            await msg.delete()
+        except Exception as e:
+            logger.warning(f"删除分享链接消息失败: chat_id={chat_id}, msg_id: {msg.id}, error: {e}")
+
     reporter = MessageStatusReporter(msg)
     match mode:
         case "raw":

@@ -9,7 +9,7 @@ from repo.user_settings.schema import CURRENT_SCHEMA_VERSION, UserConfig
 
 
 class UserSettingsRepo:
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     @staticmethod
@@ -47,7 +47,6 @@ class UserSettingsRepo:
     async def save_config(self, user_id: int, config: UserConfig) -> UserSettings:
         settings = await self.get_or_create(user_id)
         settings.settings_json = config.model_dump(mode="json")
-        settings.schema_version = config.schema_version
         await self._session.flush()
         return settings
 
@@ -65,9 +64,8 @@ class UserSettingsRepo:
         result = await self._session.scalars(select(UserSettings).where(UserSettings.user_id.in_(user_ids)))
         return list(result)
 
-    async def save_raw(self, user_id: int, data: dict[str, Any], schema_version: int) -> UserSettings:
+    async def save_raw(self, user_id: int, data: dict[str, Any]) -> UserSettings:
         settings = await self.get_or_create(user_id)
         settings.settings_json = data
-        settings.schema_version = schema_version
         await self._session.flush()
         return settings
