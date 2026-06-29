@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardButton as Ikb
 from pyrogram.types import InlineKeyboardMarkup as Ikm
 
 from db import get_session
-from repo import UsersRepo
+from repo import UserSettingsRepo, UsersRepo
 
 LANG_MAP = {
     "zh-hans": "简体中文",
@@ -14,6 +14,16 @@ LANG_MAP = {
     "ja-jp": "日本語",
 }
 
+
+@Client.on_message(filters.command("set"))
+async def settings(_: Client, msg: Message) -> None:
+    if not msg.from_user:
+        return
+
+    async with get_session() as session:
+        usr = UserSettingsRepo(session)
+        user_config = await usr.get_config(msg.from_user.id)
+    print(user_config)
 
 
 @Client.on_message(filters.command("lang"))

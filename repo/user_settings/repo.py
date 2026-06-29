@@ -4,7 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.models.user_settings import UserSettings
-from user_config import DEFAULT_USER_CONFIG, UserConfig, migrate
+from repo.user_settings.migrate import migrate
+from repo.user_settings.schema import CURRENT_SCHEMA_VERSION, UserConfig
 
 
 class UserSettingsRepo:
@@ -13,13 +14,12 @@ class UserSettingsRepo:
 
     @staticmethod
     def config_from_raw(raw: dict[str, Any] | None) -> UserConfig:
-        if raw is None:
-            return DEFAULT_USER_CONFIG.model_copy(deep=True)
-        data = migrate(raw)
-        return UserConfig.model_validate(data)
+        config = UserConfig.model_validate(raw) if raw is not None else None
+        return migrate(config)
 
     async def get(self, user_id: int) -> UserSettings | None:
-        return await self._session.scalar(select(UserSettings).where(UserSettings.user_id == user_id))
+        settings = await self._session.scalar(select(UserSettings).where(UserSettings.user_id == user_id))
+        return settings
 
     async def get_or_create(self, user_id: int) -> UserSettings:
         settings = await self.get(user_id)
@@ -30,7 +30,6 @@ class UserSettingsRepo:
         settings = UserSettings(
             user_id=user_id,
             settings_json=config.model_dump(mode="json"),
-            schema_version=config.schema_version,
         )
         self._session.add(settings)
         await self._session.flush()
@@ -40,7 +39,7 @@ class UserSettingsRepo:
         settings = await self.get_or_create(user_id)
         config = self.config_from_raw(settings.settings_json)
 
-        if settings.schema_version != config.schema_version or settings.settings_json != config.model_dump(mode="json"):
+        if CURRENT_SCHEMA_VERSION != config.schema_version or settings.settings_json != config.model_dump(mode="json"):
             await self.save_config(user_id, config)
 
         return config
