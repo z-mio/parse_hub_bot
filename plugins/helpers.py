@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from easy_ai18n import PreLocaleSelector
 from easy_ai18n.core import LocaleContent
 from markdown import markdown
 from parsehub import ParseHub, Platform
@@ -71,16 +72,16 @@ def format_text(text: str) -> str:
         return text
 
 
-def progress(current: int, total: int, unit: str) -> str | None:
+def progress(current: int, total: int, unit: str, _t: PreLocaleSelector) -> str | None:
     if unit == "bytes":
         if total <= 0:
             return None
 
-        text = f"下 载 中... | {current * 100 / total:.0f}%"
+        text = _t(f"下 载 中... | {current * 100 / total:.0f}%")
         if round(current * 100 / total, 1) % 25 == 0:
             return text
     else:
-        text = f"下 载 中... | {current}/{total}"
+        text = _t(f"下 载 中... | {current}/{total}")
         if (current + 1) % 3 == 0 or (current + 1) == total:
             return text
     return None

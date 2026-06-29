@@ -1,0 +1,52 @@
+08fc0528426e: '**▎Switched to: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎{stage} Error:** \n```\n{error}```"
+0d3d68e32996: A task with the same content is already being parsed, waiting for parsing
+  to complete...
+27350d00b70d: Uploading...
+30364e475d07: This is not your operation
+3065ed13e5f9: Get original link
+36c680f6f5b0: Enable/Disable Platform Parsing
+460ce129a523: Downloading...
+47ca28a6369b: Toggle auto-delete share link messages
+4f573d1850a1: Modify default parsing mode
+569c1f28ab00: Packaging...
+5713cae37816: '**▎Unsupported platform**'
+5861d620c41d: Downloading... | {current}/{total}
+5a9f36a77173: Package
+5fcfdc5f95ad: '**▎Select default parsing mode**'
+645dbc5504e7: Preview
+6612548ad85b: Compress
+68957ac274c5: Downloading... | {current * 100 / total:.0f}%
+816de50b9e0e: Please enter the link in the chat box
+8c028b35f75a: '**▎Switched to: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Please add a link or reply to a message**'
+a3e3b88377c8: Start
+aa357cb96ee8: Parse
+b8918b19e2a1: '**▎Enable / Disable Platform Parsing**'
+b8a95e74574c: Do not process media, send original file
+bd19acb3024c: '**Send the share link for parsing**
+
+
+  **Supported platforms:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Command list:**
+
+  `/jx <link>` - Parse and send media
+
+  `/raw <link>` - Do not process media, send the original file
+
+  `/zip <link>` - Do not process media, save parsing results, send compressed package
+
+
+  **Open source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+c039b80e17dd: Aggregate Parsing
+c1ecedab11bc: Original
+d59c948c471c: Parsing...
+d5a73b0c7f2f: Upload
+d5bfcc66db65: '**▎Auto-delete share link messages {''启用'' if user_config.auto_delete_url
+  else ''禁用''}**'
+d915366ac40b: Do not process media, save parsing results, send compressed package
+db13dfb7e345: Change language

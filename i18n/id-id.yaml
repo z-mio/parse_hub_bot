@@ -1,0 +1,51 @@
+08fc0528426e: '**▎Sudah beralih ke: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎Kesalahan {stage}:** \n```\n{error}```"
+0d3d68e32996: Tugas yang sama sedang diproses, tunggu hingga selesai...
+27350d00b70d: Sedang mengunggah...
+30364e475d07: Ini bukan tindakan Anda
+3065ed13e5f9: Dapatkan tautan asli
+36c680f6f5b0: Aktifkan/Nonaktifkan pemrosesan platform
+460ce129a523: Sedang mengunduh...
+47ca28a6369b: Hidup/Mati hapus otomatis pesan tautan berbagi
+4f573d1850a1: Ubah mode pemrosesan default
+569c1f28ab00: Sedang mengemas...
+5713cae37816: '**▎Platform tidak didukung**'
+5861d620c41d: Sedang mengunduh... | {current}/{total}
+5a9f36a77173: Mengemas
+5fcfdc5f95ad: '**▎Pilih mode pemrosesan default**'
+645dbc5504e7: Pratinjau
+6612548ad85b: Kompres
+68957ac274c5: Sedang mengunduh... | {current * 100 / total:.0f}%
+816de50b9e0e: Silakan masukkan tautan di kotak obrolan
+8c028b35f75a: '**▎Sudah beralih ke: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Harap tambahkan tautan atau balas sebuah pesan**'
+a3e3b88377c8: Mulai
+aa357cb96ee8: Proses
+b8918b19e2a1: '**▎Aktifkan / Nonaktifkan pemrosesan platform**'
+b8a95e74574c: Jangan proses media, kirim file asli
+bd19acb3024c: '**Kirim tautan berbagi untuk diproses**
+
+
+  **Platform yang didukung:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Daftar perintah:**
+
+  `/jx <tautan>` - Proses dan kirim media
+
+  `/raw <tautan>` - Jangan proses media, kirim file asli
+
+  `/zip <tautan>` - Jangan proses media, simpan hasil proses, kirim paket kompres
+
+
+  **Sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+c039b80e17dd: Pemrosesan agregat
+c1ecedab11bc: Asli
+d59c948c471c: Sedang memproses...
+d5a73b0c7f2f: Unggah
+d5bfcc66db65: '**▎Sudah {''启用'' if user_config.auto_delete_url else ''禁用''} hapus
+  otomatis pesan tautan berbagi**'
+d915366ac40b: Jangan proses media, simpan hasil proses, kirim paket kompres
+db13dfb7e345: Ubah bahasa

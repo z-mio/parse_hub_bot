@@ -10,7 +10,7 @@ from pyrogram.types import BotCommand
 from core import bs, on_connect, on_disconnect, ws
 from db.engine import close_db
 from db.init import init_db
-from i18n import t_
+from i18n import ISO639_MAP, t_
 from log import logger, setup_logging
 from services import parse_cache, persistent_cache
 from utils.event_loop import setup_optimized_event_loop
@@ -78,8 +78,7 @@ class Bot(Client):
             "switch_auto_delete": t_("开/关 自动删除分享链接消息"),
             "switch_platform": t_("启用/禁用 平台解析"),
         }
-        lang_code_map = {"ja": "ja-jp", "en": "en-us", "": "zh-hans"}
-        for iso639, bcp47 in lang_code_map.items():
+        for iso639, bcp47 in ISO639_MAP.items():
             tc = {k: v[bcp47] for k, v in commands.items()}
             await self.set_bot_commands(
                 [BotCommand(command=k, description=v) for k, v in tc.items()],

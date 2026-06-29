@@ -9,7 +9,7 @@ from pyrogram.types import InlineKeyboardButton as Ikb
 from pyrogram.types import InlineKeyboardMarkup as Ikm
 
 from db import get_session
-from i18n import t_
+from i18n import LANG_MAP, t_
 from repo import UserSettingsRepo, UsersRepo
 from repo.user_settings import DefaultMode
 from repo.users import get_user_lang
@@ -37,14 +37,6 @@ class CQData:
 
     def __repr__(self) -> str:
         return self.__str__()
-
-
-LANG_MAP = {
-    "zh-hans": "简体中文",
-    "zh-hant": "繁体中文",
-    "en-us": "English",
-    "ja-jp": "日本語",
-}
 
 
 @Client.on_message(filters.command("lang"))

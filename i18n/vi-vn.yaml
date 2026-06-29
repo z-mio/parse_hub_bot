@@ -1,0 +1,51 @@
+08fc0528426e: '**▎Đã chuyển sang: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎Lỗi {stage}:** \n```\n{error}```"
+0d3d68e32996: Đã có tác vụ giống đang được phân tích, vui lòng chờ hoàn thành...
+27350d00b70d: Đang tải lên...
+30364e475d07: Đây không phải thao tác của bạn
+3065ed13e5f9: Lấy liên kết gốc
+36c680f6f5b0: Bật/Tắt phân tích nền tảng
+460ce129a523: Đang tải xuống...
+47ca28a6369b: Bật/Tắt tự động xóa tin nhắn liên kết chia sẻ
+4f573d1850a1: Thay đổi chế độ phân tích mặc định
+569c1f28ab00: Đang đóng gói...
+5713cae37816: '**▎Nền tảng không được hỗ trợ**'
+5861d620c41d: Đang tải xuống... | {current}/{total}
+5a9f36a77173: Đóng gói
+5fcfdc5f95ad: '**▎Chọn chế độ phân tích mặc định**'
+645dbc5504e7: Xem trước
+6612548ad85b: Nén
+68957ac274c5: Đang tải xuống... | {current * 100 / total:.0f}%
+816de50b9e0e: Vui lòng nhập liên kết trong hộp chat
+8c028b35f75a: '**▎Đã chuyển sang: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Vui lòng thêm liên kết hoặc trả lời một tin nhắn**'
+a3e3b88377c8: Bắt đầu
+aa357cb96ee8: Phân tích
+b8918b19e2a1: '**▎Bật / Tắt phân tích nền tảng**'
+b8a95e74574c: Không xử lý media, gửi file gốc
+bd19acb3024c: '**Gửi liên kết chia sẻ để phân tích**
+
+
+  **Nền tảng được hỗ trợ:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Danh sách lệnh:**
+
+  `/jx <liên kết>` - Phân tích và gửi media
+
+  `/raw <liên kết>` - Không xử lý media, gửi file gốc
+
+  `/zip <liên kết>` - Không xử lý media, lưu kết quả phân tích, gửi file nén
+
+
+  **Mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+c039b80e17dd: Phân tích tổng hợp
+c1ecedab11bc: Gốc
+d59c948c471c: Đang phân tích...
+d5a73b0c7f2f: Tải lên
+d5bfcc66db65: '**▎Đã {''启用'' if user_config.auto_delete_url else ''禁用''} tự động xóa
+  tin nhắn liên kết chia sẻ**'
+d915366ac40b: Không xử lý media, lưu kết quả phân tích, gửi file nén
+db13dfb7e345: Thay đổi ngôn ngữ

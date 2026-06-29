@@ -48,14 +48,15 @@ class PipelineResult:
 class PipelineProgressCallback:
     """统一的下载进度回调，依赖 StatusReporter"""
 
-    def __init__(self, reporter: StatusReporter):
+    def __init__(self, reporter: StatusReporter, _t: PreLocaleSelector):
         self._reporter = reporter
         self._last_text: str | None = None
+        self._t = _t
 
     async def __call__(self, current: int, total: int, unit: ProgressUnit, *args: Any, **kwargs: Any) -> None:
         from plugins.helpers import progress as fmt_progress
 
-        text = fmt_progress(current, total, unit)
+        text = fmt_progress(current, total, unit, self._t)
         if not text or text == self._last_text:
             return
         self._last_text = text
@@ -160,7 +161,7 @@ class ParsePipeline:
         # ── 2. 下载 ──
         await self._reporter.report(self._t("下 载 中..."))
         p = ps.parser.get_platform(self._url)
-        progress_cb = PipelineProgressCallback(self._reporter)
+        progress_cb = PipelineProgressCallback(self._reporter, _t=self._t)
 
         async def fn() -> DownloadResult:
             proxy = pl_cfg.roll_downloader_proxy(p.id)

@@ -1,0 +1,53 @@
+08fc0528426e: '**▎Şu an seçili: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎{stage} Hata:** \n```\n{error}```"
+0d3d68e32996: Aynı görev zaten çözülüyor, çözüm tamamlanana kadar bekleyin...
+27350d00b70d: Yükleniyor...
+30364e475d07: Bu senin işlemin değil
+3065ed13e5f9: Orijinal bağlantıyı al
+36c680f6f5b0: Platform çözümlemeyi etkinleştir/devre dışı bırak
+460ce129a523: İndiriliyor...
+47ca28a6369b: Paylaşım bağlantısı mesajlarını otomatik silmeyi aç/kapat
+4f573d1850a1: Varsayılan çözümleme modunu değiştir
+569c1f28ab00: Paketleniyor...
+5713cae37816: '**▎Desteklenmeyen platform**'
+5861d620c41d: İndiriliyor... | {current}/{total}
+5a9f36a77173: Paketle
+5fcfdc5f95ad: '**▎Varsayılan çözümleme modunu seç**'
+645dbc5504e7: Önizleme
+6612548ad85b: Sıkıştır
+68957ac274c5: İndiriliyor... | {current * 100 / total:.0f}%
+816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
+8c028b35f75a: '**▎Şu an seçili: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Lütfen bir bağlantı ekleyin veya bir mesaja yanıt verin**'
+a3e3b88377c8: Başlat
+aa357cb96ee8: Çözümle
+b8918b19e2a1: '**▎Platform çözümlemeyi etkinleştir/devre dışı bırak**'
+b8a95e74574c: Medya işlenmeyecek, orijinal dosya gönderilecek
+bd19acb3024c: '**Çözümleme için paylaşım bağlantısı gönderin**
+
+
+  **Desteklenen platformlar:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Komut listesi:**
+
+  `/jx <bağlantı>` - Medyayı çözümle ve gönder
+
+  `/raw <bağlantı>` - Medyayı işleme, orijinal dosyayı gönder
+
+  `/zip <bağlantı>` - Medyayı işleme, çözümleme sonucunu kaydet, sıkıştırılmış dosya
+  gönder
+
+
+  **Açık kaynak adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+c039b80e17dd: Toplu çözümleme
+c1ecedab11bc: Orijinal
+d59c948c471c: Çözülüyor...
+d5a73b0c7f2f: Yükle
+d5bfcc66db65: '**▎Paylaşım bağlantısı mesajları otomatik olarak {''启用'' if user_config.auto_delete_url
+  else ''禁用''} silindi**'
+d915366ac40b: Medya işlenmeyecek, çözümleme sonucu kaydedilecek, sıkıştırılmış dosya
+  gönderilecek
+db13dfb7e345: Dili değiştir

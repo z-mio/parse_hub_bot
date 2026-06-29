@@ -1,0 +1,52 @@
+08fc0528426e: '**▎Cambiado a: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎Error en {stage}:** \n```\n{error}```"
+0d3d68e32996: Ya hay una tarea igual en proceso de análisis, esperando a que termine...
+27350d00b70d: Subiendo...
+30364e475d07: Esta no es tu acción
+3065ed13e5f9: Obtener enlace original
+36c680f6f5b0: Activar/Desactivar análisis de plataforma
+460ce129a523: Descargando...
+47ca28a6369b: Activar/Desactivar eliminación automática de mensajes con enlaces compartidos
+4f573d1850a1: Modificar modo de análisis predeterminado
+569c1f28ab00: Empaquetando...
+5713cae37816: '**▎Plataforma no soportada**'
+5861d620c41d: Descargando... | {current}/{total}
+5a9f36a77173: Empaquetar
+5fcfdc5f95ad: '**▎Seleccionar modo de análisis predeterminado**'
+645dbc5504e7: Vista previa
+6612548ad85b: Comprimir
+68957ac274c5: Descargando... | {current * 100 / total:.0f}%
+816de50b9e0e: Por favor, introduce un enlace en el chat
+8c028b35f75a: '**▎Cambiado a: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Por favor añade un enlace o responde a un mensaje**'
+a3e3b88377c8: Iniciar
+aa357cb96ee8: Analizar
+b8918b19e2a1: '**▎Activar / Desactivar análisis de plataforma**'
+b8a95e74574c: No procesar medios, enviar archivo original
+bd19acb3024c: '**Envía un enlace compartido para analizar**
+
+
+  **Plataformas soportadas:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Lista de comandos:**
+
+  `/jx <enlace>` - Analizar y enviar medios
+
+  `/raw <enlace>` - No procesar medios, enviar archivo original
+
+  `/zip <enlace>` - No procesar medios, guardar resultado del análisis, enviar archivo
+  comprimido
+
+
+  **Código abierto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+c039b80e17dd: Análisis agregado
+c1ecedab11bc: Original
+d59c948c471c: Analizando...
+d5a73b0c7f2f: Subir
+d5bfcc66db65: '**▎{''启用'' if user_config.auto_delete_url else ''禁用''} eliminación
+  automática de mensajes con enlaces compartidos**'
+d915366ac40b: No procesar medios, guardar resultado del análisis, enviar archivo comprimido
+db13dfb7e345: Cambiar idioma

@@ -1,0 +1,53 @@
+08fc0528426e: '**▎Passato a: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎Errore {stage}:** \n```\n{error}```"
+0d3d68e32996: Un'attività identica è già in fase di analisi, attendere il completamento...
+27350d00b70d: Caricamento in corso...
+30364e475d07: Questa non è la tua operazione
+3065ed13e5f9: Ottieni link originale
+36c680f6f5b0: Abilita/Disabilita analisi piattaforma
+460ce129a523: Download in corso...
+47ca28a6369b: Attiva/Disattiva eliminazione automatica dei messaggi con link condivisi
+4f573d1850a1: Modifica modalità di analisi predefinita
+569c1f28ab00: Impacchettamento in corso...
+5713cae37816: '**▎Piattaforma non supportata**'
+5861d620c41d: Download in corso... | {current}/{total}
+5a9f36a77173: Impacchetta
+5fcfdc5f95ad: '**▎Seleziona modalità di analisi predefinita**'
+645dbc5504e7: Anteprima
+6612548ad85b: Compressione
+68957ac274c5: Download in corso... | {current * 100 / total:.0f}%
+816de50b9e0e: Inserisci il link nella chat
+8c028b35f75a: '**▎Passato a: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Per favore aggiungi un link o rispondi a un messaggio**'
+a3e3b88377c8: Inizia
+aa357cb96ee8: Analizza
+b8918b19e2a1: '**▎Abilita / Disabilita analisi piattaforma**'
+b8a95e74574c: Non elaborare i media, invia il file originale
+bd19acb3024c: '**Invia un link condiviso per l''analisi**
+
+
+  **Piattaforme supportate:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Elenco comandi:**
+
+  `/jx <link>` - Analizza e invia media
+
+  `/raw <link>` - Non elaborare i media, invia il file originale
+
+  `/zip <link>` - Non elaborare i media, salva il risultato dell''analisi, invia un
+  archivio compresso
+
+
+  **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+c039b80e17dd: Analisi aggregata
+c1ecedab11bc: Originale
+d59c948c471c: Analisi in corso...
+d5a73b0c7f2f: Carica
+d5bfcc66db65: '**▎Messaggi con link condivisi eliminati automaticamente: {''启用'' if
+  user_config.auto_delete_url else ''禁用''}**'
+d915366ac40b: Non elaborare i media, salva il risultato dell'analisi, invia un archivio
+  compresso
+db13dfb7e345: Modifica lingua
