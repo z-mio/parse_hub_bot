@@ -15,7 +15,6 @@ dependencies = [
     "lxml-html-clean>=0.4.1",
     "markdown>=3.7",
     "parsehub>=2.0.17",
-    "pickledb>=1.6",
     "pillow>=12.1.1",
     "pillow-heif>=1.1.1",
     "pydantic>=2.12.5",
