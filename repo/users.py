@@ -16,7 +16,7 @@ class UsersRepo:
         user = await self._session.scalar(select(Users).where(Users.telegram_user_id == telegram_user_id))
         return user
 
-    async def get_or_create_by_telegram_user_id(
+    async def ensure_by_telegram_user_id(
         self,
         telegram_user_id: int,
     ) -> Users:
@@ -28,16 +28,3 @@ class UsersRepo:
         self._session.add(user)
         await self._session.flush()
         return user
-
-    async def add(self, user_id: int) -> Users:
-        user = Users(telegram_user_id=user_id)
-        self._session.add(user)
-        return user
-
-
-async def get_user_lang(telegram_user_id: int, session: AsyncSession) -> str:
-    ur = UsersRepo(session)
-    user = await ur.get_or_create_by_telegram_user_id(telegram_user_id)
-    if not user:
-        raise ValueError("User not found")
-    return str(user.language_code)

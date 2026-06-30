@@ -10,9 +10,8 @@ from pyrogram.types import InlineKeyboardMarkup as Ikm
 
 from db import get_session
 from i18n import LANG_MAP, t_
-from repo import UserSettingsRepo, UsersRepo
 from repo.user_settings import DefaultMode
-from repo.users import get_user_lang
+from services import AccountService
 
 
 @dataclass
@@ -45,10 +44,9 @@ async def select_lang(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
-        ur = UsersRepo(session)
-        user = await ur.get_or_create_by_telegram_user_id(msg.from_user.id)
+        current = await AccountService(session, msg.from_user.id).ensure_account()
 
-    current_lang = user.language_code
+    current_lang = current.lang
 
     ikbs = [
         Ikb(
@@ -71,18 +69,15 @@ async def selected_lang(_: Client, cq: CallbackQuery) -> None:
     cqdata = CQData.parse(cq.data)
     if cq.from_user.id != cqdata.uid:
         async with get_session() as session:
-            lang = await get_user_lang(cq.from_user.id, session)
+            lang = await AccountService(session, cq.from_user.id).get_lang()
         await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
         return
 
     selected = cqdata.value
     async with get_session() as session:
-        user = await UsersRepo(session).get_by_telegram_user_id(cq.from_user.id)
-        if not user:
-            raise ValueError("User not found")
-        user.language_code = selected
+        current = await AccountService(session, cq.from_user.id).set_language(selected)
 
-    await cq.message.edit(t_[user.language_code](f"**▎已切换为: {LANG_MAP[selected]}**"))
+    await cq.message.edit(t_[current.lang](f"**▎已切换为: {LANG_MAP[selected]}**"))
 
 
 MODE_MAP = {
@@ -99,9 +94,9 @@ async def select_mode(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
-        lang = await get_user_lang(msg.from_user.id, session)
-        usr = UserSettingsRepo(session)
-        user_config = await usr.get_config(msg.from_user.id)
+        current = await AccountService(session, msg.from_user.id).ensure_account()
+        lang = current.lang
+        user_config = current.config
 
     ikbs = [
         Ikb(
@@ -123,17 +118,15 @@ async def selected_mode(_: Client, cq: CallbackQuery) -> None:
     cqdata = CQData.parse(cq.data)
     if cq.from_user.id != cqdata.uid:
         async with get_session() as session:
-            lang = await get_user_lang(cq.from_user.id, session)
+            lang = await AccountService(session, cq.from_user.id).get_lang()
         await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
         return
 
     selected = cast(DefaultMode, cqdata.value)
     async with get_session() as session:
-        lang = await get_user_lang(cq.from_user.id, session)
-        usr = UserSettingsRepo(session)
-        user_config = await usr.get_config(cq.from_user.id)
-        user_config.default_mode = selected
-        await usr.save_config(cq.from_user.id, user_config)
+        account = AccountService(session, cq.from_user.id)
+        current = await account.patch_config(default_mode=selected)
+        lang = current.lang
 
     await cq.message.edit(t_[lang](f"**▎已切换为: {MODE_MAP[selected]}**"))
 
@@ -144,14 +137,13 @@ async def switch_auto_delete_url(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
-        lang = await get_user_lang(msg.from_user.id, session)
-        usr = UserSettingsRepo(session)
-        user_config = await usr.get_config(msg.from_user.id)
-        user_config.auto_delete_url = not user_config.auto_delete_url
-        await usr.save_config(msg.from_user.id, user_config)
+        account = AccountService(session, msg.from_user.id)
+        current = await account.ensure_account()
+        current = await account.patch_config(auto_delete_url=not current.config.auto_delete_url)
+        user_config = current.config
 
     await msg.reply_text(
-        t_[lang](
+        t_[current.lang](
             f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**\n"
             f"{'▎**群内使用需要授予 Bot 删除消息权限**' if user_config.auto_delete_url else ''}"
         )
@@ -164,9 +156,9 @@ async def switch_platform(_: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
-        lang = await get_user_lang(msg.from_user.id, session)
-        usr = UserSettingsRepo(session)
-        user_config = await usr.get_config(msg.from_user.id)
+        current = await AccountService(session, msg.from_user.id).ensure_account()
+        lang = current.lang
+        user_config = current.config
 
     ikbs = [
         Ikb(
@@ -188,19 +180,22 @@ async def switch_platform_callback(_: Client, cq: CallbackQuery) -> None:
     cqdata = CQData.parse(cq.data)
     if cq.from_user.id != cqdata.uid:
         async with get_session() as session:
-            lang = await get_user_lang(cq.from_user.id, session)
+            lang = await AccountService(session, cq.from_user.id).get_lang()
         await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
         return
 
     selected = cqdata.value
     async with get_session() as session:
-        usr = UserSettingsRepo(session)
-        user_config = await usr.get_config(cq.from_user.id)
-        if selected in user_config.disabled_platforms:
-            user_config.disabled_platforms.remove(selected)
+        account = AccountService(session, cq.from_user.id)
+        current = await account.ensure_account()
+
+        disabled_platforms = current.config.disabled_platforms.copy()
+        if selected in disabled_platforms:
+            disabled_platforms.remove(selected)
         else:
-            user_config.disabled_platforms.append(selected)
-        await usr.save_config(cq.from_user.id, user_config)
+            disabled_platforms.append(selected)
+        current = await account.patch_config(disabled_platforms=disabled_platforms)
+        user_config = current.config
 
     ikbs = [
         Ikb(

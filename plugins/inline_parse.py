@@ -45,8 +45,7 @@ from plugins.helpers import (
     create_richtext_telegraph,
     resolve_media_info,
 )
-from repo.users import get_user_lang
-from services import ParseService
+from services import AccountService, ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
 from utils.helpers import to_list, with_request_id
@@ -292,7 +291,7 @@ async def build_inline_results(parse_result: AnyParseResult, cli: Client) -> lis
 @Client.on_inline_query(~platform_filter(False))
 async def inline_parse_tip(_: Client, inline_query: InlineQuery) -> None:
     async with get_session() as session:
-        lang = await get_user_lang(inline_query.from_user.id, session)
+        lang = await AccountService(session, inline_query.from_user.id).get_lang()
         _t = t_[lang]
     results: list[InlineQueryResult] = [
         InlineQueryResultArticle(
@@ -336,7 +335,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
         return
 
     async with get_session() as session:
-        lang = await get_user_lang(chosen_result.from_user.id, session)
+        lang = await AccountService(session, chosen_result.from_user.id).get_lang()
         _t = t_[lang]
     media_index = int(chosen_result.result_id.split("_")[1])
     inline_message_id = chosen_result.inline_message_id

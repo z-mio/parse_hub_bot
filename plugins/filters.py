@@ -4,8 +4,7 @@ from pyrogram import filters
 from pyrogram.types import InlineQuery, Message
 
 from db.session import get_session
-from repo import UserSettingsRepo
-from services import ParseService
+from services import AccountService, ParseService
 
 
 def platform_filter(use_user_config: bool = False) -> filters.Filter:
@@ -38,7 +37,7 @@ def platform_filter(use_user_config: bool = False) -> filters.Filter:
             return True
 
         async with get_session() as session:
-            user_config = await UserSettingsRepo(session).get_config(update.from_user.id)
+            user_config = await AccountService(session, update.from_user.id).get_config()
             if platform.id in user_config.disabled_platforms:
                 return False
             return True

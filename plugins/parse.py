@@ -37,9 +37,7 @@ from plugins.helpers import (
     create_richtext_telegraph,
     resolve_media_info,
 )
-from repo import UserSettingsRepo
-from repo.users import get_user_lang
-from services import ParseService
+from services import AccountService, ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
 from utils.helpers import pack_dir_to_tar_gz, to_list, with_request_id
@@ -125,9 +123,10 @@ async def jx(cli: Client, msg: Message) -> None:
         return
 
     async with get_session() as session:
-        lang = await get_user_lang(msg.from_user.id, session)
+        current = await AccountService(session, msg.from_user.id).ensure_account()
+        lang = current.lang
         _t = t_[lang]
-        user_config = await UserSettingsRepo(session).get_config(msg.from_user.id)
+        user_config = current.config
 
     mode = user_config.default_mode
     if msg.command:
