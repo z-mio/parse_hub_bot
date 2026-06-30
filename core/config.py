@@ -4,8 +4,9 @@ from typing import Any
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
-from pydantic import Field, field_validator, model_validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from sqlalchemy import make_url
 
 load_dotenv()
 
@@ -22,33 +23,26 @@ class BotSettings(BaseSettings):
     api_hash: str = Field(...)
     bot_proxy: dict | None = Field(default=None)
     data_path: Path = Path("data")
-    cache_time: int = Field(default=14 * 24 * 60, ge=0, description="缓存时间, 单位分钟, 0 为禁用")
-    cache_max_entries: int = Field(default=15000, ge=0, description="缓存最大条数, 0 为不限制")
-    cache_save_interval: int = Field(default=5, gt=0, description="缓存保存间隔, 单位分钟")
-    cache_cleanup_interval: int = Field(default=60, gt=0, description="缓存过期清理间隔, 单位分钟")
+    cache_max_entries: int = Field(default=30000, ge=0, description="缓存最大条数, 0 为不限制")
     download_dir: Path = Path("downloads")
+
+    database_url: str = "sqlite+aiosqlite:///data/db/database.db"
+
     debug: bool = Field(default=False)
     debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")
-
-    @model_validator(mode="after")
-    def cache_config_validate(self) -> "BotSettings":
-        if self.cache_time and self.cache_cleanup_interval > self.cache_time:
-            raise ValueError("CACHE_CLEANUP_INTERVAL 不能大于 CACHE_TIME")
-        return self
 
     def model_post_init(self, __context: Any) -> None:
         """模型初始化后的操作"""
         self.sessions_path.mkdir(parents=True, exist_ok=True)
-        self.cache_path.mkdir(parents=True, exist_ok=True)
         self.config_path.mkdir(parents=True, exist_ok=True)
+
+        url = make_url(self.database_url)
+        if url.get_backend_name() == "sqlite" and url.database:
+            Path(url.database).parent.mkdir(parents=True, exist_ok=True)
 
     @property
     def sessions_path(self) -> Path:
         return self.data_path / "sessions"
-
-    @property
-    def cache_path(self) -> Path:
-        return self.data_path / "cache"
 
     @property
     def config_path(self) -> Path:

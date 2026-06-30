@@ -1,0 +1,71 @@
+from typing import Any
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from db.models.user_settings import UserSettings
+from repo.user_settings.migrate import migrate
+from repo.user_settings.schema import CURRENT_SCHEMA_VERSION, UserConfig
+
+
+class UserSettingsRepo:
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    @staticmethod
+    def config_from_raw(raw: dict[str, Any] | None) -> UserConfig:
+        config = UserConfig.model_validate(raw) if raw is not None else None
+        return migrate(config)
+
+    async def get(self, user_id: int) -> UserSettings | None:
+        settings = await self._session.scalar(select(UserSettings).where(UserSettings.user_id == user_id))
+        return settings
+
+    async def get_or_create(self, user_id: int) -> UserSettings:
+        settings = await self.get(user_id)
+        if settings is not None:
+            return settings
+
+        config = UserConfig()
+        settings = UserSettings(
+            user_id=user_id,
+            settings_json=config.model_dump(mode="json"),
+        )
+        self._session.add(settings)
+        await self._session.flush()
+        return settings
+
+    async def get_config(self, user_id: int) -> UserConfig:
+        settings = await self.get_or_create(user_id)
+        config = self.config_from_raw(settings.settings_json)
+
+        if CURRENT_SCHEMA_VERSION != config.schema_version or settings.settings_json != config.model_dump(mode="json"):
+            await self.save_config(user_id, config)
+
+        return config
+
+    async def save_config(self, user_id: int, config: UserConfig) -> UserSettings:
+        settings = await self.get_or_create(user_id)
+        settings.settings_json = config.model_dump(mode="json")
+        await self._session.flush()
+        return settings
+
+    async def patch_config(self, user_id: int, **kwargs: Any) -> UserConfig:
+        current = await self.get_config(user_id)
+        config = current.model_copy(update=kwargs)
+        config = UserConfig.model_validate(config.model_dump())
+
+        await self.save_config(user_id, config)
+        return config
+
+    async def get_by_user_ids(self, user_ids: list[int]) -> list[UserSettings]:
+        if not user_ids:
+            return []
+        result = await self._session.scalars(select(UserSettings).where(UserSettings.user_id.in_(user_ids)))
+        return list(result)
+
+    async def save_raw(self, user_id: int, data: dict[str, Any]) -> UserSettings:
+        settings = await self.get_or_create(user_id)
+        settings.settings_json = data
+        await self._session.flush()
+        return settings

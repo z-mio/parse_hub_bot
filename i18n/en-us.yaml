@@ -1,0 +1,62 @@
+08fc0528426e: '**▎Switched to: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎{stage} Error:** \n```\n{error}```"
+0d3d68e32996: A task with the same content is already being parsed, waiting for parsing
+  to complete...
+27350d00b70d: Uploading...
+30364e475d07: This is not your operation
+3065ed13e5f9: Get original link
+36c680f6f5b0: Enable/Disable Platform Parsing
+460ce129a523: Downloading...
+569c1f28ab00: Packaging...
+5713cae37816: '**▎Unsupported platform**'
+5861d620c41d: Downloading... | {current}/{total}
+5a9f36a77173: Package
+5fcfdc5f95ad: '**▎Select default parsing mode**'
+609a04710e91: '**▎Automatically deleted {''启用'' if user_config.auto_delete_url else
+  ''禁用''} shared link messages**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
+645dbc5504e7: Preview
+6536e2506f73: Enable/Disable Auto Delete Share Link Messages
+6612548ad85b: Compress
+68957ac274c5: Downloading... | {current * 100 / total:.0f}%
+7612b9a15f41: '**Send Share Link for Parsing**
+
+
+  **Supported Platforms:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Command List:**
+
+  <blockquote expandable>`/jx <link>` - Parse and send media
+
+  `/raw <link>` - Do not process media, send original file
+
+  `/zip <link>` - Do not process media, save parsing result, send compressed package
+
+  `/lang` - Select language
+
+  `/mode` - Set default parsing mode
+
+  `/switch_auto_delete` - Enable/Disable auto delete share link messages
+
+  `/switch_platform` - Enable/Disable platform parsing</blockquote>
+
+
+  **Open Source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+816de50b9e0e: Please enter the link in the chat box
+8c028b35f75a: '**▎Switched to: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Please add a link or reply to a message**'
+a3e3b88377c8: Start
+aa357cb96ee8: Parse
+b8918b19e2a1: '**▎Enable / Disable Platform Parsing**'
+b8a95e74574c: Do not process media, send original file
+c039b80e17dd: Aggregate Parsing
+c1ecedab11bc: Original
+d59c948c471c: Parsing...
+d5a73b0c7f2f: Upload
+d6fa702190b6: Set Default Parsing Mode
+d915366ac40b: Do not process media, save parsing results, send compressed package
+ff71243806c8: Select Language

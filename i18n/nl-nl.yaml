@@ -1,0 +1,63 @@
+08fc0528426e: '**▎Overgeschakeld naar: {LANG_MAP[selected]}**'
+0c7c37b93cfe: "**▎{stage} Fout:** \n```\n{error}```"
+0d3d68e32996: Er is al eenzelfde taak bezig met ontleden, wacht tot het ontleden is
+  voltooid...
+27350d00b70d: Bezig met uploaden...
+30364e475d07: Dit is niet jouw actie
+3065ed13e5f9: Oorspronkelijke link ophalen
+36c680f6f5b0: Platformontleding in-/uitschakelen
+460ce129a523: Bezig met downloaden...
+569c1f28ab00: Bezig met inpakken...
+5713cae37816: '**▎Niet ondersteund platform**'
+5861d620c41d: Bezig met downloaden... | {current}/{total}
+5a9f36a77173: Inpakken
+5fcfdc5f95ad: '**▎Selecteer standaard ontledingsmodus**'
+609a04710e91: '**▎{''启用'' if user_config.auto_delete_url else ''禁用''} automatisch
+  verwijderde gedeelde linkberichten**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
+645dbc5504e7: Voorbeeld
+6536e2506f73: Inschakelen/Uitschakelen automatisch verwijderen van gedeelde linkberichten
+6612548ad85b: Comprimeren
+68957ac274c5: Bezig met downloaden... | {current * 100 / total:.0f}%
+7612b9a15f41: '**Verzend een gedeelde link voor parsing**
+
+
+  **Ondersteunde platforms:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Lijst met commando''s:**
+
+  <blockquote expandable>`/jx <link>` - Parseer en verzend media
+
+  `/raw <link>` - Verwerk media niet, verzend het originele bestand
+
+  `/zip <link>` - Verwerk media niet, sla het parse-resultaat op, verzend een zip-bestand
+
+  `/lang` - Kies taal
+
+  `/mode` - Stel de standaard parse-modus in
+
+  `/switch_auto_delete` - Schakel automatisch verwijderen van gedeelde linkberichten
+  in/uit
+
+  `/switch_platform` - Schakel platform parsing in/uit</blockquote>
+
+
+  **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+816de50b9e0e: Voer een link in het chatvenster in
+8c028b35f75a: '**▎Overgeschakeld naar: {MODE_MAP[selected]}**'
+929107a1e13c: '**▎Voeg een link toe of beantwoord een bericht**'
+a3e3b88377c8: Start
+aa357cb96ee8: Ontleden
+b8918b19e2a1: '**▎Platformontleding in-/uitschakelen**'
+b8a95e74574c: Media niet verwerken, originele bestanden verzenden
+c039b80e17dd: Geaggregeerde ontleding
+c1ecedab11bc: Origineel
+d59c948c471c: Bezig met ontleden...
+d5a73b0c7f2f: Uploaden
+d6fa702190b6: Stel de standaard parse-modus in
+d915366ac40b: Media niet verwerken, ontledingsresultaat opslaan, zip-bestand verzenden
+ff71243806c8: Kies taal

@@ -1,0 +1,11 @@
+name: parse_hub_bot
+
+services:
+  bot:
+    image: ghcr.io/z-mio/parse_hub_bot:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - data:/app/data
+      - logs:/app/logs

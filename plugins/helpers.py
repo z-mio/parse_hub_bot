@@ -3,12 +3,15 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from easy_ai18n import PreLocaleSelector
+from easy_ai18n.core import LocaleContent
 from markdown import markdown
 from parsehub import ParseHub, Platform
 from parsehub.types import AnyMediaFile, AnyParseResult, DownloadResult, RichTextParseResult
 from parsehub.utils.media_info import MediaInfoReader
 from pyrogram import Client
 
+from i18n import t_
 from log import logger
 from utils.converter import clean_article_html
 from utils.helpers import to_list
@@ -16,6 +19,17 @@ from utils.media_processing_unit import MediaProcessingUnit
 from utils.ph import Telegraph
 
 logger = logger.bind(name="Helpers")
+
+COMMANDS = {
+    "start": t_("开始"),
+    "jx": t_("解析"),
+    "raw": t_("不处理媒体, 发送原始文件"),
+    "zip": t_("不处理媒体, 保存解析结果, 发送压缩包"),
+    "lang": t_("选择语言"),
+    "mode": t_("设置默认解析模式"),
+    "switch_auto_delete": t_("启用/禁用 自动删除分享链接消息"),
+    "switch_platform": t_("启用/禁用 平台解析"),
+}
 
 
 @dataclass
@@ -69,18 +83,18 @@ def format_text(text: str) -> str:
         return text
 
 
-def progress(current: int, total: int, unit: str) -> str | None:
+def progress(current: int, total: int, unit: str, _t: PreLocaleSelector) -> str | None:
     if unit == "bytes":
         if total <= 0:
             return None
 
-        text = f"下 载 中... | {current * 100 / total:.0f}%"
+        text = _t(f"下 载 中... | {current * 100 / total:.0f}%")
         if round(current * 100 / total, 1) % 25 == 0:
-            return text
+            return str(text)
     else:
-        text = f"下 载 中... | {current}/{total}"
+        text = _t(f"下 载 中... | {current}/{total}")
         if (current + 1) % 3 == 0 or (current + 1) == total:
-            return text
+            return str(text)
     return None
 
 
@@ -136,14 +150,20 @@ def get_supported_platforms() -> str:
     return "\n".join(text)
 
 
-def build_start_text() -> str:
-    return (
+def build_start_text() -> LocaleContent:
+    return t_(
         f"**发送分享链接以进行解析**\n\n"
         f"**支持的平台:**\n"
         f"<blockquote expandable>{get_supported_platforms()}</blockquote>\n\n"
         f"**命令列表:**\n"
+        f"<blockquote expandable>"
         f"`/jx <链接>` - 解析并发送媒体\n"
         f"`/raw <链接>` - 不处理媒体, 发送原始文件\n"
-        f"`/zip <链接>` - 不处理媒体, 保存解析结果, 发送压缩包\n\n"
+        f"`/zip <链接>` - 不处理媒体, 保存解析结果, 发送压缩包"
+        f"`/lang` - 选择语言"
+        f"`/mode` - 设置默认解析模式"
+        f"`/switch_auto_delete` - 启用/禁用 自动删除分享链接消息"
+        f"`/switch_platform` - 启用/禁用 平台解析"
+        f"</blockquote>\n\n"
         f"**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
     )
