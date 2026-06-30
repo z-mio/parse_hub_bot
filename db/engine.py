@@ -3,9 +3,9 @@ from typing import Any
 from sqlalchemy import event
 from sqlalchemy.ext.asyncio import create_async_engine
 
-DATABASE_URL = "sqlite+aiosqlite:///data/db/database.db"
+from core.config import bs
 
-engine = create_async_engine(DATABASE_URL, connect_args={"autocommit": False})
+engine = create_async_engine(bs.database_url, connect_args={"autocommit": False})
 
 
 @event.listens_for(engine.sync_engine, "connect")

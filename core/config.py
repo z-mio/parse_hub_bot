@@ -27,6 +27,9 @@ class BotSettings(BaseSettings):
     cache_save_interval: int = Field(default=5, gt=0, description="缓存保存间隔, 单位分钟")
     cache_cleanup_interval: int = Field(default=60, gt=0, description="缓存过期清理间隔, 单位分钟")
     download_dir: Path = Path("downloads")
+
+    database_url: str = "sqlite+aiosqlite:///data/db/database.db"
+
     debug: bool = Field(default=False)
     debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")
 
