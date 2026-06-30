@@ -124,9 +124,9 @@ async def jx(cli: Client, msg: Message) -> None:
 
     async with get_session() as session:
         current = await AccountService(session, msg.from_user.id).ensure_account()
+        user_config = current.config
         lang = current.lang
         _t = t_[lang]
-        user_config = current.config
 
     mode = user_config.default_mode
     if msg.command:
@@ -230,7 +230,7 @@ async def handle_parse(
             if cached := await persistent_cache.get(raw_url):
                 await _send_cached(msg, cached, raw_url)
             else:
-                await handle_parse(cli, msg, url, mode=mode)
+                await handle_parse(cli, msg, url, mode=mode, _t=_t)
                 return
         else:
             logger.debug("Pipeline 返回 None, 跳过后续处理")
