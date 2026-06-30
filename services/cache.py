@@ -119,7 +119,6 @@ class PersistentCache:
         evict_batch_size: int = 100,
     ):
         self.logger = logger.bind(name="PersistentCache")
-        self.logger.debug("数据库缓存已初始化")
         self._max_entries = max_entries
         self._stale_after = stale_after
         self._evict_batch_size = evict_batch_size
