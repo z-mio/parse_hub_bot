@@ -100,8 +100,6 @@ class InlineStatusReporter(StatusReporter):
 
 def build_cached_inline_results(entry: CacheEntry, raw_url: str) -> list[InlineQueryResult]:
     """有 file_id 缓存时，构建 cached 类型的 inline 结果（Telegram 服务端直发）"""
-    if entry.parse_result is None:
-        return []
     content = entry.parse_result.content
     caption = build_caption_by_str(entry.parse_result.title, content, raw_url, entry.telegraph_url)
     title = entry.parse_result.title or "无标题"

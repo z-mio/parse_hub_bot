@@ -642,9 +642,6 @@ async def _send_media(
 async def _send_cached(msg: Message, entry: CacheEntry, url: str) -> None:
     """从 file_id 缓存直接发送，跳过解析/下载/转码"""
     logger.debug(f"缓存发送: media={entry.media}")
-    if entry.parse_result is None:
-        await persistent_cache.remove(url)
-        return
     caption = build_caption_by_str(entry.parse_result.title, entry.parse_result.content, url, entry.telegraph_url)
 
     # 富文本类型

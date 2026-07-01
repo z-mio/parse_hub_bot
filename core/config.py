@@ -22,11 +22,12 @@ class BotSettings(BaseSettings):
     api_id: str = Field(...)
     api_hash: str = Field(...)
     bot_proxy: dict | None = Field(default=None)
-    data_path: Path = Path("data")
+    data_path: Path = Field(default=Path("data"))
     cache_max_entries: int = Field(default=30000, ge=0, description="缓存最大条数, 0 为不限制")
+    cache_disabled: bool = Field(default=False, description="禁用缓存")
     download_dir: Path = Path("downloads")
 
-    database_url: str = "sqlite+aiosqlite:///data/db/database.db"
+    database_url: str = Field(default="sqlite+aiosqlite:///data/db/database.db")
 
     debug: bool = Field(default=False)
     debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")

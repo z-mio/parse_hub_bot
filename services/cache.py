@@ -106,7 +106,7 @@ class CacheMedia(BaseModel):
 
 
 class CacheEntry(BaseModel):
-    parse_result: CacheParseResult | None = None
+    parse_result: CacheParseResult
     media: list[CacheMedia] | None = None
     telegraph_url: str | None = None
 
@@ -117,11 +117,13 @@ class PersistentCache:
         max_entries: int = 30000,
         stale_after: timedelta = timedelta(days=7),
         evict_batch_size: int = 100,
+        disable: bool = False,
     ):
         self.logger = logger.bind(name="PersistentCache")
         self._max_entries = max_entries
         self._stale_after = stale_after
         self._evict_batch_size = evict_batch_size
+        self._disable = disable
 
     @staticmethod
     def _make_key(url: str) -> str:
@@ -132,6 +134,9 @@ class PersistentCache:
         return datetime.now(UTC)
 
     async def get(self, url: str) -> CacheEntry | None:
+        if self._disable:
+            return None
+
         key = self._make_key(url)
         async with get_session() as session:
             repo = CacheRepo(session)
@@ -152,6 +157,9 @@ class PersistentCache:
             return entry
 
     async def set(self, url: str, entry: CacheEntry) -> None:
+        if self._disable:
+            return
+
         key = self._make_key(url)
         now = self._now()
         async with get_session() as session:
@@ -161,6 +169,9 @@ class PersistentCache:
             self.logger.debug(f"缓存写入: key={url}, evicted={removed}")
 
     async def remove(self, url: str) -> None:
+        if self._disable:
+            return
+
         key = self._make_key(url)
         async with get_session() as session:
             await CacheRepo(session).remove_by_key(key)
@@ -183,4 +194,4 @@ class PersistentCache:
 
 
 parse_cache = TTLCache(ttl=30 * 60, maxsize=1000)  # 解析结果缓存 30 分钟
-persistent_cache = PersistentCache(max_entries=bs.cache_max_entries)
+persistent_cache = PersistentCache(max_entries=bs.cache_max_entries, disable=bs.cache_disabled)
