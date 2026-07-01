@@ -27,6 +27,7 @@ COMMANDS = {
     "zip": t_("不处理媒体, 保存解析结果, 发送压缩包"),
     "lang": t_("选择语言"),
     "mode": t_("设置默认解析模式"),
+    "switches": t_("其他功能开关"),
     "switch_auto_delete": t_("启用/禁用 自动删除分享链接消息"),
     "switch_platform": t_("启用/禁用 平台解析"),
 }
@@ -162,6 +163,7 @@ def build_start_text() -> LocaleContent:
         f"`/zip <链接>` - 不处理媒体, 保存解析结果, 发送压缩包"
         f"`/lang` - 选择语言"
         f"`/mode` - 设置默认解析模式"
+        f"`/switches` - 其他功能开关"
         f"`/switch_auto_delete` - 启用/禁用 自动删除分享链接消息"
         f"`/switch_platform` - 启用/禁用 平台解析"
         f"</blockquote>\n\n"

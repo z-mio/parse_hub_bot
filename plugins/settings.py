@@ -11,7 +11,7 @@ from pyrogram.types import InlineKeyboardMarkup as Ikm
 from db import get_session
 from i18n import LANG_MAP, t_
 from repo.user_settings import DefaultMode
-from services import AccountService
+from services import AccountContext, AccountService
 
 
 @dataclass
@@ -52,7 +52,7 @@ async def select_lang(_: Client, msg: Message) -> None:
         Ikb(
             v,
             callback_data=CQData(key="lang", value=k, uid=msg.from_user.id).unparse(),
-            style=ButtonStyle.SUCCESS if k == current_lang else ButtonStyle.DEFAULT,
+            style=ButtonStyle.PRIMARY if k == current_lang else ButtonStyle.DEFAULT,
         )
         for k, v in LANG_MAP.items()
     ]
@@ -102,7 +102,7 @@ async def select_mode(_: Client, msg: Message) -> None:
         Ikb(
             v[lang],
             callback_data=CQData(uid=msg.from_user.id, key="mode", value=k).unparse(),
-            style=ButtonStyle.SUCCESS if k == user_config.default_mode else ButtonStyle.DEFAULT,
+            style=ButtonStyle.PRIMARY if k == user_config.default_mode else ButtonStyle.DEFAULT,
         )
         for k, v in MODE_MAP.items()
     ]
@@ -126,9 +126,8 @@ async def selected_mode(_: Client, cq: CallbackQuery) -> None:
     async with get_session() as session:
         account = AccountService(session, cq.from_user.id)
         current = await account.patch_config(default_mode=selected)
-        lang = current.lang
 
-    await cq.message.edit(t_[lang](f"**▎已切换为: {MODE_MAP[selected]}**"))
+    await cq.message.edit(t_[current.lang](f"**▎已切换为: {MODE_MAP[selected]}**"))
 
 
 @Client.on_message(filters.command("switch_auto_delete"))
@@ -138,14 +137,13 @@ async def switch_auto_delete_url(_: Client, msg: Message) -> None:
 
     async with get_session() as session:
         account = AccountService(session, msg.from_user.id)
-        current = await account.ensure_account()
-        current = await account.patch_config(auto_delete_url=not current.config.auto_delete_url)
-        user_config = current.config
+        config = await account.get_config()
+        current = await account.patch_config(auto_delete_url=not config.auto_delete_url)
 
     await msg.reply_text(
         t_[current.lang](
-            f"**▎已 {'启用' if user_config.auto_delete_url else '禁用'} 自动删除分享链接消息**\n"
-            f"{'▎**群内使用需要授予 Bot 删除消息权限**' if user_config.auto_delete_url else ''}"
+            f"**▎已 {'启用' if current.config.auto_delete_url else '禁用'} 自动删除分享链接消息**\n"
+            f"{'▎**群内使用需要授予 Bot 删除消息权限**' if current.config.auto_delete_url else ''}"
         )
     )
 
@@ -207,3 +205,52 @@ async def switch_platform_callback(_: Client, cq: CallbackQuery) -> None:
     ]
     reply_markup = Ikm([ikbs[i : i + 2] for i in range(0, len(ikbs), 2)])
     await cq.message.edit_reply_markup(reply_markup)
+
+
+def build_switches_button(current: AccountContext) -> Ikm:
+    uid = current.user.telegram_user_id
+    config = current.config
+    return Ikm(
+        [
+            [
+                Ikb(
+                    "内联发送原始 URL 选项",
+                    callback_data=CQData(key="switches", value="enable_inline_raw_url", uid=uid).unparse(),
+                    style=ButtonStyle.SUCCESS if config.enable_inline_raw_url else ButtonStyle.DANGER,
+                )
+            ]
+        ]
+    )
+
+
+@Client.on_message(filters.command("switches"))
+async def switches(_: Client, msg: Message) -> None:
+    if not msg.from_user:
+        return
+    async with get_session() as session:
+        current = await AccountService(session, msg.from_user.id).ensure_account()
+    reply_markup = build_switches_button(current)
+    await msg.reply("**▎功能开关**", reply_markup=reply_markup)
+
+
+@Client.on_callback_query(filters.regex(r"^switches"))
+async def switches_callback(_: Client, cq: CallbackQuery) -> None:
+    if not cq.data:
+        return
+
+    cqdata = CQData.parse(cq.data)
+    if cq.from_user.id != cqdata.uid:
+        async with get_session() as session:
+            lang = await AccountService(session, cq.from_user.id).get_lang()
+        await cq.answer(t_[lang]("这不是你的操作"), show_alert=True)
+        return
+
+    selected = cqdata.value
+    match selected:
+        case "enable_inline_raw_url":
+            async with get_session() as session:
+                account = AccountService(session, cq.from_user.id)
+                config = await account.get_config()
+                current = await account.patch_config(enable_inline_raw_url=not config.enable_inline_raw_url)
+
+    await cq.message.edit_reply_markup(reply_markup=build_switches_button(current))

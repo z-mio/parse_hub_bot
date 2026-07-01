@@ -37,6 +37,7 @@ from plugins.helpers import (
     create_richtext_telegraph,
     resolve_media_info,
 )
+from repo.user_settings import UserConfig
 from services import AccountService, ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
@@ -119,15 +120,17 @@ class MessageStatusReporter(StatusReporter):
     filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & ~via_me_filter & platform_filter(True))
 )
 async def jx(cli: Client, msg: Message) -> None:
+    mode = "preview"
+    lang = None
+    user_config = UserConfig()
+
     if msg.from_user:
         async with get_session() as session:
             current = await AccountService(session, msg.from_user.id).ensure_account()
             user_config = current.config
             lang = current.lang
             mode = user_config.default_mode
-    else:
-        mode = "preview"
-        lang = None
+
     _t = t_[lang]
 
     if msg.command:

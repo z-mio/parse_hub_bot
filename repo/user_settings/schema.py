@@ -15,6 +15,7 @@ class UserConfig(BaseModel):
     auto_delete_url: bool = Field(default=False, description="解析完成后自动删除分享链接")
     disabled_platforms: list[str] = Field(default=[], description="禁用的平台")
     """平台 id"""
+    enable_inline_raw_url: bool = Field(default=False, description="启用内联模式的发送原始 URL 功能")
 
     def __str__(self) -> str:
         return self.model_dump_json(indent=4, ensure_ascii=True)
@@ -24,6 +25,7 @@ class UserConfigPatch(TypedDict, total=False):
     default_mode: DefaultMode
     auto_delete_url: bool
     disabled_platforms: list[str]
+    enable_inline_raw_url: bool
 
 
 DEFAULT_USER_CONFIG = UserConfig()
