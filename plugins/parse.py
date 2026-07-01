@@ -38,7 +38,7 @@ from plugins.helpers import (
     resolve_media_info,
 )
 from repo.user_settings import UserConfig
-from services import AccountService, ParseService
+from services import AccountContext, AccountService, ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
 from utils.helpers import pack_dir_to_tar_gz, to_list, with_request_id
@@ -77,10 +77,11 @@ async def _send_with_rate_limit[T](
 class MessageStatusReporter(StatusReporter):
     """基于 Telegram Message 的状态报告器"""
 
-    def __init__(self, user_msg: Message, _t: PreLocaleSelector):
+    def __init__(self, user_msg: Message, *, _t: PreLocaleSelector, user_config: UserConfig):
         self._user_msg = user_msg
         self._msg: Message | None = None
         self._t = _t
+        self._user_config = user_config
 
     async def report(self, text: str) -> None:
         await self._edit_text(f"**▎{text}**")
@@ -90,6 +91,8 @@ class MessageStatusReporter(StatusReporter):
             self._t(f"**▎{stage}错误:** \n```\n{error}```"),
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
+        if self._user_config.keep_error_log:
+            return
 
         async def fn() -> None:
             await asyncio.sleep(15)
@@ -160,7 +163,9 @@ async def jx(cli: Client, msg: Message) -> None:
         return
 
     tasks = [
-        _handle_parse_request(cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url, _t=_t)
+        _handle_parse_request(
+            cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url, _t=_t, current=current
+        )
         for url in urls
     ]
     await asyncio.gather(*tasks)
@@ -181,9 +186,12 @@ async def _handle_parse_request(
     mode: Literal["raw", "preview", "zip"] | str = "preview",
     delete_share_url_msg: bool = False,
     _t: PreLocaleSelector,
+    current: AccountContext,
 ) -> None:
     try:
-        await handle_parse(cli, msg, url=url, mode=mode, delete_share_url_msg=delete_share_url_msg, _t=_t)
+        await handle_parse(
+            cli, msg, url=url, mode=mode, delete_share_url_msg=delete_share_url_msg, _t=_t, current=current
+        )
     except ParseRateLimitExceeded as e:
         if e.should_notify:
             text = _t(f"**▎解析过于频繁, 请在 {e.retry_after:.1f}s 后重试**")
@@ -214,8 +222,8 @@ async def handle_parse(
     mode: Literal["raw", "preview", "zip"] | str = "preview",
     delete_share_url_msg: bool = False,
     _t: PreLocaleSelector,
+    current: AccountContext,
 ) -> None:
-
     chat_id = msg.chat.id if msg.chat else None
     logger.info(f"收到解析请求: url={url}, chat_id={chat_id}, msg_id={msg.id}, mode={mode}")
     if delete_share_url_msg:
@@ -225,7 +233,7 @@ async def handle_parse(
         except Exception as e:
             logger.warning(f"删除分享链接消息失败: chat_id={chat_id}, msg_id: {msg.id}, error: {e}")
 
-    reporter = MessageStatusReporter(msg, _t)
+    reporter = MessageStatusReporter(msg, _t=_t, user_config=current.config)
     match mode:
         case "raw":
             use_caching = False
@@ -271,7 +279,7 @@ async def handle_parse(
             if cached := await persistent_cache.get(raw_url):
                 await _send_cached(msg, cached, raw_url)
             else:
-                await handle_parse(cli, msg, url=url, mode=mode, _t=_t)
+                await handle_parse(cli, msg, url=url, mode=mode, _t=_t, current=current)
                 return
         else:
             logger.debug("Pipeline 返回 None, 跳过后续处理")

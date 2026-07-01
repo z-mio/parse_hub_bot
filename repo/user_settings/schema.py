@@ -16,6 +16,7 @@ class UserConfig(BaseModel):
     disabled_platforms: list[str] = Field(default=[], description="禁用的平台")
     """平台 id"""
     enable_inline_raw_url: bool = Field(default=False, description="启用内联模式的发送原始 URL 功能")
+    keep_error_log: bool = Field(default=False, description="保留错误日志")
 
     def __str__(self) -> str:
         return self.model_dump_json(indent=4, ensure_ascii=True)
@@ -26,6 +27,7 @@ class UserConfigPatch(TypedDict, total=False):
     auto_delete_url: bool
     disabled_platforms: list[str]
     enable_inline_raw_url: bool
+    keep_error_log: bool
 
 
 DEFAULT_USER_CONFIG = UserConfig()
