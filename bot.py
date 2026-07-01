@@ -29,7 +29,7 @@ class Bot(Client):
         self.cfg = bs
 
         super().__init__(
-            f"{self.cfg.bot_token.split(':')[0]}_bot",
+            self.cfg.bot_session_name,
             api_id=self.cfg.api_id,
             api_hash=self.cfg.api_hash,
             bot_token=self.cfg.bot_token,
@@ -40,9 +40,9 @@ class Bot(Client):
         )
 
     async def bootstrap(self) -> None:
-        logger.debug("初始化数据库...")
+        logger.info("初始化数据库...")
         await init_db()
-        logger.debug("数据库初始化完成")
+        logger.success("数据库初始化完成")
         parse_cache.start_cleanup()
         self.init_watchdog()
 
