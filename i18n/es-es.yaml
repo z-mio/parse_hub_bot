@@ -55,6 +55,7 @@
 8f555aa82c87: Enlace original
 929107a1e13c: '**▎Por favor añade un enlace o responde a un mensaje**'
 a3e3b88377c8: Iniciar
+a4ce27c8e465: '**▎Interruptor de función**'
 aa357cb96ee8: Analizar
 b765e4eb1844: Enlace original
 b8918b19e2a1: '**▎Activar / Desactivar análisis de plataforma**'
@@ -68,4 +69,5 @@ d7146da48b3e: Otros interruptores de funciones
 d915366ac40b: No procesar medios, guardar resultado del análisis, enviar archivo comprimido
 e67a8324684f: ▎**Para usar en el grupo, es necesario otorgar al Bot permisos para
   eliminar mensajes**
+e73189b92dbd: Opción para enviar URL sin procesar en línea
 ff71243806c8: Seleccionar idioma

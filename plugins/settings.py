@@ -209,11 +209,12 @@ async def switch_platform_callback(_: Client, cq: CallbackQuery) -> None:
 def build_switches_button(current: AccountContext) -> Ikm:
     uid = current.user.telegram_user_id
     config = current.config
+    _t = t_[current.lang]
     return Ikm(
         [
             [
                 Ikb(
-                    "内联发送原始 URL 选项",
+                    _t("内联发送原始 URL 选项"),
                     callback_data=CQData(key="switches", value="enable_inline_raw_url", uid=uid).unparse(),
                     style=ButtonStyle.SUCCESS if config.enable_inline_raw_url else ButtonStyle.DANGER,
                 )
@@ -229,7 +230,7 @@ async def switches(_: Client, msg: Message) -> None:
     async with get_session() as session:
         current = await AccountService(session, msg.from_user.id).ensure_account()
     reply_markup = build_switches_button(current)
-    await msg.reply("**▎功能开关**", reply_markup=reply_markup)
+    await msg.reply(t_[current.lang]("**▎功能开关**"), reply_markup=reply_markup)
 
 
 @Client.on_callback_query(filters.regex(r"^switches"))

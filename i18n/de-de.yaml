@@ -54,6 +54,7 @@
 8f555aa82c87: Original-Link
 929107a1e13c: '**▎Bitte fügen Sie einen Link hinzu oder antworten Sie auf eine Nachricht**'
 a3e3b88377c8: Start
+a4ce27c8e465: '**▎Funktionsschalter**'
 aa357cb96ee8: Analysieren
 b765e4eb1844: Original-Link
 b8918b19e2a1: '**▎Plattform-Parsing aktivieren/deaktivieren**'
@@ -67,4 +68,5 @@ d7146da48b3e: Weitere Funktionsschalter
 d915366ac40b: Medien nicht verarbeiten, Analyseergebnis speichern, ZIP-Datei senden
 e67a8324684f: ▎**Im Gruppenchat muss dem Bot die Berechtigung zum Löschen von Nachrichten
   erteilt werden**
+e73189b92dbd: Option zum Inline-Senden der ursprünglichen URL
 ff71243806c8: Sprache auswählen

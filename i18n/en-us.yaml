@@ -53,6 +53,7 @@
 8f555aa82c87: Original link
 929107a1e13c: '**▎Please add a link or reply to a message**'
 a3e3b88377c8: Start
+a4ce27c8e465: '**▎Feature Toggle**'
 aa357cb96ee8: Parse
 b765e4eb1844: Original link
 b8918b19e2a1: '**▎Enable / Disable Platform Parsing**'
@@ -66,4 +67,5 @@ d7146da48b3e: Other feature toggles
 d915366ac40b: Do not process media, save parsing results, send compressed package
 e67a8324684f: ▎**Bot needs permission to delete messages in the group to use this
   feature**
+e73189b92dbd: Inline Send Raw URL Option
 ff71243806c8: Select Language
