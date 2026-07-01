@@ -12,6 +12,8 @@ logger: "Logger" = loguru.logger.bind(name="Main")
 
 
 def formatter(record: Any) -> str:
+    record["extra"].setdefault("name", "UNNAMED")
+
     rid = record["extra"].get("req_id")
     if rid:
         return (
@@ -19,6 +21,7 @@ def formatter(record: Any) -> str:
             "<level>{level: <8}</level> | "
             "<cyan>{name}:{function}:{line}</cyan> | "
             "<level>[{extra[name]}][{extra[req_id]}] {message}</level>\n"
+            "{exception}"
         )
     else:
         return (
@@ -26,6 +29,7 @@ def formatter(record: Any) -> str:
             "<level>{level: <8}</level> | "
             "<cyan>{name}:{function}:{line}</cyan> | "
             "<level>[{extra[name]}] {message}</level>\n"
+            "{exception}"
         )
 
 

@@ -1,6 +1,5 @@
 import asyncio
-import os
-from logging.config import fileConfig
+import logging
 
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -15,13 +14,12 @@ from db.base import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
-if config.config_file_name is not None and not config.attributes.get("skip_logging_config", False):
-    fileConfig(config.config_file_name)
+# Route Alembic's standard logging through loguru without replacing app logging.
+if not config.attributes.get("skip_logging_config", False):
+    logging.getLogger("alembic").setLevel(logging.INFO)
 
 target_metadata = Base.metadata
-config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL", bs.database_url))
+config.set_main_option("sqlalchemy.url", bs.database_url)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
