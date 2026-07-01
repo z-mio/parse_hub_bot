@@ -25,12 +25,24 @@ class BotSettings(BaseSettings):
     data_path: Path = Field(default=Path("data"))
     cache_max_entries: int = Field(default=30000, ge=0, description="缓存最大条数, 0 为不限制")
     cache_disabled: bool = Field(default=False, description="禁用缓存")
+
+    rate_limit_enabled: bool = Field(default=False, description="启用解析速率限制")
+    rate_limit_burst: int = Field(default=5, ge=0, description="突发请求阈值, 0 为不限制")
+    rate_limit_burst_window: float = Field(default=60, gt=0, description="突发请求统计窗口, 单位秒")
+    rate_limit_cooldown: float = Field(default=180, gt=0, description="触发限速后的冷却时间, 单位秒")
+    rate_limit_throttle: int = Field(default=1, ge=0, description="冷却期内允许解析次数, 0 为禁止解析")
+    rate_limit_throttle_window: float = Field(default=5, gt=0, description="冷却期内允许解析次数对应的统计窗口, 单位秒")
+    # chat_id 在 RATE_LIMIT_BURST_WINDOW 秒内达到 RATE_LIMIT_BURST 次解析后，进入 RATE_LIMIT_COOLDOWN 秒冷却期;
+    # 冷却期内每 RATE_LIMIT_THROTTLE_WINDOW 秒最多允许 RATE_LIMIT_THROTTLE 次解析.
+
     download_dir: Path = Path("downloads")
 
     database_url: str = Field(default="sqlite+aiosqlite:///data/db/database.db")
 
     debug: bool = Field(default=False)
     debug_skip_cleanup: bool = Field(default=False, description="跳过资源清理")
+
+    demo_mode: bool = Field(default=False, description="启用演示模式")
 
     def model_post_init(self, __context: Any) -> None:
         """模型初始化后的操作"""

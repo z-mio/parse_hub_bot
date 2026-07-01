@@ -42,6 +42,7 @@ from services import AccountService, ParseService
 from services.cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
 from utils.helpers import pack_dir_to_tar_gz, to_list, with_request_id
+from utils.rate_limit import ParseRateLimitExceeded, parse_rate_limit
 
 logger = logger.bind(name="Parse")
 SKIP_DOWNLOAD_THRESHOLD = 0
@@ -159,7 +160,7 @@ async def jx(cli: Client, msg: Message) -> None:
         return
 
     tasks = [
-        handle_parse(cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url, _t=_t)
+        _handle_parse_request(cli, msg, url=url, mode=mode, delete_share_url_msg=user_config.auto_delete_url, _t=_t)
         for url in urls
     ]
     await asyncio.gather(*tasks)
@@ -168,7 +169,36 @@ async def jx(cli: Client, msg: Message) -> None:
 # ── 主流程 ───────────────────────────────────────────────────────────
 
 
+def _get_parse_user_id(_: Client, msg: Message, **__: Any) -> int | None:
+    return msg.chat.id if msg.chat else None
+
+
+async def _handle_parse_request(
+    cli: Client,
+    msg: Message,
+    *,
+    url: str,
+    mode: Literal["raw", "preview", "zip"] | str = "preview",
+    delete_share_url_msg: bool = False,
+    _t: PreLocaleSelector,
+) -> None:
+    try:
+        await handle_parse(cli, msg, url=url, mode=mode, delete_share_url_msg=delete_share_url_msg, _t=_t)
+    except ParseRateLimitExceeded as e:
+        if e.should_notify:
+            text = _t(f"**▎解析过于频繁, 请在 {e.retry_after:.1f}s 后重试**")
+            if bs.demo_mode:
+                text += _t(
+                    "\n\n>**为保障所有用户的使用体验, 当前已启用速率限制**\n\n"
+                    ">本项目为开源项目, 如有高频或批量解析需求, 建议自行部署实例, "
+                    "以免触发 Telegram API 全局速率限制\n\n"
+                    "**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
+                )
+            await msg.reply_text(text, link_preview_options=LinkPreviewOptions(is_disabled=True))
+
+
 @with_request_id
+@parse_rate_limit(_get_parse_user_id)
 async def handle_parse(
     cli: Client,
     msg: Message,
@@ -234,7 +264,7 @@ async def handle_parse(
             if cached := await persistent_cache.get(raw_url):
                 await _send_cached(msg, cached, raw_url)
             else:
-                await handle_parse(cli, msg, url, mode=mode, _t=_t)
+                await handle_parse(cli, msg, url=url, mode=mode, _t=_t)
                 return
         else:
             logger.debug("Pipeline 返回 None, 跳过后续处理")
