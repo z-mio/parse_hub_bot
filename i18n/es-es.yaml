@@ -1,11 +1,9 @@
 08fc0528426e: '**▎Cambiado a: {LANG_MAP[selected]}**'
 0c7c37b93cfe: "**▎Error en {stage}:** \n```\n{error}```"
 0d3d68e32996: Ya hay una tarea igual en proceso de análisis, esperando a que termine...
-1c9621f6b78d: '**▎Ya se han eliminado automáticamente {''启用'' if current.config.auto_delete_url
-  else ''禁用''} mensajes con enlaces compartidos**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: Subiendo...
+2b256f16d436: '** ▎Ya se han eliminado automáticamente {status} mensajes con enlaces
+  compartidos **'
 30364e475d07: Esta no es tu acción
 3065ed13e5f9: Obtener enlace original
 36c680f6f5b0: Activar/Desactivar análisis de plataforma
@@ -20,6 +18,8 @@
 6536e2506f73: Activar/Desactivar eliminación automática de mensajes con enlaces compartidos
 6612548ad85b: Comprimir
 68957ac274c5: Descargando... | {current * 100 / total:.0f}%
+710ad08b1141: Desactivar
+7854b52a889b: Activar
 816de50b9e0e: Por favor, introduce un enlace en el chat
 88c75c95584e: '**Envía un enlace compartido para analizar**
 
@@ -66,4 +66,6 @@ d5a73b0c7f2f: Subir
 d6fa702190b6: Establecer modo de análisis predeterminado
 d7146da48b3e: Otros interruptores de funciones
 d915366ac40b: No procesar medios, guardar resultado del análisis, enviar archivo comprimido
+e67a8324684f: ▎**Para usar en el grupo, es necesario otorgar al Bot permisos para
+  eliminar mensajes**
 ff71243806c8: Seleccionar idioma

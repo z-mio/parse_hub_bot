@@ -2,11 +2,8 @@
 0c7c37b93cfe: "**▎{stage} Fehler:** \n```\n{error}```"
 0d3d68e32996: Eine identische Aufgabe wird bereits analysiert, bitte warten Sie, bis
   die Analyse abgeschlossen ist...
-1c9621f6b78d: '**▎Bereits {''启用'' if current.config.auto_delete_url else ''禁用''} automatisch
-  gelöschte Freigabelink-Nachrichten**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: Hochladen...
+2b256f16d436: '** ▎{status} automatisch gelöschte Freigabelink-Nachricht **'
 30364e475d07: Das ist nicht Ihre Aktion
 3065ed13e5f9: Original-Link abrufen
 36c680f6f5b0: Plattform-Parsing aktivieren/deaktivieren
@@ -21,6 +18,8 @@
 6536e2506f73: Automatisches Löschen von Freigabelink-Nachrichten aktivieren/deaktivieren
 6612548ad85b: Komprimieren
 68957ac274c5: Herunterladen... | {current * 100 / total:.0f}%
+710ad08b1141: Deaktivieren
+7854b52a889b: Aktivieren
 816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
 88c75c95584e: '**Senden Sie einen Freigabelink zur Analyse**
 
@@ -66,4 +65,6 @@ d5a73b0c7f2f: Hochladen
 d6fa702190b6: Standard-Parsing-Modus einstellen
 d7146da48b3e: Weitere Funktionsschalter
 d915366ac40b: Medien nicht verarbeiten, Analyseergebnis speichern, ZIP-Datei senden
+e67a8324684f: ▎**Im Gruppenchat muss dem Bot die Berechtigung zum Löschen von Nachrichten
+  erteilt werden**
 ff71243806c8: Sprache auswählen

@@ -139,11 +139,11 @@ async def switch_auto_delete_url(_: Client, msg: Message) -> None:
         account = AccountService(session, msg.from_user.id)
         config = await account.get_config()
         current = await account.patch_config(auto_delete_url=not config.auto_delete_url)
-
-    await msg.reply_text(
-        t_[current.lang](
-            f"**▎已 {'启用' if current.config.auto_delete_url else '禁用'} 自动删除分享链接消息**\n"
-            f"{'▎**群内使用需要授予 Bot 删除消息权限**' if current.config.auto_delete_url else ''}"
+    _t = t_[current.lang]
+    status = _t('启用') if current.config.auto_delete_url else _t('禁用')
+    await msg.reply_text((
+            f"{_t(f'** ▎已 {status} 自动删除分享链接消息 **')}\n"
+            f"{_t('▎**群内使用需要授予 Bot 删除消息权限**') if current.config.auto_delete_url else ''}"
         )
     )
 

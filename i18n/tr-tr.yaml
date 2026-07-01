@@ -1,11 +1,8 @@
 08fc0528426e: '**▎Şu an seçili: {LANG_MAP[selected]}**'
 0c7c37b93cfe: "**▎{stage} Hata:** \n```\n{error}```"
 0d3d68e32996: Aynı görev zaten çözülüyor, çözüm tamamlanana kadar bekleyin...
-1c9621f6b78d: '**▎{''启用'' if current.config.auto_delete_url else ''禁用''} otomatik
-  olarak paylaşım bağlantısı mesajı silindi**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: Yükleniyor...
+2b256f16d436: '** ▎{status} otomatik olarak paylaşılan bağlantı mesajı silindi **'
 30364e475d07: Bu senin işlemin değil
 3065ed13e5f9: Orijinal bağlantıyı al
 36c680f6f5b0: Platform çözümlemeyi etkinleştir/devre dışı bırak
@@ -20,6 +17,8 @@
 6536e2506f73: Otomatik paylaşım bağlantısı mesajlarını etkinleştir/devre dışı bırak
 6612548ad85b: Sıkıştır
 68957ac274c5: İndiriliyor... | {current * 100 / total:.0f}%
+710ad08b1141: Devre dışı bırak
+7854b52a889b: Etkinleştir
 816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
 88c75c95584e: '**Çözümleme için paylaşım bağlantısı gönderin**
 
@@ -67,4 +66,5 @@ d6fa702190b6: Varsayılan çözümleme modunu ayarla
 d7146da48b3e: Diğer işlev anahtarları
 d915366ac40b: Medya işlenmeyecek, çözümleme sonucu kaydedilecek, sıkıştırılmış dosya
   gönderilecek
+e67a8324684f: ▎**Grup içinde kullanmak için Bot'a mesaj silme izni verilmelidir**
 ff71243806c8: Dil seç

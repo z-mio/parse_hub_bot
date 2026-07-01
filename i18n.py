@@ -46,7 +46,9 @@ ISO639_MAP = {
 }
 
 if __name__ == "__main__":
+    k = LANG_MAP.copy()
+    k.pop("zh-hans")
     i18n.build(
-        to_locales=list(LANG_MAP.keys()),
+        to_locales=list(k.keys()),
         translator=OpenAIBulkTranslator(model="gpt-4.1-mini"),
     )
