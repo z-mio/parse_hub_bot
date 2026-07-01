@@ -45,6 +45,7 @@ from plugins.helpers import (
     create_richtext_telegraph,
     resolve_media_info,
 )
+from repo.user_settings import UserConfig
 from services import AccountContext, AccountService, ParseService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, StatusReporter
@@ -58,12 +59,15 @@ LINK_ICON_URL = "https://i.iij.li/i/20260627/6a3fb12066abb.png"
 class InlineStatusReporter(StatusReporter):
     """基于 inline_message_id 的状态报告器"""
 
-    def __init__(self, cli: Client, inline_message_id: str, caption: str = "", *, _t: PreLocaleSelector):
+    def __init__(
+        self, cli: Client, inline_message_id: str, caption: str = "", *, _t: PreLocaleSelector, user_config: UserConfig
+    ):
         self._cli = cli
         self._mid = inline_message_id
         self._caption = caption
         self._last_text: str | None = None
         self._t = _t
+        self._user_config = user_config
 
     async def report(self, text: str) -> None:
         text = f"**▎{text}**"
@@ -82,6 +86,9 @@ class InlineStatusReporter(StatusReporter):
             self._t(f"**▎{stage}错误:** \n```\n{error}```"),
             link_preview_options=LinkPreviewOptions(is_disabled=True),
         )
+
+        if self._user_config.keep_error_log:
+            return
 
         async def fn() -> None:
             await asyncio.sleep(15)
@@ -345,8 +352,8 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
         return
 
     async with get_session() as session:
-        lang = await AccountService(session, chosen_result.from_user.id).get_lang()
-        _t = t_[lang]
+        current = await AccountService(session, chosen_result.from_user.id).ensure_account()
+        _t = t_[current.lang]
     media_index = int(chosen_result.result_id.split("_")[1])
     inline_message_id = chosen_result.inline_message_id
     if inline_message_id is None:
@@ -359,7 +366,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     logger.debug(f"缓存命中: {cached_result is not None}")
 
     caption = build_caption(cached_result) if cached_result else ""
-    reporter = InlineStatusReporter(cli, inline_message_id, caption, _t=_t)
+    reporter = InlineStatusReporter(cli, inline_message_id, caption, _t=_t, user_config=current.config)
     pipeline = ParsePipeline(query, reporter, parse_result=cached_result, singleflight=False, _t=_t)
     if (result := await pipeline.run()) is None:
         return
