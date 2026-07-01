@@ -9,6 +9,11 @@
 36c680f6f5b0: Ativar/Desativar análise da plataforma
 44a77d4ad4ca: Sem título
 460ce129a523: Baixando...
+4fbdbeb0f163: '\n\n>**Para garantir a experiência de uso de todos os usuários, o limite
+  de taxa está atualmente ativado**\n\n>Este projeto é de código aberto. Se houver
+  necessidade de análise frequente ou em lote, recomenda-se implantar sua própria
+  instância para evitar acionar o limite global de taxa da API do Telegram\n\n**Código
+  aberto disponível em: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Empacotando...
 5713cae37816: '**▎Plataforma não suportada**'
 5861d620c41d: Baixando... | {current}/{total}
@@ -19,6 +24,7 @@
 6612548ad85b: Comprimir
 68957ac274c5: Baixando... | {current * 100 / total:.0f}%
 710ad08b1141: Desativar
+773e37502413: '**▎Análise muito frequente, por favor tente novamente em {e.retry_after:.1f}s**'
 7854b52a889b: Ativar
 816de50b9e0e: Por favor, insira o link na caixa de chat
 88c75c95584e: '**Envie um link de compartilhamento para análise**

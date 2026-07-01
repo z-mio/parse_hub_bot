@@ -9,6 +9,19 @@
 36c680f6f5b0: Activar/Desactivar análisis de plataforma
 44a77d4ad4ca: Sin título
 460ce129a523: Descargando...
+4fbdbeb0f163: '
+
+
+  >**Para garantizar la experiencia de uso de todos los usuarios, actualmente se ha
+  activado una limitación de velocidad**
+
+
+  >Este proyecto es de código abierto. Si tiene necesidades de análisis frecuentes
+  o en lote, se recomienda desplegar su propia instancia para evitar activar la limitación
+  global de velocidad de la API de Telegram.
+
+
+  **Repositorio abierto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Empaquetando...
 5713cae37816: '**▎Plataforma no soportada**'
 5861d620c41d: Descargando... | {current}/{total}
@@ -19,6 +32,7 @@
 6612548ad85b: Comprimir
 68957ac274c5: Descargando... | {current * 100 / total:.0f}%
 710ad08b1141: Desactivar
+773e37502413: '**▎Análisis demasiado frecuente, por favor intente de nuevo en {e.retry_after:.1f}s**'
 7854b52a889b: Activar
 816de50b9e0e: Por favor, introduce un enlace en el chat
 88c75c95584e: '**Envía un enlace compartido para analizar**

@@ -10,6 +10,19 @@
 36c680f6f5b0: Activer/Désactiver l'analyse de la plateforme
 44a77d4ad4ca: Sans titre
 460ce129a523: Téléchargement en cours...
+4fbdbeb0f163: '
+
+
+  >**Pour garantir une expérience utilisateur optimale, une limitation de débit est
+  actuellement en vigueur**
+
+
+  >Ce projet est open source. En cas de besoins fréquents ou en masse d''analyse,
+  il est recommandé de déployer votre propre instance afin d''éviter de déclencher
+  la limitation globale de débit de l''API Telegram.
+
+
+  **Code source : [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Emballage en cours...
 5713cae37816: '**▎Plateforme non prise en charge**'
 5861d620c41d: Téléchargement en cours... | {current}/{total}
@@ -21,6 +34,7 @@
 6612548ad85b: Compression
 68957ac274c5: Téléchargement en cours... | {current * 100 / total:.0f}%
 710ad08b1141: Désactiver
+773e37502413: '**▎Analyse trop fréquente, veuillez réessayer dans {e.retry_after:.1f}s**'
 7854b52a889b: Activer
 816de50b9e0e: Veuillez entrer un lien dans la zone de chat
 88c75c95584e: '**Envoyez un lien de partage pour analyse**

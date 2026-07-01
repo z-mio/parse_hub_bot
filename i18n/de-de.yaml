@@ -9,6 +9,19 @@
 36c680f6f5b0: Plattform-Parsing aktivieren/deaktivieren
 44a77d4ad4ca: Ohne Titel
 460ce129a523: Herunterladen...
+4fbdbeb0f163: '
+
+
+  >**Um die Nutzungserfahrung aller Benutzer zu gewährleisten, ist derzeit eine Geschwindigkeitsbegrenzung
+  aktiviert**
+
+
+  >Dieses Projekt ist ein Open-Source-Projekt. Bei häufigen oder massenhaften Analyseanforderungen
+  wird empfohlen, eine eigene Instanz bereitzustellen, um globale Geschwindigkeitsbegrenzungen
+  der Telegram-API zu vermeiden.
+
+
+  **Open-Source-Adresse: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Verpacken...
 5713cae37816: '**▎Nicht unterstützte Plattform**'
 5861d620c41d: Herunterladen... | {current}/{total}
@@ -19,6 +32,8 @@
 6612548ad85b: Komprimieren
 68957ac274c5: Herunterladen... | {current * 100 / total:.0f}%
 710ad08b1141: Deaktivieren
+773e37502413: '**▎Zu häufige Anfragen, bitte versuchen Sie es nach {e.retry_after:.1f}
+  Sekunden erneut**'
 7854b52a889b: Aktivieren
 816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
 88c75c95584e: '**Senden Sie einen Freigabelink zur Analyse**

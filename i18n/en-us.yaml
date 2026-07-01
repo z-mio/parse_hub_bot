@@ -9,6 +9,16 @@
 36c680f6f5b0: Enable/Disable Platform Parsing
 44a77d4ad4ca: Untitled
 460ce129a523: Downloading...
+4fbdbeb0f163: '>**To ensure a good experience for all users, rate limiting is currently
+  enabled**
+
+
+  >This project is open source. If you have high-frequency or bulk parsing needs,
+  it is recommended to deploy your own instance to avoid triggering Telegram API global
+  rate limits.
+
+
+  **Open source repository: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Packaging...
 5713cae37816: '**▎Unsupported platform**'
 5861d620c41d: Downloading... | {current}/{total}
@@ -19,6 +29,8 @@
 6612548ad85b: Compress
 68957ac274c5: Downloading... | {current * 100 / total:.0f}%
 710ad08b1141: Disable
+773e37502413: '**▎Parsing too frequently, please try again after {e.retry_after:.1f}
+  seconds**'
 7854b52a889b: Enable
 816de50b9e0e: Please enter the link in the chat box
 88c75c95584e: '**Send a shared link for parsing**

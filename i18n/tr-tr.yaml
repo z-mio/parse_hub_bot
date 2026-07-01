@@ -8,6 +8,18 @@
 36c680f6f5b0: Platform çözümlemeyi etkinleştir/devre dışı bırak
 44a77d4ad4ca: Başlıksız
 460ce129a523: İndiriliyor...
+4fbdbeb0f163: '
+
+
+  >**Tüm kullanıcıların deneyimini korumak için, şu anda hız sınırı etkinleştirilmiştir**
+
+
+  >Bu proje açık kaynaklıdır, yüksek frekanslı veya toplu çözümleme ihtiyaçlarınız
+  varsa, Telegram API''nin genel hız sınırını tetiklememek için kendi örneğinizi kurmanız
+  önerilir
+
+
+  **Açık kaynak adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Paketleniyor...
 5713cae37816: '**▎Desteklenmeyen platform**'
 5861d620c41d: İndiriliyor... | {current}/{total}
@@ -18,6 +30,8 @@
 6612548ad85b: Sıkıştır
 68957ac274c5: İndiriliyor... | {current * 100 / total:.0f}%
 710ad08b1141: Devre dışı bırak
+773e37502413: '**▎Çözümleme çok sık yapılıyor, lütfen {e.retry_after:.1f} saniye sonra
+  tekrar deneyin**'
 7854b52a889b: Etkinleştir
 816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
 88c75c95584e: '**Çözümleme için paylaşım bağlantısı gönderin**

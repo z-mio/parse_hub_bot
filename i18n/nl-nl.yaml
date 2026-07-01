@@ -9,6 +9,19 @@
 36c680f6f5b0: Platformontleding in-/uitschakelen
 44a77d4ad4ca: Geen titel
 460ce129a523: Bezig met downloaden...
+4fbdbeb0f163: '
+
+
+  >**Om de gebruikservaring voor alle gebruikers te waarborgen, is er momenteel een
+  snelheidslimiet ingeschakeld**
+
+
+  >Dit project is open source. Als u frequente of batchverwerking nodig heeft, wordt
+  aanbevolen om uw eigen instantie te implementeren om te voorkomen dat de wereldwijde
+  snelheidslimiet van de Telegram API wordt geactiveerd.
+
+
+  **Open source locatie: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Bezig met inpakken...
 5713cae37816: '**▎Niet ondersteund platform**'
 5861d620c41d: Bezig met downloaden... | {current}/{total}
@@ -19,6 +32,8 @@
 6612548ad85b: Comprimeren
 68957ac274c5: Bezig met downloaden... | {current * 100 / total:.0f}%
 710ad08b1141: Uitschakelen
+773e37502413: '**▎Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}
+  seconden**'
 7854b52a889b: Inschakelen
 816de50b9e0e: Voer een link in het chatvenster in
 88c75c95584e: '**Stuur een gedeelde link voor analyse**

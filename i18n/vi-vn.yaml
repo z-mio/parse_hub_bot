@@ -8,6 +8,16 @@
 36c680f6f5b0: Bật/Tắt phân tích nền tảng
 44a77d4ad4ca: Không tiêu đề
 460ce129a523: Đang tải xuống...
+4fbdbeb0f163: '>**Để đảm bảo trải nghiệm sử dụng cho tất cả người dùng, hiện tại đã
+  kích hoạt giới hạn tốc độ**
+
+
+  >Dự án này là dự án mã nguồn mở, nếu có nhu cầu phân tích tần suất cao hoặc hàng
+  loạt, khuyến nghị tự triển khai phiên bản để tránh kích hoạt giới hạn tốc độ toàn
+  cầu của Telegram API
+
+
+  **Địa chỉ mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Đang đóng gói...
 5713cae37816: '**▎Nền tảng không được hỗ trợ**'
 5861d620c41d: Đang tải xuống... | {current}/{total}
@@ -18,6 +28,8 @@
 6612548ad85b: Nén
 68957ac274c5: Đang tải xuống... | {current * 100 / total:.0f}%
 710ad08b1141: Vô hiệu hóa
+773e37502413: '**▎Phân tích quá thường xuyên, vui lòng thử lại sau {e.retry_after:.1f}
+  giây**'
 7854b52a889b: Kích hoạt
 816de50b9e0e: Vui lòng nhập liên kết trong hộp chat
 88c75c95584e: '**Gửi liên kết chia sẻ để phân tích**

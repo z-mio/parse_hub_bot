@@ -8,6 +8,19 @@
 36c680f6f5b0: Aktifkan/Nonaktifkan pemrosesan platform
 44a77d4ad4ca: Tanpa judul
 460ce129a523: Sedang mengunduh...
+4fbdbeb0f163: '
+
+
+  >**Untuk memastikan pengalaman penggunaan semua pengguna, saat ini pembatasan kecepatan
+  telah diaktifkan**
+
+
+  >Proyek ini adalah proyek sumber terbuka, jika ada kebutuhan parsing yang sering
+  atau dalam jumlah besar, disarankan untuk mengatur instance sendiri, agar tidak
+  memicu pembatasan kecepatan global API Telegram
+
+
+  **Alamat sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Sedang mengemas...
 5713cae37816: '**▎Platform tidak didukung**'
 5861d620c41d: Sedang mengunduh... | {current}/{total}
@@ -18,6 +31,8 @@
 6612548ad85b: Kompres
 68957ac274c5: Sedang mengunduh... | {current * 100 / total:.0f}%
 710ad08b1141: Nonaktifkan
+773e37502413: '**▎Parsing terlalu sering, silakan coba lagi setelah {e.retry_after:.1f}
+  detik**'
 7854b52a889b: Aktifkan
 816de50b9e0e: Silakan masukkan tautan di kotak obrolan
 88c75c95584e: '**Kirim tautan berbagi untuk diurai**
