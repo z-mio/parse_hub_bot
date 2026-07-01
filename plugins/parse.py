@@ -194,7 +194,14 @@ async def _handle_parse_request(
                     "以免触发 Telegram API 全局速率限制\n\n"
                     "**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
                 )
-            await msg.reply_text(text, link_preview_options=LinkPreviewOptions(is_disabled=True))
+            msg = await msg.reply_text(text, link_preview_options=LinkPreviewOptions(is_disabled=True))
+
+            async def fn(retry_after: float) -> None:
+                await asyncio.sleep(retry_after)
+                await msg.delete()
+
+            loop = asyncio.get_running_loop()
+            loop.create_task(fn(e.retry_after))
 
 
 @with_request_id
