@@ -36,7 +36,19 @@
   seconden**'
 7854b52a889b: Inschakelen
 816de50b9e0e: Voer een link in het chatvenster in
-88c75c95584e: '**Stuur een gedeelde link voor analyse**
+8c028b35f75a: '**▎Overgeschakeld naar: {MODE_MAP[selected]}**'
+8f555aa82c87: Originele link
+929107a1e13c: '**▎Voeg een link toe of beantwoord een bericht**'
+a3e3b88377c8: Start
+a4ce27c8e465: '**▎Functie Schakelaar**'
+aa357cb96ee8: Ontleden
+ad66098d7867: Foutlogboek bewaren
+b765e4eb1844: Originele link
+b8918b19e2a1: '**▎Platformontleding in-/uitschakelen**'
+b8a95e74574c: Media niet verwerken, originele bestanden verzenden
+c039b80e17dd: Geaggregeerde ontleding
+c1ecedab11bc: Origineel
+cf7e2e342196: '**Deel de link om te ontleden**
 
 
   **Ondersteunde platforms:**
@@ -46,36 +58,28 @@
 
   **Lijst met commando''s:**
 
-  <blockquote expandable>`/jx <link>` - Analyseer en stuur media
+  <blockquote expandable>/jx <link> - Ontleed en verzend media
 
-  `/raw <link>` - Verwerk media niet, stuur het originele bestand
+  /raw <link> - Verwerk media niet, verzend het originele bestand
 
-  `/zip <link>` - Verwerk media niet, sla analyse-resultaat op, stuur een zip-bestand
+  /zip <link> - Verwerk media niet, sla het ontledingsresultaat op, verzend een gecomprimeerd
+  pakket
 
-  `/lang` - Kies taal
+  /lang - Kies taal
 
-  `/mode` - Stel standaard analyse-modus in
+  /mode - Stel de standaard ontledingsmodus in
 
-  `/switches` - Andere functiewisselaars
+  /switches - Andere functiewisselaars
 
-  `/switch_auto_delete` - Schakel automatisch verwijderen van gedeelde linkberichten
+  /switch_auto_delete - Schakel automatisch verwijderen van gedeelde linkberichten
   in/uit
 
-  `/switch_platform` - Schakel platformanalyse in/uit</blockquote>
+  /switch_platform - Schakel platformontleding in/uit
+
+  </blockquote>
 
 
-  **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Overgeschakeld naar: {MODE_MAP[selected]}**'
-8f555aa82c87: Originele link
-929107a1e13c: '**▎Voeg een link toe of beantwoord een bericht**'
-a3e3b88377c8: Start
-a4ce27c8e465: '**▎Functie Schakelaar**'
-aa357cb96ee8: Ontleden
-b765e4eb1844: Originele link
-b8918b19e2a1: '**▎Platformontleding in-/uitschakelen**'
-b8a95e74574c: Media niet verwerken, originele bestanden verzenden
-c039b80e17dd: Geaggregeerde ontleding
-c1ecedab11bc: Origineel
+  **Open source locatie: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d59c948c471c: Bezig met ontleden...
 d5a73b0c7f2f: Uploaden
 d6fa702190b6: Stel de standaard parse-modus in

@@ -36,7 +36,19 @@
 773e37502413: '**▎Analisi troppo frequente, riprova tra {e.retry_after:.1f} secondi**'
 7854b52a889b: Abilita
 816de50b9e0e: Inserisci il link nella chat
-88c75c95584e: '**Invia un link di condivisione per l''analisi**
+8c028b35f75a: '**▎Passato a: {MODE_MAP[selected]}**'
+8f555aa82c87: Link originale
+929107a1e13c: '**▎Per favore aggiungi un link o rispondi a un messaggio**'
+a3e3b88377c8: Inizia
+a4ce27c8e465: '**▎Interruttore Funzione**'
+aa357cb96ee8: Analizza
+ad66098d7867: Conserva i log degli errori
+b765e4eb1844: Link originale
+b8918b19e2a1: '**▎Abilita / Disabilita analisi piattaforma**'
+b8a95e74574c: Non elaborare i media, invia il file originale
+c039b80e17dd: Analisi aggregata
+c1ecedab11bc: Originale
+cf7e2e342196: '**Invia il link di condivisione per l''analisi**
 
 
   **Piattaforme supportate:**
@@ -46,36 +58,28 @@
 
   **Elenco comandi:**
 
-  <blockquote expandable>`/jx <link>` - Analizza e invia media
+  <blockquote expandable>/jx <link> - Analizza e invia media
 
-  `/raw <link>` - Non elabora media, invia file originale
+  /raw <link> - Non elabora media, invia il file originale
 
-  `/zip <link>` - Non elabora media, salva risultato analisi, invia archivio compresso
+  /zip <link> - Non elabora media, salva il risultato dell''analisi, invia un archivio
+  compresso
 
-  `/lang` - Seleziona lingua
+  /lang - Seleziona la lingua
 
-  `/mode` - Imposta modalità di analisi predefinita
+  /mode - Imposta la modalità di analisi predefinita
 
-  `/switches` - Altri interruttori funzionali
+  /switches - Altri interruttori di funzionalità
 
-  `/switch_auto_delete` - Abilita/disabilita eliminazione automatica dei messaggi
-  di link di condivisione
+  /switch_auto_delete - Abilita/disabilita l''eliminazione automatica dei messaggi
+  con link di condivisione
 
-  `/switch_platform` - Abilita/disabilita analisi piattaforma</blockquote>
+  /switch_platform - Abilita/disabilita l''analisi della piattaforma
+
+  </blockquote>
 
 
   **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Passato a: {MODE_MAP[selected]}**'
-8f555aa82c87: Link originale
-929107a1e13c: '**▎Per favore aggiungi un link o rispondi a un messaggio**'
-a3e3b88377c8: Inizia
-a4ce27c8e465: '**▎Interruttore Funzione**'
-aa357cb96ee8: Analizza
-b765e4eb1844: Link originale
-b8918b19e2a1: '**▎Abilita / Disabilita analisi piattaforma**'
-b8a95e74574c: Non elaborare i media, invia il file originale
-c039b80e17dd: Analisi aggregata
-c1ecedab11bc: Originale
 d59c948c471c: Analisi in corso...
 d5a73b0c7f2f: Carica
 d6fa702190b6: Imposta la modalità di analisi predefinita

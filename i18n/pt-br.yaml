@@ -27,7 +27,19 @@
 773e37502413: '**▎Análise muito frequente, por favor tente novamente em {e.retry_after:.1f}s**'
 7854b52a889b: Ativar
 816de50b9e0e: Por favor, insira o link na caixa de chat
-88c75c95584e: '**Envie um link de compartilhamento para análise**
+8c028b35f75a: '**▎Alternado para: {MODE_MAP[selected]}**'
+8f555aa82c87: Link original
+929107a1e13c: '**▎Por favor, adicione um link ou responda a uma mensagem**'
+a3e3b88377c8: Iniciar
+a4ce27c8e465: '**▎Interruptor de Função**'
+aa357cb96ee8: Analisar
+ad66098d7867: Manter registro de erros
+b765e4eb1844: Link original
+b8918b19e2a1: '**▎Ativar / Desativar análise da plataforma**'
+b8a95e74574c: Não processar mídia, enviar arquivo original
+c039b80e17dd: Análise agregada
+c1ecedab11bc: Original
+cf7e2e342196: '**Envie o link de compartilhamento para análise**
 
 
   **Plataformas suportadas:**
@@ -37,36 +49,27 @@
 
   **Lista de comandos:**
 
-  <blockquote expandable>`/jx <link>` - Analisa e envia mídia
+  <blockquote expandable>/jx <link> - Analisar e enviar mídia
 
-  `/raw <link>` - Não processa mídia, envia arquivo original
+  /raw <link> - Não processar mídia, enviar arquivo original
 
-  `/zip <link>` - Não processa mídia, salva resultado da análise, envia arquivo compactado
+  /zip <link> - Não processar mídia, salvar resultado da análise, enviar arquivo compactado
 
-  `/lang` - Seleciona idioma
+  /lang - Selecionar idioma
 
-  `/mode` - Define modo padrão de análise
+  /mode - Definir modo padrão de análise
 
-  `/switches` - Outras opções
+  /switches - Outras opções
 
-  `/switch_auto_delete` - Ativa/desativa exclusão automática de mensagens de link
+  /switch_auto_delete - Ativar/Desativar exclusão automática de mensagens de link
   de compartilhamento
 
-  `/switch_platform` - Ativa/desativa análise de plataforma</blockquote>
+  /switch_platform - Ativar/Desativar análise por plataforma
+
+  </blockquote>
 
 
   **Código aberto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Alternado para: {MODE_MAP[selected]}**'
-8f555aa82c87: Link original
-929107a1e13c: '**▎Por favor, adicione um link ou responda a uma mensagem**'
-a3e3b88377c8: Iniciar
-a4ce27c8e465: '**▎Interruptor de Função**'
-aa357cb96ee8: Analisar
-b765e4eb1844: Link original
-b8918b19e2a1: '**▎Ativar / Desativar análise da plataforma**'
-b8a95e74574c: Não processar mídia, enviar arquivo original
-c039b80e17dd: Análise agregada
-c1ecedab11bc: Original
 d59c948c471c: Analisando...
 d5a73b0c7f2f: Enviar
 d6fa702190b6: Definir modo padrão de análise

@@ -34,7 +34,19 @@
   tekrar deneyin**'
 7854b52a889b: Etkinleştir
 816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
-88c75c95584e: '**Çözümleme için paylaşım bağlantısı gönderin**
+8c028b35f75a: '**▎Şu an seçili: {MODE_MAP[selected]}**'
+8f555aa82c87: Orijinal bağlantı
+929107a1e13c: '**▎Lütfen bir bağlantı ekleyin veya bir mesaja yanıt verin**'
+a3e3b88377c8: Başlat
+a4ce27c8e465: '**▎Fonksiyon Anahtarı**'
+aa357cb96ee8: Çözümle
+ad66098d7867: Hata günlüklerini sakla
+b765e4eb1844: Orijinal bağlantı
+b8918b19e2a1: '**▎Platform çözümlemeyi etkinleştir/devre dışı bırak**'
+b8a95e74574c: Medya işlenmeyecek, orijinal dosya gönderilecek
+c039b80e17dd: Toplu çözümleme
+c1ecedab11bc: Orijinal
+cf7e2e342196: '**Çözümleme için paylaşım bağlantısını gönderin**
 
 
   **Desteklenen platformlar:**
@@ -44,37 +56,28 @@
 
   **Komut listesi:**
 
-  <blockquote expandable>`/jx <bağlantı>` - Medyayı çözümle ve gönder
+  <blockquote expandable>/jx <bağlantı> - Medyayı çözümle ve gönder
 
-  `/raw <bağlantı>` - Medyayı işlemeyin, orijinal dosyayı gönder
+  /raw <bağlantı> - Medyayı işlemeye gerek yok, orijinal dosyayı gönder
 
-  `/zip <bağlantı>` - Medyayı işlemeyin, çözümleme sonucunu kaydet, sıkıştırılmış
+  /zip <bağlantı> - Medyayı işlemeye gerek yok, çözümleme sonucunu kaydet, sıkıştırılmış
   dosyayı gönder
 
-  `/lang` - Dil seç
+  /lang - Dil seç
 
-  `/mode` - Varsayılan çözümleme modunu ayarla
+  /mode - Varsayılan çözümleme modunu ayarla
 
-  `/switches` - Diğer işlev anahtarları
+  /switches - Diğer işlev anahtarları
 
-  `/switch_auto_delete` - Paylaşım bağlantısı mesajlarının otomatik silinmesini etkinleştir/devre
+  /switch_auto_delete - Paylaşım bağlantısı mesajlarının otomatik silinmesini etkinleştir/devre
   dışı bırak
 
-  `/switch_platform` - Platform çözümlemeyi etkinleştir/devre dışı bırak</blockquote>
+  /switch_platform - Platform çözümlemeyi etkinleştir/devre dışı bırak
+
+  </blockquote>
 
 
   **Açık kaynak adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Şu an seçili: {MODE_MAP[selected]}**'
-8f555aa82c87: Orijinal bağlantı
-929107a1e13c: '**▎Lütfen bir bağlantı ekleyin veya bir mesaja yanıt verin**'
-a3e3b88377c8: Başlat
-a4ce27c8e465: '**▎Fonksiyon Anahtarı**'
-aa357cb96ee8: Çözümle
-b765e4eb1844: Orijinal bağlantı
-b8918b19e2a1: '**▎Platform çözümlemeyi etkinleştir/devre dışı bırak**'
-b8a95e74574c: Medya işlenmeyecek, orijinal dosya gönderilecek
-c039b80e17dd: Toplu çözümleme
-c1ecedab11bc: Orijinal
 d59c948c471c: Çözülüyor...
 d5a73b0c7f2f: Yükle
 d6fa702190b6: Varsayılan çözümleme modunu ayarla

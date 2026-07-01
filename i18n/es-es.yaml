@@ -35,7 +35,19 @@
 773e37502413: '**▎Análisis demasiado frecuente, por favor intente de nuevo en {e.retry_after:.1f}s**'
 7854b52a889b: Activar
 816de50b9e0e: Por favor, introduce un enlace en el chat
-88c75c95584e: '**Envía un enlace compartido para analizar**
+8c028b35f75a: '**▎Cambiado a: {MODE_MAP[selected]}**'
+8f555aa82c87: Enlace original
+929107a1e13c: '**▎Por favor añade un enlace o responde a un mensaje**'
+a3e3b88377c8: Iniciar
+a4ce27c8e465: '**▎Interruptor de función**'
+aa357cb96ee8: Analizar
+ad66098d7867: Conservar registros de errores
+b765e4eb1844: Enlace original
+b8918b19e2a1: '**▎Activar / Desactivar análisis de plataforma**'
+b8a95e74574c: No procesar medios, enviar archivo original
+c039b80e17dd: Análisis agregado
+c1ecedab11bc: Original
+cf7e2e342196: '**Enviar enlace para compartir para análisis**
 
 
   **Plataformas compatibles:**
@@ -45,37 +57,28 @@
 
   **Lista de comandos:**
 
-  <blockquote expandable>`/jx <enlace>` - Analiza y envía medios
+  <blockquote expandable>/jx <enlace> - Analizar y enviar medios
 
-  `/raw <enlace>` - No procesa medios, envía el archivo original
+  /raw <enlace> - No procesar medios, enviar archivo original
 
-  `/zip <enlace>` - No procesa medios, guarda el resultado del análisis, envía un
-  archivo comprimido
+  /zip <enlace> - No procesar medios, guardar resultado del análisis, enviar archivo
+  comprimido
 
-  `/lang` - Selecciona el idioma
+  /lang - Seleccionar idioma
 
-  `/mode` - Configura el modo de análisis predeterminado
+  /mode - Configurar modo de análisis predeterminado
 
-  `/switches` - Otros interruptores de funciones
+  /switches - Otros interruptores de funciones
 
-  `/switch_auto_delete` - Activa/desactiva la eliminación automática de mensajes con
-  enlaces compartidos
+  /switch_auto_delete - Activar/desactivar eliminación automática de mensajes con
+  enlaces para compartir
 
-  `/switch_platform` - Activa/desactiva el análisis de plataformas</blockquote>
+  /switch_platform - Activar/desactivar análisis de plataforma
+
+  </blockquote>
 
 
   **Código abierto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Cambiado a: {MODE_MAP[selected]}**'
-8f555aa82c87: Enlace original
-929107a1e13c: '**▎Por favor añade un enlace o responde a un mensaje**'
-a3e3b88377c8: Iniciar
-a4ce27c8e465: '**▎Interruptor de función**'
-aa357cb96ee8: Analizar
-b765e4eb1844: Enlace original
-b8918b19e2a1: '**▎Activar / Desactivar análisis de plataforma**'
-b8a95e74574c: No procesar medios, enviar archivo original
-c039b80e17dd: Análisis agregado
-c1ecedab11bc: Original
 d59c948c471c: Analizando...
 d5a73b0c7f2f: Subir
 d6fa702190b6: Establecer modo de análisis predeterminado

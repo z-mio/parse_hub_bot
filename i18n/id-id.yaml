@@ -35,7 +35,19 @@
   detik**'
 7854b52a889b: Aktifkan
 816de50b9e0e: Silakan masukkan tautan di kotak obrolan
-88c75c95584e: '**Kirim tautan berbagi untuk diurai**
+8c028b35f75a: '**▎Sudah beralih ke: {MODE_MAP[selected]}**'
+8f555aa82c87: Tautan asli
+929107a1e13c: '**▎Harap tambahkan tautan atau balas sebuah pesan**'
+a3e3b88377c8: Mulai
+a4ce27c8e465: '**▎Sakelar Fitur**'
+aa357cb96ee8: Proses
+ad66098d7867: Simpan log kesalahan
+b765e4eb1844: Tautan asli
+b8918b19e2a1: '**▎Aktifkan / Nonaktifkan pemrosesan platform**'
+b8a95e74574c: Jangan proses media, kirim file asli
+c039b80e17dd: Pemrosesan agregat
+c1ecedab11bc: Asli
+cf7e2e342196: '**Kirim tautan berbagi untuk diurai**
 
 
   **Platform yang didukung:**
@@ -45,37 +57,27 @@
 
   **Daftar perintah:**
 
-  <blockquote expandable>`/jx <tautan>` - Mengurai dan mengirim media
+  <blockquote expandable>/jx <tautan> - Mengurai dan mengirim media
 
-  `/raw <tautan>` - Tidak memproses media, mengirim file asli
+  /raw <tautan> - Tidak memproses media, mengirim file asli
 
-  `/zip <tautan>` - Tidak memproses media, menyimpan hasil penguraian, mengirim paket
-  kompresi
+  /zip <tautan> - Tidak memproses media, menyimpan hasil penguraian, mengirim paket
+  terkompresi
 
-  `/lang` - Memilih bahasa
+  /lang - Pilih bahasa
 
-  `/mode` - Mengatur mode penguraian default
+  /mode - Atur mode penguraian default
 
-  `/switches` - Saklar fungsi lainnya
+  /switches - Saklar fungsi lainnya
 
-  `/switch_auto_delete` - Mengaktifkan/nonaktifkan penghapusan otomatis pesan tautan
-  berbagi
+  /switch_auto_delete - Aktifkan/nonaktifkan penghapusan otomatis pesan tautan berbagi
 
-  `/switch_platform` - Mengaktifkan/nonaktifkan penguraian platform</blockquote>
+  /switch_platform - Aktifkan/nonaktifkan penguraian platform
+
+  </blockquote>
 
 
   **Alamat sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Sudah beralih ke: {MODE_MAP[selected]}**'
-8f555aa82c87: Tautan asli
-929107a1e13c: '**▎Harap tambahkan tautan atau balas sebuah pesan**'
-a3e3b88377c8: Mulai
-a4ce27c8e465: '**▎Sakelar Fitur**'
-aa357cb96ee8: Proses
-b765e4eb1844: Tautan asli
-b8918b19e2a1: '**▎Aktifkan / Nonaktifkan pemrosesan platform**'
-b8a95e74574c: Jangan proses media, kirim file asli
-c039b80e17dd: Pemrosesan agregat
-c1ecedab11bc: Asli
 d59c948c471c: Sedang memproses...
 d5a73b0c7f2f: Unggah
 d6fa702190b6: Atur mode penguraian default

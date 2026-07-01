@@ -34,7 +34,19 @@
 773e37502413: '**▎Zbyt częste przetwarzanie, spróbuj ponownie za {e.retry_after:.1f}s**'
 7854b52a889b: Włącz
 816de50b9e0e: Wpisz link w polu czatu
-88c75c95584e: '**Wyślij link do udostępnienia, aby go przeanalizować**
+8c028b35f75a: '**▎Przełączono na: {MODE_MAP[selected]}**'
+8f555aa82c87: Oryginalny link
+929107a1e13c: '**▎Dodaj link lub odpowiedz na wiadomość**'
+a3e3b88377c8: Start
+a4ce27c8e465: '**▎Przełącznik funkcji**'
+aa357cb96ee8: Analizuj
+ad66098d7867: Zachowaj dziennik błędów
+b765e4eb1844: Oryginalny link
+b8918b19e2a1: '**▎Włącz / Wyłącz analizę platformy**'
+b8a95e74574c: Nie przetwarzaj mediów, wyślij oryginalny plik
+c039b80e17dd: Agreguj analizę
+c1ecedab11bc: Oryginalny
+cf7e2e342196: '**Wyślij link do udostępnienia, aby go przeanalizować**
 
 
   **Obsługiwane platformy:**
@@ -44,36 +56,27 @@
 
   **Lista poleceń:**
 
-  <blockquote expandable>`/jx <link>` - analizuj i wyślij media
+  <blockquote expandable>/jx <link> - analizuj i wyślij media
 
-  `/raw <link>` - nie przetwarzaj mediów, wyślij oryginalny plik
+  /raw <link> - nie przetwarzaj mediów, wyślij oryginalny plik
 
-  `/zip <link>` - nie przetwarzaj mediów, zapisz wynik analizy, wyślij archiwum
+  /zip <link> - nie przetwarzaj mediów, zapisz wynik analizy, wyślij archiwum
 
-  `/lang` - wybierz język
+  /lang - wybierz język
 
-  `/mode` - ustaw domyślny tryb analizy
+  /mode - ustaw domyślny tryb analizy
 
-  `/switches` - inne przełączniki funkcji
+  /switches - inne przełączniki funkcji
 
-  `/switch_auto_delete` - włącz/wyłącz automatyczne usuwanie wiadomości z linkami
-  do udostępniania
+  /switch_auto_delete - włącz/wyłącz automatyczne usuwanie wiadomości z linkiem do
+  udostępnienia
 
-  `/switch_platform` - włącz/wyłącz analizę platformy</blockquote>
+  /switch_platform - włącz/wyłącz analizę platformy
+
+  </blockquote>
 
 
-  **Kod źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Przełączono na: {MODE_MAP[selected]}**'
-8f555aa82c87: Oryginalny link
-929107a1e13c: '**▎Dodaj link lub odpowiedz na wiadomość**'
-a3e3b88377c8: Start
-a4ce27c8e465: '**▎Przełącznik funkcji**'
-aa357cb96ee8: Analizuj
-b765e4eb1844: Oryginalny link
-b8918b19e2a1: '**▎Włącz / Wyłącz analizę platformy**'
-b8a95e74574c: Nie przetwarzaj mediów, wyślij oryginalny plik
-c039b80e17dd: Agreguj analizę
-c1ecedab11bc: Oryginalny
+  **Adres źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d59c948c471c: Analizowanie...
 d5a73b0c7f2f: Przesyłanie
 d6fa702190b6: Ustaw domyślny tryb analizy

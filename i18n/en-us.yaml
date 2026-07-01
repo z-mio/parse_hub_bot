@@ -33,7 +33,19 @@
   seconds**'
 7854b52a889b: Enable
 816de50b9e0e: Please enter the link in the chat box
-88c75c95584e: '**Send a shared link for parsing**
+8c028b35f75a: '**▎Switched to: {MODE_MAP[selected]}**'
+8f555aa82c87: Original link
+929107a1e13c: '**▎Please add a link or reply to a message**'
+a3e3b88377c8: Start
+a4ce27c8e465: '**▎Feature Toggle**'
+aa357cb96ee8: Parse
+ad66098d7867: Retain error logs
+b765e4eb1844: Original link
+b8918b19e2a1: '**▎Enable / Disable Platform Parsing**'
+b8a95e74574c: Do not process media, send original file
+c039b80e17dd: Aggregate Parsing
+c1ecedab11bc: Original
+cf7e2e342196: '**Send the share link for parsing**
 
 
   **Supported platforms:**
@@ -43,35 +55,26 @@
 
   **Command list:**
 
-  <blockquote expandable>`/jx <link>` - Parse and send media
+  <blockquote expandable>/jx <link> - Parse and send media
 
-  `/raw <link>` - Do not process media, send original file
+  /raw <link> - Do not process media, send original file
 
-  `/zip <link>` - Do not process media, save parsing results, send compressed package
+  /zip <link> - Do not process media, save parsing results, send compressed package
 
-  `/lang` - Select language
+  /lang - Select language
 
-  `/mode` - Set default parsing mode
+  /mode - Set default parsing mode
 
-  `/switches` - Other feature toggles
+  /switches - Other feature toggles
 
-  `/switch_auto_delete` - Enable/disable automatic deletion of shared link messages
+  /switch_auto_delete - Enable/disable auto-delete of share link messages
 
-  `/switch_platform` - Enable/disable platform parsing</blockquote>
+  /switch_platform - Enable/disable platform parsing
+
+  </blockquote>
 
 
   **Open source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Switched to: {MODE_MAP[selected]}**'
-8f555aa82c87: Original link
-929107a1e13c: '**▎Please add a link or reply to a message**'
-a3e3b88377c8: Start
-a4ce27c8e465: '**▎Feature Toggle**'
-aa357cb96ee8: Parse
-b765e4eb1844: Original link
-b8918b19e2a1: '**▎Enable / Disable Platform Parsing**'
-b8a95e74574c: Do not process media, send original file
-c039b80e17dd: Aggregate Parsing
-c1ecedab11bc: Original
 d59c948c471c: Parsing...
 d5a73b0c7f2f: Upload
 d6fa702190b6: Set Default Parsing Mode

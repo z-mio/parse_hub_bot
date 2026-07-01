@@ -36,7 +36,19 @@
   Sekunden erneut**'
 7854b52a889b: Aktivieren
 816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
-88c75c95584e: '**Senden Sie einen Freigabelink zur Analyse**
+8c028b35f75a: '**▎Bereits gewechselt zu: {MODE_MAP[selected]}**'
+8f555aa82c87: Original-Link
+929107a1e13c: '**▎Bitte fügen Sie einen Link hinzu oder antworten Sie auf eine Nachricht**'
+a3e3b88377c8: Start
+a4ce27c8e465: '**▎Funktionsschalter**'
+aa357cb96ee8: Analysieren
+ad66098d7867: Fehlerprotokolle behalten
+b765e4eb1844: Original-Link
+b8918b19e2a1: '**▎Plattform-Parsing aktivieren/deaktivieren**'
+b8a95e74574c: Medien nicht verarbeiten, Originaldatei senden
+c039b80e17dd: Aggregiertes Parsing
+c1ecedab11bc: Original
+cf7e2e342196: '**Sende den Freigabelink zur Analyse**
 
 
   **Unterstützte Plattformen:**
@@ -46,36 +58,26 @@
 
   **Befehlsliste:**
 
-  <blockquote expandable>`/jx <Link>` - Medien analysieren und senden
+  <blockquote expandable>/jx <Link> - Medien analysieren und senden
 
-  `/raw <Link>` - Medien nicht verarbeiten, Originaldatei senden
+  /raw <Link> - Medien nicht verarbeiten, Originaldatei senden
 
-  `/zip <Link>` - Medien nicht verarbeiten, Analyseergebnis speichern, ZIP-Archiv
-  senden
+  /zip <Link> - Medien nicht verarbeiten, Analyseergebnis speichern, ZIP-Datei senden
 
-  `/lang` - Sprache auswählen
+  /lang - Sprache auswählen
 
-  `/mode` - Standard-Analysemode einstellen
+  /mode - Standard-Analysemode einstellen
 
-  `/switches` - Weitere Funktionsschalter
+  /switches - Weitere Funktionsschalter
 
-  `/switch_auto_delete` - Automatisches Löschen von Freigabelink-Nachrichten aktivieren/deaktivieren
+  /switch_auto_delete - Automatisches Löschen von Freigabelink-Nachrichten aktivieren/deaktivieren
 
-  `/switch_platform` - Plattformanalyse aktivieren/deaktivieren</blockquote>
+  /switch_platform - Plattformanalyse aktivieren/deaktivieren
+
+  </blockquote>
 
 
   **Quellcode: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Bereits gewechselt zu: {MODE_MAP[selected]}**'
-8f555aa82c87: Original-Link
-929107a1e13c: '**▎Bitte fügen Sie einen Link hinzu oder antworten Sie auf eine Nachricht**'
-a3e3b88377c8: Start
-a4ce27c8e465: '**▎Funktionsschalter**'
-aa357cb96ee8: Analysieren
-b765e4eb1844: Original-Link
-b8918b19e2a1: '**▎Plattform-Parsing aktivieren/deaktivieren**'
-b8a95e74574c: Medien nicht verarbeiten, Originaldatei senden
-c039b80e17dd: Aggregiertes Parsing
-c1ecedab11bc: Original
 d59c948c471c: Analysiere...
 d5a73b0c7f2f: Hochladen
 d6fa702190b6: Standard-Parsing-Modus einstellen

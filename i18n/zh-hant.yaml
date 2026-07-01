@@ -31,45 +31,48 @@
 773e37502413: '**▎解析過於頻繁，請在 {e.retry_after:.1f}s 後重試**'
 7854b52a889b: 啟用
 816de50b9e0e: 請在聊天框輸入連結
-88c75c95584e: '**發送分享連結以進行解析**
-
-
-  **支援的平台:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **指令列表:**
-
-  <blockquote expandable>`/jx <連結>` - 解析並發送媒體
-
-  `/raw <連結>` - 不處理媒體，發送原始檔案
-
-  `/zip <連結>` - 不處理媒體，保存解析結果，發送壓縮包
-
-  `/lang` - 選擇語言
-
-  `/mode` - 設定預設解析模式
-
-  `/switches` - 其他功能開關
-
-  `/switch_auto_delete` - 啟用/禁用自動刪除分享連結訊息
-
-  `/switch_platform` - 啟用/禁用平台解析</blockquote>
-
-
-  **開源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 8c028b35f75a: '**▎已切換為: {MODE_MAP[selected]}**'
 8f555aa82c87: 原連結
 929107a1e13c: '**▎請加上連結或回覆一條消息**'
 a3e3b88377c8: 開始
 a4ce27c8e465: '**▎功能開關**'
 aa357cb96ee8: 解析
+ad66098d7867: 保留錯誤日誌
 b765e4eb1844: 原始連結
 b8918b19e2a1: '**▎啟用 / 禁用 平台解析**'
 b8a95e74574c: 不處理媒體，發送原始文件
 c039b80e17dd: 聚合解析
 c1ecedab11bc: 原始
+cf7e2e342196: '**發送分享連結以進行解析**
+
+
+  **支持的平台:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **命令列表:**
+
+  <blockquote expandable>/jx <連結> - 解析並發送媒體
+
+  /raw <連結> - 不處理媒體，發送原始檔案
+
+  /zip <連結> - 不處理媒體，保存解析結果，發送壓縮包
+
+  /lang - 選擇語言
+
+  /mode - 設定預設解析模式
+
+  /switches - 其他功能開關
+
+  /switch_auto_delete - 啟用/禁用 自動刪除分享連結訊息
+
+  /switch_platform - 啟用/禁用 平台解析
+
+  </blockquote>
+
+
+  **開源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d59c948c471c: 解 析 中...
 d5a73b0c7f2f: 上傳
 d6fa702190b6: 設定預設解析模式

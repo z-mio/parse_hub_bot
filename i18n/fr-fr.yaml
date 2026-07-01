@@ -37,7 +37,19 @@
 773e37502413: '**▎Analyse trop fréquente, veuillez réessayer dans {e.retry_after:.1f}s**'
 7854b52a889b: Activer
 816de50b9e0e: Veuillez entrer un lien dans la zone de chat
-88c75c95584e: '**Envoyez un lien de partage pour analyse**
+8c028b35f75a: '**▎Passé à : {MODE_MAP[selected]}**'
+8f555aa82c87: Lien original
+929107a1e13c: '**▎Veuillez ajouter un lien ou répondre à un message**'
+a3e3b88377c8: Démarrer
+a4ce27c8e465: '**▎Interrupteur de fonction**'
+aa357cb96ee8: Analyser
+ad66098d7867: Conserver les journaux d'erreurs
+b765e4eb1844: Lien brut
+b8918b19e2a1: '**▎Activer / Désactiver l''analyse de la plateforme**'
+b8a95e74574c: Ne pas traiter les médias, envoyer le fichier original
+c039b80e17dd: Analyse agrégée
+c1ecedab11bc: Original
+cf7e2e342196: '**Envoyez un lien de partage pour analyse**
 
 
   **Plateformes prises en charge :**
@@ -47,37 +59,28 @@
 
   **Liste des commandes :**
 
-  <blockquote expandable>`/jx <lien>` - Analyser et envoyer le média
+  <blockquote expandable>/jx <lien> - Analyser et envoyer le média
 
-  `/raw <lien>` - Ne pas traiter le média, envoyer le fichier brut
+  /raw <lien> - Ne pas traiter le média, envoyer le fichier brut
 
-  `/zip <lien>` - Ne pas traiter le média, enregistrer le résultat de l''analyse,
-  envoyer une archive compressée
+  /zip <lien> - Ne pas traiter le média, enregistrer le résultat de l''analyse, envoyer
+  une archive compressée
 
-  `/lang` - Choisir la langue
+  /lang - Choisir la langue
 
-  `/mode` - Définir le mode d''analyse par défaut
+  /mode - Définir le mode d''analyse par défaut
 
-  `/switches` - Autres options
+  /switches - Autres options
 
-  `/switch_auto_delete` - Activer/désactiver la suppression automatique des messages
+  /switch_auto_delete - Activer/désactiver la suppression automatique des messages
   de lien de partage
 
-  `/switch_platform` - Activer/désactiver l''analyse de la plateforme</blockquote>
+  /switch_platform - Activer/désactiver l''analyse de la plateforme
+
+  </blockquote>
 
 
   **Code source : [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-8c028b35f75a: '**▎Passé à : {MODE_MAP[selected]}**'
-8f555aa82c87: Lien original
-929107a1e13c: '**▎Veuillez ajouter un lien ou répondre à un message**'
-a3e3b88377c8: Démarrer
-a4ce27c8e465: '**▎Interrupteur de fonction**'
-aa357cb96ee8: Analyser
-b765e4eb1844: Lien brut
-b8918b19e2a1: '**▎Activer / Désactiver l''analyse de la plateforme**'
-b8a95e74574c: Ne pas traiter les médias, envoyer le fichier original
-c039b80e17dd: Analyse agrégée
-c1ecedab11bc: Original
 d59c948c471c: Analyse en cours...
 d5a73b0c7f2f: Téléverser
 d6fa702190b6: Définir le mode d'analyse par défaut
