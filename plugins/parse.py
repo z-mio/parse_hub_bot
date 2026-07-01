@@ -119,16 +119,17 @@ class MessageStatusReporter(StatusReporter):
     filters.command(["jx", "raw", "zip"]) | ((filters.text | filters.caption) & ~via_me_filter & platform_filter(True))
 )
 async def jx(cli: Client, msg: Message) -> None:
-    if not msg.from_user:
-        return
+    if msg.from_user:
+        async with get_session() as session:
+            current = await AccountService(session, msg.from_user.id).ensure_account()
+            user_config = current.config
+            lang = current.lang
+            mode = user_config.default_mode
+    else:
+        mode = "preview"
+        lang = None
+    _t = t_[lang]
 
-    async with get_session() as session:
-        current = await AccountService(session, msg.from_user.id).ensure_account()
-        user_config = current.config
-        lang = current.lang
-        _t = t_[lang]
-
-    mode = user_config.default_mode
     if msg.command:
         match msg.command[0]:
             case "raw":

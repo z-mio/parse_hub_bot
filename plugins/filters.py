@@ -33,13 +33,16 @@ def platform_filter(use_user_config: bool = False) -> filters.Filter:
         if not platform:
             return False
 
-        if flt.use_user_config is False or not update.from_user:
-            return True
+        if update.from_user:
+            if flt.use_user_config is False:
+                return True
 
-        async with get_session() as session:
-            user_config = await AccountService(session, update.from_user.id).get_config()
-            if platform.id in user_config.disabled_platforms:
-                return False
+            async with get_session() as session:
+                user_config = await AccountService(session, update.from_user.id).get_config()
+                if platform.id in user_config.disabled_platforms:
+                    return False
+                return True
+        else:
             return True
 
     return filters.create(func, use_user_config=use_user_config)
