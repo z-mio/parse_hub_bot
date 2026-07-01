@@ -1,25 +1,27 @@
 08fc0528426e: '**▎Sudah beralih ke: {LANG_MAP[selected]}**'
 0c7c37b93cfe: "**▎Kesalahan {stage}:** \n```\n{error}```"
 0d3d68e32996: Tugas yang sama sedang diproses, tunggu hingga selesai...
+1c9621f6b78d: '**▎Sudah {''启用'' if current.config.auto_delete_url else ''禁用''} pesan
+  tautan berbagi dihapus otomatis**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: Sedang mengunggah...
 30364e475d07: Ini bukan tindakan Anda
 3065ed13e5f9: Dapatkan tautan asli
 36c680f6f5b0: Aktifkan/Nonaktifkan pemrosesan platform
+44a77d4ad4ca: Tanpa judul
 460ce129a523: Sedang mengunduh...
 569c1f28ab00: Sedang mengemas...
 5713cae37816: '**▎Platform tidak didukung**'
 5861d620c41d: Sedang mengunduh... | {current}/{total}
 5a9f36a77173: Mengemas
 5fcfdc5f95ad: '**▎Pilih mode pemrosesan default**'
-609a04710e91: '**▎Sudah {''启用'' if user_config.auto_delete_url else ''禁用''} menghapus
-  otomatis pesan tautan berbagi**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: Pratinjau
 6536e2506f73: Aktifkan/Nonaktifkan penghapusan otomatis pesan tautan berbagi
 6612548ad85b: Kompres
 68957ac274c5: Sedang mengunduh... | {current * 100 / total:.0f}%
-7612b9a15f41: '**Kirim tautan berbagi untuk diurai**
+816de50b9e0e: Silakan masukkan tautan di kotak obrolan
+88c75c95584e: '**Kirim tautan berbagi untuk diurai**
 
 
   **Platform yang didukung:**
@@ -36,21 +38,25 @@
   `/zip <tautan>` - Tidak memproses media, menyimpan hasil penguraian, mengirim paket
   kompresi
 
-  `/lang` - Pilih bahasa
+  `/lang` - Memilih bahasa
 
-  `/mode` - Atur mode penguraian default
+  `/mode` - Mengatur mode penguraian default
 
-  `/switch_auto_delete` - Aktifkan/Nonaktifkan penghapusan otomatis pesan tautan berbagi
+  `/switches` - Saklar fungsi lainnya
 
-  `/switch_platform` - Aktifkan/Nonaktifkan penguraian platform</blockquote>
+  `/switch_auto_delete` - Mengaktifkan/nonaktifkan penghapusan otomatis pesan tautan
+  berbagi
+
+  `/switch_platform` - Mengaktifkan/nonaktifkan penguraian platform</blockquote>
 
 
-  **Sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-816de50b9e0e: Silakan masukkan tautan di kotak obrolan
+  **Alamat sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 8c028b35f75a: '**▎Sudah beralih ke: {MODE_MAP[selected]}**'
+8f555aa82c87: Tautan asli
 929107a1e13c: '**▎Harap tambahkan tautan atau balas sebuah pesan**'
 a3e3b88377c8: Mulai
 aa357cb96ee8: Proses
+b765e4eb1844: Tautan asli
 b8918b19e2a1: '**▎Aktifkan / Nonaktifkan pemrosesan platform**'
 b8a95e74574c: Jangan proses media, kirim file asli
 c039b80e17dd: Pemrosesan agregat
@@ -58,5 +64,6 @@ c1ecedab11bc: Asli
 d59c948c471c: Sedang memproses...
 d5a73b0c7f2f: Unggah
 d6fa702190b6: Atur mode penguraian default
+d7146da48b3e: Saklar fungsi lainnya
 d915366ac40b: Jangan proses media, simpan hasil proses, kirim paket kompres
 ff71243806c8: Pilih bahasa

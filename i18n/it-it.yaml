@@ -1,26 +1,28 @@
 08fc0528426e: '**▎Passato a: {LANG_MAP[selected]}**'
 0c7c37b93cfe: "**▎Errore {stage}:** \n```\n{error}```"
 0d3d68e32996: Un'attività identica è già in fase di analisi, attendere il completamento...
+1c9621f6b78d: '**▎Messaggi di link di condivisione eliminati automaticamente {''启用''
+  if current.config.auto_delete_url else ''禁用''}**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: Caricamento in corso...
 30364e475d07: Questa non è la tua operazione
 3065ed13e5f9: Ottieni link originale
 36c680f6f5b0: Abilita/Disabilita analisi piattaforma
+44a77d4ad4ca: Senza titolo
 460ce129a523: Download in corso...
 569c1f28ab00: Impacchettamento in corso...
 5713cae37816: '**▎Piattaforma non supportata**'
 5861d620c41d: Download in corso... | {current}/{total}
 5a9f36a77173: Impacchetta
 5fcfdc5f95ad: '**▎Seleziona modalità di analisi predefinita**'
-609a04710e91: '**▎Sono stati eliminati automaticamente {''启用'' if user_config.auto_delete_url
-  else ''禁用''} messaggi di link condivisi**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: Anteprima
 6536e2506f73: Abilita/disabilita l'eliminazione automatica dei messaggi con link di
   condivisione
 6612548ad85b: Compressione
 68957ac274c5: Download in corso... | {current * 100 / total:.0f}%
-7612b9a15f41: '**Invia un link di condivisione per l''analisi**
+816de50b9e0e: Inserisci il link nella chat
+88c75c95584e: '**Invia un link di condivisione per l''analisi**
 
 
   **Piattaforme supportate:**
@@ -32,27 +34,29 @@
 
   <blockquote expandable>`/jx <link>` - Analizza e invia media
 
-  `/raw <link>` - Non elabora i media, invia il file originale
+  `/raw <link>` - Non elabora media, invia file originale
 
-  `/zip <link>` - Non elabora i media, salva il risultato dell''analisi, invia un
-  archivio compresso
+  `/zip <link>` - Non elabora media, salva risultato analisi, invia archivio compresso
 
-  `/lang` - Seleziona la lingua
+  `/lang` - Seleziona lingua
 
-  `/mode` - Imposta la modalità di analisi predefinita
+  `/mode` - Imposta modalità di analisi predefinita
 
-  `/switch_auto_delete` - Abilita/disabilita l''eliminazione automatica dei messaggi
-  con link di condivisione
+  `/switches` - Altri interruttori funzionali
 
-  `/switch_platform` - Abilita/disabilita l''analisi della piattaforma</blockquote>
+  `/switch_auto_delete` - Abilita/disabilita eliminazione automatica dei messaggi
+  di link di condivisione
+
+  `/switch_platform` - Abilita/disabilita analisi piattaforma</blockquote>
 
 
   **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-816de50b9e0e: Inserisci il link nella chat
 8c028b35f75a: '**▎Passato a: {MODE_MAP[selected]}**'
+8f555aa82c87: Link originale
 929107a1e13c: '**▎Per favore aggiungi un link o rispondi a un messaggio**'
 a3e3b88377c8: Inizia
 aa357cb96ee8: Analizza
+b765e4eb1844: Link originale
 b8918b19e2a1: '**▎Abilita / Disabilita analisi piattaforma**'
 b8a95e74574c: Non elaborare i media, invia il file originale
 c039b80e17dd: Analisi aggregata
@@ -60,6 +64,7 @@ c1ecedab11bc: Originale
 d59c948c471c: Analisi in corso...
 d5a73b0c7f2f: Carica
 d6fa702190b6: Imposta la modalità di analisi predefinita
+d7146da48b3e: Altri interruttori funzionali
 d915366ac40b: Non elaborare i media, salva il risultato dell'analisi, invia un archivio
   compresso
 ff71243806c8: Seleziona la lingua

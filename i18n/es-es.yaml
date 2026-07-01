@@ -1,25 +1,27 @@
 08fc0528426e: '**▎Cambiado a: {LANG_MAP[selected]}**'
 0c7c37b93cfe: "**▎Error en {stage}:** \n```\n{error}```"
 0d3d68e32996: Ya hay una tarea igual en proceso de análisis, esperando a que termine...
+1c9621f6b78d: '**▎Ya se han eliminado automáticamente {''启用'' if current.config.auto_delete_url
+  else ''禁用''} mensajes con enlaces compartidos**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: Subiendo...
 30364e475d07: Esta no es tu acción
 3065ed13e5f9: Obtener enlace original
 36c680f6f5b0: Activar/Desactivar análisis de plataforma
+44a77d4ad4ca: Sin título
 460ce129a523: Descargando...
 569c1f28ab00: Empaquetando...
 5713cae37816: '**▎Plataforma no soportada**'
 5861d620c41d: Descargando... | {current}/{total}
 5a9f36a77173: Empaquetar
 5fcfdc5f95ad: '**▎Seleccionar modo de análisis predeterminado**'
-609a04710e91: '**▎Ya se han eliminado automáticamente {''启用'' if user_config.auto_delete_url
-  else ''禁用''} mensajes de enlaces compartidos**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: Vista previa
 6536e2506f73: Activar/Desactivar eliminación automática de mensajes con enlaces compartidos
 6612548ad85b: Comprimir
 68957ac274c5: Descargando... | {current * 100 / total:.0f}%
-7612b9a15f41: '**Enviar enlace compartido para análisis**
+816de50b9e0e: Por favor, introduce un enlace en el chat
+88c75c95584e: '**Envía un enlace compartido para analizar**
 
 
   **Plataformas compatibles:**
@@ -29,29 +31,32 @@
 
   **Lista de comandos:**
 
-  <blockquote expandable>`/jx <enlace>` - Analizar y enviar medios
+  <blockquote expandable>`/jx <enlace>` - Analiza y envía medios
 
-  `/raw <enlace>` - No procesar medios, enviar archivo original
+  `/raw <enlace>` - No procesa medios, envía el archivo original
 
-  `/zip <enlace>` - No procesar medios, guardar resultado del análisis, enviar archivo
-  comprimido
+  `/zip <enlace>` - No procesa medios, guarda el resultado del análisis, envía un
+  archivo comprimido
 
-  `/lang` - Seleccionar idioma
+  `/lang` - Selecciona el idioma
 
-  `/mode` - Establecer modo de análisis predeterminado
+  `/mode` - Configura el modo de análisis predeterminado
 
-  `/switch_auto_delete` - Activar/Desactivar eliminación automática de mensajes con
+  `/switches` - Otros interruptores de funciones
+
+  `/switch_auto_delete` - Activa/desactiva la eliminación automática de mensajes con
   enlaces compartidos
 
-  `/switch_platform` - Activar/Desactivar análisis de plataforma</blockquote>
+  `/switch_platform` - Activa/desactiva el análisis de plataformas</blockquote>
 
 
   **Código abierto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-816de50b9e0e: Por favor, introduce un enlace en el chat
 8c028b35f75a: '**▎Cambiado a: {MODE_MAP[selected]}**'
+8f555aa82c87: Enlace original
 929107a1e13c: '**▎Por favor añade un enlace o responde a un mensaje**'
 a3e3b88377c8: Iniciar
 aa357cb96ee8: Analizar
+b765e4eb1844: Enlace original
 b8918b19e2a1: '**▎Activar / Desactivar análisis de plataforma**'
 b8a95e74574c: No procesar medios, enviar archivo original
 c039b80e17dd: Análisis agregado
@@ -59,5 +64,6 @@ c1ecedab11bc: Original
 d59c948c471c: Analizando...
 d5a73b0c7f2f: Subir
 d6fa702190b6: Establecer modo de análisis predeterminado
+d7146da48b3e: Otros interruptores de funciones
 d915366ac40b: No procesar medios, guardar resultado del análisis, enviar archivo comprimido
 ff71243806c8: Seleccionar idioma

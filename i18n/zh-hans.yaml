@@ -1,24 +1,26 @@
 08fc0528426e: '**▎已切换为: {LANG_MAP[selected]}**'
 0c7c37b93cfe: "**▎{stage}错误:** \n```\n{error}```"
 0d3d68e32996: 已有相同任务正在解析, 等待解析完成...
+1c9621f6b78d: '**▎已 {''启用'' if current.config.auto_delete_url else ''禁用''} 自动删除分享链接消息**
+
+  {''▎**群内使用需要授予 Bot 删除消息权限**'' if current.config.auto_delete_url else ''''}'
 27350d00b70d: 上 传 中...
 30364e475d07: 这不是你的操作
 3065ed13e5f9: 获取原始链接
 36c680f6f5b0: 启用/禁用 平台解析
+44a77d4ad4ca: 无标题
 460ce129a523: 下 载 中...
 569c1f28ab00: 打 包 中...
 5713cae37816: '**▎不支持的平台**'
 5861d620c41d: 下 载 中... | {current}/{total}
 5a9f36a77173: 打包
 5fcfdc5f95ad: '**▎选择默认解析模式**'
-609a04710e91: '**▎已 {''启用'' if user_config.auto_delete_url else ''禁用''} 自动删除分享链接消息**
-
-  {''▎**群内使用需要授予 Bot 删除消息权限**'' if user_config.auto_delete_url else ''''}'
 645dbc5504e7: 预览
 6536e2506f73: 启用/禁用 自动删除分享链接消息
 6612548ad85b: 压缩
 68957ac274c5: 下 载 中... | {current * 100 / total:.0f}%
-7612b9a15f41: '**发送分享链接以进行解析**
+816de50b9e0e: 请在聊天框输入链接
+88c75c95584e: '**发送分享链接以进行解析**
 
 
   **支持的平台:**
@@ -38,17 +40,20 @@
 
   `/mode` - 设置默认解析模式
 
-  `/switch_auto_delete` - 启用/禁用 自动删除分享链接消息
+  `/switches` - 其他功能开关
+
+  `/switch_auto_delete` - 启用/禁用自动删除分享链接消息
 
   `/switch_platform` - 启用/禁用 平台解析</blockquote>
 
 
   **开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
-816de50b9e0e: 请在聊天框输入链接
 8c028b35f75a: '**▎已切换为: {MODE_MAP[selected]}**'
+8f555aa82c87: 原链接
 929107a1e13c: '**▎请加上链接或回复一条消息**'
 a3e3b88377c8: 开始
 aa357cb96ee8: 解析
+b765e4eb1844: 原始链接
 b8918b19e2a1: '**▎启用 / 禁用 平台解析**'
 b8a95e74574c: 不处理媒体, 发送原始文件
 c039b80e17dd: 聚合解析
@@ -56,5 +61,6 @@ c1ecedab11bc: 原始
 d59c948c471c: 解 析 中...
 d5a73b0c7f2f: 上传
 d6fa702190b6: 设置默认解析模式
+d7146da48b3e: 其他功能开关
 d915366ac40b: 不处理媒体, 保存解析结果, 发送压缩包
 ff71243806c8: 选择语言
