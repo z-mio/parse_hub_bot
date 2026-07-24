@@ -29,12 +29,9 @@ def get_config_target(update: Message | InlineQuery, *, include_member: bool = T
     if update.chat and update.chat.id is not None and update.chat.type == ChatType.CHANNEL:
         return ChannelSettingsTarget(telegram_chat_id=update.chat.id)
 
-    if not update.from_user:
-        raise ValueError("缺少配置目标用户")
-
     thread_id = get_thread_id(update)
 
-    if update.chat and update.chat.id is not None and thread_id:
+    if update.chat and update.chat.id is not None and thread_id and update.from_user:
         if include_member:
             return ForumTopicMemberSettingsTarget(
                 telegram_chat_id=update.chat.id,
@@ -44,8 +41,11 @@ def get_config_target(update: Message | InlineQuery, *, include_member: bool = T
         return ForumTopicSettingsTarget(telegram_chat_id=update.chat.id, telegram_thread_id=thread_id)
 
     if update.chat and update.chat.id is not None and update.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        if include_member:
+        if include_member and update.from_user:
             return GroupMemberSettingsTarget(telegram_chat_id=update.chat.id, telegram_user_id=update.from_user.id)
         return GroupSettingsTarget(telegram_chat_id=update.chat.id)
 
-    return UserSettingsTarget(telegram_user_id=update.from_user.id)
+    if update.from_user:
+        return UserSettingsTarget(telegram_user_id=update.from_user.id)
+
+    raise ValueError("缺少配置目标用户")
