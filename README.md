@@ -42,27 +42,27 @@
 
 ## 📦 支持平台一览
 
-| 平台              | 视频 | 图文 |      其他       |
-|:----------------|:--:|:--:|:-------------:|
-| **Twitter / X** | ✅  | ✅  |     📝 文章     |
-| **Instagram**   | ✅  | ✅  |               |
-| **YouTube**     | ✅  |    |     🎵 音乐     |
-| **Facebook**    | ✅  |    |               |
-| **Threads**     | ✅  | ✅  |               |
-| **Bilibili**    | ✅  |    |     📝 动态     |
-| **抖音**          | ✅  | ✅  |     ☀️日常      |
-| **TikTok**      | ✅  | ✅  |               |
-| **微博**          | ✅  | ✅  |               |
-| **小红书**         | ✅  | ✅  |               |
-| **贴吧**          | ✅  | ✅  |               |
-| **微信公众号**       |    | ✅  |               |
-| **快手**          | ✅  |    |               |
-| **酷安**          |    | ✅  |               |
-| **皮皮虾**         | ✅  | ✅  |               |
-| **最右**          | ✅  | ✅  |               |
-| **小黑盒**         | ✅  | ✅  |               |
-| **Snapchat**    | ✅  |    |               |
-| **知乎**          | ✅  | ✅  | 🐶 问答, 专栏, 圈子 |
+| 平台            | 视频 | 图文 |        其他         |
+|:----------------|:----:|:----:|:-------------------:|
+| **Twitter / X** |  ✅  |  ✅  |       📝 文章       |
+| **Instagram**   |  ✅  |  ✅  |                     |
+| **YouTube**     |  ✅  |      |       🎵 音乐       |
+| **Facebook**    |  ✅  |      |                     |
+| **Threads**     |  ✅  |  ✅  |                     |
+| **Bilibili**    |  ✅  |      |       📝 动态       |
+| **抖音**        |  ✅  |  ✅  |       ☀️日常        |
+| **TikTok**      |  ✅  |  ✅  |                     |
+| **微博**        |  ✅  |  ✅  |                     |
+| **小红书**      |  ✅  |  ✅  |                     |
+| **贴吧**        |  ✅  |  ✅  |                     |
+| **微信公众号**  |      |  ✅  |                     |
+| **快手**        |  ✅  |      |                     |
+| **酷安**        |      |  ✅  |                     |
+| **皮皮虾**      |  ✅  |  ✅  |                     |
+| **最右**        |  ✅  |  ✅  |                     |
+| **小黑盒**      |  ✅  |  ✅  |                     |
+| **Snapchat**    |  ✅  |      |                     |
+| **知乎**        |  ✅  |  ✅  | 🐶 问答, 专栏, 圈子 |
 
 > 🔧 更多平台持续接入中...
 
@@ -112,7 +112,7 @@ BOT_PROXY=     # Bot 连接 TG 使用的代理，例：http://127.0.0.1:7890
 
 ### 🌐 平台配置
 
-用于为各解析平台单独配置**代理**和 **Cookie**，位于 `data/config/platform_config.yaml`
+用于为各解析平台单独配置 **代理**和 **Cookie**，位于 `data/config/platform_config.yaml`
 
 ```yaml
 # ═══════════════════════ 全局默认代理 ═══════════════════════
@@ -152,33 +152,33 @@ platforms:
 直连（不使用代理）
 ```
 
-> 💡 当代理池中有多个地址时，每次请求会**随机选取**一个
+> 💡 当代理池中有多个地址时，每次请求会 **随机选取**一个
 
 ### 🔑 支持的平台 ID
 
 `<platform_id>` 必须是以下合法的平台 ID：
 
-| 平台 ID       | 对应平台        |
+| 平台 ID     | 对应平台    |
 |:------------|:------------|
 | `twitter`   | Twitter / X |
 | `instagram` | Instagram   |
 | `youtube`   | YouTube     |
 | `facebook`  | Facebook    |
 | `threads`   | Threads     |
-| `bilibili`  | 哔哩哔哩        |
-| `douyin`    | 抖音          |
+| `bilibili`  | 哔哩哔哩    |
+| `douyin`    | 抖音        |
 | `tiktok`    | TikTok      |
-| `weibo`     | 微博          |
-| `xhs`       | 小红书         |
-| `tieba`     | 百度贴吧        |
-| `wechat`    | 微信公众号       |
-| `kuaishou`  | 快手          |
-| `coolapk`   | 酷安          |
-| `pipixia`   | 皮皮虾         |
-| `zuiyou`    | 最右          |
-| `xiaoheihe` | 小黑盒         |
+| `weibo`     | 微博        |
+| `xhs`       | 小红书      |
+| `tieba`     | 百度贴吧    |
+| `wechat`    | 微信公众号  |
+| `kuaishou`  | 快手        |
+| `coolapk`   | 酷安        |
+| `pipixia`   | 皮皮虾      |
+| `zuiyou`    | 最右        |
+| `xiaoheihe` | 小黑盒      |
 | `snapchat`  | Snapchat    |
-| `zhihu`     | 知乎          |
+| `zhihu`     | 知乎        |
 
 ### 🍪 支持 Cookie 的平台
 
@@ -251,16 +251,6 @@ platforms:
       - "SESSDATA=xxx; bili_jct=xxx; buvid3=xxx"
       - "SESSDATA=yyy; bili_jct=yyy; buvid3=yyy"
 ```
-
-## 🌟 Star History
-
-<a href="https://www.star-history.com/?type=date&repos=z-mio%2FParse_Hub_Bot">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=z-mio/Parse_Hub_Bot&type=date&theme=dark&legend=top-left&sealed_token=n_B6V73FCZt16MtUaTQowR-ZQ1pdhKCd94W-9symYgpKxNI0h62EyiVFeaTIVana0l0ZYCGLFye8lCdeaXM4OPmIByiQqnbBewQtQM3bRlPd61GHsqtyg7LQGCdZoGEitbc2y_m7V9cO-04CnJwKTd7Rrct1JSNi0oLZlHPJ-DhBMpwTEp25929J4KLM" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=z-mio/Parse_Hub_Bot&type=date&legend=top-left&sealed_token=n_B6V73FCZt16MtUaTQowR-ZQ1pdhKCd94W-9symYgpKxNI0h62EyiVFeaTIVana0l0ZYCGLFye8lCdeaXM4OPmIByiQqnbBewQtQM3bRlPd61GHsqtyg7LQGCdZoGEitbc2y_m7V9cO-04CnJwKTd7Rrct1JSNi0oLZlHPJ-DhBMpwTEp25929J4KLM" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=z-mio/Parse_Hub_Bot&type=date&legend=top-left&sealed_token=n_B6V73FCZt16MtUaTQowR-ZQ1pdhKCd94W-9symYgpKxNI0h62EyiVFeaTIVana0l0ZYCGLFye8lCdeaXM4OPmIByiQqnbBewQtQM3bRlPd61GHsqtyg7LQGCdZoGEitbc2y_m7V9cO-04CnJwKTd7Rrct1JSNi0oLZlHPJ-DhBMpwTEp25929J4KLM" />
- </picture>
-</a>
 
 ## 🤝 参与贡献
 

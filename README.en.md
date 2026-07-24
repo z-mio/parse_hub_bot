@@ -253,16 +253,6 @@ platforms:
       - "SESSDATA=yyy; bili_jct=yyy; buvid3=yyy"
 ```
 
-## 🌟 Star History
-
-<a href="https://www.star-history.com/?type=date&repos=z-mio%2FParse_Hub_Bot">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=z-mio/Parse_Hub_Bot&type=date&theme=dark&legend=top-left&sealed_token=n_B6V73FCZt16MtUaTQowR-ZQ1pdhKCd94W-9symYgpKxNI0h62EyiVFeaTIVana0l0ZYCGLFye8lCdeaXM4OPmIByiQqnbBewQtQM3bRlPd61GHsqtyg7LQGCdZoGEitbc2y_m7V9cO-04CnJwKTd7Rrct1JSNi0oLZlHPJ-DhBMpwTEp25929J4KLM" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=z-mio/Parse_Hub_Bot&type=date&legend=top-left&sealed_token=n_B6V73FCZt16MtUaTQowR-ZQ1pdhKCd94W-9symYgpKxNI0h62EyiVFeaTIVana0l0ZYCGLFye8lCdeaXM4OPmIByiQqnbBewQtQM3bRlPd61GHsqtyg7LQGCdZoGEitbc2y_m7V9cO-04CnJwKTd7Rrct1JSNi0oLZlHPJ-DhBMpwTEp25929J4KLM" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=z-mio/Parse_Hub_Bot&type=date&legend=top-left&sealed_token=n_B6V73FCZt16MtUaTQowR-ZQ1pdhKCd94W-9symYgpKxNI0h62EyiVFeaTIVana0l0ZYCGLFye8lCdeaXM4OPmIByiQqnbBewQtQM3bRlPd61GHsqtyg7LQGCdZoGEitbc2y_m7V9cO-04CnJwKTd7Rrct1JSNi0oLZlHPJ-DhBMpwTEp25929J4KLM" />
- </picture>
-</a>
-
 ## 🤝 Contributing
 
 Pull requests and issues are welcome!
