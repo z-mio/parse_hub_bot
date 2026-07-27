@@ -32,11 +32,14 @@ class MediaProcessingUnit:
     Telegram 限制：
     - 图片宽高比 / 高宽比不能超过 20:1
     - 单次最多发送 10 张图片
+    - 单个视频最大 2000 MB
 
     用法：
         mpu = MediaProcessingUnit(output_dir=Path("./output"))
         result = await mpu.process("media.mp4")
     """
+
+    TG_MAX_VIDEO_SIZE = 2000 * 1000**2
 
     def __init__(
         self,
@@ -278,11 +281,11 @@ class MediaProcessingUnit:
 
         source = converted or file_path
         video_size = source.stat().st_size
-        self.logger(f"视频大小: {video_size / 1024 / 1024:.1f} MB")
+        self.logger(f"视频大小: {video_size / 1000 / 1000:.1f} MB ({video_size / 1024 / 1024:.1f} MiB)")
 
-        if video_size > 2 * 1024**3:  # 2 GiB
-            self.logger("视频超过 2 GiB，开始分割")
-            output_paths, output_dir = await self.split_video(source, self.output_dir)
+        if video_size > self.TG_MAX_VIDEO_SIZE:
+            self.logger(f"视频超过 {self.TG_MAX_VIDEO_SIZE / 1000 / 1000:.0f} MB 限制，开始分割")
+            output_paths, output_dir = await self.split_video(source, self.output_dir, self.TG_MAX_VIDEO_SIZE)
             if converted:
                 os.remove(converted)
             return MediaProcessResult(output_paths=output_paths, temp_dir=output_dir)
@@ -415,7 +418,7 @@ class MediaProcessingUnit:
         self,
         file_path: Path,
         output_dir: Path,
-        size_limit: int = 2_000_000_000,
+        size_limit: int = TG_MAX_VIDEO_SIZE,
         ffmpeg_args: list[str] | None = None,
         keep_sec: float = 1.0,
     ) -> tuple[list[Path], Path]:
@@ -427,7 +430,10 @@ class MediaProcessingUnit:
         split_dir.mkdir(parents=True, exist_ok=True)
         ext = file_path.suffix.lstrip(".")
         total_duration = int(await self.get_duration(file_path))
-        self.logger(f"视频分割: duration={total_duration}s, size_limit={size_limit}")
+        self.logger(
+            f"视频分割: duration={total_duration}s, "
+            f"size_limit={size_limit / 1000 / 1000:.0f} MB ({size_limit / 1024 / 1024:.1f} MiB)"
+        )
 
         cur, part, output_paths = 0, 1, []
         while cur < total_duration:
@@ -480,8 +486,8 @@ class MediaProcessingUnit:
 
 
 async def main() -> None:
-    mpu = MediaProcessingUnit(output_dir=Path(r"D:\Downloads\新建文件夹"))
-    result = await mpu.process(r"D:\Downloads\36751083810-1-30066.mp4")
+    mpu = MediaProcessingUnit(output_dir=Path(r"/home/mio/Projects/personal/parse_hub_bot/downloads/与辉同行25年6月13日-一"))
+    result = await mpu.process(r"/home/mio/Projects/personal/parse_hub_bot/downloads/与辉同行25年6月13日-一/与辉同行25年6月13日-一.mp4")
     print(result.output_paths)
 
 

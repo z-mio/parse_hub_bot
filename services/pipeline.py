@@ -225,6 +225,7 @@ class ParsePipeline:
         logger.debug(f"下载完成: output_dir={download_result.output_dir}")
 
         # ── 3. 媒体处理 ──
+        await self._reporter.report(self._t("处 理 中..."))
         if self._skip_media_processing:
             logger.debug(f"流水线完成: download_result={download_result}")
             processed_list = [ProcessedMedia(i, [Path(i.path)]) for i in to_list(download_result.media)]
