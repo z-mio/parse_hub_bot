@@ -486,8 +486,12 @@ class MediaProcessingUnit:
 
 
 async def main() -> None:
-    mpu = MediaProcessingUnit(output_dir=Path(r"/home/mio/Projects/personal/parse_hub_bot/downloads/与辉同行25年6月13日-一"))
-    result = await mpu.process(r"/home/mio/Projects/personal/parse_hub_bot/downloads/与辉同行25年6月13日-一/与辉同行25年6月13日-一.mp4")
+    mpu = MediaProcessingUnit(
+        output_dir=Path(r"/home/mio/Projects/personal/parse_hub_bot/downloads/与辉同行25年6月13日-一")
+    )
+    result = await mpu.process(
+        r"/home/mio/Projects/personal/parse_hub_bot/downloads/与辉同行25年6月13日-一/与辉同行25年6月13日-一.mp4"
+    )
     print(result.output_paths)
 
 
