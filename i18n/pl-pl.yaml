@@ -12,6 +12,7 @@
 1a603ac4b55c: Proszę wysłać `/cfg` lub użyć `/cfg <nazwa_użytkownika_kanalu/link/id>`
   w prywatnej rozmowie, grupie lub temacie, aby skonfigurować
 1d30c358e2a1: Domyślny tryb analizy
+1f3c920d087b: Przetwarzanie...
 224e2ccda861: Konfiguracja
 27350d00b70d: Przesyłanie...
 295bb704f520: Język
@@ -61,6 +62,7 @@
 405ba1795958: Konfiguracja tematu
 44a77d4ad4ca: Bez tytułu
 460ce129a523: Pobieranie...
+4e9ce9dfe13d: Ukryj tytuł
 4fb5f29ee802: Proszę dołączyć link lub odpowiedzieć na wiadomość
 4fbdbeb0f163: '
 
@@ -81,6 +83,7 @@
 5a9f36a77173: Pakuj
 5b943dc87178: Link do pobrania GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Artykuł wysłany z użyciem formatowania tekstu
 5e788d9e0992: Nie kanał
 5f411223ca5a: Powrót
 5fcfdc5f95ad: '**▎Wybierz domyślny tryb analizy**'
@@ -111,6 +114,7 @@
 a3e3b88377c8: Start
 a4ce27c8e465: '**▎Przełącznik funkcji**'
 aa357cb96ee8: Analizuj
+ab480060abb1: Nie pokazuj dziennika błędów
 ad66098d7867: Zachowaj dziennik błędów
 b3bbb48dcb10: Analiza zbyt częsta, spróbuj ponownie za {e.retry_after:.1f}s
 b6aaf8f2a2be: Konfiguracja osobista w grupie
@@ -120,6 +124,7 @@ b8a95e74574c: Nie przetwarzaj mediów, wyślij oryginalny plik
 be6f406c8f81: Konfiguracja osobista
 bebccdf7a76e: Nieprawidłowy format linku
 c039b80e17dd: Agreguj analizę
+c11154582f8a: Ukryj wprowadzenie
 c1ecedab11bc: Oryginalny
 c2236f70c559: Omijanie analizy pamięci podręcznej
 c25add78a072: "{t} \n```\n{error}```"
@@ -168,6 +173,7 @@ e3ab31c8d89c: Analizuj i podglądaj zawartość
 e4f6307e1c4f: 'Przełączono na: {LANG_MAP[selected]}'
 e67a8324684f: ▎**W grupie wymagana jest zgoda na usuwanie wiadomości przez bota**
 e73189b92dbd: Opcja wysyłania surowego URL w linii
+eaa3cd851501: Niestandardowy tekst
 f047ff589a7a: Wyślij jako paczkę, z informacjami o analizie
 ff71243806c8: Wybierz język
 ff7e330bebf8: Konfiguracja osobista w temacie

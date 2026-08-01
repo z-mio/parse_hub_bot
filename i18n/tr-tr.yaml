@@ -11,6 +11,7 @@
 1a603ac4b55c: Lütfen özel mesajda, grupta veya konularda `/cfg` komutunu gönderin
   veya `/cfg <kanal kullanıcı adı/link/id>` ile yapılandırın
 1d30c358e2a1: Varsayılan çözümleme modu
+1f3c920d087b: İşleniyor...
 224e2ccda861: Yapılandırma
 27350d00b70d: Yükleniyor...
 295bb704f520: Dil
@@ -61,6 +62,7 @@
 405ba1795958: Konu yapılandırması
 44a77d4ad4ca: Başlıksız
 460ce129a523: İndiriliyor...
+4e9ce9dfe13d: Başlığı Gizle
 4fb5f29ee802: Lütfen bir link ekleyin veya bir mesaja yanıt verin
 4fbdbeb0f163: '
 
@@ -80,6 +82,7 @@
 5a9f36a77173: Paketle
 5b943dc87178: GIF indirme linki
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Makale zengin metin olarak gönderildi
 5e788d9e0992: Kanal değil
 5f411223ca5a: Geri
 5fcfdc5f95ad: '**▎Varsayılan çözümleme modunu seç**'
@@ -111,6 +114,7 @@
 a3e3b88377c8: Başlat
 a4ce27c8e465: '**▎Fonksiyon Anahtarı**'
 aa357cb96ee8: Çözümle
+ab480060abb1: Hata günlüklerini gösterme
 ad66098d7867: Hata günlüklerini sakla
 b3bbb48dcb10: Çözümleme çok sık yapılıyor, lütfen {e.retry_after:.1f} saniye sonra
   tekrar deneyin
@@ -121,6 +125,7 @@ b8a95e74574c: Medya işlenmeyecek, orijinal dosya gönderilecek
 be6f406c8f81: Kişisel yapılandırma
 bebccdf7a76e: Bağlantı formatı geçersiz
 c039b80e17dd: Toplu çözümleme
+c11154582f8a: Özeti Gizle
 c1ecedab11bc: Orijinal
 c2236f70c559: Önbellek çözümlemesini atla
 c25add78a072: "{t} \n```\n{error}```"
@@ -167,6 +172,7 @@ e3ab31c8d89c: İçeriği çözümle ve önizle
 e4f6307e1c4f: '{LANG_MAP[selected]} olarak değiştirildi'
 e67a8324684f: ▎**Grup içinde kullanmak için Bot'a mesaj silme izni verilmelidir**
 e73189b92dbd: Ham URL'yi satır içi gönderme seçeneği
+eaa3cd851501: Özel metin
 f047ff589a7a: Paket halinde gönder, çözümleme bilgisi ile birlikte
 ff71243806c8: Dil seç
 ff7e330bebf8: Konu içi kişisel yapılandırma

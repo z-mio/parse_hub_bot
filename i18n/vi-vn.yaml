@@ -12,6 +12,7 @@
 1a603ac4b55c: Vui lòng gửi `/cfg` hoặc sử dụng `/cfg <tên người dùng/kênh/liên kết/id>`
   trong tin nhắn riêng, nhóm hoặc chủ đề để cấu hình
 1d30c358e2a1: Chế độ phân tích mặc định
+1f3c920d087b: Đang xử lý...
 224e2ccda861: Cấu hình
 27350d00b70d: Đang tải lên...
 295bb704f520: Ngôn ngữ
@@ -60,6 +61,7 @@
 405ba1795958: Cấu hình chủ đề
 44a77d4ad4ca: Không tiêu đề
 460ce129a523: Đang tải xuống...
+4e9ce9dfe13d: Ẩn tiêu đề
 4fb5f29ee802: Vui lòng thêm liên kết hoặc trả lời một tin nhắn
 4fbdbeb0f163: '>**Để đảm bảo trải nghiệm sử dụng cho tất cả người dùng, hiện tại đã
   kích hoạt giới hạn tốc độ**
@@ -77,6 +79,7 @@
 5a9f36a77173: Đóng gói
 5b943dc87178: Liên kết tải xuống GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Bài viết sử dụng văn bản định dạng phong phú để gửi
 5e788d9e0992: Không phải kênh
 5f411223ca5a: Quay lại
 5fcfdc5f95ad: '**▎Chọn chế độ phân tích mặc định**'
@@ -108,6 +111,7 @@
 a3e3b88377c8: Bắt đầu
 a4ce27c8e465: '**▎Công tắc chức năng**'
 aa357cb96ee8: Phân tích
+ab480060abb1: Không hiển thị nhật ký lỗi
 ad66098d7867: Giữ lại nhật ký lỗi
 b3bbb48dcb10: Phân tích quá thường xuyên, vui lòng thử lại sau {e.retry_after:.1f}
   giây
@@ -118,6 +122,7 @@ b8a95e74574c: Không xử lý media, gửi file gốc
 be6f406c8f81: Cấu hình cá nhân
 bebccdf7a76e: Định dạng liên kết không hợp lệ
 c039b80e17dd: Phân tích tổng hợp
+c11154582f8a: Ẩn phần giới thiệu
 c1ecedab11bc: Gốc
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
@@ -166,6 +171,7 @@ e3ab31c8d89c: Phân tích và xem trước nội dung
 e4f6307e1c4f: 'Đã chuyển sang: {LANG_MAP[selected]}'
 e67a8324684f: ▎**Cần cấp quyền xóa tin nhắn cho Bot trong nhóm**
 e73189b92dbd: Tùy chọn gửi URL gốc nội tuyến
+eaa3cd851501: Tùy chỉnh văn bản
 f047ff589a7a: Gửi gói kèm thông tin phân tích
 ff71243806c8: Chọn ngôn ngữ
 ff7e330bebf8: Cấu hình cá nhân trong chủ đề

@@ -12,6 +12,7 @@
 1a603ac4b55c: Silakan kirim `/cfg` atau gunakan `/cfg <nama pengguna/link/id saluran>`
   dalam obrolan pribadi, grup, atau topik untuk konfigurasi
 1d30c358e2a1: Mode parsing default
+1f3c920d087b: Sedang diproses...
 224e2ccda861: Konfigurasi
 27350d00b70d: Sedang mengunggah...
 295bb704f520: Bahasa
@@ -61,6 +62,7 @@
 405ba1795958: Konfigurasi topik
 44a77d4ad4ca: Tanpa judul
 460ce129a523: Sedang mengunduh...
+4e9ce9dfe13d: Sembunyikan judul
 4fb5f29ee802: Harap sertakan tautan atau balas pesan
 4fbdbeb0f163: '
 
@@ -81,6 +83,7 @@
 5a9f36a77173: Mengemas
 5b943dc87178: Tautan unduhan GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Artikel dikirim menggunakan teks kaya
 5e788d9e0992: Bukan saluran
 5f411223ca5a: Kembali
 5fcfdc5f95ad: '**▎Pilih mode pemrosesan default**'
@@ -111,6 +114,7 @@
 a3e3b88377c8: Mulai
 a4ce27c8e465: '**▎Sakelar Fitur**'
 aa357cb96ee8: Proses
+ab480060abb1: Jangan tampilkan log kesalahan
 ad66098d7867: Simpan log kesalahan
 b3bbb48dcb10: Analisis terlalu sering, silakan coba lagi setelah {e.retry_after:.1f}
   detik
@@ -121,6 +125,7 @@ b8a95e74574c: Jangan proses media, kirim file asli
 be6f406c8f81: Konfigurasi pribadi
 bebccdf7a76e: Format tautan tidak valid
 c039b80e17dd: Pemrosesan agregat
+c11154582f8a: Sembunyikan deskripsi
 c1ecedab11bc: Asli
 c2236f70c559: Melewati parsing cache
 c25add78a072: "{t} \n```\n{error}```"
@@ -169,6 +174,7 @@ e3ab31c8d89c: Parsing dan pratinjau konten
 e4f6307e1c4f: 'Berhasil beralih ke: {LANG_MAP[selected]}'
 e67a8324684f: ▎**Penggunaan dalam grup memerlukan izin Bot untuk menghapus pesan**
 e73189b92dbd: Opsi kirim URL asli secara inline
+eaa3cd851501: Teks kustom
 f047ff589a7a: Kirim paket, sertakan informasi parsing
 ff71243806c8: Pilih bahasa
 ff7e330bebf8: Konfigurasi pribadi dalam topik

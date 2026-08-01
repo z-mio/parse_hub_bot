@@ -12,6 +12,7 @@
 1a603ac4b55c: Invia `/cfg` in chat privata, gruppo o argomento oppure usa `/cfg <nome
   utente/link/id del canale>` per configurare
 1d30c358e2a1: Modalità di analisi predefinita
+1f3c920d087b: In elaborazione...
 224e2ccda861: Configurazione
 27350d00b70d: Caricamento in corso...
 295bb704f520: Lingua
@@ -63,6 +64,7 @@
 405ba1795958: Configurazione topic
 44a77d4ad4ca: Senza titolo
 460ce129a523: Download in corso...
+4e9ce9dfe13d: Nascondi titolo
 4fb5f29ee802: Per favore aggiungi un link o rispondi a un messaggio
 4fbdbeb0f163: '
 
@@ -83,6 +85,7 @@
 5a9f36a77173: Impacchetta
 5b943dc87178: Link per il download GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Articolo inviato con testo formattato
 5e788d9e0992: Non è un canale
 5f411223ca5a: Indietro
 5fcfdc5f95ad: '**▎Seleziona modalità di analisi predefinita**'
@@ -114,6 +117,7 @@
 a3e3b88377c8: Inizia
 a4ce27c8e465: '**▎Interruttore Funzione**'
 aa357cb96ee8: Analizza
+ab480060abb1: Non mostrare i log degli errori
 ad66098d7867: Conserva i log degli errori
 b3bbb48dcb10: Analisi troppo frequente, riprova tra {e.retry_after:.1f} secondi
 b6aaf8f2a2be: Configurazione personale nel gruppo
@@ -123,6 +127,7 @@ b8a95e74574c: Non elaborare i media, invia il file originale
 be6f406c8f81: Configurazione personale
 bebccdf7a76e: Formato del link non valido
 c039b80e17dd: Analisi aggregata
+c11154582f8a: Nascondi introduzione
 c1ecedab11bc: Originale
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
@@ -170,6 +175,7 @@ e4f6307e1c4f: 'Passato a: {LANG_MAP[selected]}'
 e67a8324684f: ▎**Per l'uso nel gruppo è necessario concedere al Bot l'autorizzazione
   a eliminare i messaggi**
 e73189b92dbd: Opzione per inviare URL originale in linea
+eaa3cd851501: Testo personalizzato
 f047ff589a7a: Invia pacchettizzato con informazioni di analisi
 ff71243806c8: Seleziona la lingua
 ff7e330bebf8: Configurazione personale nell'argomento

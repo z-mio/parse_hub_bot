@@ -12,6 +12,7 @@
 1a603ac4b55c: Por favor, envie `/cfg` em chat privado, grupo ou tópico, ou use `/cfg
   <nome de usuário/link/id do canal>` para configurar
 1d30c358e2a1: Modo de análise padrão
+1f3c920d087b: Processando...
 224e2ccda861: Configuração
 27350d00b70d: Enviando...
 295bb704f520: Idioma
@@ -62,6 +63,7 @@
 405ba1795958: Configuração do tópico
 44a77d4ad4ca: Sem título
 460ce129a523: Baixando...
+4e9ce9dfe13d: Ocultar título
 4fb5f29ee802: Por favor, adicione um link ou responda a uma mensagem
 4fbdbeb0f163: '\n\n>**Para garantir a experiência de uso de todos os usuários, o limite
   de taxa está atualmente ativado**\n\n>Este projeto é de código aberto. Se houver
@@ -74,6 +76,7 @@
 5a9f36a77173: Empacotar
 5b943dc87178: Link para download do GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Artigo enviado com texto formatado
 5e788d9e0992: Não é um canal
 5f411223ca5a: Voltar
 5fcfdc5f95ad: '**▎Selecionar modo de análise padrão**'
@@ -104,6 +107,7 @@
 a3e3b88377c8: Iniciar
 a4ce27c8e465: '**▎Interruptor de Função**'
 aa357cb96ee8: Analisar
+ab480060abb1: Não mostrar logs de erro
 ad66098d7867: Manter registro de erros
 b3bbb48dcb10: Análise muito frequente, por favor tente novamente em {e.retry_after:.1f}s
 b6aaf8f2a2be: Configuração pessoal no grupo
@@ -113,6 +117,7 @@ b8a95e74574c: Não processar mídia, enviar arquivo original
 be6f406c8f81: Configuração pessoal
 bebccdf7a76e: Formato de link inválido
 c039b80e17dd: Análise agregada
+c11154582f8a: Ocultar resumo
 c1ecedab11bc: Original
 c2236f70c559: Ignorar análise de cache
 c25add78a072: "{t} \n```\n{error}```"
@@ -159,6 +164,7 @@ e4f6307e1c4f: 'Alterado para: {LANG_MAP[selected]}'
 e67a8324684f: ▎**Para usar no grupo, é necessário conceder permissão ao Bot para excluir
   mensagens**
 e73189b92dbd: Opção para enviar URL original embutida
+eaa3cd851501: Texto personalizado
 f047ff589a7a: Enviar em pacote, com informações de análise
 ff71243806c8: Selecionar idioma
 ff7e330bebf8: Configuração pessoal no tópico

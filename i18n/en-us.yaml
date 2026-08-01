@@ -13,6 +13,7 @@
 1a603ac4b55c: Please send `/cfg` in private chat, group, or topic, or use `/cfg <channel
   username/link/id>` to configure
 1d30c358e2a1: Default parsing mode
+1f3c920d087b: Processing...
 224e2ccda861: Configuration
 27350d00b70d: Uploading...
 295bb704f520: Language
@@ -61,6 +62,7 @@
 405ba1795958: Topic Configuration
 44a77d4ad4ca: Untitled
 460ce129a523: Downloading...
+4e9ce9dfe13d: Hide Title
 4fb5f29ee802: Please add a link or reply to a message
 4fbdbeb0f163: '>**To ensure a good experience for all users, rate limiting is currently
   enabled**
@@ -78,6 +80,7 @@
 5a9f36a77173: Package
 5b943dc87178: GIF download link
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Send article using rich text
 5e788d9e0992: Non-channel
 5f411223ca5a: Back
 5fcfdc5f95ad: '**▎Select default parsing mode**'
@@ -108,6 +111,7 @@
 a3e3b88377c8: Start
 a4ce27c8e465: '**▎Feature Toggle**'
 aa357cb96ee8: Parse
+ab480060abb1: Do not display error logs
 ad66098d7867: Retain error logs
 b3bbb48dcb10: Parsing too frequently, please try again after {e.retry_after:.1f}s
 b6aaf8f2a2be: Individual configuration within group
@@ -117,6 +121,7 @@ b8a95e74574c: Do not process media, send original file
 be6f406c8f81: Personal Configuration
 bebccdf7a76e: Invalid link format
 c039b80e17dd: Aggregate Parsing
+c11154582f8a: Hide Introduction
 c1ecedab11bc: Original
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
@@ -163,6 +168,7 @@ e4f6307e1c4f: 'Switched to: {LANG_MAP[selected]}'
 e67a8324684f: ▎**Bot needs permission to delete messages in the group to use this
   feature**
 e73189b92dbd: Inline Send Raw URL Option
+eaa3cd851501: Custom Copy
 f047ff589a7a: Pack and send with parsing information
 ff71243806c8: Select Language
 ff7e330bebf8: Individual configuration within topic

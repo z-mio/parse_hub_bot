@@ -13,6 +13,7 @@
 1a603ac4b55c: Veuillez envoyer `/cfg` en message privé, groupe ou sujet, ou utiliser
   `/cfg <nom d'utilisateur/lien/id du canal>` pour configurer
 1d30c358e2a1: Mode d'analyse par défaut
+1f3c920d087b: En cours de traitement...
 224e2ccda861: Configuration
 27350d00b70d: Téléchargement en cours...
 295bb704f520: Langue
@@ -64,6 +65,7 @@
 405ba1795958: Configuration du sujet
 44a77d4ad4ca: Sans titre
 460ce129a523: Téléchargement en cours...
+4e9ce9dfe13d: Masquer le titre
 4fb5f29ee802: Veuillez ajouter un lien ou répondre à un message
 4fbdbeb0f163: '
 
@@ -84,6 +86,7 @@
 5a9f36a77173: Emballer
 5b943dc87178: Lien de téléchargement GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: L'article est envoyé en texte enrichi
 5e788d9e0992: Non chaîne
 5f411223ca5a: Retour
 5fcfdc5f95ad: '**▎Choisir le mode d''analyse par défaut**'
@@ -115,6 +118,7 @@
 a3e3b88377c8: Démarrer
 a4ce27c8e465: '**▎Interrupteur de fonction**'
 aa357cb96ee8: Analyser
+ab480060abb1: Ne pas afficher les journaux d'erreurs
 ad66098d7867: Conserver les journaux d'erreurs
 b3bbb48dcb10: Analyse trop fréquente, veuillez réessayer dans {e.retry_after:.1f}s
 b6aaf8f2a2be: Configuration personnelle dans le groupe
@@ -124,6 +128,7 @@ b8a95e74574c: Ne pas traiter les médias, envoyer le fichier original
 be6f406c8f81: Configuration personnelle
 bebccdf7a76e: Format de lien invalide
 c039b80e17dd: Analyse agrégée
+c11154582f8a: Masquer la description
 c1ecedab11bc: Original
 c2236f70c559: Contourner l'analyse du cache
 c25add78a072: "{t} \n```\n{error}```"
@@ -171,6 +176,7 @@ e4f6307e1c4f: 'Passé à : {LANG_MAP[selected]}'
 e67a8324684f: ▎**L'utilisation dans le groupe nécessite d'accorder au Bot l'autorisation
   de supprimer les messages**
 e73189b92dbd: Option d'envoi en ligne de l'URL brute
+eaa3cd851501: Texte personnalisé
 f047ff589a7a: Envoyer en paquet, avec informations d'analyse
 ff71243806c8: Choisir la langue
 ff7e330bebf8: Configuration personnelle dans le sujet

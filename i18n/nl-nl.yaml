@@ -13,6 +13,7 @@
 1a603ac4b55c: Stuur `/cfg` in een privébericht, groep of onderwerp, of gebruik `/cfg
   <kanaal gebruikersnaam/link/id>` om te configureren
 1d30c358e2a1: Standaard parseermodus
+1f3c920d087b: Bezig met verwerken...
 224e2ccda861: Configuratie
 27350d00b70d: Bezig met uploaden...
 295bb704f520: Taal
@@ -62,6 +63,7 @@
 405ba1795958: Topicconfiguratie
 44a77d4ad4ca: Geen titel
 460ce129a523: Bezig met downloaden...
+4e9ce9dfe13d: Titel verbergen
 4fb5f29ee802: Voeg een link toe of beantwoord een bericht
 4fbdbeb0f163: '
 
@@ -82,6 +84,7 @@
 5a9f36a77173: Inpakken
 5b943dc87178: GIF downloadlink
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5d6ac8f8e4f3: Artikel verzonden met rich text
 5e788d9e0992: Geen kanaal
 5f411223ca5a: Terug
 5fcfdc5f95ad: '**▎Selecteer standaard ontledingsmodus**'
@@ -113,6 +116,7 @@
 a3e3b88377c8: Start
 a4ce27c8e465: '**▎Functie Schakelaar**'
 aa357cb96ee8: Ontleden
+ab480060abb1: Foutlogboeken niet weergeven
 ad66098d7867: Foutlogboek bewaren
 b3bbb48dcb10: Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}s
 b6aaf8f2a2be: Persoonlijke configuratie binnen groep
@@ -122,6 +126,7 @@ b8a95e74574c: Media niet verwerken, originele bestanden verzenden
 be6f406c8f81: Persoonlijke configuratie
 bebccdf7a76e: Ongeldig linkformaat
 c039b80e17dd: Geaggregeerde ontleding
+c11154582f8a: Introductie verbergen
 c1ecedab11bc: Origineel
 c2236f70c559: Cache-omzeiling parsing
 c25add78a072: "{t} \n```\n{error}```"
@@ -171,6 +176,7 @@ e4f6307e1c4f: 'Gewisseld naar: {LANG_MAP[selected]}'
 e67a8324684f: ▎**Bot moet toestemming hebben om berichten te verwijderen binnen de
   groep**
 e73189b92dbd: Optie om ruwe URL inline te verzenden
+eaa3cd851501: Aangepaste tekst
 f047ff589a7a: Verpak en stuur, inclusief parseer informatie
 ff71243806c8: Kies taal
 ff7e330bebf8: Persoonlijke configuratie binnen onderwerp
