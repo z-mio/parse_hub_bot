@@ -123,6 +123,12 @@ class SettingsConfig(BaseModel):
         ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
     ] = True
 
+    hide_error: Annotated[
+        bool,
+        Field(description="解析错误时不发送错误日志消息"),
+        ConfigMetadata(POLICY_SCOPES, MergeStrategy.POLICY),
+    ] = False
+
     def __str__(self) -> str:
         return self.model_dump_json(indent=4, ensure_ascii=True)
 

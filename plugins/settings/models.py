@@ -139,6 +139,13 @@ BOOL_SWITCHES = (
         patch=lambda settings, target, value: settings.patch_config(target, keep_error_log=value),
     ),
     BoolSwitchDTO(
+        field="hide_error",
+        code="he",
+        label=t_("不显示错误日志"),
+        get_value=lambda config: config.hide_error,
+        patch=lambda settings, target, value: settings.patch_config(target, hide_error=value),
+    ),
+    BoolSwitchDTO(
         field="noprogress",
         code="np",
         label=t_("禁用解析进度"),

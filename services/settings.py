@@ -76,6 +76,7 @@ class ConfigPatch(TypedDict, total=False):
     hide_desc: bool
     hide_title: bool
     rich_mode: bool
+    hide_error: bool
 
 
 class SettingsService:

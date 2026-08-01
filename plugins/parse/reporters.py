@@ -53,6 +53,9 @@ class MessageStatusReporter(StatusReporter):
         await self._edit_text(format_label(text))
 
     async def report_error(self, stage: str, error: Exception) -> None:
+        if self._config.hide_error:
+            return
+
         t = format_label(self._t(f"{stage}错误:"))
         text = self._t(f"{t} \n```\n{error}```")
         if bs.demo_mode:
@@ -118,6 +121,9 @@ class InlineStatusReporter(StatusReporter):
         await self._edit_inline_text(inline_message_id=self._mid, text=full)
 
     async def report_error(self, stage: str, error: Exception) -> None:
+        if self._user_config.hide_error:
+            return
+
         text = self._t(f"{format_label(f'{stage}错误:')} \n```\n{error}```")
         if bs.demo_mode:
             text += self._t("\n\n**问题反馈: @MisakaSisters**")
