@@ -10,7 +10,12 @@ from db import get_session
 from i18n import t_
 from log import logger
 from plugins.context import get_config_target
-from plugins.filters import forwarded_from_bot_filter, platform_filter, via_me_filter
+from plugins.filters import (
+    allow_channel_auto_forward_parse_filter,
+    forwarded_from_bot_filter,
+    platform_filter,
+    via_me_filter,
+)
 from plugins.helpers import build_caption, create_richtext_telegraph, format_label
 from plugins.parse.context import GIF_ONLY_SKIP_DOWNLOAD_COUNT_THRESHOLD, ParseOptions, ParseRequest
 from plugins.parse.reporters import MessageStatusReporter, disable_progress_on_report_forbidden
@@ -26,7 +31,13 @@ logger = logger.bind(name="Parse")
 
 @Client.on_message(
     filters.command(["jx", "jxjx", "raw", "zip"])
-    | ((filters.text | filters.caption) & ~via_me_filter & platform_filter(True) & ~forwarded_from_bot_filter)
+    | (
+        (filters.text | filters.caption)
+        & ~via_me_filter
+        & platform_filter(True)
+        & ~forwarded_from_bot_filter
+        & allow_channel_auto_forward_parse_filter
+    )
 )
 async def parse(cli: Client, msg: Message) -> None:
     bypass_cache = False
