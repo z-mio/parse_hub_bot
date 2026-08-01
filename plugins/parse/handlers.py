@@ -255,6 +255,7 @@ async def handle_parse(req: ParseRequest) -> bool:
             and gif_only
             and len(to_list(parse_result.media)) > GIF_ONLY_SKIP_DOWNLOAD_COUNT_THRESHOLD
         ):
+            await sender.typing()
             await sender.text_no_preview(caption, reply_markup=build_gif_button(to_list(parse_result.media)))
             await reporter.dismiss()
             return True
