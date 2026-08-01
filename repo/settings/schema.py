@@ -99,6 +99,24 @@ class SettingsConfig(BaseModel):
         ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
     ] = True
 
+    custom_content: Annotated[
+        bool,
+        Field(description="插入自定义文案到解析结果"),
+        ConfigMetadata(frozenset([SettingsScope.CHANNEL, SettingsScope.USER]), MergeStrategy.STRICT),
+    ] = False
+
+    hide_title: Annotated[
+        bool,
+        Field(description="隐藏标题"),
+        ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
+    ] = False
+
+    hide_desc: Annotated[
+        bool,
+        Field(description="隐藏简介"),
+        ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
+    ] = False
+
     def __str__(self) -> str:
         return self.model_dump_json(indent=4, ensure_ascii=True)
 

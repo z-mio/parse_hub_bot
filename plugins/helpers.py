@@ -12,6 +12,7 @@ from pyrogram.types import Message
 
 from i18n import t_
 from log import logger
+from repo.settings import SettingsConfig
 from utils.converter import clean_article_html
 from utils.ph import Telegraph
 
@@ -47,9 +48,18 @@ def build_start_text() -> LocaleContent:
     )
 
 
-def build_caption(parse_result: AnyParseResult, telegraph_url: str | None = None, *, hide_source: bool = False) -> str:
+def build_caption(
+    parse_result: AnyParseResult, telegraph_url: str | None = None, *, custom_content: str = "", config: SettingsConfig
+) -> str:
     return build_caption_by_str(
-        parse_result.title, parse_result.content, parse_result.raw_url, telegraph_url, hide_source=hide_source
+        parse_result.title,
+        parse_result.content,
+        parse_result.raw_url,
+        telegraph_url,
+        hide_source=config.hide_source,
+        custom_content=custom_content,
+        hide_title=config.hide_title,
+        hide_desc=config.hide_desc,
     )
 
 
@@ -60,6 +70,9 @@ def build_caption_by_str(
     telegraph_url: str | None = None,
     *,
     hide_source: bool = False,
+    custom_content: str = "",
+    hide_title: bool = False,
+    hide_desc: bool = False,
 ) -> str:
     """构建消息正文：标题 + 内容 + 来源链接"""
     title, content = title or "", content or ""
@@ -69,11 +82,15 @@ def build_caption_by_str(
         body = f"**[{label}]({telegraph_url})**"
     else:
         parts = []
-        if title:
+        if not hide_title and title:
             parts.append(f"**{title}**")
-        if content:
+        if not hide_desc and content:
             parts.append(content)
-        body = format_text("\n\n".join(parts) or "-")
+        body = format_text(("\n\n".join(parts)).strip())
+
+    if custom_content:
+        body += f"\n\n{custom_content}"
+
     if hide_source:
         return body
     return f"{body}\n\n{format_label(f"<a href='{raw_url}'>Source</a>")}"

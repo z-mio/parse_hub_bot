@@ -25,6 +25,7 @@ class ParseRequest:
     t_: PreLocaleSelector
     bypass_cache: bool = False
     delete_share_url_msg: bool = False
+    custom_content: str = ""
 
     @property
     def chat_id(self) -> int | None:

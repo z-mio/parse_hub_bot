@@ -1,4 +1,5 @@
 import asyncio
+import re
 from dataclasses import replace
 
 from parsehub.types import AniRef, PostType
@@ -73,12 +74,20 @@ async def parse(cli: Client, msg: Message) -> None:
     else:
         text = msg.text or msg.caption or ""
 
-    tokens = text.strip().split()
-    urls = list({i for i in tokens if ParseService().parser.get_platform(i)})[:10]
+    lines = text.strip().split()
+    urls = list({i for i in lines if ParseService().parser.get_platform(i)})[:10]
 
     if not urls:
         await MessageSender(msg, config).text(format_label(_t("不支持的平台")))
         return
+
+    custom_content = ""
+    if len(urls) == 1 and config.custom_content and msg.text:
+        raw_text = msg.text
+        if msg.entities:
+            raw_text = cli.parser.unparse(msg.text, msg.entities, is_html=True)  # type: ignore[assignment]
+        items: list[str] = [m.group(2) for m in re.finditer(r"^(={2})(.*?)\1", raw_text, flags=re.S | re.M)]
+        custom_content = items[0].strip() if items else ""
 
     tasks = [
         _handle_parse_request(
@@ -91,6 +100,7 @@ async def parse(cli: Client, msg: Message) -> None:
                 t_=_t,
                 bypass_cache=bypass_cache,
                 delete_share_url_msg=config.auto_delete_url,
+                custom_content=custom_content,
             )
         )
         for url in urls
@@ -149,7 +159,7 @@ async def handle_parse(req: ParseRequest) -> bool:
     if options.use_caching and not req.bypass_cache and (cached := await persistent_cache.get(raw_url)):
         logger.debug("file_id 缓存命中, 直接发送")
         try:
-            await send_cached(sender, cached, raw_url)
+            await send_cached(sender, cached, raw_url, custom_content=req.custom_content)
         except Exception as e:
             logger.exception(e)
             logger.error("从缓存发送失败, 以上为错误信息")
@@ -174,7 +184,7 @@ async def handle_parse(req: ParseRequest) -> bool:
                 logger.debug("Singleflight 等待完成, 重新检查缓存")
                 if not req.bypass_cache and (cached := await persistent_cache.get(raw_url)):
                     try:
-                        await send_cached(sender, cached, raw_url)
+                        await send_cached(sender, cached, raw_url, custom_content=req.custom_content)
                     except Exception as e:
                         logger.exception(e)
                         logger.error("从缓存发送失败, 以上为错误信息")
@@ -196,7 +206,12 @@ async def handle_parse(req: ParseRequest) -> bool:
             await sender.typing()
             ph_url = await create_richtext_telegraph(req.cli, parse_result)
             logger.debug(f"Telegraph 页面创建完成: {ph_url}")
-            caption = build_caption(parse_result, ph_url, hide_source=req.config.hide_source)
+            caption = build_caption(
+                parse_result,
+                ph_url,
+                config=req.config,
+                custom_content=req.custom_content,
+            )
             await sender.text_with_preview_above(caption)
             await persistent_cache.set(
                 raw_url,
@@ -208,7 +223,11 @@ async def handle_parse(req: ParseRequest) -> bool:
             await reporter.dismiss()
             return True
 
-        caption = build_caption(parse_result, hide_source=req.config.hide_source)
+        caption = build_caption(
+            parse_result,
+            config=req.config,
+            custom_content=req.custom_content,
+        )
         gif_only = all(isinstance(i, AniRef) for i in to_list(parse_result.media))
         if (
             req.mode == ParseMode.PREVIEW
@@ -231,10 +250,10 @@ async def handle_parse(req: ParseRequest) -> bool:
             return True
 
         if req.mode == ParseMode.RAW:
-            await send_raw(sender, result, reporter, _t=req.t_)
+            await send_raw(sender, result, reporter, _t=req.t_, custom_content=req.custom_content)
             return True
         if req.mode == ParseMode.ZIP:
-            await send_zip(sender, result, reporter, _t=req.t_)
+            await send_zip(sender, result, reporter, _t=req.t_, custom_content=req.custom_content)
             return True
 
         logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")

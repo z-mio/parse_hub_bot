@@ -72,6 +72,9 @@ class ConfigPatch(TypedDict, total=False):
     noprogress: bool
     video_cover: bool
     reply_msg: bool
+    custom_content: bool
+    hide_desc: bool
+    hide_title: bool
 
 
 class SettingsService:

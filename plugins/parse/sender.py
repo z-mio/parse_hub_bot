@@ -296,12 +296,13 @@ async def send_raw(
     reporter: StatusReporter,
     *,
     _t: PreLocaleSelector,
+    custom_content: str = "",
 ) -> None:
     """Raw 模式：将文件以原始文档形式上传。"""
     logger.debug("Raw 模式, 直接上传文件")
     await reporter.report(_t("上 传 中..."))
     try:
-        caption = build_caption(result.parse_result, hide_source=sender.config.hide_source)
+        caption = build_caption(result.parse_result, config=sender.config, custom_content=custom_content)
         docs: list[InputMediaDocument] = []
         gifs = []
         livephoto_videos: dict[int, InputMediaDocument] = {}
@@ -364,11 +365,12 @@ async def send_zip(
     reporter: StatusReporter,
     *,
     _t: PreLocaleSelector,
+    custom_content: str = "",
 ) -> None:
     logger.debug("Zip 模式, 开始打包")
     await reporter.report(_t("打 包 中..."))
     try:
-        caption = build_caption(result.parse_result, hide_source=sender.config.hide_source)
+        caption = build_caption(result.parse_result, config=sender.config, custom_content=custom_content)
         if result.output_dir is None:
             raise ValueError("缺少打包目录")
         pack_path = await asyncio.to_thread(pack_dir_to_tar_gz, result.output_dir)
@@ -426,7 +428,7 @@ async def send_media(
     )
 
 
-async def send_cached(sender: MessageSender, entry: CacheEntry, url: str) -> None:
+async def send_cached(sender: MessageSender, entry: CacheEntry, url: str, *, custom_content: str = "") -> None:
     """从 file_id 缓存直接发送，跳过解析/下载/转码。"""
     logger.debug(f"缓存发送: media={entry.media}")
     caption = build_caption_by_str(
@@ -435,6 +437,9 @@ async def send_cached(sender: MessageSender, entry: CacheEntry, url: str) -> Non
         url,
         entry.telegraph_url,
         hide_source=sender.config.hide_source,
+        custom_content=custom_content,
+        hide_title=sender.config.hide_title,
+        hide_desc=sender.config.hide_desc,
     )
 
     if entry.telegraph_url:

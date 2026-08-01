@@ -121,14 +121,14 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
     cached_result = await parse_cache.get(raw_url)
     logger.debug(f"缓存命中: {cached_result is not None}")
 
-    caption = build_caption(cached_result, hide_source=config.hide_source) if cached_result else ""
+    caption = build_caption(cached_result, config=config) if cached_result else ""
     reporter = InlineStatusReporter(cli, inline_message_id, caption, t=_t, user_config=config)
     with ParsePipeline(query, raw_url, reporter, parse_result=cached_result, singleflight=False, t=_t) as pipeline:
         if (result := await pipeline.run()) is None:
             return
 
         parse_result = result.parse_result
-        caption = build_caption(parse_result, hide_source=config.hide_source)
+        caption = build_caption(parse_result, config=config)
 
         # ── 上传 ──
         await reporter.report(_t("上 传 中..."))
@@ -180,7 +180,13 @@ def build_cached_inline_results(
 
     content = entry.parse_result.content
     caption = build_caption_by_str(
-        entry.parse_result.title, content, raw_url, entry.telegraph_url, hide_source=config.hide_source
+        entry.parse_result.title,
+        content,
+        raw_url,
+        entry.telegraph_url,
+        hide_source=config.hide_source,
+        hide_title=config.hide_title,
+        hide_desc=config.hide_desc,
     )
     title = entry.parse_result.title or "-"
 
@@ -296,7 +302,7 @@ async def build_inline_results(
     # ── 富文本直接 telegraph 发送 ──
     if parse_result.type == PostType.RICHTEXT:
         url = await create_richtext_telegraph(cli, parse_result)
-        caption = build_caption(parse_result, url, hide_source=config.hide_source)
+        caption = build_caption(parse_result, url, config=config)
         results.append(
             InlineQueryResultArticle(
                 title=title,
@@ -309,7 +315,7 @@ async def build_inline_results(
         )
         return results
 
-    caption = build_caption(parse_result, hide_source=config.hide_source)
+    caption = build_caption(parse_result, config=config)
 
     if not media_list:
         results.append(
