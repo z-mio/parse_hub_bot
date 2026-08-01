@@ -4,7 +4,7 @@ from parsehub import AnyParseResult
 from parsehub.types import (
     AniRef,
     ImageRef,
-    PostType,
+    RichTextParseResult,
     VideoRef,
 )
 from pyrogram import Client
@@ -21,6 +21,8 @@ from pyrogram.types import (
     InlineQueryResultPhoto,
     InlineQueryResultVideo,
     InputMediaVideo,
+    InputRichMessage,
+    InputRichMessageContent,
     InputTextMessageContent,
     LinkPreviewOptions,
 )
@@ -300,7 +302,20 @@ async def build_inline_results(
         )
 
     # ── 富文本直接 telegraph 发送 ──
-    if parse_result.type == PostType.RICHTEXT:
+    if isinstance(parse_result, RichTextParseResult):
+        if config.rich_mode:
+            caption = build_caption(parse_result, config=config, rich=True)
+            results.append(
+                InlineQueryResultArticle(
+                    title=title,
+                    description=parse_result.content,
+                    input_message_content=InputRichMessageContent(
+                        InputRichMessage(markdown=caption),
+                    ),
+                )
+            )
+            return results
+
         url = await create_richtext_telegraph(cli, parse_result)
         caption = build_caption(parse_result, url, config=config)
         results.append(

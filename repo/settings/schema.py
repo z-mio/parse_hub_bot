@@ -117,6 +117,12 @@ class SettingsConfig(BaseModel):
         ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
     ] = False
 
+    rich_mode: Annotated[
+        bool,
+        Field(description="使用 Telegram 富文本替代 Telegraph"),
+        ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
+    ] = True
+
     def __str__(self) -> str:
         return self.model_dump_json(indent=4, ensure_ascii=True)
 

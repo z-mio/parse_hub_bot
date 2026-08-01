@@ -2,9 +2,9 @@ import asyncio
 import re
 from dataclasses import replace
 
-from parsehub.types import AniRef, PostType
+from parsehub.types import AniRef, RichTextParseResult
 from pyrogram import Client, filters
-from pyrogram.types import Message
+from pyrogram.types import InputRichMessage, Message
 
 from core import bs
 from db import get_session
@@ -69,7 +69,7 @@ async def parse(cli: Client, msg: Message) -> None:
         if not text and msg.reply_to_message:
             text = msg.reply_to_message.text or msg.reply_to_message.caption or ""
         if not text:
-            await MessageSender(msg, config).text(format_label(_t("请加上链接或回复一条消息")))
+            await MessageSender(cli, msg, config).text(format_label(_t("请加上链接或回复一条消息")))
             return
     else:
         text = msg.text or msg.caption or ""
@@ -78,7 +78,7 @@ async def parse(cli: Client, msg: Message) -> None:
     urls = list({i for i in lines if ParseService().parser.get_platform(i)})[:10]
 
     if not urls:
-        await MessageSender(msg, config).text(format_label(_t("不支持的平台")))
+        await MessageSender(cli, msg, config).text(format_label(_t("不支持的平台")))
         return
 
     custom_content = ""
@@ -123,7 +123,7 @@ async def _handle_parse_request(req: ParseRequest) -> None:
                     "以免触发 Telegram API 全局速率限制\n\n"
                     "**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
                 )
-            await MessageSender(req.msg, req.config).delete_after(e.retry_after).text_no_preview(text)
+            await MessageSender(req.cli, req.msg, req.config).delete_after(e.retry_after).text_no_preview(text)
     else:
         if not r:
             return
@@ -147,9 +147,9 @@ async def handle_parse(req: ParseRequest) -> bool:
         logger.debug("bypass_cache=True 绕过缓存")
 
     reporter = MessageStatusReporter(
-        req.msg, t=req.t_, config=req.config, on_forbidden=disable_progress_on_report_forbidden
+        req.cli, req.msg, t=req.t_, config=req.config, on_forbidden=disable_progress_on_report_forbidden
     )
-    sender = MessageSender(req.msg, req.config)
+    sender = MessageSender(req.cli, req.msg, req.config)
     try:
         raw_url = await ParseService().get_raw_url(req.url)
     except Exception as e:
@@ -201,7 +201,28 @@ async def handle_parse(req: ParseRequest) -> bool:
         parse_result = result.parse_result
         await parse_cache.set(raw_url, parse_result)
 
-        if parse_result.type == PostType.RICHTEXT:
+        if isinstance(parse_result, RichTextParseResult):
+            # 富文本发送
+            if req.config.rich_mode:
+                await sender.typing()
+                caption = build_caption(parse_result, config=req.config, custom_content=req.custom_content, rich=True)
+                if req.chat_id:
+                    await sender.rich_message(
+                        rich_message=InputRichMessage(markdown=caption),
+                    )
+                    await persistent_cache.set(
+                        raw_url,
+                        CacheEntry(
+                            parse_result=CacheParseResult(
+                                title=parse_result.title, content=parse_result.markdown_content
+                            ),
+                            rich=True,
+                        ),
+                    )
+                    await reporter.dismiss()
+                    return True
+
+            # Telegraph 发送
             logger.debug(f"富文本类型, 创建 Telegraph 页面: title={parse_result.title}")
             await sender.typing()
             ph_url = await create_richtext_telegraph(req.cli, parse_result)

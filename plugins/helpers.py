@@ -49,17 +49,25 @@ def build_start_text() -> LocaleContent:
 
 
 def build_caption(
-    parse_result: AnyParseResult, telegraph_url: str | None = None, *, custom_content: str = "", config: SettingsConfig
+    parse_result: AnyParseResult,
+    telegraph_url: str | None = None,
+    *,
+    custom_content: str = "",
+    config: SettingsConfig,
+    rich: bool = False,
 ) -> str:
     return build_caption_by_str(
         parse_result.title,
-        parse_result.content,
+        replace_url(parse_result.platform, parse_result.markdown_content)
+        if rich and isinstance(parse_result, RichTextParseResult)
+        else parse_result.content,
         parse_result.raw_url,
         telegraph_url,
         hide_source=config.hide_source,
         custom_content=custom_content,
         hide_title=config.hide_title,
         hide_desc=config.hide_desc,
+        rich=rich,
     )
 
 
@@ -73,11 +81,13 @@ def build_caption_by_str(
     custom_content: str = "",
     hide_title: bool = False,
     hide_desc: bool = False,
+    rich: bool = False,
 ) -> str:
     """构建消息正文：标题 + 内容 + 来源链接"""
     title, content = title or "", content or ""
-
-    if telegraph_url:
+    if rich:
+        body = f"### {title}\n\n <details><summary>📃</summary>\n\n{content}\n\n</details>"
+    elif telegraph_url:
         label = (title or content[:15]).replace("\n", " ") or "-"
         body = f"**[{label}]({telegraph_url})**"
     else:
@@ -121,15 +131,19 @@ async def create_telegraph_page(html_content: str, cli: Client, parse_result: An
     return page.url
 
 
+def replace_url(platform: Platform | None, v: str) -> str:
+    match platform:
+        case Platform.WEIXIN:
+            v = v.replace("mmbiz.qpic.cn", "qpic.cn.in/mmbiz.qpic.cn")
+        case Platform.COOLAPK:
+            v = v.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com")
+    return v
+
+
 async def create_richtext_telegraph(cli: Client, parse_result: RichTextParseResult) -> str:
     """将富文本解析结果转换为 Telegraph 页面，返回页面 URL"""
     logger.debug(f"富文本转 Telegraph: platform={parse_result.platform}, md_len={len(parse_result.markdown_content)}")
-    md = parse_result.markdown_content
-    match parse_result.platform:
-        case Platform.WEIXIN:
-            md = md.replace("mmbiz.qpic.cn", "qpic.cn.in/mmbiz.qpic.cn")
-        case Platform.COOLAPK:
-            md = md.replace("image.coolapk.com", "qpic.cn.in/image.coolapk.com")
+    md = replace_url(parse_result.platform, parse_result.markdown_content)
     html = clean_article_html(markdown(md))
     return await create_telegraph_page(html, cli, parse_result)
 

@@ -75,6 +75,7 @@ class ConfigPatch(TypedDict, total=False):
     custom_content: bool
     hide_desc: bool
     hide_title: bool
+    rich_mode: bool
 
 
 class SettingsService:

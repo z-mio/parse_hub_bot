@@ -33,12 +33,14 @@ class MessageStatusReporter(StatusReporter):
 
     def __init__(
         self,
+        cli: Client,
         user_msg: Message,
         *,
         t: PreLocaleSelector,
         config: SettingsConfig,
         on_forbidden: Callable[[Message, SettingsConfig], Awaitable[None]] | None = None,
     ):
+        self._cli = cli
         self._user_msg = user_msg
         self._msg: Message | None = None
         self._t = t
@@ -76,7 +78,7 @@ class MessageStatusReporter(StatusReporter):
     async def _edit_text(self, text: str, **kwargs: Any) -> None:
         try:
             if self._msg is None:
-                self._msg = await MessageSender(self._user_msg, self._config).text(text, **kwargs)
+                self._msg = await MessageSender(self._cli, self._user_msg, self._config).text(text, **kwargs)
             else:
                 if self._msg.text != text:
                     await self._msg.edit_text(text, **kwargs)

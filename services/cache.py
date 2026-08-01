@@ -109,6 +109,7 @@ class CacheEntry(BaseModel):
     parse_result: CacheParseResult
     media: list[CacheMedia] | None = None
     telegraph_url: str | None = None
+    rich: bool = False
 
 
 class PersistentCache:

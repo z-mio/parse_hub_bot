@@ -8,7 +8,7 @@ from typing import Any, BinaryIO, cast
 
 from easy_ai18n import PreLocaleSelector
 from parsehub.types import AniFile, AniRef, AnyMediaRef, AnyParseResult, ImageFile, LivePhotoFile, VideoFile
-from pyrogram import enums
+from pyrogram import Client, enums
 from pyrogram.errors import FloodWait, Forbidden, SlowmodeWait, WebpageCurlFailed, WebpageMediaEmpty
 from pyrogram.types import (
     InlineKeyboardButton as Ikb,
@@ -21,6 +21,7 @@ from pyrogram.types import (
     InputMediaDocument,
     InputMediaPhoto,
     InputMediaVideo,
+    InputRichMessage,
     LinkPreviewOptions,
     Message,
     ReplyParameters,
@@ -45,6 +46,7 @@ type ReplyMediaGroupItem = InputMediaPhoto | InputMediaVideo | InputMediaDocumen
 
 @dataclass(frozen=True, slots=True)
 class MessageSender:
+    cli: Client
     msg: Message
     config: SettingsConfig
     delete_after_seconds: float | None = None
@@ -96,8 +98,11 @@ class MessageSender:
             except Forbidden as e:
                 logger.warning(f"消息发送失败, Bot 无权限: {e}")
                 break
+            except Exception as e:
+                logger.warning(f"消息发送失败: {e}")
+                break
             await asyncio.sleep(0.5)
-        raise RuntimeError("发送失败")
+        raise RuntimeError("消息发送失败")
 
     async def chat_action(self, action: enums.ChatAction) -> None:
         await self.msg.reply_chat_action(action)
@@ -289,6 +294,28 @@ class MessageSender:
             partial(self.msg.reply_media_group, media=cast(Any, media), reply_parameters=self.reply_parameters)
         )
 
+    async def rich_message(
+        self,
+        rich_message: InputRichMessage,
+        *,
+        reply_markup: Ikm | None = None,
+    ) -> Message:
+        if not self.msg.chat or not self.msg.chat.id:
+            raise ValueError("not chat or chat_id")
+        return cast(
+            Message,
+            await self._send_and_schedule_delete(
+                partial(
+                    self.cli.send_rich_message,
+                    chat_id=self.msg.chat.id,
+                    message_thread_id=self.msg.message_thread_id,
+                    rich_message=rich_message,
+                    reply_markup=reply_markup,
+                    reply_parameters=self.reply_parameters,
+                )
+            ),
+        )
+
 
 async def send_raw(
     sender: MessageSender,
@@ -440,7 +467,12 @@ async def send_cached(sender: MessageSender, entry: CacheEntry, url: str, *, cus
         custom_content=custom_content,
         hide_title=sender.config.hide_title,
         hide_desc=sender.config.hide_desc,
+        rich=entry.rich,
     )
+
+    if entry.rich:
+        await sender.rich_message(rich_message=InputRichMessage(markdown=caption))
+        return
 
     if entry.telegraph_url:
         await sender.text_with_preview_above(caption)

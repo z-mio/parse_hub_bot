@@ -159,6 +159,13 @@ BOOL_SWITCHES = (
         get_value=lambda config: config.enable_inline_raw_url,
         patch=lambda settings, target, value: settings.patch_config(target, enable_inline_raw_url=value),
     ),
+    BoolSwitchDTO(
+        field="rich_mode",
+        code="ri",
+        label=t_("文章使用富文本发送"),
+        get_value=lambda config: config.rich_mode,
+        patch=lambda settings, target, value: settings.patch_config(target, rich_mode=value),
+    ),
 )
 
 BOOL_SWITCH_MAP = {switch.code: switch for switch in BOOL_SWITCHES}
