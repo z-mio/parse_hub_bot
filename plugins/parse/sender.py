@@ -302,6 +302,9 @@ class MessageSender:
     ) -> Message:
         if not self.msg.chat or not self.msg.chat.id:
             raise ValueError("not chat or chat_id")
+        reply_parameters = (
+            ReplyParameters(message_id=self.msg.id) if self.reply_parameters is None else self.reply_parameters
+        )
         return cast(
             Message,
             await self._send_and_schedule_delete(
@@ -311,7 +314,7 @@ class MessageSender:
                     message_thread_id=self.msg.message_thread_id,
                     rich_message=rich_message,
                     reply_markup=reply_markup,
-                    reply_parameters=self.reply_parameters,
+                    reply_parameters=reply_parameters,
                 )
             ),
         )
