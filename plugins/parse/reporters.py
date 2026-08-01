@@ -64,8 +64,7 @@ class MessageStatusReporter(StatusReporter):
 
         async def fn() -> None:
             await asyncio.sleep(15)
-            if self._msg:
-                await self._msg.delete()
+            await self.dismiss()
 
         loop = asyncio.get_running_loop()
         loop.create_task(fn())

@@ -90,7 +90,7 @@ async def parse(cli: Client, msg: Message) -> None:
 @with_request_id
 async def _handle_parse_request(req: ParseRequest) -> None:
     try:
-        await handle_parse(req)
+        r = await handle_parse(req)
     except ParseRateLimitExceeded as e:
         if e.should_notify:
             logger.warning(f"速率限制 {e.retry_after:.1f}s, chat_id={req.chat_id}, msg_id={req.msg.id}")
@@ -102,14 +102,16 @@ async def _handle_parse_request(req: ParseRequest) -> None:
                     "以免触发 Telegram API 全局速率限制\n\n"
                     "**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
                 )
-            notice = await MessageSender(req.msg, req.config).text_no_preview(text)
-
-            async def fn(retry_after: float) -> None:
-                await asyncio.sleep(retry_after)
-                await notice.delete()
-
-            loop = asyncio.get_running_loop()
-            loop.create_task(fn(e.retry_after))
+            await MessageSender(req.msg, req.config).delete_after(e.retry_after).text_no_preview(text)
+    else:
+        if not r:
+            return
+        if req.delete_share_url_msg:
+            logger.debug(f"自动删除分享链接消息: chat_id={req.chat_id}, msg_id: {req.msg.id}")
+            try:
+                await req.msg.delete()
+            except Exception as e:
+                logger.warning(f"删除分享链接消息失败: chat_id={req.chat_id}, msg_id: {req.msg.id}, error: {e}")
 
 
 def _get_parse_user_id(req: ParseRequest) -> int | None:
@@ -117,17 +119,11 @@ def _get_parse_user_id(req: ParseRequest) -> int | None:
 
 
 @parse_rate_limit(_get_parse_user_id)
-async def handle_parse(req: ParseRequest) -> None:
+async def handle_parse(req: ParseRequest) -> bool:
     options = ParseOptions.from_mode(req.mode, bypass_cache=req.bypass_cache)
     logger.info(f"收到解析请求: url={req.url}, chat_id={req.chat_id}, msg_id={req.msg.id}, mode={req.mode}")
     if req.bypass_cache:
         logger.debug("bypass_cache=True 绕过缓存")
-    if req.delete_share_url_msg:
-        logger.debug(f"自动删除分享链接消息: chat_id={req.chat_id}, msg_id: {req.msg.id}")
-        try:
-            await req.msg.delete()
-        except Exception as e:
-            logger.warning(f"删除分享链接消息失败: chat_id={req.chat_id}, msg_id: {req.msg.id}, error: {e}")
 
     reporter = MessageStatusReporter(
         req.msg, t=req.t_, config=req.config, on_forbidden=disable_progress_on_report_forbidden
@@ -137,12 +133,18 @@ async def handle_parse(req: ParseRequest) -> None:
         raw_url = await ParseService().get_raw_url(req.url)
     except Exception as e:
         await reporter.report_error(req.t_("获取原始链接"), e)
-        return
+        return False
 
     if options.use_caching and not req.bypass_cache and (cached := await persistent_cache.get(raw_url)):
         logger.debug("file_id 缓存命中, 直接发送")
-        await send_cached(sender, cached, raw_url)
-        return
+        try:
+            await send_cached(sender, cached, raw_url)
+        except Exception as e:
+            logger.exception(e)
+            logger.error("从缓存发送失败, 以上为错误信息")
+            return False
+        else:
+            return True
 
     cached_parse_result = None if req.bypass_cache else await parse_cache.get(raw_url)
     with ParsePipeline(
@@ -160,13 +162,20 @@ async def handle_parse(req: ParseRequest) -> None:
             if pipeline.waited:
                 logger.debug("Singleflight 等待完成, 重新检查缓存")
                 if not req.bypass_cache and (cached := await persistent_cache.get(raw_url)):
-                    await send_cached(sender, cached, raw_url)
+                    try:
+                        await send_cached(sender, cached, raw_url)
+                    except Exception as e:
+                        logger.exception(e)
+                        logger.error("从缓存发送失败, 以上为错误信息")
+                        return False
+                    else:
+                        return True
                 else:
-                    await handle_parse(replace(req, delete_share_url_msg=False))
-                    return
+                    return await handle_parse(replace(req, delete_share_url_msg=False))
+
             else:
                 logger.debug("Pipeline 返回 None, 跳过后续处理")
-            return
+            return False
 
         parse_result = result.parse_result
         await parse_cache.set(raw_url, parse_result)
@@ -186,7 +195,7 @@ async def handle_parse(req: ParseRequest) -> None:
                 ),
             )
             await reporter.dismiss()
-            return
+            return True
 
         caption = build_caption(parse_result, hide_source=req.config.hide_source)
         gif_only = all(isinstance(i, AniRef) for i in to_list(parse_result.media))
@@ -197,7 +206,7 @@ async def handle_parse(req: ParseRequest) -> None:
         ):
             await sender.text_no_preview(caption, reply_markup=build_gif_button(to_list(parse_result.media)))
             await reporter.dismiss()
-            return
+            return True
 
         if not result.processed_list:
             logger.debug("无媒体文件, 仅发送文本")
@@ -208,14 +217,14 @@ async def handle_parse(req: ParseRequest) -> None:
             )
             await persistent_cache.set(raw_url, cache_entry)
             await reporter.dismiss()
-            return
+            return True
 
         if req.mode == ParseMode.RAW:
             await send_raw(sender, result, reporter, _t=req.t_)
-            return
+            return True
         if req.mode == ParseMode.ZIP:
             await send_zip(sender, result, reporter, _t=req.t_)
-            return
+            return True
 
         logger.debug(f"开始上传媒体: media_count={len(result.processed_list)}")
         await reporter.report(req.t_("上 传 中..."))
@@ -224,8 +233,9 @@ async def handle_parse(req: ParseRequest) -> None:
             if media_cache_entry:
                 await persistent_cache.set(raw_url, media_cache_entry)
             await reporter.dismiss()
+            return True
         except Exception as e:
-            logger.opt(exception=e).debug("详细堆栈")
-            logger.error(f"上传失败: {e}")
+            logger.exception(e)
+            logger.error("上传失败, 以上为错误信息")
             await reporter.report_error(req.t_("上传"), e)
-            return
+            return False

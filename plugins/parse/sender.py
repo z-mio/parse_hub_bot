@@ -1,7 +1,7 @@
 import asyncio
 import os
 from collections.abc import Awaitable, Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import partial
 from itertools import batched
 from typing import Any, BinaryIO, cast
@@ -47,10 +47,40 @@ type ReplyMediaGroupItem = InputMediaPhoto | InputMediaVideo | InputMediaDocumen
 class MessageSender:
     msg: Message
     config: SettingsConfig
+    delete_after_seconds: float | None = None
 
     @property
     def reply_parameters(self) -> ReplyParameters | None:
         return None if self.config.reply_msg else ReplyParameters()
+
+    def delete_after(self, seconds: float | int | None) -> "MessageSender":
+        if not seconds:
+            return self
+        return replace(self, delete_after_seconds=float(seconds))
+
+    def _delete_later(self, sent: Message | Sequence[Message]) -> None:
+        if self.delete_after_seconds is None:
+            return
+
+        messages = to_list(sent)
+
+        async def fn() -> None:
+            await asyncio.sleep(self.delete_after_seconds or 0)
+            for message in messages:
+                try:
+                    await message.delete()
+                except Exception as e:
+                    logger.debug(
+                        f"定时删除消息失败: chat_id={message.chat and message.chat.id}, msg_id={message.id}, error={e}"
+                    )
+
+        asyncio.get_running_loop().create_task(fn())
+
+    async def _send_and_schedule_delete[T](self, send_coro_fn: Callable[[], Awaitable[T]]) -> T:
+        sent = await self._send(send_coro_fn)
+        if isinstance(sent, Message) or isinstance(sent, list):
+            self._delete_later(sent)
+        return sent
 
     @staticmethod
     async def _send[T](send_coro_fn: Callable[[], Awaitable[T]]) -> T:
@@ -93,7 +123,7 @@ class MessageSender:
     ) -> Message:
         return cast(
             Message,
-            await self._send(
+            await self._send_and_schedule_delete(
                 partial(
                     self.msg.reply_text,
                     text,
@@ -128,7 +158,7 @@ class MessageSender:
     ) -> Message:
         return cast(
             Message,
-            await self._send(
+            await self._send_and_schedule_delete(
                 partial(
                     self.msg.reply_document,
                     document,
@@ -140,7 +170,7 @@ class MessageSender:
         )
 
     def reply_to(self, msg: Message) -> "MessageSender":
-        return MessageSender(msg, self.config)
+        return replace(self, msg=msg)
 
     async def force_document(
         self,
@@ -159,7 +189,7 @@ class MessageSender:
     async def photo(self, photo: str | BinaryIO, *, caption: str | None = None) -> Message:
         return cast(
             Message,
-            await self._send(
+            await self._send_and_schedule_delete(
                 partial(self.msg.reply_photo, photo, caption=caption or "", reply_parameters=self.reply_parameters)
             ),
         )
@@ -177,7 +207,7 @@ class MessageSender:
     ) -> Message:
         return cast(
             Message,
-            await self._send(
+            await self._send_and_schedule_delete(
                 partial(
                     self.msg.reply_video,
                     video,
@@ -244,7 +274,7 @@ class MessageSender:
     async def animation(self, animation: str | BinaryIO, *, caption: str | None = None) -> Message:
         return cast(
             Message,
-            await self._send(
+            await self._send_and_schedule_delete(
                 partial(
                     self.msg.reply_animation,
                     animation,
@@ -255,7 +285,7 @@ class MessageSender:
         )
 
     async def media_group(self, media: list[ReplyMediaGroupItem]) -> list[Message]:
-        return await self._send(
+        return await self._send_and_schedule_delete(
             partial(self.msg.reply_media_group, media=cast(Any, media), reply_parameters=self.reply_parameters)
         )
 
@@ -322,10 +352,10 @@ async def send_raw(
         logger.error(f"Raw 模式上传失败: {e}")
         await reporter.report_error(_t("上传"), e)
         return
+    else:
+        await reporter.dismiss()
     finally:
         result.cleanup()
-
-    await reporter.dismiss()
 
 
 async def send_zip(
@@ -359,12 +389,12 @@ async def send_zip(
         logger.error(f"上传失败: {e}")
         await reporter.report_error(_t("上传"), e)
         return
+    else:
+        await reporter.dismiss()
     finally:
         if not bs.debug_skip_cleanup:
             logger.debug("清理压缩包")
             os.remove(pack_path)
-
-    await reporter.dismiss()
 
 
 async def send_media(
