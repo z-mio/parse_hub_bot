@@ -121,7 +121,7 @@ class SettingsConfig(BaseModel):
         bool,
         Field(description="使用 Telegram 富文本替代 Telegraph"),
         ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
-    ] = True
+    ] = False
 
     hide_error: Annotated[
         bool,
