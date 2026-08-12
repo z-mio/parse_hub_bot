@@ -19,6 +19,8 @@ from utils.event_loop import setup_optimized_event_loop
 pillow_heif.register_heif_opener()
 
 setup_logging(debug=bs.debug)
+if bs.debug:
+    logger.enable("parsehub")
 
 setup_optimized_event_loop()
 loop = asyncio.new_event_loop()
