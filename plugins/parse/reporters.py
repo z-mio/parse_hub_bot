@@ -59,7 +59,7 @@ class MessageStatusReporter(StatusReporter):
         t = format_label(self._t(f"{stage}错误:"))
         text = self._t(f"{t} \n```\n{error}```")
         if bs.demo_mode:
-            text += self._t("\n\n**问题反馈: @MisakaSisters**")
+            text += self._t("\n\n<b>问题反馈: @MisakaSisters</b>")
         await self._edit_text(
             text,
             link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -126,7 +126,7 @@ class InlineStatusReporter(StatusReporter):
 
         text = self._t(f"{format_label(f'{stage}错误:')} \n```\n{error}```")
         if bs.demo_mode:
-            text += self._t("\n\n**问题反馈: @MisakaSisters**")
+            text += self._t("\n\n<b>问题反馈: @MisakaSisters</b>")
         await self._edit_inline_text(
             inline_message_id=self._mid, text=text, link_preview_options=LinkPreviewOptions(is_disabled=True)
         )
