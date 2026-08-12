@@ -49,13 +49,13 @@ class Bot(Client):
         logger.success("数据库初始化完成")
 
         parse_cache.start_cleanup()
-        await super().start()
+        await super().start(*args, **kwargs)
         await self.set_menu()
         return self
 
     async def stop(self, *args: Any, **kwargs: Any) -> None:
         ws.exit_flag = True
-        await super().stop()
+        await super().stop(*args, **kwargs)
         await close_db()
         # 结束时清理下载残留
         if self.cfg.download_dir.exists() and not self.cfg.debug_skip_cleanup:
