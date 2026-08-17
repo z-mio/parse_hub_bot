@@ -492,15 +492,15 @@ wheels = [
 
 [[package]]
 name = "easy-ai18n"
-version = "1.2.0"
+version = "1.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "loguru" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fd/8a/07a97458540cd544d6359d76b36e3dabe11d35e0661b6a1a4c3ca4cf665d/easy_ai18n-1.2.0.tar.gz", hash = "sha256:9bcb73566d242f7888dca4ec118753cc9db5c8ef86283e40ddd6411e961cced5", size = 35030, upload-time = "2026-08-17T02:58:16.883Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/44/c095358676beaaa0e407107cdbc67a5478f18132de64ed3ef28b097aabd3/easy_ai18n-1.2.1.tar.gz", hash = "sha256:3c450af3ac9dc945920e0e4399646dd04588644a4aa1841cf013bb7d95438c28", size = 35061, upload-time = "2026-08-17T10:08:17.925Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/75/6329e11a3e809e13b5c044230dbdb8b045e296feb5d20800a89cba50d4d2/easy_ai18n-1.2.0-py3-none-any.whl", hash = "sha256:54dbddc9d84f1c90a03c3b266a9127ec15a7c607869d79ddb1033628d48a1070", size = 31687, upload-time = "2026-08-17T02:58:15.461Z" },
+    { url = "https://files.pythonhosted.org/packages/d5/b0/a9e552ae31a8f51e0286965c3be2eac575e76317d76c84c988d838de0b9e/easy_ai18n-1.2.1-py3-none-any.whl", hash = "sha256:b4ad53ccfe909dd904ba7c33e9901af9e412287449b59addf9ff530ffa459bcf", size = 31693, upload-time = "2026-08-17T10:08:16.724Z" },
 ]
 
 [package.optional-dependencies]
@@ -1461,7 +1461,7 @@ dev = [
 requires-dist = [
     { name = "aiosqlite", specifier = ">=0.22.1" },
     { name = "alembic", specifier = ">=1.18.5" },
-    { name = "easy-ai18n", specifier = ">=1.2.0" },
+    { name = "easy-ai18n", specifier = ">=1.2.1" },
     { name = "haishoku", specifier = ">=1.1.8" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "kurigram", specifier = ">=2.2.24" },
@@ -1484,7 +1484,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "easy-ai18n", extras = ["builder"], specifier = ">=1.2.0" },
+    { name = "easy-ai18n", extras = ["builder"], specifier = ">=1.2.1" },
     { name = "mypy", specifier = ">=2.1.0" },
     { name = "pytest", specifier = ">=9.1.1" },
 ]

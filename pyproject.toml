@@ -7,7 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "aiosqlite>=0.22.1",
     "alembic>=1.18.5",
-    "easy-ai18n>=1.2.0",
+    "easy-ai18n>=1.2.1",
     "haishoku>=1.1.8",
     "httpx>=0.28.1",
     "kurigram>=2.2.24",
@@ -48,7 +48,7 @@ ignore = [
 
 [dependency-groups]
 dev = [
-    "easy-ai18n[builder]>=1.2.0",
+    "easy-ai18n[builder]>=1.2.1",
     "mypy>=2.1.0",
     "pytest>=9.1.1",
 ]
