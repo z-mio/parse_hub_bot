@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Self
 
-from easy_ai18n import PostLocaleSelector
+from easy_ai18n import LocaleContent
 
 from i18n import t_
 from repo.settings import SettingsConfig
@@ -83,7 +83,7 @@ class SettingsViewModel:
 class BoolSwitchDTO:
     field: str
     code: str
-    label: PostLocaleSelector
+    label: LocaleContent
     get_value: Callable[[SettingsConfig], bool]
     patch: Callable[[SettingsService, AnySettingsTarget, bool], Awaitable[SettingsConfig]]
 

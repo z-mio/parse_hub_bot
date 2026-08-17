@@ -3,7 +3,7 @@
 import re
 from urllib.parse import urlsplit
 
-from easy_ai18n.core import LocaleContent
+from easy_ai18n import LocaleContent
 from markdown import markdown
 from parsehub import ParseHub, Platform
 from parsehub.types import AnyParseResult, RichTextParseResult

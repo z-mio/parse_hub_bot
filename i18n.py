@@ -1,11 +1,11 @@
 import os
 
 from easy_ai18n import EasyAI18n
-from easy_ai18n.translator import OpenAIBulkTranslator
+from easy_ai18n.translators import LLMBulkTranslator
 
 from core import bs
 
-i18n = EasyAI18n(func_names=["t_", "_t"])
+i18n = EasyAI18n(source_locale="zh-hans", func_names=["t_", "_t"])
 
 t_ = i18n.i18n()
 
@@ -50,9 +50,7 @@ ISO639_MAP = {
 }
 
 if __name__ == "__main__":
-    k = LANG_MAP.copy()
-    k.pop(bs.language)
     i18n.build(
-        to_locales=list(k.keys()),
-        translator=OpenAIBulkTranslator(model=os.getenv("I18N_MODEL", "gpt-4.1-mini")),
+        to_locales=list(LANG_MAP.keys()),
+        translator=LLMBulkTranslator(model=os.getenv("I18N_MODEL", "gpt-4.1-mini")),
     )
