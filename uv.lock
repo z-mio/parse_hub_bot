@@ -863,6 +863,15 @@ wheels = [
 ]
 
 [[package]]
+name = "json5"
+version = "0.15.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e4/7d/05c46a96a78147ae3bf99c2f4169ce144a70220b8d6fcd56f6ec368b8ce9/json5-0.15.0.tar.gz", hash = "sha256:7424d1f1eb1d56da6e3d70643f53619862b4ce81440bdb8ecfd6f875e5ba4a71", size = 53278, upload-time = "2026-06-19T20:08:27.716Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/eb/be/59527c99478aade6bb33a68d72e6e18dd4e6ff6eacfc7d01bdb15bc76912/json5-0.15.0-py3-none-any.whl", hash = "sha256:56636a30c0e8a4665fe2179c0212f32eae3796dea89ea6f649b9436ecdb39618", size = 36570, upload-time = "2026-06-19T20:08:26.748Z" },
+]
+
+[[package]]
 name = "kurigram"
 version = "2.2.26"
 source = { registry = "https://pypi.org/simple" }
@@ -1442,7 +1451,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "2.2.1"
+version = "2.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -1450,6 +1459,7 @@ dependencies = [
     { name = "cryptography" },
     { name = "gmssl" },
     { name = "httpx", extra = ["socks"] },
+    { name = "json5" },
     { name = "loguru" },
     { name = "lxml" },
     { name = "markdown" },
@@ -1466,9 +1476,9 @@ dependencies = [
     { name = "urlextract" },
     { name = "yt-dlp", extra = ["default"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cf/6e/43e43c69608d6ed2032cd603745b547b53351dde20363d5ba27f0bc6c4b6/parsehub-2.2.1.tar.gz", hash = "sha256:4c25dffbabdf1403a39505fb56ec0d03a943b4559f4b488380f05a3679938c70", size = 119693, upload-time = "2026-08-31T08:01:11.846Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/60/2d/1a4110136f41f9dc19b4c3561b2d55b91d0f631bf128a6c38a0dbd8531d1/parsehub-2.2.2.tar.gz", hash = "sha256:10dacb023553a90f713429fb82efb5692a3cc47ca2be8cf2ddbcd8689c3f752c", size = 121530, upload-time = "2026-09-16T05:28:57.061Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/58/c4/95d6a9c262d17b84487f4721cc190b81ac302e25c770febda5cc6057d297/parsehub-2.2.1-py3-none-any.whl", hash = "sha256:9d3a962b51ebc3caf12c11e5b1f6fd1f2d835c87c270167862c873d0e4d150da", size = 132204, upload-time = "2026-08-31T08:01:10.409Z" },
+    { url = "https://files.pythonhosted.org/packages/74/ec/f2d0c178572cb4be21b4fa310a27e4e4e20ab66dbc4b8d9e09808b593e0c/parsehub-2.2.2-py3-none-any.whl", hash = "sha256:f20f34b0746dc59a6baebc301622fec570dc7fdcb843e45e365b53bc865ea6d0", size = 134197, upload-time = "2026-09-16T05:28:55.617Z" },
 ]
 
 [[package]]
