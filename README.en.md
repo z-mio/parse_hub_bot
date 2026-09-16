@@ -42,28 +42,28 @@
 
 ## 📦 Supported Platforms
 
-| Platform        | Video | Image Posts |          Other           |
-|:----------------|:-----:|:-----------:|:------------------------:|
-| **Twitter / X** |  ✅   |     ✅      |       📝 Articles        |
-| **Instagram**   |  ✅   |     ✅      |                          |
-| **YouTube**     |  ✅   |             |         🎵 Music         |
-| **Facebook**    |  ✅   |             |                          |
-| **Threads**     |  ✅   |     ✅      |                          |
-| **Bilibili**    |  ✅   |             |        📝 Updates        |
-| **Douyin**      |  ✅   |     ✅      |      ☀️ Daily posts      |
-| **TikTok**      |  ✅   |     ✅      |                          |
-| **Weibo**       |  ✅   |     ✅      |                          |
-| **Xiaohongshu** |  ✅   |     ✅      |                          |
-| **Tieba**       |  ✅   |     ✅      |                          |
-| **WeChat OA**   |       |     ✅      |                          |
-| **Kuaishou**    |  ✅   |     ✅      |                          |
-| **Coolapk**     |       |     ✅      |                          |
-| **Pipixia**     |  ✅   |     ✅      |                          |
-| **Zuiyou**      |  ✅   |     ✅      |                          |
-| **Xiaoheihe**   |  ✅   |     ✅      |                          |
-| **Snapchat**    |  ✅   |             |                          |
-| **Zhihu**       |  ✅   |     ✅      | 🐶 Q&A, columns, circles |
-| **Douban**      |  ✅   |     ✅      |     👥 Group topics      |
+| Platform        | Video | Image Posts |              Other              |
+|:----------------|:-----:|:-----------:|:-------------------------------:|
+| **Twitter / X** |  ✅   |     ✅      |           📝 Articles           |
+| **Instagram**   |  ✅   |     ✅      |                                 |
+| **YouTube**     |  ✅   |             |            🎵 Music             |
+| **Facebook**    |  ✅   |             |                                 |
+| **Threads**     |  ✅   |     ✅      |                                 |
+| **Bilibili**    |  ✅   |             |           📝 Updates            |
+| **Douyin**      |  ✅   |     ✅      |         ☀️ Daily posts          |
+| **TikTok**      |  ✅   |     ✅      |                                 |
+| **Weibo**       |  ✅   |     ✅      |                                 |
+| **Xiaohongshu** |  ✅   |     ✅      |                                 |
+| **Tieba**       |  ✅   |     ✅      |                                 |
+| **WeChat OA**   |       |     ✅      |                                 |
+| **Kuaishou**    |  ✅   |     ✅      |                                 |
+| **Coolapk**     |       |     ✅      |                                 |
+| **Pipixia**     |  ✅   |     ✅      |                                 |
+| **Zuiyou**      |  ✅   |     ✅      |                                 |
+| **Xiaoheihe**   |  ✅   |     ✅      |                                 |
+| **Snapchat**    |  ✅   |             |                                 |
+| **Zhihu**       |  ✅   |     ✅      | 🐶 Q&A, columns, circles, Daily |
+| **Douban**      |  ✅   |     ✅      |         👥 Group topics         |
 
 > 🔧 More platforms are being added continuously...
 
