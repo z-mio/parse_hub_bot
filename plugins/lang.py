@@ -35,6 +35,8 @@ async def select_lang(_: Client, msg: Message) -> None:
 async def selected_lang(_: Client, cq: CallbackQuery) -> None:
     if not cq.data:
         return
+    if not cq.message:
+        return
 
     _key, uid, selected = str(cq.data).split("|", 2)
     if cq.from_user.id != int(uid):

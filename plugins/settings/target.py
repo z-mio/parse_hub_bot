@@ -236,6 +236,10 @@ async def resolve_channel_target(
         await msg.reply(format_label(_t("Bot 未加入该频道, 请先将 Bot 加入频道后再配置")))
         return None
 
+    if not chat:
+        await msg.reply(format_label(_t("Bot 未加入该频道, 请先将 Bot 加入频道后再配置")))
+        return None
+
     if chat.type != ChatType.CHANNEL:
         await msg.reply(format_label(_t("非频道")))
         return None

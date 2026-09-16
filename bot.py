@@ -53,13 +53,14 @@ class Bot(Client):
         await self.set_menu()
         return self
 
-    async def stop(self, *args: Any, **kwargs: Any) -> None:
+    async def stop(self, *args: Any, **kwargs: Any) -> Client:
         ws.exit_flag = True
         await super().stop(*args, **kwargs)
         await close_db()
         # 结束时清理下载残留
         if self.cfg.download_dir.exists() and not self.cfg.debug_skip_cleanup:
             shutil.rmtree(self.cfg.download_dir)
+        return self
 
     def init_watchdog(self) -> None:
         self.add_handler(ConnectHandler(on_connect))

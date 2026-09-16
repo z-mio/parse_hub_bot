@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 from pydantic import Field, field_validator
@@ -21,7 +20,7 @@ class BotSettings(BaseSettings):
     bot_token: str = Field(...)
     api_id: str = Field(...)
     api_hash: str = Field(...)
-    bot_proxy: dict | None = Field(default=None)
+    bot_proxy: str | None = Field(default=None)
     data_path: Path = Field(default=Path("data"))
     language: str = Field(default="zh-hans")
     cache_max_entries: int = Field(default=30000, ge=0, description="缓存最大条数, 0 为不限制")
@@ -61,20 +60,6 @@ class BotSettings(BaseSettings):
     @property
     def config_path(self) -> Path:
         return self.data_path / "config"
-
-    @field_validator("bot_proxy", mode="before")
-    @classmethod
-    def proxy_config(cls, v: str | None = None) -> dict | None:
-        url = urlparse(v) if v else None
-        if not url:
-            return None
-        return {
-            "scheme": url.scheme,
-            "hostname": url.hostname,
-            "port": url.port,
-            "username": url.username,
-            "password": url.password,
-        }
 
     @property
     def bot_session_name(self) -> str:
