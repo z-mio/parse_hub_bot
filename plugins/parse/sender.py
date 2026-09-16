@@ -24,7 +24,6 @@ from pyrogram.types import (
     InputRichMessage,
     LinkPreviewOptions,
     Message,
-    ReplyParameters,
 )
 
 from core import bs
@@ -51,10 +50,6 @@ class MessageSender:
     msg: Message
     config: SettingsConfig
     delete_after_seconds: float | None = None
-
-    @property
-    def reply_parameters(self) -> ReplyParameters | None:
-        return None if self.config.reply_msg else ReplyParameters()
 
     def delete_after(self, seconds: float | int | None) -> "MessageSender":
         if not seconds:
@@ -132,11 +127,10 @@ class MessageSender:
             Message,
             await self._send_and_schedule_delete(
                 partial(
-                    self.msg.answer,
+                    self.msg.reply if self.config.reply_msg else self.msg.answer,
                     text,
                     link_preview_options=link_preview_options,
                     reply_markup=reply_markup,
-                    reply_parameters=self.reply_parameters,
                 )
             ),
         )
@@ -167,11 +161,12 @@ class MessageSender:
             Message,
             await self._send_and_schedule_delete(
                 partial(
-                    self.msg.answer_document,
+                    (self.msg.reply_document if self.config.reply_msg else self.msg.answer_document)
+                    if use_reply_policy
+                    else self.msg.reply_document,
                     document,
                     caption=caption or "",
                     force_document=force_document,
-                    reply_parameters=self.reply_parameters if use_reply_policy else None,
                 )
             ),
         )
@@ -197,7 +192,11 @@ class MessageSender:
         return cast(
             Message,
             await self._send_and_schedule_delete(
-                partial(self.msg.answer_photo, photo, caption=caption or "", reply_parameters=self.reply_parameters)
+                partial(
+                    self.msg.reply_photo if self.config.reply_msg else self.msg.answer_photo,
+                    photo,
+                    caption=caption or "",
+                )
             ),
         )
 
@@ -216,7 +215,7 @@ class MessageSender:
             Message,
             await self._send_and_schedule_delete(
                 partial(
-                    self.msg.answer_video,
+                    self.msg.reply_video if self.config.reply_msg else self.msg.answer_video,
                     video,
                     caption=caption or "",
                     video_cover=video_cover,
@@ -224,7 +223,6 @@ class MessageSender:
                     width=width or 0,
                     height=height or 0,
                     supports_streaming=True if supports_streaming is None else supports_streaming,
-                    reply_parameters=self.reply_parameters,
                 )
             ),
         )
@@ -283,17 +281,19 @@ class MessageSender:
             Message,
             await self._send_and_schedule_delete(
                 partial(
-                    self.msg.answer_animation,
+                    self.msg.reply_animation if self.config.reply_msg else self.msg.answer_animation,
                     animation,
                     caption=caption or "",
-                    reply_parameters=self.reply_parameters,
                 )
             ),
         )
 
     async def media_group(self, media: list[ReplyMediaGroupItem]) -> list[Message]:
         return await self._send_and_schedule_delete(
-            partial(self.msg.answer_media_group, media=cast(Any, media), reply_parameters=self.reply_parameters)
+            partial(
+                self.msg.reply_media_group if self.config.reply_msg else self.msg.answer_media_group,
+                media=cast(Any, media),
+            )
         )
 
     async def rich_message(
@@ -306,10 +306,9 @@ class MessageSender:
             Message,
             await self._send_and_schedule_delete(
                 partial(
-                    self.msg.answer_rich,
+                    self.msg.reply_rich if self.config.reply_msg else self.msg.answer_rich,
                     rich_message=rich_message,
                     reply_markup=reply_markup,
-                    reply_parameters=self.reply_parameters,
                 )
             ),
         )
