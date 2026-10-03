@@ -1,5 +1,6 @@
 import asyncio
 import re
+from collections.abc import Awaitable
 from dataclasses import replace
 
 from parsehub.types import AniRef, RichTextParseResult
@@ -28,6 +29,20 @@ from utils.helpers import to_list, with_request_id
 from utils.rate_limit import ParseRateLimitExceeded, parse_rate_limit
 
 logger = logger.bind(name="Parse")
+
+_bg: set[asyncio.Task[None]] = set()
+
+
+def _on_done(task: asyncio.Task[None]) -> None:
+    _bg.discard(task)
+    if not task.cancelled() and (exc := task.exception()) is not None:
+        logger.opt(exception=exc).error("后台解析任务异常")
+
+
+def spawn(coro: Awaitable[None]) -> None:
+    task = asyncio.ensure_future(coro)
+    _bg.add(task)
+    task.add_done_callback(_on_done)
 
 
 @Client.on_message(
@@ -89,23 +104,22 @@ async def parse(cli: Client, msg: Message) -> None:
         items: list[str] = [m.group(2) for m in re.finditer(r"^(={2})(.*?)\1", raw_text, flags=re.S | re.M)]
         custom_content = items[0].strip() if items else ""
 
-    tasks = [
-        _handle_parse_request(
-            ParseRequest(
-                cli=cli,
-                msg=msg,
-                url=url,
-                mode=mode,
-                config=config,
-                t_=_t,
-                bypass_cache=bypass_cache,
-                delete_share_url_msg=config.auto_delete_url,
-                custom_content=custom_content,
+    for url in urls:
+        spawn(
+            _handle_parse_request(
+                ParseRequest(
+                    cli=cli,
+                    msg=msg,
+                    url=url,
+                    mode=mode,
+                    config=config,
+                    t_=_t,
+                    bypass_cache=bypass_cache,
+                    delete_share_url_msg=config.auto_delete_url,
+                    custom_content=custom_content,
+                )
             )
         )
-        for url in urls
-    ]
-    await asyncio.gather(*tasks)
 
 
 @with_request_id
