@@ -94,10 +94,10 @@ class MessageSender:
                     raise
             except Forbidden as e:
                 logger.warning(f"消息发送失败, Bot 无权限: {e}")
-                break
+                raise
             except Exception as e:
                 logger.warning(f"消息发送失败: {e}")
-                break
+                raise
             await asyncio.sleep(0.5)
         raise RuntimeError("消息发送失败")
 
