@@ -73,6 +73,36 @@ class Telegraph:
             await self.get_account_info(),
         )
 
+    async def edit_page(
+        self,
+        path: str,
+        title: str,
+        content: list[dict[str, Any]] | None = None,
+        html_content: str | None = None,
+        author_name: str | None = None,
+        author_url: str | None = None,
+        return_content: bool = False,
+    ) -> "TelegraphPage":
+        """编辑已有 Telegraph 页面"""
+        response = await self.telegraph.edit_page(
+            path,
+            title,
+            content,
+            html_content,
+            author_name,
+            author_url,
+            return_content,
+        )
+        return TelegraphPage(
+            response["path"],
+            response["url"],
+            response["title"],
+            response["description"],
+            response["views"],
+            response["can_edit"],
+            await self.get_account_info(),
+        )
+
 
 @dataclass
 class TelegraphAccount:

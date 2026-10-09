@@ -239,7 +239,12 @@ async def handle_parse(req: ParseRequest) -> bool:
             # Telegraph 发送
             logger.debug(f"富文本类型, 创建 Telegraph 页面: title={parse_result.title}")
             await sender.typing()
-            ph_url = await create_richtext_telegraph(req.cli, parse_result)
+            try:
+                ph_url = await create_richtext_telegraph(req.cli, parse_result)
+            except Exception as e:
+                logger.exception(e)
+                await reporter.report_error(req.t_("创建 Telegraph 页面"), e)
+                return False
             logger.debug(f"Telegraph 页面创建完成: {ph_url}")
             caption = build_caption(
                 parse_result,
