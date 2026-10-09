@@ -33,7 +33,7 @@
 
 ## ✨ Features
 
-- 🎬 **Multi-platform parsing** — Parse content from 16+ major platforms, including Douyin, Bilibili, YouTube,
+- 🎬 **Multi-platform parsing** — Parse content from 20+ major platforms, including Douyin, Bilibili, YouTube,
   Xiaohongshu, and Twitter
 - ⚡ **Inline mode** — Parse a link from any chat by typing `@BotUsername <link>`
 - 🖼️ **Telegram-ready media** — Automatic transcoding, long-image splitting, and large-video segmentation
@@ -42,28 +42,31 @@
 
 ## 📦 Supported Platforms
 
-| Platform        | Video | Image Posts |              Other              |
-|:----------------|:-----:|:-----------:|:-------------------------------:|
-| **Twitter / X** |  ✅   |     ✅      |           📝 Articles           |
-| **Instagram**   |  ✅   |     ✅      |                                 |
-| **YouTube**     |  ✅   |             |            🎵 Music             |
-| **Facebook**    |  ✅   |             |                                 |
-| **Threads**     |  ✅   |     ✅      |                                 |
-| **Bilibili**    |  ✅   |             |           📝 Updates            |
-| **Douyin**      |  ✅   |     ✅      |         ☀️ Daily posts          |
-| **TikTok**      |  ✅   |     ✅      |                                 |
-| **Weibo**       |  ✅   |     ✅      |                                 |
-| **Xiaohongshu** |  ✅   |     ✅      |                                 |
-| **Tieba**       |  ✅   |     ✅      |                                 |
-| **WeChat OA**   |       |     ✅      |                                 |
-| **Kuaishou**    |  ✅   |     ✅      |                                 |
-| **Coolapk**     |       |     ✅      |                                 |
-| **Pipixia**     |  ✅   |     ✅      |                                 |
-| **Zuiyou**      |  ✅   |     ✅      |                                 |
-| **Xiaoheihe**   |  ✅   |     ✅      |                                 |
-| **Snapchat**    |  ✅   |             |                                 |
-| **Zhihu**       |  ✅   |     ✅      | 🐶 Q&A, columns, circles, Daily |
-| **Douban**      |  ✅   |     ✅      |         👥 Group topics         |
+| Platform        | Video | Image Posts |                    Other                    |
+|:----------------|:-----:|:-----------:|:-------------------------------------------:|
+| **Twitter / X** |  ✅   |     ✅      |                 📝 Articles                 |
+| **Instagram**   |  ✅   |     ✅      |                                             |
+| **YouTube**     |  ✅   |             |                  🎵 Music                   |
+| **Facebook**    |  ✅   |             |                                             |
+| **Threads**     |  ✅   |     ✅      |                                             |
+| **Bilibili**    |  ✅   |             |                 📝 Updates                  |
+| **Douyin**      |  ✅   |     ✅      |               ☀️ Daily posts                |
+| **TikTok**      |  ✅   |     ✅      |                                             |
+| **Weibo**       |  ✅   |     ✅      |                                             |
+| **Xiaohongshu** |  ✅   |     ✅      |                                             |
+| **Tieba**       |  ✅   |     ✅      |                                             |
+| **WeChat OA**   |       |     ✅      |                                             |
+| **Kuaishou**    |  ✅   |     ✅      |                                             |
+| **Coolapk**     |       |     ✅      |                                             |
+| **Pipixia**     |  ✅   |     ✅      |                                             |
+| **Zuiyou**      |  ✅   |     ✅      |                                             |
+| **Xiaoheihe**   |  ✅   |     ✅      |                                             |
+| **Snapchat**    |  ✅   |             |                                             |
+| **Zhihu**       |  ✅   |     ✅      |       🐶 Q&A, columns, circles, Daily       |
+| **Douban**      |  ✅   |     ✅      |               👥 Group topics               |
+| **Bangumi**     |       |     ✅      | 💬 Subject discussions, blogs, group topics |
+| **Toutiao**     |  ✅   |     ✅      |        📰 Articles, Weitoutiao posts        |
+| **Medium**      |  ✅   |     ✅      |                 📰 Articles                 |
 
 > 🔧 More platforms are being added continuously...
 
@@ -173,15 +176,18 @@ Direct connection (no proxy)
 | `weibo`     | Weibo       |
 | `xhs`       | Xiaohongshu |
 | `tieba`     | Baidu Tieba |
-| `wechat`    | WeChat OA   |
+| `weixin`    | WeChat OA   |
 | `kuaishou`  | Kuaishou    |
 | `coolapk`   | Coolapk     |
-| `pipixia`   | Pipixia     |
+| `pipix`     | Pipixia     |
 | `zuiyou`    | Zuiyou      |
 | `xiaoheihe` | Xiaoheihe   |
 | `snapchat`  | Snapchat    |
 | `zhihu`     | Zhihu       |
 | `douban`    | Douban      |
+| `bangumi`   | Bangumi     |
+| `toutiao`   | Toutiao     |
+| `medium`    | Medium      |
 
 ### 🍪 Platforms Supporting Cookies
 
