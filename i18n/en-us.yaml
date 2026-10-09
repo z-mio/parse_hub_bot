@@ -4,21 +4,31 @@
   configuring
 06778dbf05d5: Platform Management
 091d3a0665fa: Channel Configuration
+0b93dc449457: Parsing results will not display the post summary. Articles sent via
+  Telegraph or rich text are unaffected.
 0d3d68e32996: A task with the same content is already being parsed, waiting for parsing
   to complete...
 0f6c4353601e: Send original file to avoid quality compression
 0f6cedccc5d3: Too many GIFs, skipping upload, please download manually
 1a603ac4b55c: Please send `/cfg` in private chat, group, or topic, or use `/cfg <channel
   username/link/id>` to configure
+1a7619451107: Error messages during parsing remain visible; when turned off, they
+  are automatically deleted after 15 seconds.
 1d30c358e2a1: Default parsing mode
 1f3c920d087b: Processing...
 224e2ccda861: Configuration
+2560e051161e: The original "Source" link is no longer appended at the end of parsing
+  results.
+256aefe3fdbf: Error Log
 27350d00b70d: Uploading...
 295bb704f520: Language
 2bc28481a223: Automatically delete link messages
 30364e475d07: This is not your operation
 3065ed13e5f9: Get original link
 31f3c8c65cc4: Channel username/link/id
+32316f34b45d: Content Display
+330add4a5718: No longer send parsing progress messages; send the result directly after
+  parsing is complete.
 33ccc7a4682a: Unsupported platform
 3795485677d6: Group Configuration
 39b75e75d433: Video cover
@@ -40,6 +50,10 @@
 
 
   **Open source repository: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+5066c3cded7f: 'https://x.com/i/status/123
+
+  ==Write your copy here=='
+53ace4305f51: Enabled
 569c1f28ab00: Packaging...
 5861d620c41d: Downloading... | {current}/{total}
 5a9f36a77173: Package
@@ -48,6 +62,8 @@
 5d6ac8f8e4f3: Send article using rich text
 5e788d9e0992: Non-channel
 5f411223ca5a: Back
+662e14fab581: The parsing method used when sending links directly; commands override
+  this method when used.
 6740d8c7b274: Reply to message
 6769c172299c: You are not an admin of this chat, no permission to modify configuration
 68957ac274c5: Downloading... | {current * 100 / total:.0f}%
@@ -56,20 +72,29 @@
 769d88e425e0: Done
 77274b54a324: '{stage} error:'
 7853187dd3ea: Support type
+7b48a0292498: Parsing results will not display the post title. Articles sent via Telegraph
+  or rich text are unaffected.
 7eafd0a497bd: '
 
 
   <b>Feedback: @MisakaSisters</b>'
 816de50b9e0e: Please enter the link in the chat box
+'849320560237': 'On'
 868afb493654: Select configuration target
 8a8672da4ab7: Unsupported configuration item
 8dc878e08cd6: Send the share link for parsing
 8f555aa82c87: Original link
 945599b91845: Disable parsing progress
+996b5ce5395f: Use the platform-provided thumbnail as the video cover when sending
+  videos; if turned off, no cover is set.
 9b3dbf3e3f85: Hide bottom "Source"
 a3e3b88377c8: Start
 ab480060abb1: Do not display error logs
+ab511431782e: Article content is sent directly using Telegram rich text, and Telegraph
+  pages are no longer created.
 ad66098d7867: Retain error logs
+b0294761479a: After disabling, links from this platform will no longer be automatically
+  parsed when sent.
 b3bbb48dcb10: Parsing too frequently, please try again after {e.retry_after:.1f}s
 b6aaf8f2a2be: Individual configuration within group
 b765e4eb1844: Original link
@@ -81,6 +106,8 @@ c039b80e17dd: Aggregate Parsing
 c11154582f8a: Hide Introduction
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
+c4ee311078aa: Automatically delete user-sent links after parsing is complete. In groups,
+  the bot needs permission to delete messages.
 c97827ba89ec: '**Send share link for parsing**
 
 
@@ -110,13 +137,23 @@ c97827ba89ec: '**Send share link for parsing**
 
   **Open source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Configuration panel
+d2a9e9b5d414: Message Behavior
 d5631690265c: Unrecognized configuration target
+d58a55bceec7: 'Off'
 d59c948c471c: Parsing...
 d5a73b0c7f2f: Upload
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Parse and preview content
 e4f6307e1c4f: 'Switched to: {LANG_MAP[selected]}'
+e5aa11737c3b: After enabling "Custom Copy", you can use the `==copy==` double equal
+  sign delimiter syntax in channels or private chats to insert the `copy` with retained
+  styling into the parsed result (💡 Custom Emojis are not supported in channels).
+e7a34daf96fd: Parsing results are sent as a reply to the original message; when turned
+  off, results are sent directly to the chat.
 eaa3cd851501: Custom Copy
 f047ff589a7a: Pack and send with parsing information
 f136c494af8c: Create Telegraph page
+fcaea8ec774e: Do not send error messages when parsing fails.
+fed0d2f0cea0: Add an "Original Link" option in the result list of inline mode; when
+  selected, only the link itself is sent.
 ff7e330bebf8: Individual configuration within topic

@@ -4,21 +4,31 @@
   dem Kanal hinzu und konfigurieren Sie ihn dann.
 06778dbf05d5: Plattformverwaltung
 091d3a0665fa: Kanal-Konfiguration
+0b93dc449457: Der Analyseergebnis zeigt keine Zusammenfassung des Beitragsinhalts
+  an. Artikel, die mit Telegraph oder Rich-Text gesendet werden, sind nicht betroffen.
 0d3d68e32996: Eine identische Aufgabe wird bereits analysiert, bitte warten Sie, bis
   die Analyse abgeschlossen ist...
 0f6c4353601e: Originaldatei senden, um Qualitätsverlust zu vermeiden
 0f6cedccc5d3: Zu viele GIFs, Upload übersprungen, bitte selbst herunterladen
 1a603ac4b55c: Bitte senden Sie `/cfg` oder verwenden Sie `/cfg <Kanal-Benutzername/Link/ID>`
   im privaten Chat, in der Gruppe oder im Thema zur Konfiguration.
+1a7619451107: Bei Analysefehlern bleibt die Fehlermeldung bestehen und wird nach 15
+  Sekunden beim Schließen automatisch gelöscht.
 1d30c358e2a1: Standard-Parsing-Modus
 1f3c920d087b: In Bearbeitung...
 224e2ccda861: Konfiguration
+2560e051161e: Am Ende des Analyseergebnisses wird kein „Source“-Originallink mehr
+  angehängt.
+256aefe3fdbf: Fehlerprotokoll
 27350d00b70d: Hochladen...
 295bb704f520: Sprache
 2bc28481a223: Automatisches Löschen von Linknachrichten
 30364e475d07: Das ist nicht Ihre Aktion
 3065ed13e5f9: Original-Link abrufen
 31f3c8c65cc4: Kanal-Benutzername/Link/ID
+32316f34b45d: Inhaltsanzeige
+330add4a5718: Keine Fortschrittsnachrichten mehr senden, Ergebnis wird nach Abschluss
+  der Analyse direkt gesendet.
 33ccc7a4682a: Nicht unterstützte Plattform
 3795485677d6: Gruppenkonfiguration
 39b75e75d433: Video-Cover
@@ -43,6 +53,10 @@
 
 
   **Open-Source-Adresse: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+5066c3cded7f: 'https://x.com/i/status/123
+
+  ==Hier den Text schreiben=='
+53ace4305f51: Aktiviert
 569c1f28ab00: Verpacken...
 5861d620c41d: Herunterladen... | {current}/{total}
 5a9f36a77173: Verpacken
@@ -51,6 +65,8 @@
 5d6ac8f8e4f3: Artikel wird mit Rich-Text gesendet
 5e788d9e0992: Kein Kanal
 5f411223ca5a: Zurück
+662e14fab581: Analysenmethode, die beim direkten Senden von Links verwendet wird;
+  bei Verwendung eines Befehls gilt der Befehl.
 6740d8c7b274: Nachricht beantworten
 6769c172299c: Sie sind kein Administrator dieses Chats und dürfen die Konfiguration
   nicht ändern.
@@ -60,20 +76,29 @@
 769d88e425e0: Fertig
 77274b54a324: '{stage} Fehler:'
 7853187dd3ea: Unterstützungstyp
+7b48a0292498: Der Analyseergebnis zeigt keine Beitragstitel an. Artikel, die mit Telegraph
+  oder Rich-Text gesendet werden, sind nicht betroffen.
 7eafd0a497bd: '
 
 
   <b>Problemmeldung: @MisakaSisters</b>'
 816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
+'849320560237': Ein
 868afb493654: Konfigurationsziel wählen
 8a8672da4ab7: Nicht unterstützte Konfigurationsoption
 8dc878e08cd6: Senden Sie den Freigabelink zur Analyse
 8f555aa82c87: Original-Link
 945599b91845: Parsing-Fortschritt deaktivieren
+996b5ce5395f: Bei Videos wird das vom Anbieter bereitgestellte Vorschaubild als Video-Cover
+  verwendet; bei Deaktivierung wird kein Cover eingestellt.
 9b3dbf3e3f85: Untere "Quelle" ausblenden
 a3e3b88377c8: Start
 ab480060abb1: Fehlerprotokolle nicht anzeigen
+ab511431782e: Artikelinhalte werden direkt mit Telegram Rich-Text gesendet, es wird
+  keine Telegraph-Seite mehr erstellt.
 ad66098d7867: Fehlerprotokolle behalten
+b0294761479a: Nach dem Ausschalten wird der Link dieser Plattform nicht mehr automatisch
+  analysiert.
 b3bbb48dcb10: Zu häufige Analyse, bitte versuche es nach {e.retry_after:.1f} Sekunden
   erneut
 b6aaf8f2a2be: Persönliche Konfiguration in der Gruppe
@@ -86,6 +111,8 @@ c039b80e17dd: Aggregiertes Parsing
 c11154582f8a: Einführung ausblenden
 c2236f70c559: Cache-Parsing umgehen
 c25add78a072: "{t} \n```\n{error}```"
+c4ee311078aa: Nach Abschluss der Analyse wird der vom Benutzer gesendete Link automatisch
+  gelöscht. In Gruppen benötigt der Bot Berechtigung zum Löschen von Nachrichten.
 c97827ba89ec: '**Senden Sie einen Freigabelink zur Analyse**
 
 
@@ -115,13 +142,24 @@ c97827ba89ec: '**Senden Sie einen Freigabelink zur Analyse**
 
   **Open-Source-Adresse: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Konfigurationspanel
+d2a9e9b5d414: Nachrichtenverhalten
 d5631690265c: Konfigurationsziel kann nicht erkannt werden
+d58a55bceec7: Aus
 d59c948c471c: Analysiere...
 d5a73b0c7f2f: Hochladen
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Inhalt analysieren und Vorschau anzeigen
 e4f6307e1c4f: 'Wechsel zu: {LANG_MAP[selected]}'
+e5aa11737c3b: Nach Aktivierung der Funktion „Benutzerdefinierte Texte“ kann in Kanälen/Privatchats
+  die Syntax `==Text==` mit doppeltem Gleichheitszeichen verwendet werden, um den
+  `Text` stilgetreu in das Parsergebnis einzufügen (💡 Kanäle unterstützen keine benutzerdefinierten
+  Emojis)
+e7a34daf96fd: Das Analyseergebnis wird als Antwort auf die Originalnachricht gesendet;
+  wenn ausgeschaltet, wird es direkt in den Chat gesendet.
 eaa3cd851501: Benutzerdefinierter Text
 f047ff589a7a: Paket senden, inklusive Analyseinformationen
 f136c494af8c: Telegraph-Seite erstellen
+fcaea8ec774e: Bei Analysefehlern wird keine Fehlermeldung gesendet.
+fed0d2f0cea0: In der Ergebnisliste des Inline-Modus wird die Option „Originallink“
+  hinzugefügt; wenn ausgewählt, wird nur der Link selbst gesendet.
 ff7e330bebf8: Persönliche Konfiguration im Thema

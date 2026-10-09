@@ -4,21 +4,31 @@
   kanaal voordat je het configureert
 06778dbf05d5: Platformbeheer
 091d3a0665fa: Kanaalconfiguratie
+0b93dc449457: De inhoud van de post wordt niet weergegeven in het parse-resultaat.
+  Artikelen verzonden met Telegraph of rich text worden niet beïnvloed.
 0d3d68e32996: Er is al eenzelfde taak bezig met ontleden, wacht tot het ontleden is
   voltooid...
 0f6c4353601e: Stuur het originele bestand om kwaliteitscompressie te voorkomen
 0f6cedccc5d3: Te veel GIF's, upload wordt overgeslagen, download ze zelf
 1a603ac4b55c: Stuur `/cfg` in een privébericht, groep of onderwerp, of gebruik `/cfg
   <kanaal gebruikersnaam/link/id>` om te configureren
+1a7619451107: Foutmeldingen blijven zichtbaar bij parse-fouten en verdwijnen automatisch
+  15 seconden na het sluiten.
 1d30c358e2a1: Standaard parseermodus
 1f3c920d087b: Bezig met verwerken...
 224e2ccda861: Configuratie
+2560e051161e: Het parse-resultaat bevat niet langer de "Source" originele link aan
+  het einde.
+256aefe3fdbf: Foutlogboek
 27350d00b70d: Bezig met uploaden...
 295bb704f520: Taal
 2bc28481a223: Automatisch verwijderde linkberichten
 30364e475d07: Dit is niet jouw actie
 3065ed13e5f9: Oorspronkelijke link ophalen
 31f3c8c65cc4: Kanaalgebruikersnaam/link/id
+32316f34b45d: Inhoudsweergave
+330add4a5718: Stuur geen voortgangsberichten meer over de analyse, stuur het resultaat
+  direct na voltooiing van de analyse.
 33ccc7a4682a: Niet-ondersteund platform
 3795485677d6: Groepsconfiguratie
 39b75e75d433: Videominiatuur
@@ -43,6 +53,10 @@
 
 
   **Open source locatie: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+5066c3cded7f: 'https://x.com/i/status/123
+
+  ==Schrijf hier de tekst=='
+53ace4305f51: Ingeschakeld
 569c1f28ab00: Bezig met inpakken...
 5861d620c41d: Bezig met downloaden... | {current}/{total}
 5a9f36a77173: Inpakken
@@ -51,6 +65,8 @@
 5d6ac8f8e4f3: Artikel verzonden met rich text
 5e788d9e0992: Geen kanaal
 5f411223ca5a: Terug
+662e14fab581: De parse-methode die wordt gebruikt bij het direct verzenden van een
+  link; bij gebruik van een commando geldt het commando.
 6740d8c7b274: Antwoord op bericht
 6769c172299c: Je bent geen beheerder van deze chat, je hebt geen toestemming om de
   configuratie te wijzigen
@@ -60,20 +76,29 @@
 769d88e425e0: Voltooid
 77274b54a324: '{stage} fout:'
 7853187dd3ea: Ondersteuningstype
+7b48a0292498: De titel van de post wordt niet weergegeven in het parse-resultaat.
+  Artikelen verzonden met Telegraph of rich text worden niet beïnvloed.
 7eafd0a497bd: '
 
 
   <b>Probleemfeedback: @MisakaSisters</b>'
 816de50b9e0e: Voer een link in het chatvenster in
+'849320560237': Aan
 868afb493654: Kies configuratiedoel
 8a8672da4ab7: Niet-ondersteunde configuratieoptie
 8dc878e08cd6: Verzend de deel-link voor analyse
 8f555aa82c87: Originele link
 945599b91845: Parsing voortgang uitschakelen
+996b5ce5395f: Wanneer een video wordt verzonden, wordt de door het platform geleverde
+  coverafbeelding als videominiatuur gebruikt. Bij uitschakeling wordt er geen cover
+  ingesteld.
 9b3dbf3e3f85: Verberg "Bron" onderaan
 a3e3b88377c8: Start
 ab480060abb1: Foutlogboeken niet weergeven
+ab511431782e: Artikelinhoud wordt direct als Telegram rich text verzonden en er wordt
+  geen Telegraph-pagina meer aangemaakt.
 ad66098d7867: Foutlogboek bewaren
+b0294761479a: Na het uitschakelen worden links van dit platform niet automatisch geanalyseerd.
 b3bbb48dcb10: Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}s
 b6aaf8f2a2be: Persoonlijke configuratie binnen groep
 b765e4eb1844: Originele link
@@ -85,6 +110,8 @@ c039b80e17dd: Geaggregeerde ontleding
 c11154582f8a: Introductie verbergen
 c2236f70c559: Cache-omzeiling parsing
 c25add78a072: "{t} \n```\n{error}```"
+c4ee311078aa: Verwijder automatisch links die door gebruikers zijn verzonden na analyse.
+  In groepen moet de bot de toestemming hebben om berichten te verwijderen.
 c97827ba89ec: '**Stuur een deel-link om te parseren**
 
 
@@ -114,13 +141,24 @@ c97827ba89ec: '**Stuur een deel-link om te parseren**
 
   **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Configuratiepaneel
+d2a9e9b5d414: Berichtgedrag
 d5631690265c: Kan configuratiedoel niet herkennen
+d58a55bceec7: Uit
 d59c948c471c: Bezig met ontleden...
 d5a73b0c7f2f: Uploaden
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Parseer en bekijk inhoud
 e4f6307e1c4f: 'Gewisseld naar: {LANG_MAP[selected]}'
+e5aa11737c3b: Na het inschakelen van "Aangepaste tekst", kunt u in kanalen/privégesprekken
+  de `==tekst==` dubbele gelijkheidstekens gebruiken als afbakening, om de `tekst`
+  met opmaak in het resultaat in te voegen (💡 Kanalen ondersteunen geen aangepaste
+  emoji's).
+e7a34daf96fd: Het parse-resultaat wordt als antwoord op het originele bericht verzonden;
+  bij uitschakeling wordt het direct in de chat geplaatst.
 eaa3cd851501: Aangepaste tekst
 f047ff589a7a: Verpak en stuur, inclusief parseer informatie
 f136c494af8c: Maak een Telegraph-pagina aan
+fcaea8ec774e: Bij parse-fouten worden er geen foutmeldingen verzonden.
+fed0d2f0cea0: De lijst met resultaten in inline-modus bevat de optie "Originele link";
+  bij selectie wordt alleen de link zelf verzonden.
 ff7e330bebf8: Persoonlijke configuratie binnen onderwerp

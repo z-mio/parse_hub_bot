@@ -4,20 +4,30 @@
   canale e poi configura
 06778dbf05d5: Gestione piattaforma
 091d3a0665fa: Configurazione canale
+0b93dc449457: I risultati dell'analisi non mostrano il sommario del post. Gli articoli
+  inviati tramite Telegraph o testo formattato non sono influenzati.
 0d3d68e32996: Un'attività identica è già in fase di analisi, attendere il completamento...
 0f6c4353601e: Invia il file originale per evitare la compressione della qualità
 0f6cedccc5d3: Troppi GIF, caricamento saltato, si prega di scaricare manualmente
 1a603ac4b55c: Invia `/cfg` in chat privata, gruppo o argomento oppure usa `/cfg <nome
   utente/link/id del canale>` per configurare
+1a7619451107: In caso di errore di analisi, il messaggio di errore resta visibile;
+  alla chiusura viene rimosso automaticamente dopo 15 secondi.
 1d30c358e2a1: Modalità di analisi predefinita
 1f3c920d087b: In elaborazione...
 224e2ccda861: Configurazione
+2560e051161e: Alla fine dei risultati dell'analisi non viene più allegato il link
+  originale "Source".
+256aefe3fdbf: Registro degli errori
 27350d00b70d: Caricamento in corso...
 295bb704f520: Lingua
 2bc28481a223: Eliminazione automatica dei messaggi con link
 30364e475d07: Questa non è la tua operazione
 3065ed13e5f9: Ottieni link originale
 31f3c8c65cc4: Nome utente/link/ID del canale
+32316f34b45d: Visualizzazione contenuti
+330add4a5718: Non inviare più messaggi di progresso dell'analisi, ma inviare direttamente
+  il risultato al termine dell'analisi.
 33ccc7a4682a: Piattaforma non supportata
 3795485677d6: Configurazione gruppo
 39b75e75d433: Copertina video
@@ -42,6 +52,10 @@
 
 
   **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+5066c3cded7f: 'https://x.com/i/status/123
+
+  ==Scrivi il testo qui=='
+53ace4305f51: Abilitato
 569c1f28ab00: Impacchettamento in corso...
 5861d620c41d: Download in corso... | {current}/{total}
 5a9f36a77173: Impacchetta
@@ -50,6 +64,8 @@
 5d6ac8f8e4f3: Articolo inviato con testo formattato
 5e788d9e0992: Non è un canale
 5f411223ca5a: Indietro
+662e14fab581: Metodo di analisi usato per inviare link direttamente; i comandi usano
+  sempre il loro metodo.
 6740d8c7b274: Rispondi al messaggio
 6769c172299c: Non sei un amministratore di questa chat, non hai il permesso di modificare
   la configurazione
@@ -59,20 +75,29 @@
 769d88e425e0: Completato
 77274b54a324: 'Errore {stage}:'
 7853187dd3ea: Tipo di supporto
+7b48a0292498: I risultati dell'analisi non mostrano il titolo del post. Gli articoli
+  inviati tramite Telegraph o testo formattato non sono influenzati.
 7eafd0a497bd: '
 
 
   <b>Feedback: @MisakaSisters</b>'
 816de50b9e0e: Inserisci il link nella chat
+'849320560237': Attiva
 868afb493654: Seleziona obiettivo configurazione
 8a8672da4ab7: Opzione di configurazione non supportata
 8dc878e08cd6: Invia il link di condivisione per l'analisi
 8f555aa82c87: Link originale
 945599b91845: Disabilita progresso analisi
+996b5ce5395f: Quando si invia un video, utilizza l'immagine di copertina fornita dalla
+  piattaforma come anteprima; se disattivato, nessuna copertina sarà impostata.
 9b3dbf3e3f85: Nascondi "Fonte" in basso
 a3e3b88377c8: Inizia
 ab480060abb1: Non mostrare i log degli errori
+ab511431782e: I contenuti di tipo articolo sono inviati direttamente con formato testo
+  formattato di Telegram, senza creare una pagina Telegraph.
 ad66098d7867: Conserva i log degli errori
+b0294761479a: Dopo la disattivazione, i link di questa piattaforma non verranno analizzati
+  automaticamente.
 b3bbb48dcb10: Analisi troppo frequente, riprova tra {e.retry_after:.1f} secondi
 b6aaf8f2a2be: Configurazione personale nel gruppo
 b765e4eb1844: Link originale
@@ -84,6 +109,9 @@ c039b80e17dd: Analisi aggregata
 c11154582f8a: Nascondi introduzione
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
+c4ee311078aa: Dopo il completamento dell'analisi, il link inviato dall'utente viene
+  automaticamente eliminato. Nei gruppi, il bot deve avere il permesso di eliminare
+  i messaggi.
 c97827ba89ec: '**Invia un link di condivisione per l''analisi**
 
 
@@ -113,13 +141,24 @@ c97827ba89ec: '**Invia un link di condivisione per l''analisi**
 
   **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Pannello di configurazione
+d2a9e9b5d414: Comportamento dei messaggi
 d5631690265c: Obiettivo di configurazione non riconosciuto
+d58a55bceec7: Disattiva
 d59c948c471c: Analisi in corso...
 d5a73b0c7f2f: Carica
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Analizza e visualizza in anteprima il contenuto
 e4f6307e1c4f: 'Passato a: {LANG_MAP[selected]}'
+e5aa11737c3b: Dopo aver abilitato "Testo personalizzato", utilizza la sintassi delimitata
+  da doppio uguale `==Testo==` nei canali o nelle chat private per inserire il `Testo`
+  con lo stile preservato nel risultato dell'analisi (💡 i canali non supportano emoji
+  personalizzate)
+e7a34daf96fd: I risultati dell'analisi sono inviati come risposta al messaggio originale;
+  se disattivato, saranno inviati direttamente nella chat.
 eaa3cd851501: Testo personalizzato
 f047ff589a7a: Invia pacchettizzato con informazioni di analisi
 f136c494af8c: Crea pagina Telegraph
+fcaea8ec774e: Non inviare messaggi di errore in caso di errore di analisi.
+fed0d2f0cea0: Nella modalità inline, l'elenco dei risultati include un'opzione "Link
+  originale" che, se selezionata, invia solo il link stesso.
 ff7e330bebf8: Configurazione personale nell'argomento
