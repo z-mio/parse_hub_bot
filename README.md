@@ -28,10 +28,6 @@
 
 </div>
 
-
-
-
-
 ---
 
 > 官方实例：[@ParseHubot](https://t.me/ParseHubot)
