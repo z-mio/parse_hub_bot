@@ -3,6 +3,7 @@
 import asyncio
 import re
 from html.parser import HTMLParser
+from typing import cast
 from urllib.parse import urlsplit
 
 from easy_ai18n import LocaleContent
@@ -10,7 +11,20 @@ from markdown import markdown
 from parsehub import ParseHub, Platform
 from parsehub.types import AnyParseResult, RichTextParseResult
 from pyrogram import Client
-from pyrogram.types import Message
+from pyrogram.types import (
+    InputRichBlockDetails,
+    InputRichBlockList,
+    InputRichBlockListItem,
+    InputRichBlockParagraph,
+    InputRichBlockTable,
+    InputRichMessage,
+    Message,
+    RichBlockTableCell,
+    RichText,
+    RichTextBold,
+    RichTextCode,
+    RichTextUrl,
+)
 
 from i18n import t_
 from log import logger
@@ -28,6 +42,7 @@ COMMANDS = {
     "jxjx": t_("绕过缓存解析"),
     "lang": t_("语言"),
     "cfg": t_("配置"),
+    "ocfg": t_("旧版配置菜单"),
 }
 
 
@@ -45,8 +60,104 @@ def build_start_text() -> LocaleContent:
         f"/lang - 语言\n"
         f"/cfg - 配置\n"
         f"/cfg <频道用户名/链接/id> - 频道配置\n"
+        f"/ocfg - 旧版配置菜单\n"
         f"</blockquote>\n\n"
         f"**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
+    )
+
+
+GITHUB_REPO_URL = "https://github.com/z-mio/parse_hub_bot"
+
+
+def _r(value: object) -> RichText:
+    """kurigram 的 RichText 参数运行时可接受 str/list，但标注只写了 RichText 类"""
+    return cast("RichText", value)
+
+
+def _platform_table(lang: str) -> InputRichBlockTable:
+    header = [
+        RichBlockTableCell(text=_r(t_("平台")[lang]), is_header=True),
+        RichBlockTableCell(text=_r(t_("支持类型")[lang]), is_header=True),
+    ]
+    rows = [
+        [
+            RichBlockTableCell(text=_r(i["name"])),
+            RichBlockTableCell(text=_r(", ".join(i["supported_types"]))),
+        ]
+        for i in sorted(ParseHub().get_platforms(), key=lambda i: i["name"], reverse=True)
+    ]
+    return InputRichBlockTable(cells=[header, *rows], is_bordered=True, is_striped=True)
+
+
+def build_help_rich_message(lang: str) -> InputRichMessage:
+    """以 RichMessage blocks 形式构建 /help 富文本文档"""
+    command_lines = [
+        ("jx", f" <{t_('链接')[lang]}>"),
+        ("raw", f" <{t_('链接')[lang]}>"),
+        ("zip", f" <{t_('链接')[lang]}>"),
+        ("jxjx", f" <{t_('链接')[lang]}>"),
+        ("lang", ""),
+        ("cfg", ""),
+    ]
+    command_items = [
+        InputRichBlockListItem(
+            blocks=[
+                InputRichBlockParagraph(
+                    _r(
+                        [
+                            RichTextCode(_r(f"/{cmd}")),
+                            f"{suffix} - {COMMANDS[cmd][lang]}",
+                        ]
+                    )
+                )
+            ]
+        )
+        for cmd, suffix in command_lines
+    ]
+    command_items.append(
+        InputRichBlockListItem(
+            blocks=[
+                InputRichBlockParagraph(
+                    _r(
+                        [
+                            RichTextCode(_r("/cfg")),
+                            f" <{t_('频道用户名/链接/id')[lang]}> - {t_('频道配置')[lang]}",
+                        ]
+                    )
+                )
+            ]
+        )
+    )
+    command_items.append(
+        InputRichBlockListItem(
+            blocks=[
+                InputRichBlockParagraph(
+                    _r(
+                        [
+                            RichTextCode(_r("/ocfg")),
+                            f" - {COMMANDS['ocfg'][lang]}",
+                        ]
+                    )
+                )
+            ]
+        )
+    )
+
+    return InputRichMessage(
+        blocks=[
+            InputRichBlockParagraph(text=_r(t_("发送分享链接以进行解析")[lang])),
+            InputRichBlockDetails(
+                summary=_r(t_("支持的平台")[lang]),
+                blocks=[_platform_table(lang)],
+            ),
+            InputRichBlockDetails(
+                summary=_r(t_("命令列表")[lang]),
+                blocks=[InputRichBlockList(items=command_items)],
+            ),
+            InputRichBlockParagraph(
+                _r(RichTextBold(_r([t_("开源地址")[lang], ": ", RichTextUrl(_r("GitHub"), GITHUB_REPO_URL)])))
+            ),
+        ]
     )
 
 

@@ -139,7 +139,9 @@ def restore_cfg_target(cq: CallbackQuery, data: CfgCQData) -> AnySettingsTarget 
             return ChannelSettingsTarget(telegram_chat_id=data.channel_id)
 
 
-def cfg_callback_data(action: CfgAction, value: str, target: AnySettingsTarget | None) -> str:
+def cfg_callback_data(
+    action: CfgAction, value: str, target: AnySettingsTarget | None, expanded: str | None = None
+) -> str:
     scope: CfgScopeCode | None
     match target:
         case UserSettingsTarget():
@@ -165,6 +167,7 @@ def cfg_callback_data(action: CfgAction, value: str, target: AnySettingsTarget |
         user_id=target.telegram_user_id
         if isinstance(target, UserSettingsTarget | GroupMemberSettingsTarget | ForumTopicMemberSettingsTarget)
         else None,
+        expanded=expanded,
     ).unparse()
 
 

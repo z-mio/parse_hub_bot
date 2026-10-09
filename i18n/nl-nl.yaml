@@ -3,66 +3,42 @@
 04f706887b08: Bot is niet toegevoegd aan dit kanaal, voeg de Bot eerst toe aan het
   kanaal voordat je het configureert
 06778dbf05d5: Platformbeheer
-08fc0528426e: '**▎Overgeschakeld naar: {LANG_MAP[selected]}**'
 091d3a0665fa: Kanaalconfiguratie
-0c7c37b93cfe: "**▎{stage} Fout:** \n```\n{error}```"
+0b93dc449457: De inhoud van de post wordt niet weergegeven in het parse-resultaat.
+  Artikelen verzonden met Telegraph of rich text worden niet beïnvloed.
 0d3d68e32996: Er is al eenzelfde taak bezig met ontleden, wacht tot het ontleden is
   voltooid...
 0f6c4353601e: Stuur het originele bestand om kwaliteitscompressie te voorkomen
 0f6cedccc5d3: Te veel GIF's, upload wordt overgeslagen, download ze zelf
 1a603ac4b55c: Stuur `/cfg` in een privébericht, groep of onderwerp, of gebruik `/cfg
   <kanaal gebruikersnaam/link/id>` om te configureren
+1a7619451107: Foutmeldingen blijven zichtbaar bij parse-fouten en verdwijnen automatisch
+  15 seconden na het sluiten.
 1d30c358e2a1: Standaard parseermodus
 1f3c920d087b: Bezig met verwerken...
+20a7b9ae5106: Oud configuratiemenu
 224e2ccda861: Configuratie
+2560e051161e: Het parse-resultaat bevat niet langer de "Source" originele link aan
+  het einde.
+256aefe3fdbf: Foutlogboek
 27350d00b70d: Bezig met uploaden...
 295bb704f520: Taal
-2b256f16d436: '** ▎{status} automatisch verwijderde gedeelde linkberichten **'
 2bc28481a223: Automatisch verwijderde linkberichten
 30364e475d07: Dit is niet jouw actie
 3065ed13e5f9: Oorspronkelijke link ophalen
-32327b34a026: '**Verzend de deel-link voor analyse**
-
-
-  **Ondersteunde platforms:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lijst met commando''s:**
-
-  <blockquote expandable>/jx <link> - Analyseer en verzend media
-
-  /raw <link> - Verwerk media niet, verzend het originele bestand
-
-  /zip <link> - Verwerk media niet, sla de analyse op en verzend een gecomprimeerd
-  pakket
-
-  /jxjx <link> - Omzeil cache, analyseer en verzend media
-
-  /lang - Kies taal
-
-  /mode - Stel de standaard analysemode in
-
-  /switches - Andere functiewisselaars
-
-  /switch_auto_delete - Schakel automatisch verwijderen van deel-link berichten in/uit
-
-  /switch_platform - Schakel platformanalyse in/uit
-
-  </blockquote>
-
-
-  **Open source locatie: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+31f3c8c65cc4: Kanaalgebruikersnaam/link/id
+32316f34b45d: Inhoudsweergave
+330add4a5718: Stuur geen voortgangsberichten meer over de analyse, stuur het resultaat
+  direct na voltooiing van de analyse.
 33ccc7a4682a: Niet-ondersteund platform
-34f3f7d5372a: '**▎GIF downloadlink**'
-36c680f6f5b0: Platformontleding in-/uitschakelen
 3795485677d6: Groepsconfiguratie
 39b75e75d433: Videominiatuur
+39e4a584197b: Ondersteunde platforms
 3d3eeb2bc9cd: Onbekende configuratieoptie
 405ba1795958: Topicconfiguratie
-44a77d4ad4ca: Geen titel
+411955a09348: Open-source adres
 460ce129a523: Bezig met downloaden...
+4981287fe504: Platform
 4e9ce9dfe13d: Titel verbergen
 4fb5f29ee802: Voeg een link toe of beantwoord een bericht
 4fbdbeb0f163: '
@@ -78,8 +54,11 @@
 
 
   **Open source locatie: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+5066c3cded7f: 'https://x.com/i/status/123
+
+  ==Schrijf hier de tekst=='
+53ace4305f51: Ingeschakeld
 569c1f28ab00: Bezig met inpakken...
-5713cae37816: '**▎Niet ondersteund platform**'
 5861d620c41d: Bezig met downloaden... | {current}/{total}
 5a9f36a77173: Inpakken
 5b943dc87178: GIF downloadlink
@@ -87,58 +66,30 @@
 5d6ac8f8e4f3: Artikel verzonden met rich text
 5e788d9e0992: Geen kanaal
 5f411223ca5a: Terug
-5fcfdc5f95ad: '**▎Selecteer standaard ontledingsmodus**'
-645dbc5504e7: Voorbeeld
-6536e2506f73: Inschakelen/Uitschakelen automatisch verwijderen van gedeelde linkberichten
-6612548ad85b: Comprimeren
+662e14fab581: De parse-methode die wordt gebruikt bij het direct verzenden van een
+  link; bij gebruik van een commando geldt het commando.
 6740d8c7b274: Antwoord op bericht
 6769c172299c: Je bent geen beheerder van deze chat, je hebt geen toestemming om de
   configuratie te wijzigen
 68957ac274c5: Bezig met downloaden... | {current * 100 / total:.0f}%
-710ad08b1141: Uitschakelen
 '734176584215': Je bent geen eigenaar van dit kanaal, je hebt geen toestemming om
   de kanaalconfiguratie te wijzigen
 769d88e425e0: Voltooid
 77274b54a324: '{stage} fout:'
-773e37502413: '**▎Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}
-  seconden**'
-7854b52a889b: Inschakelen
+7853187dd3ea: Ondersteuningstype
+7b48a0292498: De titel van de post wordt niet weergegeven in het parse-resultaat.
+  Artikelen verzonden met Telegraph of rich text worden niet beïnvloed.
 7eafd0a497bd: '
 
 
   <b>Probleemfeedback: @MisakaSisters</b>'
 816de50b9e0e: Voer een link in het chatvenster in
+'849320560237': Aan
 868afb493654: Kies configuratiedoel
 8a8672da4ab7: Niet-ondersteunde configuratieoptie
-8c028b35f75a: '**▎Overgeschakeld naar: {MODE_MAP[selected]}**'
+8dc878e08cd6: Verzend de deel-link voor analyse
 8f555aa82c87: Originele link
-929107a1e13c: '**▎Voeg een link toe of beantwoord een bericht**'
-945599b91845: Parsing voortgang uitschakelen
-996ebe10260e: '**▎Te veel GIFs, upload overgeslagen, download zelf**'
-9b3dbf3e3f85: Verberg "Bron" onderaan
-9dbc542be826: Verberg analysevoortgang
-a3e3b88377c8: Start
-a4ce27c8e465: '**▎Functie Schakelaar**'
-aa357cb96ee8: Ontleden
-ab480060abb1: Foutlogboeken niet weergeven
-ad66098d7867: Foutlogboek bewaren
-b3bbb48dcb10: Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}s
-b6aaf8f2a2be: Persoonlijke configuratie binnen groep
-b765e4eb1844: Originele link
-b8918b19e2a1: '**▎Platformontleding in-/uitschakelen**'
-b8a95e74574c: Media niet verwerken, originele bestanden verzenden
-be6f406c8f81: Persoonlijke configuratie
-bebccdf7a76e: Ongeldig linkformaat
-c039b80e17dd: Geaggregeerde ontleding
-c11154582f8a: Introductie verbergen
-c1ecedab11bc: Origineel
-c2236f70c559: Cache-omzeiling parsing
-c25add78a072: "{t} \n```\n{error}```"
-c589bcdf2a2b: '
-
-
-  **Probleemrapportage: @MisakaSisters**'
-c97827ba89ec: '**Stuur een deel-link om te parseren**
+928c258e7aae: '**Stuur een deel-link om te ontleden**
 
 
   **Ondersteunde platforms:**
@@ -148,13 +99,13 @@ c97827ba89ec: '**Stuur een deel-link om te parseren**
 
   **Lijst met commando''s:**
 
-  <blockquote expandable>/jx <link> - Parseer en bekijk inhoud
+  <blockquote expandable>/jx <link> - Inhoud ontleden en previewen
 
-  /raw <link> - Stuur het originele bestand om kwaliteitscompressie te voorkomen
+  /raw <link> - Origineel bestand verzenden, om kwaliteitsverlies te voorkomen
 
-  /zip <link> - Verpak en stuur, inclusief parseer informatie
+  /zip <link> - Verpakt verzenden, inclusief ontledingsinformatie
 
-  /jxjx <link> - Omzeil cache parsing
+  /jxjx <link> - Ontleden zonder cache
 
   /lang - Taal
 
@@ -162,25 +113,55 @@ c97827ba89ec: '**Stuur een deel-link om te parseren**
 
   /cfg <kanaal gebruikersnaam/link/id> - Kanaalconfiguratie
 
+  /ocfg - Oud configuratiemenu
+
   </blockquote>
 
 
   **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+945599b91845: Parsing voortgang uitschakelen
+996b5ce5395f: Wanneer een video wordt verzonden, wordt de door het platform geleverde
+  coverafbeelding als videominiatuur gebruikt. Bij uitschakeling wordt er geen cover
+  ingesteld.
+9b3dbf3e3f85: Verberg "Bron" onderaan
+a3e3b88377c8: Start
+ab480060abb1: Foutlogboeken niet weergeven
+ab511431782e: Artikelinhoud wordt direct als Telegram rich text verzonden en er wordt
+  geen Telegraph-pagina meer aangemaakt.
+ad66098d7867: Foutlogboek bewaren
+b0294761479a: Na het uitschakelen worden links van dit platform niet automatisch geanalyseerd.
+b3bbb48dcb10: Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}s
+b6aaf8f2a2be: Persoonlijke configuratie binnen groep
+b765e4eb1844: Originele link
+bbef4170b1e1: Lijst met commando's
+be6f406c8f81: Persoonlijke configuratie
+bebccdf7a76e: Ongeldig linkformaat
+bfe68d5844f8: Link
+c039b80e17dd: Geaggregeerde ontleding
+c11154582f8a: Introductie verbergen
+c2236f70c559: Cache-omzeiling parsing
+c25add78a072: "{t} \n```\n{error}```"
+c4ee311078aa: Verwijder automatisch links die door gebruikers zijn verzonden na analyse.
+  In groepen moet de bot de toestemming hebben om berichten te verwijderen.
 d2282636abc7: Configuratiepaneel
+d2a9e9b5d414: Berichtgedrag
 d5631690265c: Kan configuratiedoel niet herkennen
+d58a55bceec7: Uit
 d59c948c471c: Bezig met ontleden...
 d5a73b0c7f2f: Uploaden
-d6fa702190b6: Stel de standaard parse-modus in
-d7146da48b3e: Andere functiewisselaars
-d915366ac40b: Media niet verwerken, ontledingsresultaat opslaan, zip-bestand verzenden
-da72eb8457df: Verberg onderste Source-hyperlink
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Parseer en bekijk inhoud
 e4f6307e1c4f: 'Gewisseld naar: {LANG_MAP[selected]}'
-e67a8324684f: ▎**Bot moet toestemming hebben om berichten te verwijderen binnen de
-  groep**
-e73189b92dbd: Optie om ruwe URL inline te verzenden
+e5aa11737c3b: Na het inschakelen van "Aangepaste tekst", kunt u in kanalen/privégesprekken
+  de `==tekst==` dubbele gelijkheidstekens gebruiken als afbakening, om de `tekst`
+  met opmaak in het resultaat in te voegen (💡 Kanalen ondersteunen geen aangepaste
+  emoji's).
+e7a34daf96fd: Het parse-resultaat wordt als antwoord op het originele bericht verzonden;
+  bij uitschakeling wordt het direct in de chat geplaatst.
 eaa3cd851501: Aangepaste tekst
 f047ff589a7a: Verpak en stuur, inclusief parseer informatie
-ff71243806c8: Kies taal
+f136c494af8c: Maak een Telegraph-pagina aan
+fcaea8ec774e: Bij parse-fouten worden er geen foutmeldingen verzonden.
+fed0d2f0cea0: De lijst met resultaten in inline-modus bevat de optie "Originele link";
+  bij selectie wordt alleen de link zelf verzonden.
 ff7e330bebf8: Persoonlijke configuratie binnen onderwerp

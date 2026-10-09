@@ -2,13 +2,14 @@ from easy_ai18n import PreLocaleSelector
 from pyrogram import Client, filters
 from pyrogram.enums import ChatType
 from pyrogram.errors import RPCError
-from pyrogram.types import CallbackQuery, Message
+from pyrogram.types import CallbackQuery, InputRichBlockSectionHeading, InputRichMessage, Message
 
 from db import get_session
 from i18n import t_
-from plugins.helpers import format_label
+from plugins.helpers import _r, format_label
 from plugins.settings.models import BOOL_SWITCH_MAP, CfgAction, CfgCQData, CfgPage, SettingsViewModel
-from plugins.settings.render import build_cfg_markup, cfg_page_label
+from plugins.settings.render import build_cfg_rich_message, build_cfg_title
+from plugins.settings.render_legacy import build_cfg_markup
 from plugins.settings.target import (
     build_cfg_target_options,
     ensure_cfg_field,
@@ -32,6 +33,15 @@ from services.settings import (
 
 @Client.on_message(filters.command("cfg"))
 async def cfg(cli: Client, msg: Message) -> None:
+    await cfg_command(cli, msg, legacy=False)
+
+
+@Client.on_message(filters.command("ocfg"))
+async def ocfg(cli: Client, msg: Message) -> None:
+    await cfg_command(cli, msg, legacy=True)
+
+
+async def cfg_command(cli: Client, msg: Message, *, legacy: bool) -> None:
     if not msg.from_user:
         return
 
@@ -46,7 +56,7 @@ async def cfg(cli: Client, msg: Message) -> None:
             return
         async with get_session() as session:
             vm = await build_cfg_vm(SettingsService(session), _t, target, "频道配置")
-        await msg.reply(format_label(build_cfg_title(_t, vm.target_label)), reply_markup=build_cfg_markup(_t, vm))
+        await reply_cfg_panel(msg, _t, vm, legacy=legacy)
         return
 
     options = await build_cfg_target_options(cli, msg, _t)
@@ -57,7 +67,7 @@ async def cfg(cli: Client, msg: Message) -> None:
         option = options[0]
         async with get_session() as session:
             vm = await build_cfg_vm(SettingsService(session), _t, option.target, option.label)
-        await msg.reply(format_label(build_cfg_title(_t, vm.target_label)), reply_markup=build_cfg_markup(_t, vm))
+        await reply_cfg_panel(msg, _t, vm, legacy=legacy)
         return
 
     vm = SettingsViewModel(
@@ -67,7 +77,15 @@ async def cfg(cli: Client, msg: Message) -> None:
         target_label=None,
         target_options=tuple(options),
     )
-    await msg.reply(format_label(_t("选择配置目标")), reply_markup=build_cfg_markup(_t, vm))
+    await reply_cfg_panel(msg, _t, vm, legacy=legacy)
+
+
+async def reply_cfg_panel(msg: Message, _t: PreLocaleSelector, vm: SettingsViewModel, *, legacy: bool) -> None:
+    if legacy:
+        text = _t("选择配置目标") if vm.target is None else build_cfg_title(_t, vm.target_label)
+        await msg.reply(format_label(text), reply_markup=build_cfg_markup(_t, vm))
+        return
+    await msg.reply_rich(rich_message=build_cfg_rich_message(_t, vm))
 
 
 @Client.on_callback_query(filters.regex(r"^cfg"))
@@ -76,6 +94,7 @@ async def cfg_callback(cli: Client, cq: CallbackQuery) -> None:
         return
 
     data = CfgCQData.parse(cq.data)
+    legacy = cq.message.rich_message is None
     async with get_session() as session:
         lang = await UserService(session).get_lang(cq.from_user.id)
         _t = t_[lang]
@@ -101,6 +120,7 @@ async def cfg_callback(cli: Client, cq: CallbackQuery) -> None:
                 if not await ensure_cfg_field(cq, _t, target, "default_mode"):
                     return
                 if (await settings.get_config(target)).default_mode == selected:
+                    await cq.answer()
                     return
                 await settings.patch_config(target, default_mode=selected)
             case CfgAction.TOGGLE_BOOL:
@@ -126,25 +146,36 @@ async def cfg_callback(cli: Client, cq: CallbackQuery) -> None:
                 pass
             case CfgAction.DONE:
                 pass
+            case CfgAction.EXPAND:
+                pass
 
         label = get_cfg_target_label(_t, target)
         vm = await build_cfg_vm(settings, _t, target, label)
 
+    expanded = data.expanded
+    if data.action == CfgAction.EXPAND:
+        expanded = None if data.expanded == data.value else data.value
+    focus = data.value if data.action in (CfgAction.TOGGLE_BOOL, CfgAction.EXPAND) else None
     page = (
         CfgPage.PLATFORM
         if data.action == CfgAction.TOGGLE_PLATFORM or data.value == CfgPage.PLATFORM.value
         else CfgPage.MAIN
     )
-    await cq.message.edit(
-        format_label(build_cfg_title(_t, vm.target_label, page)),
-        reply_markup=build_cfg_markup(_t, vm, page),
-    )
+    if legacy:
+        await cq.message.edit(
+            format_label(build_cfg_title(_t, vm.target_label, page)),
+            reply_markup=build_cfg_markup(_t, vm, page),
+        )
+    else:
+        await cq.message.edit_text(rich_message=build_cfg_rich_message(_t, vm, page, expanded=expanded, focus=focus))
+    await cq.answer()
 
 
 async def finish_cfg_panel(cli: Client, cq: CallbackQuery, _t: PreLocaleSelector, data: CfgCQData) -> None:
     if not cq.message:
         return
 
+    legacy = cq.message.rich_message is None
     target = restore_cfg_target(cq, data)
     if not target:
         await cq.answer(_t("无法识别配置目标"), show_alert=True)
@@ -154,9 +185,23 @@ async def finish_cfg_panel(cli: Client, cq: CallbackQuery, _t: PreLocaleSelector
 
     if await can_delete_cfg_messages(cli, cq):
         await delete_cfg_messages(cq.message)
+        await cq.answer()
         return
 
-    await cq.message.edit(format_label(build_cfg_title(_t, label, suffix=_t("完成"))), reply_markup=None)
+    if legacy:
+        await cq.message.edit(format_label(build_cfg_title(_t, label, suffix=_t("完成"))), reply_markup=None)
+    else:
+        await cq.message.edit_text(
+            rich_message=InputRichMessage(
+                blocks=[
+                    InputRichBlockSectionHeading(
+                        text=_r(f"⚙️ {build_cfg_title(_t, label, suffix=_t('完成'))}"),
+                        size=2,
+                    )
+                ]
+            )
+        )
+    await cq.answer()
 
 
 async def can_delete_cfg_messages(cli: Client, cq: CallbackQuery) -> bool:
@@ -204,23 +249,6 @@ def get_cfg_target_label(_t: PreLocaleSelector, target: AnySettingsTarget) -> st
         case ChannelSettingsTarget():
             label = _t("频道配置")
     return str(label)
-
-
-def build_cfg_title(
-    _t: PreLocaleSelector,
-    target_label: str | None,
-    page: CfgPage = CfgPage.MAIN,
-    *,
-    suffix: str | None = None,
-) -> str:
-    parts = [_t("配置面板")]
-    if target_label:
-        parts.append(target_label)
-    if page_label := cfg_page_label(_t, page):
-        parts.append(page_label)
-    if suffix:
-        parts.append(suffix)
-    return " - ".join(parts)
 
 
 async def build_cfg_vm(

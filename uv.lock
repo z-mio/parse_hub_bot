@@ -1624,7 +1624,7 @@ requires-dist = [
     { name = "loguru", specifier = ">=0.6.0" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
-    { name = "parsehub", specifier = ">=2.2.1" },
+    { name = "parsehub", specifier = ">=2.3.0" },
     { name = "pillow", specifier = ">=12.1.1" },
     { name = "pillow-heif", specifier = ">=1.1.1" },
     { name = "pydantic", specifier = ">=2.12.5" },

@@ -3,65 +3,40 @@
 04f706887b08: Bot nie dołączył do tego kanału, najpierw dodaj bota do kanału, a następnie
   skonfiguruj
 06778dbf05d5: Zarządzanie platformą
-08fc0528426e: '**▎Przełączono na: {LANG_MAP[selected]}**'
 091d3a0665fa: Konfiguracja kanału
-0c7c37b93cfe: "**▎Błąd {stage}:** \n```\n{error}```"
+0b93dc449457: Wyniki analizy nie pokazują streszczenia treści posta. Artykuły wysłane
+  przez Telegraph lub jako bogaty tekst nie są dotknięte.
 0d3d68e32996: Już trwa analiza tego samego zadania, czekaj na zakończenie analizy...
 0f6c4353601e: Wyślij oryginalny plik, aby uniknąć kompresji jakości obrazu
 0f6cedccc5d3: Zbyt wiele GIF-ów, pomijanie przesyłania, proszę pobrać samodzielnie
 1a603ac4b55c: Proszę wysłać `/cfg` lub użyć `/cfg <nazwa_użytkownika_kanalu/link/id>`
   w prywatnej rozmowie, grupie lub temacie, aby skonfigurować
+1a7619451107: W przypadku błędu analizy komunikat o błędzie pozostaje widoczny, po
+  zamknięciu zostanie automatycznie usunięty po 15 sekundach.
 1d30c358e2a1: Domyślny tryb analizy
 1f3c920d087b: Przetwarzanie...
+20a7b9ae5106: Stare menu konfiguracji
 224e2ccda861: Konfiguracja
+2560e051161e: Na końcu wyników analizy nie będzie już dołączany oryginalny link „Source”.
+256aefe3fdbf: Dziennik błędów
 27350d00b70d: Przesyłanie...
 295bb704f520: Język
-2b256f16d436: '** ▎Automatycznie usunięto {status} wiadomości z linkami do udostępniania**'
 2bc28481a223: Automatyczne usuwanie wiadomości z linkami
 30364e475d07: To nie jest twoja operacja
 3065ed13e5f9: Pobierz oryginalny link
-32327b34a026: '**Wyślij link do udostępnienia, aby go przeanalizować**
-
-
-  **Obsługiwane platformy:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lista poleceń:**
-
-  <blockquote expandable>/jx <link> - analizuj i wyślij media
-
-  /raw <link> - nie przetwarzaj mediów, wyślij oryginalny plik
-
-  /zip <link> - nie przetwarzaj mediów, zapisz wynik analizy, wyślij archiwum
-
-  /jxjx <link> - pomiń pamięć podręczną, analizuj i wyślij media
-
-  /lang - wybierz język
-
-  /mode - ustaw domyślny tryb analizy
-
-  /switches - inne przełączniki funkcji
-
-  /switch_auto_delete - włącz/wyłącz automatyczne usuwanie wiadomości z linkiem do
-  udostępnienia
-
-  /switch_platform - włącz/wyłącz analizę platformy
-
-  </blockquote>
-
-
-  **Kod źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+31f3c8c65cc4: Nazwa użytkownika/link/id kanału
+32316f34b45d: Wyświetlanie treści
+330add4a5718: Nie wysyłaj już wiadomości o postępach analizowania, po zakończeniu
+  analizy wyślij bezpośrednio wynik.
 33ccc7a4682a: Nieobsługiwana platforma
-34f3f7d5372a: '**▎Link do pobrania GIF**'
-36c680f6f5b0: Włącz/Wyłącz analizę platformy
 3795485677d6: Konfiguracja grupy
 39b75e75d433: Miniatura wideo
+39e4a584197b: Obsługiwane platformy
 3d3eeb2bc9cd: Nieznana opcja konfiguracji
 405ba1795958: Konfiguracja tematu
-44a77d4ad4ca: Bez tytułu
+411955a09348: Adres open source
 460ce129a523: Pobieranie...
+4981287fe504: Platforma
 4e9ce9dfe13d: Ukryj tytuł
 4fb5f29ee802: Proszę dołączyć link lub odpowiedzieć na wiadomość
 4fbdbeb0f163: '
@@ -77,8 +52,11 @@
 
 
   **Repozytorium otwartego źródła: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+5066c3cded7f: 'https://x.com/i/status/123
+
+  ==Tu wpisz tekst reklamowy=='
+53ace4305f51: Włączone
 569c1f28ab00: Pakowanie...
-5713cae37816: '**▎Platforma nieobsługiwana**'
 5861d620c41d: Pobieranie... | {current}/{total}
 5a9f36a77173: Pakuj
 5b943dc87178: Link do pobrania GIF
@@ -86,57 +64,30 @@
 5d6ac8f8e4f3: Artykuł wysłany z użyciem formatowania tekstu
 5e788d9e0992: Nie kanał
 5f411223ca5a: Powrót
-5fcfdc5f95ad: '**▎Wybierz domyślny tryb analizy**'
-645dbc5504e7: Podgląd
-6536e2506f73: Włącz/Wyłącz automatyczne usuwanie wiadomości z linkami do udostępniania
-6612548ad85b: Kompresuj
+662e14fab581: Sposób analizy używany przy bezpośrednim wysłaniu linku. Podczas użycia
+  komendy obowiązuje sposób określony w komendzie.
 6740d8c7b274: Odpowiedz na wiadomość
 6769c172299c: Nie jesteś administratorem tego czatu, nie masz uprawnień do zmiany
   konfiguracji
 68957ac274c5: Pobieranie... | {current * 100 / total:.0f}%
-710ad08b1141: Wyłącz
 '734176584215': Nie jesteś właścicielem tego kanału, nie masz uprawnień do zmiany
   konfiguracji kanału
 769d88e425e0: Zakończono
 77274b54a324: 'Błąd {stage}:'
-773e37502413: '**▎Zbyt częste przetwarzanie, spróbuj ponownie za {e.retry_after:.1f}s**'
-7854b52a889b: Włącz
+7853187dd3ea: Typ wsparcia
+7b48a0292498: Wyniki analizy nie pokazują tytułu posta. Artykuły wysłane przez Telegraph
+  lub jako bogaty tekst nie są dotknięte.
 7eafd0a497bd: '
 
 
   <b>Opinie i sugestie: @MisakaSisters</b>'
 816de50b9e0e: Wpisz link w polu czatu
+'849320560237': Włącz
 868afb493654: Wybierz cel konfiguracji
 8a8672da4ab7: Nieobsługiwany element konfiguracji
-8c028b35f75a: '**▎Przełączono na: {MODE_MAP[selected]}**'
+8dc878e08cd6: Wyślij link do udostępnienia w celu analizy
 8f555aa82c87: Oryginalny link
-929107a1e13c: '**▎Dodaj link lub odpowiedz na wiadomość**'
-945599b91845: Wyłącz postęp analizy
-996ebe10260e: '**▎Zbyt wiele GIF-ów, pomijam przesyłanie, proszę pobrać samodzielnie**'
-9b3dbf3e3f85: Ukryj dolny „Źródło”
-9dbc542be826: Ukryj postęp analizy
-a3e3b88377c8: Start
-a4ce27c8e465: '**▎Przełącznik funkcji**'
-aa357cb96ee8: Analizuj
-ab480060abb1: Nie pokazuj dziennika błędów
-ad66098d7867: Zachowaj dziennik błędów
-b3bbb48dcb10: Analiza zbyt częsta, spróbuj ponownie za {e.retry_after:.1f}s
-b6aaf8f2a2be: Konfiguracja osobista w grupie
-b765e4eb1844: Oryginalny link
-b8918b19e2a1: '**▎Włącz / Wyłącz analizę platformy**'
-b8a95e74574c: Nie przetwarzaj mediów, wyślij oryginalny plik
-be6f406c8f81: Konfiguracja osobista
-bebccdf7a76e: Nieprawidłowy format linku
-c039b80e17dd: Agreguj analizę
-c11154582f8a: Ukryj wprowadzenie
-c1ecedab11bc: Oryginalny
-c2236f70c559: Omijanie analizy pamięci podręcznej
-c25add78a072: "{t} \n```\n{error}```"
-c589bcdf2a2b: '
-
-
-  **Opinie o problemie: @MisakaSisters**'
-c97827ba89ec: '**Wyślij link do udostępnienia, aby przeanalizować**
+928c258e7aae: '**Wyślij link do udostępnienia w celu analizy**
 
 
   **Obsługiwane platformy:**
@@ -146,38 +97,68 @@ c97827ba89ec: '**Wyślij link do udostępnienia, aby przeanalizować**
 
   **Lista poleceń:**
 
-  <blockquote expandable>/jx <link> - Analizuj i podglądaj zawartość
+  <blockquote expandable>/jx <link> - analizuj i podglądaj zawartość
 
-  /raw <link> - Wyślij oryginalny plik, aby uniknąć kompresji jakości obrazu
+  /raw <link> - wyślij oryginalny plik, unikając kompresji jakości
 
-  /zip <link> - Wyślij jako paczkę, z informacjami o analizie
+  /zip <link> - pakuj i wysyłaj, z informacjami o analizie
 
-  /jxjx <link> - Analiza z pominięciem pamięci podręcznej
+  /jxjx <link> - omijaj pamięć podręczną podczas analizy
 
-  /lang - Język
+  /lang - język
 
-  /cfg - Konfiguracja
+  /cfg - konfiguracja
 
-  /cfg <nazwa_użytkownika_kanalu/link/id> - Konfiguracja kanału
+  /cfg <nazwa_użytkownika_kanalu/link/id> - konfiguracja kanału
+
+  /ocfg - stare menu konfiguracji
 
   </blockquote>
 
 
-  **Adres źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+  **Kod źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+945599b91845: Wyłącz postęp analizy
+996b5ce5395f: Podczas wysyłania wideo użyj miniatury udostępnionej przez platformę
+  jako okładki wideo, po wyłączeniu okładka nie będzie ustawiana.
+9b3dbf3e3f85: Ukryj dolny „Źródło”
+a3e3b88377c8: Start
+ab480060abb1: Nie pokazuj dziennika błędów
+ab511431782e: Treści artykułów wysyłaj bezpośrednio jako bogaty tekst Telegram, nie
+  twórz już stron Telegraph.
+ad66098d7867: Zachowaj dziennik błędów
+b0294761479a: Po wyłączeniu wysyłanie linków z tej platformy nie będzie automatycznie
+  analizowane.
+b3bbb48dcb10: Analiza zbyt częsta, spróbuj ponownie za {e.retry_after:.1f}s
+b6aaf8f2a2be: Konfiguracja osobista w grupie
+b765e4eb1844: Oryginalny link
+bbef4170b1e1: Lista poleceń
+be6f406c8f81: Konfiguracja osobista
+bebccdf7a76e: Nieprawidłowy format linku
+bfe68d5844f8: Link
+c039b80e17dd: Agreguj analizę
+c11154582f8a: Ukryj wprowadzenie
+c2236f70c559: Omijanie analizy pamięci podręcznej
+c25add78a072: "{t} \n```\n{error}```"
+c4ee311078aa: Po zakończeniu analizy link wysłany przez użytkownika jest automatycznie
+  usuwany. W grupach bot musi mieć uprawnienia do usuwania wiadomości.
 d2282636abc7: Panel konfiguracji
+d2a9e9b5d414: Zachowanie wiadomości
 d5631690265c: Nie można rozpoznać celu konfiguracji
+d58a55bceec7: Wyłącz
 d59c948c471c: Analizowanie...
 d5a73b0c7f2f: Przesyłanie
-d6fa702190b6: Ustaw domyślny tryb analizy
-d7146da48b3e: Inne przełączniki funkcji
-d915366ac40b: Nie przetwarzaj mediów, zapisz wynik analizy, wyślij archiwum
-da72eb8457df: Ukryj dolny hiperłącze źródła
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Analizuj i podglądaj zawartość
 e4f6307e1c4f: 'Przełączono na: {LANG_MAP[selected]}'
-e67a8324684f: ▎**W grupie wymagana jest zgoda na usuwanie wiadomości przez bota**
-e73189b92dbd: Opcja wysyłania surowego URL w linii
+e5aa11737c3b: Po włączeniu opcji „Niestandardowy tekst”, używając w kanale lub prywatnej
+  rozmowie składni z podwójnym znakiem równości `==tekst==`, można wstawić „tekst”
+  z zachowaniem stylu do wyniku analizy (💡 Kanały nie obsługują niestandardowych emotikonów)
+e7a34daf96fd: Wynik analizy jest wysyłany jako odpowiedź na oryginalną wiadomość,
+  po wyłączeniu jest wysyłany bezpośrednio do czatu.
 eaa3cd851501: Niestandardowy tekst
 f047ff589a7a: Wyślij jako paczkę, z informacjami o analizie
-ff71243806c8: Wybierz język
+f136c494af8c: Utwórz stronę Telegraph
+fcaea8ec774e: W przypadku błędu analizy nie wysyłaj komunikatu o błędzie.
+fed0d2f0cea0: W trybie inline na liście wyników dodaj opcję „Oryginalny link”, wybranie
+  jej spowoduje wysłanie tylko samego linku.
 ff7e330bebf8: Konfiguracja osobista w temacie
