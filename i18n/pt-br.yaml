@@ -3,9 +3,7 @@
 04f706887b08: Bot não entrou no canal, por favor adicione o Bot ao canal antes de
   configurar
 06778dbf05d5: Gerenciamento da plataforma
-08fc0528426e: '**▎Alternado para: {LANG_MAP[selected]}**'
 091d3a0665fa: Configuração do canal
-0c7c37b93cfe: "**▎Erro em {stage}:** \n```\n{error}```"
 0d3d68e32996: Já existe uma tarefa igual sendo processada, aguardando a conclusão...
 0f6c4353601e: Enviar arquivo original, evitar compressão de qualidade
 0f6cedccc5d3: Muitos GIFs, pulando upload, por favor baixe manualmente
@@ -16,52 +14,17 @@
 224e2ccda861: Configuração
 27350d00b70d: Enviando...
 295bb704f520: Idioma
-2b256f16d436: '** ▎Já foram excluídas automaticamente {status} mensagens de links
-  compartilhados **'
 2bc28481a223: Excluir automaticamente mensagens de link
 30364e475d07: Esta não é a sua operação
 3065ed13e5f9: Obter link original
-32327b34a026: '**Envie o link de compartilhamento para análise**
-
-
-  **Plataformas suportadas:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lista de comandos:**
-
-  <blockquote expandable>/jx <link> - Analisa e envia mídia
-
-  /raw <link> - Não processa mídia, envia arquivo original
-
-  /zip <link> - Não processa mídia, salva resultado da análise, envia arquivo compactado
-
-  /jxjx <link> - Ignora cache, analisa e envia mídia
-
-  /lang - Seleciona idioma
-
-  /mode - Define modo padrão de análise
-
-  /switches - Outras opções
-
-  /switch_auto_delete - Ativa/Desativa exclusão automática de mensagens com links
-  de compartilhamento
-
-  /switch_platform - Ativa/Desativa análise de plataforma
-
-  </blockquote>
-
-
-  **Código aberto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+31f3c8c65cc4: Nome de usuário/link/id do canal
 33ccc7a4682a: Plataforma não suportada
-34f3f7d5372a: '**▎Link para download do GIF**'
-36c680f6f5b0: Ativar/Desativar análise da plataforma
 3795485677d6: Configuração do grupo
 39b75e75d433: Capa do vídeo
+39e4a584197b: Plataformas suportadas
 3d3eeb2bc9cd: Opção de configuração desconhecida
 405ba1795958: Configuração do tópico
-44a77d4ad4ca: Sem título
+411955a09348: Endereço de código aberto
 460ce129a523: Baixando...
 4981287fe504: Plataforma
 4e9ce9dfe13d: Ocultar título
@@ -72,7 +35,6 @@
   instância para evitar acionar o limite global de taxa da API do Telegram\n\n**Código
   aberto disponível em: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Empacotando...
-5713cae37816: '**▎Plataforma não suportada**'
 5861d620c41d: Baixando... | {current}/{total}
 5a9f36a77173: Empacotar
 5b943dc87178: Link para download do GIF
@@ -80,22 +42,15 @@
 5d6ac8f8e4f3: Artigo enviado com texto formatado
 5e788d9e0992: Não é um canal
 5f411223ca5a: Voltar
-5fcfdc5f95ad: '**▎Selecionar modo de análise padrão**'
-645dbc5504e7: Visualizar
-6536e2506f73: Ativar/Desativar exclusão automática de mensagens de link compartilhado
-6612548ad85b: Comprimir
 6740d8c7b274: Responder mensagem
 6769c172299c: Você não é administrador deste chat, não tem permissão para modificar
   a configuração
 68957ac274c5: Baixando... | {current * 100 / total:.0f}%
-710ad08b1141: Desativar
 '734176584215': Você não é o proprietário deste canal, não tem permissão para modificar
   a configuração do canal
 769d88e425e0: Concluído
 77274b54a324: 'Erro em {stage}:'
-773e37502413: '**▎Análise muito frequente, por favor tente novamente em {e.retry_after:.1f}s**'
-7853187dd3ea: Tipos suportados
-7854b52a889b: Ativar
+7853187dd3ea: Tipo de suporte
 7eafd0a497bd: '
 
 
@@ -103,31 +58,24 @@
 816de50b9e0e: Por favor, insira o link na caixa de chat
 868afb493654: Selecione o alvo da configuração
 8a8672da4ab7: Opção de configuração não suportada
-8c028b35f75a: '**▎Alternado para: {MODE_MAP[selected]}**'
+8dc878e08cd6: Envie o link para compartilhar para análise
 8f555aa82c87: Link original
-929107a1e13c: '**▎Por favor, adicione um link ou responda a uma mensagem**'
 945599b91845: Desativar progresso de análise
-996ebe10260e: '**▎Muitos GIFs, pulando upload, por favor baixe manualmente**'
 9b3dbf3e3f85: Ocultar "Source" na parte inferior
-9dbc542be826: Ocultar progresso de análise
 a3e3b88377c8: Iniciar
-a4ce27c8e465: '**▎Interruptor de Função**'
-aa357cb96ee8: Analisar
 ab480060abb1: Não mostrar logs de erro
 ad66098d7867: Manter registro de erros
 b3bbb48dcb10: Análise muito frequente, por favor tente novamente em {e.retry_after:.1f}s
 b6aaf8f2a2be: Configuração pessoal no grupo
 b765e4eb1844: Link original
-b8918b19e2a1: '**▎Ativar / Desativar análise da plataforma**'
-b8a95e74574c: Não processar mídia, enviar arquivo original
+bbef4170b1e1: Lista de comandos
 be6f406c8f81: Configuração pessoal
 bebccdf7a76e: Formato de link inválido
+bfe68d5844f8: Link
 c039b80e17dd: Análise agregada
 c11154582f8a: Ocultar resumo
-c1ecedab11bc: Original
 c2236f70c559: Ignorar análise de cache
 c25add78a072: "{t} \n```\n{error}```"
-c589bcdf2a2b: '\n\n**Feedback de Problemas: @MisakaSisters**'
 c97827ba89ec: '**Envie o link para compartilhar para análise**
 
 
@@ -160,17 +108,10 @@ d2282636abc7: Painel de configuração
 d5631690265c: Alvo da configuração não reconhecido
 d59c948c471c: Analisando...
 d5a73b0c7f2f: Enviar
-d6fa702190b6: Definir modo padrão de análise
-d7146da48b3e: Outras opções
-d915366ac40b: Não processar mídia, salvar resultado da análise, enviar arquivo compactado
-da72eb8457df: Ocultar hiperlink da fonte na parte inferior
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Analisar e pré-visualizar conteúdo
 e4f6307e1c4f: 'Alterado para: {LANG_MAP[selected]}'
-e67a8324684f: ▎**Para usar no grupo, é necessário conceder permissão ao Bot para excluir
-  mensagens**
-e73189b92dbd: Opção para enviar URL original embutida
 eaa3cd851501: Texto personalizado
 f047ff589a7a: Enviar em pacote, com informações de análise
-ff71243806c8: Selecionar idioma
+f136c494af8c: Criar página no Telegraph
 ff7e330bebf8: Configuração pessoal no tópico

@@ -3,9 +3,7 @@
 04f706887b08: Bot belum bergabung dengan saluran ini, silakan tambahkan Bot ke saluran
   terlebih dahulu sebelum mengonfigurasi
 06778dbf05d5: Manajemen Platform
-08fc0528426e: '**▎Sudah beralih ke: {LANG_MAP[selected]}**'
 091d3a0665fa: Konfigurasi Saluran
-0c7c37b93cfe: "**▎Kesalahan {stage}:** \n```\n{error}```"
 0d3d68e32996: Tugas yang sama sedang diproses, tunggu hingga selesai...
 0f6c4353601e: Kirim file asli, hindari kompresi kualitas gambar
 0f6cedccc5d3: GIF terlalu banyak, lewati pengunggahan, silakan unduh sendiri
@@ -16,51 +14,17 @@
 224e2ccda861: Konfigurasi
 27350d00b70d: Sedang mengunggah...
 295bb704f520: Bahasa
-2b256f16d436: '** ▎Sudah {status} pesan tautan berbagi yang dihapus otomatis **'
 2bc28481a223: Hapus otomatis pesan tautan
 30364e475d07: Ini bukan tindakan Anda
 3065ed13e5f9: Dapatkan tautan asli
-32327b34a026: '**Kirim tautan berbagi untuk diurai**
-
-
-  **Platform yang didukung:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Daftar perintah:**
-
-  <blockquote expandable>/jx <tautan> - Mengurai dan mengirim media
-
-  /raw <tautan> - Tidak memproses media, mengirim file asli
-
-  /zip <tautan> - Tidak memproses media, menyimpan hasil penguraian, mengirim paket
-  zip
-
-  /jxjx <tautan> - Melewati cache, mengurai dan mengirim media
-
-  /lang - Pilih bahasa
-
-  /mode - Atur mode penguraian default
-
-  /switches - Saklar fungsi lainnya
-
-  /switch_auto_delete - Aktifkan/nonaktifkan penghapusan otomatis pesan tautan berbagi
-
-  /switch_platform - Aktifkan/nonaktifkan penguraian platform
-
-  </blockquote>
-
-
-  **Alamat sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+31f3c8c65cc4: Nama pengguna/link/id saluran
 33ccc7a4682a: Platform tidak didukung
-34f3f7d5372a: '**▎Tautan Unduhan GIF**'
-36c680f6f5b0: Aktifkan/Nonaktifkan pemrosesan platform
 3795485677d6: Konfigurasi grup
 39b75e75d433: Sampul video
+39e4a584197b: Platform yang didukung
 3d3eeb2bc9cd: Item konfigurasi tidak dikenal
 405ba1795958: Konfigurasi topik
-44a77d4ad4ca: Tanpa judul
+411955a09348: Alamat sumber terbuka
 460ce129a523: Sedang mengunduh...
 4981287fe504: Platform
 4e9ce9dfe13d: Sembunyikan judul
@@ -79,7 +43,6 @@
 
   **Alamat sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Sedang mengemas...
-5713cae37816: '**▎Platform tidak didukung**'
 5861d620c41d: Sedang mengunduh... | {current}/{total}
 5a9f36a77173: Mengemas
 5b943dc87178: Tautan unduhan GIF
@@ -87,22 +50,14 @@
 5d6ac8f8e4f3: Artikel dikirim menggunakan teks kaya
 5e788d9e0992: Bukan saluran
 5f411223ca5a: Kembali
-5fcfdc5f95ad: '**▎Pilih mode pemrosesan default**'
-645dbc5504e7: Pratinjau
-6536e2506f73: Aktifkan/Nonaktifkan penghapusan otomatis pesan tautan berbagi
-6612548ad85b: Kompres
 6740d8c7b274: Balas pesan
 6769c172299c: Anda bukan admin obrolan ini, tidak berwenang mengubah konfigurasi
 68957ac274c5: Sedang mengunduh... | {current * 100 / total:.0f}%
-710ad08b1141: Nonaktifkan
 '734176584215': Anda bukan pemilik saluran ini, tidak berwenang mengubah konfigurasi
   saluran
 769d88e425e0: Selesai
 77274b54a324: 'Kesalahan {stage}:'
-773e37502413: '**▎Parsing terlalu sering, silakan coba lagi setelah {e.retry_after:.1f}
-  detik**'
-7853187dd3ea: Jenis yang didukung
-7854b52a889b: Aktifkan
+7853187dd3ea: Jenis dukungan
 7eafd0a497bd: '
 
 
@@ -110,35 +65,25 @@
 816de50b9e0e: Silakan masukkan tautan di kotak obrolan
 868afb493654: Pilih target konfigurasi
 8a8672da4ab7: Opsi konfigurasi tidak didukung
-8c028b35f75a: '**▎Sudah beralih ke: {MODE_MAP[selected]}**'
+8dc878e08cd6: Kirim tautan berbagi untuk dianalisis
 8f555aa82c87: Tautan asli
-929107a1e13c: '**▎Harap tambahkan tautan atau balas sebuah pesan**'
 945599b91845: Nonaktifkan progres parsing
-996ebe10260e: '**▎GIF terlalu banyak, lewati pengunggahan, silakan unduh sendiri**'
 9b3dbf3e3f85: Sembunyikan "Sumber" di bagian bawah
-9dbc542be826: Sembunyikan kemajuan parsing
 a3e3b88377c8: Mulai
-a4ce27c8e465: '**▎Sakelar Fitur**'
-aa357cb96ee8: Proses
 ab480060abb1: Jangan tampilkan log kesalahan
 ad66098d7867: Simpan log kesalahan
 b3bbb48dcb10: Analisis terlalu sering, silakan coba lagi setelah {e.retry_after:.1f}
   detik
 b6aaf8f2a2be: Konfigurasi pribadi dalam grup
 b765e4eb1844: Tautan asli
-b8918b19e2a1: '**▎Aktifkan / Nonaktifkan pemrosesan platform**'
-b8a95e74574c: Jangan proses media, kirim file asli
+bbef4170b1e1: Daftar perintah
 be6f406c8f81: Konfigurasi pribadi
 bebccdf7a76e: Format tautan tidak valid
+bfe68d5844f8: Tautan
 c039b80e17dd: Pemrosesan agregat
 c11154582f8a: Sembunyikan deskripsi
-c1ecedab11bc: Asli
 c2236f70c559: Melewati parsing cache
 c25add78a072: "{t} \n```\n{error}```"
-c589bcdf2a2b: '
-
-
-  **Masalah Umpan Balik: @MisakaSisters**'
 c97827ba89ec: '**Kirim tautan berbagi untuk parsing**
 
 
@@ -171,16 +116,10 @@ d2282636abc7: Panel konfigurasi
 d5631690265c: Target konfigurasi tidak dikenali
 d59c948c471c: Sedang memproses...
 d5a73b0c7f2f: Unggah
-d6fa702190b6: Atur mode penguraian default
-d7146da48b3e: Saklar fungsi lainnya
-d915366ac40b: Jangan proses media, simpan hasil proses, kirim paket kompres
-da72eb8457df: Menyembunyikan tautan sumber di bagian bawah
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Parsing dan pratinjau konten
 e4f6307e1c4f: 'Berhasil beralih ke: {LANG_MAP[selected]}'
-e67a8324684f: ▎**Penggunaan dalam grup memerlukan izin Bot untuk menghapus pesan**
-e73189b92dbd: Opsi kirim URL asli secara inline
 eaa3cd851501: Teks kustom
 f047ff589a7a: Kirim paket, sertakan informasi parsing
-ff71243806c8: Pilih bahasa
+f136c494af8c: Buat halaman Telegraph
 ff7e330bebf8: Konfigurasi pribadi dalam topik

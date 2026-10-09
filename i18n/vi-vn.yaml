@@ -3,9 +3,7 @@
 04f706887b08: Bot chưa tham gia kênh này, vui lòng thêm Bot vào kênh trước khi cấu
   hình
 06778dbf05d5: Quản lý nền tảng
-08fc0528426e: '**▎Đã chuyển sang: {LANG_MAP[selected]}**'
 091d3a0665fa: Cấu hình kênh
-0c7c37b93cfe: "**▎Lỗi {stage}:** \n```\n{error}```"
 0d3d68e32996: Đã có tác vụ giống đang được phân tích, vui lòng chờ hoàn thành...
 0f6c4353601e: Gửi tệp gốc, tránh nén chất lượng hình ảnh
 0f6cedccc5d3: Quá nhiều GIF, bỏ qua tải lên, vui lòng tải xuống thủ công
@@ -16,50 +14,17 @@
 224e2ccda861: Cấu hình
 27350d00b70d: Đang tải lên...
 295bb704f520: Ngôn ngữ
-2b256f16d436: '** ▎Đã tự động xóa {status} tin nhắn liên kết chia sẻ**'
 2bc28481a223: Tự động xóa tin nhắn liên kết
 30364e475d07: Đây không phải thao tác của bạn
 3065ed13e5f9: Lấy liên kết gốc
-32327b34a026: '**Gửi liên kết chia sẻ để phân tích**
-
-
-  **Nền tảng hỗ trợ:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Danh sách lệnh:**
-
-  <blockquote expandable>/jx <liên kết> - Phân tích và gửi phương tiện
-
-  /raw <liên kết> - Không xử lý phương tiện, gửi tệp gốc
-
-  /zip <liên kết> - Không xử lý phương tiện, lưu kết quả phân tích, gửi gói nén
-
-  /jxjx <liên kết> - Bỏ qua bộ nhớ đệm, phân tích và gửi phương tiện
-
-  /lang - Chọn ngôn ngữ
-
-  /mode - Đặt chế độ phân tích mặc định
-
-  /switches - Các công tắc chức năng khác
-
-  /switch_auto_delete - Bật/tắt tự động xóa tin nhắn liên kết chia sẻ
-
-  /switch_platform - Bật/tắt phân tích nền tảng
-
-  </blockquote>
-
-
-  **Địa chỉ mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+31f3c8c65cc4: Tên người dùng/liên kết/id kênh
 33ccc7a4682a: Nền tảng không được hỗ trợ
-34f3f7d5372a: '**▎Liên kết tải xuống GIF**'
-36c680f6f5b0: Bật/Tắt phân tích nền tảng
 3795485677d6: Cấu hình nhóm
 39b75e75d433: Ảnh bìa video
+39e4a584197b: Nền tảng hỗ trợ
 3d3eeb2bc9cd: Mục cấu hình không xác định
 405ba1795958: Cấu hình chủ đề
-44a77d4ad4ca: Không tiêu đề
+411955a09348: Địa chỉ nguồn mở
 460ce129a523: Đang tải xuống...
 4981287fe504: Nền tảng
 4e9ce9dfe13d: Ẩn tiêu đề
@@ -75,7 +40,6 @@
 
   **Địa chỉ mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Đang đóng gói...
-5713cae37816: '**▎Nền tảng không được hỗ trợ**'
 5861d620c41d: Đang tải xuống... | {current}/{total}
 5a9f36a77173: Đóng gói
 5b943dc87178: Liên kết tải xuống GIF
@@ -83,23 +47,15 @@
 5d6ac8f8e4f3: Bài viết sử dụng văn bản định dạng phong phú để gửi
 5e788d9e0992: Không phải kênh
 5f411223ca5a: Quay lại
-5fcfdc5f95ad: '**▎Chọn chế độ phân tích mặc định**'
-645dbc5504e7: Xem trước
-6536e2506f73: Bật/tắt tự động xóa tin nhắn liên kết chia sẻ
-6612548ad85b: Nén
 6740d8c7b274: Trả lời tin nhắn
 6769c172299c: Bạn không phải là quản trị viên của cuộc trò chuyện này, không có quyền
   thay đổi cấu hình
 68957ac274c5: Đang tải xuống... | {current * 100 / total:.0f}%
-710ad08b1141: Vô hiệu hóa
 '734176584215': Bạn không phải là chủ sở hữu của kênh này, không có quyền thay đổi
   cấu hình kênh
 769d88e425e0: Hoàn thành
 77274b54a324: 'Lỗi {stage}:'
-773e37502413: '**▎Phân tích quá thường xuyên, vui lòng thử lại sau {e.retry_after:.1f}
-  giây**'
-7853187dd3ea: Loại được hỗ trợ
-7854b52a889b: Kích hoạt
+7853187dd3ea: Loại hỗ trợ
 7eafd0a497bd: '
 
 
@@ -107,35 +63,25 @@
 816de50b9e0e: Vui lòng nhập liên kết trong hộp chat
 868afb493654: Chọn mục tiêu cấu hình
 8a8672da4ab7: Mục cấu hình không được hỗ trợ
-8c028b35f75a: '**▎Đã chuyển sang: {MODE_MAP[selected]}**'
+8dc878e08cd6: Gửi liên kết chia sẻ để phân tích
 8f555aa82c87: Liên kết gốc
-929107a1e13c: '**▎Vui lòng thêm liên kết hoặc trả lời một tin nhắn**'
 945599b91845: Vô hiệu hóa tiến trình phân tích
-996ebe10260e: '**▎Quá nhiều GIF, bỏ qua tải lên, vui lòng tự tải xuống**'
 9b3dbf3e3f85: Ẩn "Nguồn" ở dưới cùng
-9dbc542be826: Ẩn tiến trình phân tích
 a3e3b88377c8: Bắt đầu
-a4ce27c8e465: '**▎Công tắc chức năng**'
-aa357cb96ee8: Phân tích
 ab480060abb1: Không hiển thị nhật ký lỗi
 ad66098d7867: Giữ lại nhật ký lỗi
 b3bbb48dcb10: Phân tích quá thường xuyên, vui lòng thử lại sau {e.retry_after:.1f}
   giây
 b6aaf8f2a2be: Cấu hình cá nhân trong nhóm
 b765e4eb1844: Liên kết nguyên bản
-b8918b19e2a1: '**▎Bật / Tắt phân tích nền tảng**'
-b8a95e74574c: Không xử lý media, gửi file gốc
+bbef4170b1e1: Danh sách lệnh
 be6f406c8f81: Cấu hình cá nhân
 bebccdf7a76e: Định dạng liên kết không hợp lệ
+bfe68d5844f8: Liên kết
 c039b80e17dd: Phân tích tổng hợp
 c11154582f8a: Ẩn phần giới thiệu
-c1ecedab11bc: Gốc
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
-c589bcdf2a2b: '
-
-
-  **Phản hồi vấn đề: @MisakaSisters**'
 c97827ba89ec: '**Gửi liên kết chia sẻ để phân tích**
 
 
@@ -168,16 +114,10 @@ d2282636abc7: Bảng cấu hình
 d5631690265c: Không thể nhận diện mục tiêu cấu hình
 d59c948c471c: Đang phân tích...
 d5a73b0c7f2f: Tải lên
-d6fa702190b6: Đặt chế độ phân tích mặc định
-d7146da48b3e: Các công tắc chức năng khác
-d915366ac40b: Không xử lý media, lưu kết quả phân tích, gửi file nén
-da72eb8457df: Hide bottom Source hyperlink
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: Phân tích và xem trước nội dung
 e4f6307e1c4f: 'Đã chuyển sang: {LANG_MAP[selected]}'
-e67a8324684f: ▎**Cần cấp quyền xóa tin nhắn cho Bot trong nhóm**
-e73189b92dbd: Tùy chọn gửi URL gốc nội tuyến
 eaa3cd851501: Tùy chỉnh văn bản
 f047ff589a7a: Gửi gói kèm thông tin phân tích
-ff71243806c8: Chọn ngôn ngữ
+f136c494af8c: Tạo trang Telegraph
 ff7e330bebf8: Cấu hình cá nhân trong chủ đề

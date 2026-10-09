@@ -2,9 +2,7 @@
 047ddf74eb5e: Bu senin konfigürasyonun değil
 04f706887b08: Bot bu kanala katılmadı, lütfen önce Botu kanala ekleyin ve sonra yapılandırın
 06778dbf05d5: Platform yönetimi
-08fc0528426e: '**▎Şu an seçili: {LANG_MAP[selected]}**'
 091d3a0665fa: Kanal Yapılandırması
-0c7c37b93cfe: "**▎{stage} Hata:** \n```\n{error}```"
 0d3d68e32996: Aynı görev zaten çözülüyor, çözüm tamamlanana kadar bekleyin...
 0f6c4353601e: Orijinal dosyayı gönder, kalite sıkıştırmasını önle
 0f6cedccc5d3: GIF çok fazla, yükleme atlandı, lütfen kendiniz indirin
@@ -15,52 +13,17 @@
 224e2ccda861: Yapılandırma
 27350d00b70d: Yükleniyor...
 295bb704f520: Dil
-2b256f16d436: '** ▎{status} otomatik olarak paylaşılan bağlantı mesajı silindi **'
 2bc28481a223: Bağlantı mesajlarını otomatik sil
 30364e475d07: Bu senin işlemin değil
 3065ed13e5f9: Orijinal bağlantıyı al
-32327b34a026: '**Paylaşım bağlantısını çözümlemek için gönderin**
-
-
-  **Desteklenen platformlar:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Komut listesi:**
-
-  <blockquote expandable>/jx <bağlantı> - Medyayı çözümle ve gönder
-
-  /raw <bağlantı> - Medyayı işlemeyin, ham dosyayı gönder
-
-  /zip <bağlantı> - Medyayı işlemeyin, çözümleme sonucunu kaydet ve sıkıştırılmış
-  dosya olarak gönder
-
-  /jxjx <bağlantı> - Önbelleği atlayarak medyayı çözümle ve gönder
-
-  /lang - Dil seçimi
-
-  /mode - Varsayılan çözümleme modunu ayarla
-
-  /switches - Diğer işlev anahtarları
-
-  /switch_auto_delete - Paylaşım bağlantısı mesajlarının otomatik silinmesini etkinleştir/devre
-  dışı bırak
-
-  /switch_platform - Platform çözümlemeyi etkinleştir/devre dışı bırak
-
-  </blockquote>
-
-
-  **Açık kaynak adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
+31f3c8c65cc4: Kanal kullanıcı adı/bağlantı/id
 33ccc7a4682a: Desteklenmeyen platform
-34f3f7d5372a: '**▎GIF İndirme Bağlantısı**'
-36c680f6f5b0: Platform çözümlemeyi etkinleştir/devre dışı bırak
 3795485677d6: Grup yapılandırması
 39b75e75d433: Video kapağı
+39e4a584197b: Desteklenen platformlar
 3d3eeb2bc9cd: Bilinmeyen yapılandırma öğesi
 405ba1795958: Konu yapılandırması
-44a77d4ad4ca: Başlıksız
+411955a09348: Açık kaynak adresi
 460ce129a523: İndiriliyor...
 4981287fe504: Platform
 4e9ce9dfe13d: Başlığı Gizle
@@ -78,7 +41,6 @@
 
   **Açık kaynak adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 569c1f28ab00: Paketleniyor...
-5713cae37816: '**▎Desteklenmeyen platform**'
 5861d620c41d: İndiriliyor... | {current}/{total}
 5a9f36a77173: Paketle
 5b943dc87178: GIF indirme linki
@@ -86,23 +48,15 @@
 5d6ac8f8e4f3: Makale zengin metin olarak gönderildi
 5e788d9e0992: Kanal değil
 5f411223ca5a: Geri
-5fcfdc5f95ad: '**▎Varsayılan çözümleme modunu seç**'
-645dbc5504e7: Önizleme
-6536e2506f73: Otomatik paylaşım bağlantısı mesajlarını etkinleştir/devre dışı bırak
-6612548ad85b: Sıkıştır
 6740d8c7b274: Mesaja yanıt ver
 6769c172299c: Bu sohbetin yöneticisi değilsiniz, yapılandırmayı değiştirme yetkiniz
   yok
 68957ac274c5: İndiriliyor... | {current * 100 / total:.0f}%
-710ad08b1141: Devre dışı bırak
 '734176584215': Bu kanalın sahibi değilsiniz, kanal yapılandırmasını değiştirme yetkiniz
   yok
 769d88e425e0: Tamamlandı
 77274b54a324: '{stage} hata:'
-773e37502413: '**▎Çözümleme çok sık yapılıyor, lütfen {e.retry_after:.1f} saniye sonra
-  tekrar deneyin**'
-7853187dd3ea: Desteklenen türler
-7854b52a889b: Etkinleştir
+7853187dd3ea: Destek türü
 7eafd0a497bd: '
 
 
@@ -110,32 +64,25 @@
 816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
 868afb493654: Yapılandırma hedefi seçin
 8a8672da4ab7: Desteklenmeyen yapılandırma öğesi
-8c028b35f75a: '**▎Şu an seçili: {MODE_MAP[selected]}**'
+8dc878e08cd6: Çözümleme için paylaşım bağlantısı gönderin
 8f555aa82c87: Orijinal bağlantı
-929107a1e13c: '**▎Lütfen bir bağlantı ekleyin veya bir mesaja yanıt verin**'
 945599b91845: Çözümleme ilerlemesini devre dışı bırak
-996ebe10260e: '**▎GIF Çok Fazla, Yükleme Atlandı, Lütfen Kendiniz İndirin**'
 9b3dbf3e3f85: Alt "Kaynak"u gizle
-9dbc542be826: Çözümleme ilerlemesini gizle
 a3e3b88377c8: Başlat
-a4ce27c8e465: '**▎Fonksiyon Anahtarı**'
-aa357cb96ee8: Çözümle
 ab480060abb1: Hata günlüklerini gösterme
 ad66098d7867: Hata günlüklerini sakla
 b3bbb48dcb10: Çözümleme çok sık yapılıyor, lütfen {e.retry_after:.1f} saniye sonra
   tekrar deneyin
 b6aaf8f2a2be: Grup içi kişisel yapılandırma
 b765e4eb1844: Orijinal bağlantı
-b8918b19e2a1: '**▎Platform çözümlemeyi etkinleştir/devre dışı bırak**'
-b8a95e74574c: Medya işlenmeyecek, orijinal dosya gönderilecek
+bbef4170b1e1: Komut listesi
 be6f406c8f81: Kişisel yapılandırma
 bebccdf7a76e: Bağlantı formatı geçersiz
+bfe68d5844f8: Bağlantı
 c039b80e17dd: Toplu çözümleme
 c11154582f8a: Özeti Gizle
-c1ecedab11bc: Orijinal
 c2236f70c559: Önbellek çözümlemesini atla
 c25add78a072: "{t} \n```\n{error}```"
-c589bcdf2a2b: '\n\n**Sorun Bildirimi: @MisakaSisters**'
 c97827ba89ec: '**Çözümleme için paylaşım bağlantısı gönderin**
 
 
@@ -168,17 +115,10 @@ d2282636abc7: Yapılandırma paneli
 d5631690265c: Yapılandırma hedefi tanınamadı
 d59c948c471c: Çözülüyor...
 d5a73b0c7f2f: Yükle
-d6fa702190b6: Varsayılan çözümleme modunu ayarla
-d7146da48b3e: Diğer işlev anahtarları
-d915366ac40b: Medya işlenmeyecek, çözümleme sonucu kaydedilecek, sıkıştırılmış dosya
-  gönderilecek
-da72eb8457df: Alt kısımdaki Kaynak bağlantısını gizle
 e14de27e8559: '{target_label}'
 e3ab31c8d89c: İçeriği çözümle ve önizle
 e4f6307e1c4f: '{LANG_MAP[selected]} olarak değiştirildi'
-e67a8324684f: ▎**Grup içinde kullanmak için Bot'a mesaj silme izni verilmelidir**
-e73189b92dbd: Ham URL'yi satır içi gönderme seçeneği
 eaa3cd851501: Özel metin
 f047ff589a7a: Paket halinde gönder, çözümleme bilgisi ile birlikte
-ff71243806c8: Dil seç
+f136c494af8c: Telegraph sayfası oluştur
 ff7e330bebf8: Konu içi kişisel yapılandırma
