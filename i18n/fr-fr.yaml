@@ -16,6 +16,7 @@
   supprimé automatiquement 15 secondes après la fermeture.
 1d30c358e2a1: Mode d'analyse par défaut
 1f3c920d087b: En cours de traitement...
+20a7b9ae5106: Menu de configuration ancien
 224e2ccda861: Configuration
 2560e051161e: Le lien original « Source » n'est plus ajouté à la fin du résultat d'analyse.
 256aefe3fdbf: Journal des erreurs
@@ -87,6 +88,36 @@
 8a8672da4ab7: Option de configuration non prise en charge
 8dc878e08cd6: Envoyez un lien de partage pour l'analyse
 8f555aa82c87: Lien original
+928c258e7aae: '**Envoyez un lien de partage pour analyse**
+
+
+  **Plateformes prises en charge :**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Liste des commandes :**
+
+  <blockquote expandable>/jx <lien> - Analyser et prévisualiser le contenu
+
+  /raw <lien> - Envoyer le fichier original, éviter la compression de qualité
+
+  /zip <lien> - Envoyer en paquet, avec informations d''analyse
+
+  /jxjx <lien> - Analyser en contournant le cache
+
+  /lang - Langue
+
+  /cfg - Configuration
+
+  /cfg <nom_utilisateur/ lien/ id du canal> - Configuration du canal
+
+  /ocfg - Menu de configuration ancien
+
+  </blockquote>
+
+
+  **Code source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Désactiver la progression de l'analyse
 996b5ce5395f: Lors de l'envoi de vidéos, la vignette fournie par la plateforme est
   utilisée comme couverture vidéo ; si désactivé, aucune couverture n'est définie.
@@ -111,34 +142,6 @@ c2236f70c559: Contourner l'analyse du cache
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Supprimer automatiquement le lien envoyé par l'utilisateur après l'analyse
   terminée. Dans un groupe, le bot doit avoir les permissions de suppression de messages.
-c97827ba89ec: '**Envoyez un lien de partage pour analyse**
-
-
-  **Plateformes prises en charge :**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Liste des commandes :**
-
-  <blockquote expandable>/jx <lien> - Analyser et prévisualiser le contenu
-
-  /raw <lien> - Envoyer le fichier original, éviter la compression de la qualité
-
-  /zip <lien> - Envoyer en paquet, avec informations d''analyse
-
-  /jxjx <lien> - Analyser en contournant le cache
-
-  /lang - Langue
-
-  /cfg - Configuration
-
-  /cfg <nom d''utilisateur/lien/id du canal> - Configuration du canal
-
-  </blockquote>
-
-
-  **Code source : [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Panneau de configuration
 d2a9e9b5d414: Comportement du message
 d5631690265c: Impossible de reconnaître la cible de configuration

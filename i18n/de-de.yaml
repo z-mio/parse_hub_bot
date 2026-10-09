@@ -16,6 +16,7 @@
   Sekunden beim Schließen automatisch gelöscht.
 1d30c358e2a1: Standard-Parsing-Modus
 1f3c920d087b: In Bearbeitung...
+20a7b9ae5106: Altes Konfigurationsmenü
 224e2ccda861: Konfiguration
 2560e051161e: Am Ende des Analyseergebnisses wird kein „Source“-Originallink mehr
   angehängt.
@@ -88,6 +89,36 @@
 8a8672da4ab7: Nicht unterstützte Konfigurationsoption
 8dc878e08cd6: Senden Sie den Freigabelink zur Analyse
 8f555aa82c87: Original-Link
+928c258e7aae: '**Senden Sie einen Freigabelink zur Analyse**
+
+
+  **Unterstützte Plattformen:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Befehlsliste:**
+
+  <blockquote expandable>/jx <Link> - Inhalt analysieren und vorschauen
+
+  /raw <Link> - Originaldatei senden, um Qualitätsverlust zu vermeiden
+
+  /zip <Link> - Gepackt senden, mit Analyseinformationen
+
+  /jxjx <Link> - Analyse ohne Cache umgehen
+
+  /lang - Sprache
+
+  /cfg - Konfiguration
+
+  /cfg <Kanalbenutzername/Link/ID> - Kanal-Konfiguration
+
+  /ocfg - Altes Konfigurationsmenü
+
+  </blockquote>
+
+
+  **Quellcode: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Parsing-Fortschritt deaktivieren
 996b5ce5395f: Bei Videos wird das vom Anbieter bereitgestellte Vorschaubild als Video-Cover
   verwendet; bei Deaktivierung wird kein Cover eingestellt.
@@ -113,34 +144,6 @@ c2236f70c559: Cache-Parsing umgehen
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Nach Abschluss der Analyse wird der vom Benutzer gesendete Link automatisch
   gelöscht. In Gruppen benötigt der Bot Berechtigung zum Löschen von Nachrichten.
-c97827ba89ec: '**Senden Sie einen Freigabelink zur Analyse**
-
-
-  **Unterstützte Plattformen:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Befehlsliste:**
-
-  <blockquote expandable>/jx <Link> - Inhalt analysieren und Vorschau anzeigen
-
-  /raw <Link> - Originaldatei senden, um Qualitätsverlust zu vermeiden
-
-  /zip <Link> - Paket senden, inklusive Analyseinformationen
-
-  /jxjx <Link> - Cache-Umgehung beim Parsen
-
-  /lang - Sprache
-
-  /cfg - Konfiguration
-
-  /cfg <Kanal-Benutzername/Link/ID> - Kanal-Konfiguration
-
-  </blockquote>
-
-
-  **Open-Source-Adresse: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Konfigurationspanel
 d2a9e9b5d414: Nachrichtenverhalten
 d5631690265c: Konfigurationsziel kann nicht erkannt werden

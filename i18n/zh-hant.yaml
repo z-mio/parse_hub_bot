@@ -11,6 +11,7 @@
 1a7619451107: 解析出錯時錯誤消息一直保留，關閉時 15 秒後自動刪除。
 1d30c358e2a1: 預設解析模式
 1f3c920d087b: 處理中...
+20a7b9ae5106: 舊版配置選單
 224e2ccda861: 配置
 2560e051161e: 解析結果末尾不再附帶「Source」原連結。
 256aefe3fdbf: 錯誤日誌
@@ -74,6 +75,36 @@
 8a8672da4ab7: 不支援的配置項
 8dc878e08cd6: 發送分享連結以進行解析
 8f555aa82c87: 原連結
+928c258e7aae: '**發送分享鏈接以進行解析**
+
+
+  **支持的平台:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **命令列表:**
+
+  <blockquote expandable>/jx <鏈接> - 解析並預覽內容
+
+  /raw <鏈接> - 發送原檔案, 避免畫質壓縮
+
+  /zip <鏈接> - 打包發送, 附帶解析資訊
+
+  /jxjx <鏈接> - 繞過快取解析
+
+  /lang - 語言
+
+  /cfg - 配置
+
+  /cfg <頻道用戶名/鏈接/id> - 頻道配置
+
+  /ocfg - 舊版配置選單
+
+  </blockquote>
+
+
+  **開源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: 禁用解析進度
 996b5ce5395f: 發送視頻時使用平台提供的封面圖作為視頻封面，關閉後不設置封面。
 9b3dbf3e3f85: 隱藏底部「Source」
@@ -94,34 +125,6 @@ c11154582f8a: 隱藏簡介
 c2236f70c559: 繞過快取解析
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: 解析完成後自動刪除用戶發送的連結。在群組中需要 bot 有刪除消息的權限。
-c97827ba89ec: '**發送分享連結以進行解析**
-
-
-  **支援的平台:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **命令列表:**
-
-  <blockquote expandable>/jx <連結> - 解析並預覽內容
-
-  /raw <連結> - 發送原文件，避免畫質壓縮
-
-  /zip <連結> - 打包發送，附帶解析資訊
-
-  /jxjx <連結> - 繞過快取解析
-
-  /lang - 語言
-
-  /cfg - 配置
-
-  /cfg <頻道用戶名/連結/id> - 頻道配置
-
-  </blockquote>
-
-
-  **開源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: 配置面板
 d2a9e9b5d414: 消息行為
 d5631690265c: 無法識別配置目標

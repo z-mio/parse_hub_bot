@@ -15,6 +15,7 @@
   alla chiusura viene rimosso automaticamente dopo 15 secondi.
 1d30c358e2a1: Modalità di analisi predefinita
 1f3c920d087b: In elaborazione...
+20a7b9ae5106: Menu di configurazione precedente
 224e2ccda861: Configurazione
 2560e051161e: Alla fine dei risultati dell'analisi non viene più allegato il link
   originale "Source".
@@ -87,6 +88,36 @@
 8a8672da4ab7: Opzione di configurazione non supportata
 8dc878e08cd6: Invia il link di condivisione per l'analisi
 8f555aa82c87: Link originale
+928c258e7aae: '**Invia il link di condivisione per l''analisi**
+
+
+  **Piattaforme supportate:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Elenco comandi:**
+
+  <blockquote expandable>/jx <link> - Analizza e anteprima contenuto
+
+  /raw <link> - Invia file originale, evita compressione della qualità video
+
+  /zip <link> - Invia come pacchetto, include informazioni di analisi
+
+  /jxjx <link> - Analizza bypassando la cache
+
+  /lang - Lingua
+
+  /cfg - Configurazione
+
+  /cfg <nome_utente_canale/link/id> - Configurazione del canale
+
+  /ocfg - Menu di configurazione precedente
+
+  </blockquote>
+
+
+  **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Disabilita progresso analisi
 996b5ce5395f: Quando si invia un video, utilizza l'immagine di copertina fornita dalla
   piattaforma come anteprima; se disattivato, nessuna copertina sarà impostata.
@@ -112,34 +143,6 @@ c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Dopo il completamento dell'analisi, il link inviato dall'utente viene
   automaticamente eliminato. Nei gruppi, il bot deve avere il permesso di eliminare
   i messaggi.
-c97827ba89ec: '**Invia un link di condivisione per l''analisi**
-
-
-  **Piattaforme supportate:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Elenco comandi:**
-
-  <blockquote expandable>/jx <link> - Analizza e visualizza in anteprima il contenuto
-
-  /raw <link> - Invia il file originale per evitare la compressione della qualità
-
-  /zip <link> - Invia pacchettizzato con informazioni di analisi
-
-  /jxjx <link> - Analizza bypassando la cache
-
-  /lang - Lingua
-
-  /cfg - Configurazione
-
-  /cfg <nome utente/link/id del canale> - Configurazione del canale
-
-  </blockquote>
-
-
-  **Codice sorgente: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Pannello di configurazione
 d2a9e9b5d414: Comportamento dei messaggi
 d5631690265c: Obiettivo di configurazione non riconosciuto

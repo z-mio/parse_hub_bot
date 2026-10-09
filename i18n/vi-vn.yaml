@@ -15,6 +15,7 @@
   động xóa sau 15 giây.
 1d30c358e2a1: Chế độ phân tích mặc định
 1f3c920d087b: Đang xử lý...
+20a7b9ae5106: Menu cấu hình phiên bản cũ
 224e2ccda861: Cấu hình
 2560e051161e: Kết quả phân tích không còn kèm theo liên kết gốc “Source” ở cuối.
 256aefe3fdbf: Nhật ký lỗi
@@ -83,6 +84,36 @@
 8a8672da4ab7: Mục cấu hình không được hỗ trợ
 8dc878e08cd6: Gửi liên kết chia sẻ để phân tích
 8f555aa82c87: Liên kết gốc
+928c258e7aae: '**Gửi liên kết chia sẻ để phân tích**
+
+
+  **Nền tảng được hỗ trợ:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Danh sách lệnh:**
+
+  <blockquote expandable>/jx <liên kết> - Phân tích và xem trước nội dung
+
+  /raw <liên kết> - Gửi file gốc, tránh nén chất lượng hình ảnh
+
+  /zip <liên kết> - Gói gửi kèm thông tin phân tích
+
+  /jxjx <liên kết> - Phân tích vượt bộ nhớ đệm
+
+  /lang - Ngôn ngữ
+
+  /cfg - Cấu hình
+
+  /cfg <tên người dùng kênh/liên kết/id> - Cấu hình kênh
+
+  /ocfg - Menu cấu hình phiên bản cũ
+
+  </blockquote>
+
+
+  **Địa chỉ mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Vô hiệu hóa tiến trình phân tích
 996b5ce5395f: Khi gửi video, sử dụng ảnh bìa do nền tảng cung cấp làm ảnh bìa video,
   tắt sẽ không thiết lập ảnh bìa.
@@ -108,34 +139,6 @@ c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Sau khi phân tích xong sẽ tự động xóa liên kết do người dùng gửi. Trong
   nhóm cần bot có quyền xóa tin nhắn.
-c97827ba89ec: '**Gửi liên kết chia sẻ để phân tích**
-
-
-  **Các nền tảng được hỗ trợ:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Danh sách lệnh:**
-
-  <blockquote expandable>/jx <liên kết> - Phân tích và xem trước nội dung
-
-  /raw <liên kết> - Gửi tệp gốc, tránh nén chất lượng hình ảnh
-
-  /zip <liên kết> - Gửi gói kèm thông tin phân tích
-
-  /jxjx <liên kết> - Phân tích bỏ qua bộ nhớ đệm
-
-  /lang - Ngôn ngữ
-
-  /cfg - Cấu hình
-
-  /cfg <tên người dùng/kênh/liên kết/id> - Cấu hình kênh
-
-  </blockquote>
-
-
-  **Mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Bảng cấu hình
 d2a9e9b5d414: Hành vi tin nhắn
 d5631690265c: Không thể nhận diện mục tiêu cấu hình

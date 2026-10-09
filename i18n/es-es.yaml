@@ -15,6 +15,7 @@
   elimina automáticamente 15 segundos después de cerrar.
 1d30c358e2a1: Modo de análisis predeterminado
 1f3c920d087b: Procesando...
+20a7b9ae5106: Menú de configuración anterior
 224e2ccda861: Configuración
 2560e051161e: Al final del resultado del análisis ya no se adjunta el enlace original
   "Fuente".
@@ -87,6 +88,36 @@
 8a8672da4ab7: Opción de configuración no soportada
 8dc878e08cd6: Enviar enlace para compartir para analizar
 8f555aa82c87: Enlace original
+928c258e7aae: '**Enviar enlace para compartir para análisis**
+
+
+  **Plataformas compatibles:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Lista de comandos:**
+
+  <blockquote expandable>/jx <enlace> - Analizar y previsualizar contenido
+
+  /raw <enlace> - Enviar archivo original, evitar compresión de calidad
+
+  /zip <enlace> - Enviar empaquetado, con información de análisis
+
+  /jxjx <enlace> - Analizar saltándose el caché
+
+  /lang - Idioma
+
+  /cfg - Configuración
+
+  /cfg <nombre de usuario/enlace/id del canal> - Configuración del canal
+
+  /ocfg - Menú de configuración anterior
+
+  </blockquote>
+
+
+  **Código abierto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Desactivar progreso de análisis
 996b5ce5395f: Cuando se envía un video, se usa la miniatura proporcionada por la plataforma
   como portada del video; si se desactiva, no se establece portada.
@@ -112,34 +143,6 @@ c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Después de completar el análisis, se eliminarán automáticamente los
   enlaces enviados por el usuario. En grupos, el bot necesita tener permiso para eliminar
   mensajes.
-c97827ba89ec: '**Envía un enlace para analizar**
-
-
-  **Plataformas soportadas:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lista de comandos:**
-
-  <blockquote expandable>/jx <enlace> - Analizar y previsualizar contenido
-
-  /raw <enlace> - Enviar archivo original para evitar compresión de calidad
-
-  /zip <enlace> - Enviar empaquetado con información de análisis
-
-  /jxjx <enlace> - Analizar saltándose la caché
-
-  /lang - Idioma
-
-  /cfg - Configuración
-
-  /cfg <nombre de usuario/enlace/id del canal> - Configuración del canal
-
-  </blockquote>
-
-
-  **Código abierto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Panel de configuración
 d2a9e9b5d414: Comportamiento del mensaje
 d5631690265c: No se puede reconocer el objetivo de configuración

@@ -15,6 +15,7 @@
   otomatis dihapus 15 detik setelah ditutup.
 1d30c358e2a1: Mode parsing default
 1f3c920d087b: Sedang diproses...
+20a7b9ae5106: Menu Konfigurasi Versi Lama
 224e2ccda861: Konfigurasi
 2560e051161e: Hasil parsing tidak lagi menyertakan tautan asli "Source" di akhir.
 256aefe3fdbf: Catatan Kesalahan
@@ -85,6 +86,36 @@
 8a8672da4ab7: Opsi konfigurasi tidak didukung
 8dc878e08cd6: Kirim tautan berbagi untuk dianalisis
 8f555aa82c87: Tautan asli
+928c258e7aae: '**Kirim tautan berbagi untuk analisis**
+
+
+  **Platform yang didukung:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Daftar perintah:**
+
+  <blockquote expandable>/jx <tautan> - Analisis dan pratinjau konten
+
+  /raw <tautan> - Kirim file asli, menghindari kompresi kualitas gambar
+
+  /zip <tautan> - Kirim dalam bentuk paket, disertai informasi analisis
+
+  /jxjx <tautan> - Lewati cache untuk analisis
+
+  /lang - Bahasa
+
+  /cfg - Konfigurasi
+
+  /cfg <nama pengguna/tautan/id saluran> - Konfigurasi saluran
+
+  /ocfg - Menu konfigurasi versi lama
+
+  </blockquote>
+
+
+  **Sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Nonaktifkan progres parsing
 996b5ce5395f: Saat mengirim video, gunakan gambar sampul yang disediakan platform
   sebagai sampul video; jika dimatikan, tidak akan mengatur sampul.
@@ -110,34 +141,6 @@ c2236f70c559: Melewati parsing cache
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Tautan yang dikirim pengguna akan dihapus otomatis setelah parsing selesai.
   Di grup, bot harus memiliki izin untuk menghapus pesan.
-c97827ba89ec: '**Kirim tautan berbagi untuk parsing**
-
-
-  **Platform yang didukung:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Daftar perintah:**
-
-  <blockquote expandable>/jx <tautan> - Parsing dan pratinjau konten
-
-  /raw <tautan> - Kirim file asli, hindari kompresi kualitas gambar
-
-  /zip <tautan> - Kirim paket, sertakan informasi parsing
-
-  /jxjx <tautan> - Parsing melewati cache
-
-  /lang - Bahasa
-
-  /cfg - Konfigurasi
-
-  /cfg <nama pengguna/link/id saluran> - Konfigurasi saluran
-
-  </blockquote>
-
-
-  **Sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Panel konfigurasi
 d2a9e9b5d414: Perilaku Pesan
 d5631690265c: Target konfigurasi tidak dikenali

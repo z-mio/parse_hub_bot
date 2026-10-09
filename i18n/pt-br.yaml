@@ -15,6 +15,7 @@
   é excluída automaticamente após 15 segundos.
 1d30c358e2a1: Modo de análise padrão
 1f3c920d087b: Processando...
+20a7b9ae5106: Menu de Configuração Antigo
 224e2ccda861: Configuração
 2560e051161e: O resultado da análise não inclui mais o link original "Source" no final.
 256aefe3fdbf: Registro de erros
@@ -78,6 +79,36 @@
 8a8672da4ab7: Opção de configuração não suportada
 8dc878e08cd6: Envie o link para compartilhar para análise
 8f555aa82c87: Link original
+928c258e7aae: '**Envie um link de compartilhamento para análise**
+
+
+  **Plataformas suportadas:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Lista de comandos:**
+
+  <blockquote expandable>/jx <link> - Analisa e pré-visualiza o conteúdo
+
+  /raw <link> - Envia o arquivo original, evitando compressão de qualidade
+
+  /zip <link> - Envia como pacote, acompanhado das informações da análise
+
+  /jxjx <link> - Analisa contornando o cache
+
+  /lang - Idioma
+
+  /cfg - Configuração
+
+  /cfg <nome de usuário/link/id do canal> - Configuração do canal
+
+  /ocfg - Menu de configuração antigo
+
+  </blockquote>
+
+
+  **Código aberto disponível em: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Desativar progresso de análise
 996b5ce5395f: Ao enviar vídeo, use a miniatura fornecida pela plataforma como capa
   do vídeo; se desativado, nenhuma capa será definida.
@@ -102,34 +133,6 @@ c2236f70c559: Ignorar análise de cache
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Após a conclusão da análise, o link enviado pelo usuário será excluído
   automaticamente. No grupo, o bot precisa ter permissão para excluir mensagens.
-c97827ba89ec: '**Envie o link para compartilhar para análise**
-
-
-  **Plataformas suportadas:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lista de comandos:**
-
-  <blockquote expandable>/jx <link> - Analisar e pré-visualizar conteúdo
-
-  /raw <link> - Enviar arquivo original, evitar compressão de qualidade
-
-  /zip <link> - Enviar em pacote, com informações de análise
-
-  /jxjx <link> - Analisar ignorando cache
-
-  /lang - Idioma
-
-  /cfg - Configuração
-
-  /cfg <nome de usuário/link/id do canal> - Configuração do canal
-
-  </blockquote>
-
-
-  **Código aberto: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Painel de configuração
 d2a9e9b5d414: Comportamento da mensagem
 d5631690265c: Alvo da configuração não reconhecido

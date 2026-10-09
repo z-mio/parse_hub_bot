@@ -15,6 +15,7 @@
   zamknięciu zostanie automatycznie usunięty po 15 sekundach.
 1d30c358e2a1: Domyślny tryb analizy
 1f3c920d087b: Przetwarzanie...
+20a7b9ae5106: Stare menu konfiguracji
 224e2ccda861: Konfiguracja
 2560e051161e: Na końcu wyników analizy nie będzie już dołączany oryginalny link „Source”.
 256aefe3fdbf: Dziennik błędów
@@ -86,6 +87,36 @@
 8a8672da4ab7: Nieobsługiwany element konfiguracji
 8dc878e08cd6: Wyślij link do udostępnienia w celu analizy
 8f555aa82c87: Oryginalny link
+928c258e7aae: '**Wyślij link do udostępnienia w celu analizy**
+
+
+  **Obsługiwane platformy:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Lista poleceń:**
+
+  <blockquote expandable>/jx <link> - analizuj i podglądaj zawartość
+
+  /raw <link> - wyślij oryginalny plik, unikając kompresji jakości
+
+  /zip <link> - pakuj i wysyłaj, z informacjami o analizie
+
+  /jxjx <link> - omijaj pamięć podręczną podczas analizy
+
+  /lang - język
+
+  /cfg - konfiguracja
+
+  /cfg <nazwa_użytkownika_kanalu/link/id> - konfiguracja kanału
+
+  /ocfg - stare menu konfiguracji
+
+  </blockquote>
+
+
+  **Kod źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Wyłącz postęp analizy
 996b5ce5395f: Podczas wysyłania wideo użyj miniatury udostępnionej przez platformę
   jako okładki wideo, po wyłączeniu okładka nie będzie ustawiana.
@@ -110,34 +141,6 @@ c2236f70c559: Omijanie analizy pamięci podręcznej
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Po zakończeniu analizy link wysłany przez użytkownika jest automatycznie
   usuwany. W grupach bot musi mieć uprawnienia do usuwania wiadomości.
-c97827ba89ec: '**Wyślij link do udostępnienia, aby przeanalizować**
-
-
-  **Obsługiwane platformy:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lista poleceń:**
-
-  <blockquote expandable>/jx <link> - Analizuj i podglądaj zawartość
-
-  /raw <link> - Wyślij oryginalny plik, aby uniknąć kompresji jakości obrazu
-
-  /zip <link> - Wyślij jako paczkę, z informacjami o analizie
-
-  /jxjx <link> - Analiza z pominięciem pamięci podręcznej
-
-  /lang - Język
-
-  /cfg - Konfiguracja
-
-  /cfg <nazwa_użytkownika_kanalu/link/id> - Konfiguracja kanału
-
-  </blockquote>
-
-
-  **Adres źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Panel konfiguracji
 d2a9e9b5d414: Zachowanie wiadomości
 d5631690265c: Nie można rozpoznać celu konfiguracji

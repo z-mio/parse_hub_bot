@@ -16,6 +16,7 @@
   15 seconden na het sluiten.
 1d30c358e2a1: Standaard parseermodus
 1f3c920d087b: Bezig met verwerken...
+20a7b9ae5106: Oud configuratiemenu
 224e2ccda861: Configuratie
 2560e051161e: Het parse-resultaat bevat niet langer de "Source" originele link aan
   het einde.
@@ -88,6 +89,36 @@
 8a8672da4ab7: Niet-ondersteunde configuratieoptie
 8dc878e08cd6: Verzend de deel-link voor analyse
 8f555aa82c87: Originele link
+928c258e7aae: '**Stuur een deel-link om te ontleden**
+
+
+  **Ondersteunde platforms:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Lijst met commando''s:**
+
+  <blockquote expandable>/jx <link> - Inhoud ontleden en previewen
+
+  /raw <link> - Origineel bestand verzenden, om kwaliteitsverlies te voorkomen
+
+  /zip <link> - Verpakt verzenden, inclusief ontledingsinformatie
+
+  /jxjx <link> - Ontleden zonder cache
+
+  /lang - Taal
+
+  /cfg - Configuratie
+
+  /cfg <kanaal gebruikersnaam/link/id> - Kanaalconfiguratie
+
+  /ocfg - Oud configuratiemenu
+
+  </blockquote>
+
+
+  **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Parsing voortgang uitschakelen
 996b5ce5395f: Wanneer een video wordt verzonden, wordt de door het platform geleverde
   coverafbeelding als videominiatuur gebruikt. Bij uitschakeling wordt er geen cover
@@ -112,34 +143,6 @@ c2236f70c559: Cache-omzeiling parsing
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Verwijder automatisch links die door gebruikers zijn verzonden na analyse.
   In groepen moet de bot de toestemming hebben om berichten te verwijderen.
-c97827ba89ec: '**Stuur een deel-link om te parseren**
-
-
-  **Ondersteunde platforms:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Lijst met commando''s:**
-
-  <blockquote expandable>/jx <link> - Parseer en bekijk inhoud
-
-  /raw <link> - Stuur het originele bestand om kwaliteitscompressie te voorkomen
-
-  /zip <link> - Verpak en stuur, inclusief parseer informatie
-
-  /jxjx <link> - Omzeil cache parsing
-
-  /lang - Taal
-
-  /cfg - Configuratie
-
-  /cfg <kanaal gebruikersnaam/link/id> - Kanaalconfiguratie
-
-  </blockquote>
-
-
-  **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Configuratiepaneel
 d2a9e9b5d414: Berichtgedrag
 d5631690265c: Kan configuratiedoel niet herkennen

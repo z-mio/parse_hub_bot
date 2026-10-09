@@ -14,6 +14,7 @@
   15 saniye sonra otomatik silinir.
 1d30c358e2a1: Varsayılan çözümleme modu
 1f3c920d087b: İşleniyor...
+20a7b9ae5106: Eski Sürüm Ayar Menüsü
 224e2ccda861: Yapılandırma
 2560e051161e: Çözümleme sonucunun sonunda "Kaynak" orijinal bağlantısı artık eklenmez.
 256aefe3fdbf: Hata Günlüğü
@@ -84,6 +85,36 @@
 8a8672da4ab7: Desteklenmeyen yapılandırma öğesi
 8dc878e08cd6: Çözümleme için paylaşım bağlantısı gönderin
 8f555aa82c87: Orijinal bağlantı
+928c258e7aae: '**Analiz için paylaşım bağlantısı gönderin**
+
+
+  **Desteklenen platformlar:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Komut Listesi:**
+
+  <blockquote expandable>/jx <bağlantı> - İçeriği analiz et ve önizle
+
+  /raw <bağlantı> - Orijinal dosyayı gönder, kalite sıkıştırmasını önler
+
+  /zip <bağlantı> - Paket halinde gönder, analiz bilgisi ile birlikte
+
+  /jxjx <bağlantı> - Önbelleği atla ve analiz et
+
+  /lang - Dil
+
+  /cfg - Ayarlar
+
+  /cfg <kanal kullanıcı adı/bağlantı/id> - Kanal ayarları
+
+  /ocfg - Eski sürüm ayar menüsü
+
+  </blockquote>
+
+
+  **Açık Kaynak Adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Çözümleme ilerlemesini devre dışı bırak
 996b5ce5395f: Video gönderilirken platform tarafından sağlanan kapak görseli video
   kapağı olarak kullanılır, kapatılırsa kapak ayarlanmaz.
@@ -109,34 +140,6 @@ c2236f70c559: Önbellek çözümlemesini atla
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Çözümleme tamamlandıktan sonra kullanıcı tarafından gönderilen bağlantı
   otomatik olarak silinir. Gruplarda botun mesaj silme yetkisi olması gerekir.
-c97827ba89ec: '**Çözümleme için paylaşım bağlantısı gönderin**
-
-
-  **Desteklenen platformlar:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Komut listesi:**
-
-  <blockquote expandable>/jx <bağlantı> - İçeriği çözümle ve önizle
-
-  /raw <bağlantı> - Orijinal dosyayı gönder, kalite sıkıştırmasını önle
-
-  /zip <bağlantı> - Paket halinde gönder, çözümleme bilgisi ile birlikte
-
-  /jxjx <bağlantı> - Önbelleği atlayarak çözümle
-
-  /lang - Dil
-
-  /cfg - Yapılandırma
-
-  /cfg <kanal kullanıcı adı/link/id> - Kanal yapılandırması
-
-  </blockquote>
-
-
-  **Açık kaynak adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Yapılandırma paneli
 d2a9e9b5d414: Mesaj Davranışı
 d5631690265c: Yapılandırma hedefi tanınamadı

@@ -16,6 +16,7 @@
   are automatically deleted after 15 seconds.
 1d30c358e2a1: Default parsing mode
 1f3c920d087b: Processing...
+20a7b9ae5106: Old version configuration menu
 224e2ccda861: Configuration
 2560e051161e: The original "Source" link is no longer appended at the end of parsing
   results.
@@ -84,6 +85,36 @@
 8a8672da4ab7: Unsupported configuration item
 8dc878e08cd6: Send the share link for parsing
 8f555aa82c87: Original link
+928c258e7aae: '**Send sharing link for parsing**
+
+
+  **Supported platforms:**
+
+  <blockquote expandable>{get_supported_platforms()}</blockquote>
+
+
+  **Command list:**
+
+  <blockquote expandable>/jx <link> - Parse and preview content
+
+  /raw <link> - Send original file to avoid quality compression
+
+  /zip <link> - Pack and send, including parsing information
+
+  /jxjx <link> - Bypass cache parsing
+
+  /lang - Language
+
+  /cfg - Configuration
+
+  /cfg <channel username/link/id> - Channel configuration
+
+  /ocfg - Old version configuration menu
+
+  </blockquote>
+
+
+  **Open source at: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Disable parsing progress
 996b5ce5395f: Use the platform-provided thumbnail as the video cover when sending
   videos; if turned off, no cover is set.
@@ -108,34 +139,6 @@ c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Automatically delete user-sent links after parsing is complete. In groups,
   the bot needs permission to delete messages.
-c97827ba89ec: '**Send share link for parsing**
-
-
-  **Supported platforms:**
-
-  <blockquote expandable>{get_supported_platforms()}</blockquote>
-
-
-  **Command list:**
-
-  <blockquote expandable>/jx <link> - Parse and preview content
-
-  /raw <link> - Send original file to avoid quality compression
-
-  /zip <link> - Pack and send with parsing information
-
-  /jxjx <link> - Bypass cache parsing
-
-  /lang - Language
-
-  /cfg - Configuration
-
-  /cfg <channel username/link/id> - Channel configuration
-
-  </blockquote>
-
-
-  **Open source: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 d2282636abc7: Configuration panel
 d2a9e9b5d414: Message Behavior
 d5631690265c: Unrecognized configuration target
