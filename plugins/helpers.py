@@ -42,6 +42,7 @@ COMMANDS = {
     "jxjx": t_("绕过缓存解析"),
     "lang": t_("语言"),
     "cfg": t_("配置"),
+    "ocfg": t_("旧版配置菜单"),
 }
 
 
@@ -59,6 +60,7 @@ def build_start_text() -> LocaleContent:
         f"/lang - 语言\n"
         f"/cfg - 配置\n"
         f"/cfg <频道用户名/链接/id> - 频道配置\n"
+        f"/ocfg - 旧版配置菜单\n"
         f"</blockquote>\n\n"
         f"**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
     )
@@ -120,6 +122,20 @@ def build_help_rich_message(lang: str) -> InputRichMessage:
                         [
                             RichTextCode(_r("/cfg")),
                             f" <{t_('频道用户名/链接/id')[lang]}> - {t_('频道配置')[lang]}",
+                        ]
+                    )
+                )
+            ]
+        )
+    )
+    command_items.append(
+        InputRichBlockListItem(
+            blocks=[
+                InputRichBlockParagraph(
+                    _r(
+                        [
+                            RichTextCode(_r("/ocfg")),
+                            f" - {COMMANDS['ocfg'][lang]}",
                         ]
                     )
                 )
