@@ -153,7 +153,7 @@ def _split_html_blocks(html: str) -> list[str]:
         def handle_startendtag(self, tag: str, attrs: list) -> None:
             if self.depth == 0:
                 start = self._offset()
-                self.blocks.append((start, start + len(self.get_starttag_text())))
+                self.blocks.append((start, start + len(self.get_starttag_text() or "")))
 
         def handle_endtag(self, tag: str) -> None:
             if tag in _VOID_TAGS:
