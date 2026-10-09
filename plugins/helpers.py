@@ -3,6 +3,7 @@
 import asyncio
 import re
 from html.parser import HTMLParser
+from typing import cast
 from urllib.parse import urlsplit
 
 from easy_ai18n import LocaleContent
@@ -10,7 +11,22 @@ from markdown import markdown
 from parsehub import ParseHub, Platform
 from parsehub.types import AnyParseResult, RichTextParseResult
 from pyrogram import Client
-from pyrogram.types import Message
+from pyrogram.types import (
+    InputMediaPhoto,
+    InputRichBlockDetails,
+    InputRichBlockList,
+    InputRichBlockListItem,
+    InputRichBlockParagraph,
+    InputRichBlockPhoto,
+    InputRichBlockSectionHeading,
+    InputRichMessage,
+    Message,
+    RichText,
+    RichTextBold,
+    RichTextCode,
+    RichTextItalic,
+    RichTextUrl,
+)
 
 from i18n import t_
 from log import logger
@@ -47,6 +63,98 @@ def build_start_text() -> LocaleContent:
         f"/cfg <频道用户名/链接/id> - 频道配置\n"
         f"</blockquote>\n\n"
         f"**开源地址: [GitHub](https://github.com/z-mio/parse_hub_bot)**"
+    )
+
+
+GITHUB_REPO_URL = "https://github.com/z-mio/parse_hub_bot"
+GITHUB_CARD_URL = "https://opengraph.githubassets.com/1/z-mio/parse_hub_bot"
+
+
+def _r(value: object) -> RichText:
+    """kurigram 的 RichText 参数运行时可接受 str/list，但标注只写了 RichText 类"""
+    return cast("RichText", value)
+
+
+def _platform_list_items() -> list[InputRichBlockListItem]:
+    items: list[tuple[str, InputRichBlockListItem]] = []
+    for i in ParseHub().get_platforms():
+        items.append(
+            (
+                i["name"],
+                InputRichBlockListItem(
+                    blocks=[
+                        InputRichBlockParagraph(
+                            _r(
+                                [
+                                    RichTextBold(i["name"]),
+                                    " ",
+                                    RichTextItalic(_r(f"({', '.join(i['supported_types'])})")),
+                                ]
+                            )
+                        )
+                    ]
+                ),
+            )
+        )
+    items.sort(key=lambda x: x[0], reverse=True)
+    return [item for _, item in items]
+
+
+def build_help_rich_message(lang: str) -> InputRichMessage:
+    """以 RichMessage blocks 形式构建 /help 富文本文档"""
+    command_lines = [
+        ("jx", f" <{t_('链接')[lang]}>"),
+        ("raw", f" <{t_('链接')[lang]}>"),
+        ("zip", f" <{t_('链接')[lang]}>"),
+        ("jxjx", f" <{t_('链接')[lang]}>"),
+        ("lang", ""),
+        ("cfg", ""),
+    ]
+    command_items = [
+        InputRichBlockListItem(
+            blocks=[
+                InputRichBlockParagraph(
+                    _r(
+                        [
+                            RichTextCode(_r(f"/{cmd}")),
+                            f"{suffix} - {COMMANDS[cmd][lang]}",
+                        ]
+                    )
+                )
+            ]
+        )
+        for cmd, suffix in command_lines
+    ]
+    command_items.append(
+        InputRichBlockListItem(
+            blocks=[
+                InputRichBlockParagraph(
+                    _r(
+                        [
+                            RichTextCode(_r("/cfg")),
+                            f" <{t_('频道用户名/链接/id')[lang]}> - {t_('频道配置')[lang]}",
+                        ]
+                    )
+                )
+            ]
+        )
+    )
+
+    return InputRichMessage(
+        blocks=[
+            InputRichBlockPhoto(photo=InputMediaPhoto(GITHUB_CARD_URL)),
+            InputRichBlockSectionHeading(text=_r("🔗 ParseHubBot"), size=3),
+            InputRichBlockParagraph(text=_r(t_("发送分享链接以进行解析")[lang])),
+            InputRichBlockDetails(
+                summary=_r(t_("支持的平台")[lang]),
+                blocks=[InputRichBlockList(items=_platform_list_items())],
+            ),
+            InputRichBlockDetails(
+                summary=_r(t_("命令列表")[lang]),
+                blocks=[InputRichBlockList(items=command_items)],
+            ),
+            InputRichBlockParagraph(_r([t_("开源地址")[lang], " ", RichTextUrl(_r("GitHub"), GITHUB_REPO_URL)])),
+        ]
     )
 
 
