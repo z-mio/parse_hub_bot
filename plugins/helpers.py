@@ -12,19 +12,17 @@ from parsehub import ParseHub, Platform
 from parsehub.types import AnyParseResult, RichTextParseResult
 from pyrogram import Client
 from pyrogram.types import (
-    InputMediaPhoto,
     InputRichBlockDetails,
     InputRichBlockList,
     InputRichBlockListItem,
     InputRichBlockParagraph,
-    InputRichBlockPhoto,
-    InputRichBlockSectionHeading,
+    InputRichBlockTable,
     InputRichMessage,
     Message,
+    RichBlockTableCell,
     RichText,
     RichTextBold,
     RichTextCode,
-    RichTextItalic,
     RichTextUrl,
 )
 
@@ -67,7 +65,6 @@ def build_start_text() -> LocaleContent:
 
 
 GITHUB_REPO_URL = "https://github.com/z-mio/parse_hub_bot"
-GITHUB_CARD_URL = "https://opengraph.githubassets.com/1/z-mio/parse_hub_bot"
 
 
 def _r(value: object) -> RichText:
@@ -75,29 +72,19 @@ def _r(value: object) -> RichText:
     return cast("RichText", value)
 
 
-def _platform_list_items() -> list[InputRichBlockListItem]:
-    items: list[tuple[str, InputRichBlockListItem]] = []
-    for i in ParseHub().get_platforms():
-        items.append(
-            (
-                i["name"],
-                InputRichBlockListItem(
-                    blocks=[
-                        InputRichBlockParagraph(
-                            _r(
-                                [
-                                    RichTextBold(i["name"]),
-                                    " ",
-                                    RichTextItalic(_r(f"({', '.join(i['supported_types'])})")),
-                                ]
-                            )
-                        )
-                    ]
-                ),
-            )
-        )
-    items.sort(key=lambda x: x[0], reverse=True)
-    return [item for _, item in items]
+def _platform_table(lang: str) -> InputRichBlockTable:
+    header = [
+        RichBlockTableCell(text=_r(t_("平台")[lang]), is_header=True),
+        RichBlockTableCell(text=_r(t_("支持类型")[lang]), is_header=True),
+    ]
+    rows = [
+        [
+            RichBlockTableCell(text=_r(i["name"])),
+            RichBlockTableCell(text=_r(", ".join(i["supported_types"]))),
+        ]
+        for i in sorted(ParseHub().get_platforms(), key=lambda i: i["name"], reverse=True)
+    ]
+    return InputRichBlockTable(cells=[header, *rows], is_bordered=True, is_striped=True)
 
 
 def build_help_rich_message(lang: str) -> InputRichMessage:
@@ -142,18 +129,18 @@ def build_help_rich_message(lang: str) -> InputRichMessage:
 
     return InputRichMessage(
         blocks=[
-            InputRichBlockPhoto(photo=InputMediaPhoto(GITHUB_CARD_URL)),
-            InputRichBlockSectionHeading(text=_r("🔗 ParseHubBot"), size=3),
             InputRichBlockParagraph(text=_r(t_("发送分享链接以进行解析")[lang])),
             InputRichBlockDetails(
                 summary=_r(t_("支持的平台")[lang]),
-                blocks=[InputRichBlockList(items=_platform_list_items())],
+                blocks=[_platform_table(lang)],
             ),
             InputRichBlockDetails(
                 summary=_r(t_("命令列表")[lang]),
                 blocks=[InputRichBlockList(items=command_items)],
             ),
-            InputRichBlockParagraph(_r([t_("开源地址")[lang], " ", RichTextUrl(_r("GitHub"), GITHUB_REPO_URL)])),
+            InputRichBlockParagraph(
+                _r(RichTextBold(_r([t_("开源地址")[lang], ": ", RichTextUrl(_r("GitHub"), GITHUB_REPO_URL)])))
+            ),
         ]
     )
 
