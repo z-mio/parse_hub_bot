@@ -181,6 +181,9 @@ async def finish_cfg_panel(cli: Client, cq: CallbackQuery, _t: PreLocaleSelector
         await cq.answer(_t("无法识别配置目标"), show_alert=True)
         return
 
+    if not await ensure_cfg_permission(cli, cq, _t, target):
+        return
+
     label = get_cfg_target_label(_t, target)
 
     if await can_delete_cfg_messages(cli, cq):
