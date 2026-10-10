@@ -54,6 +54,7 @@
 3d3eeb2bc9cd: Opzione di configurazione sconosciuta
 3f9578ad1850: Analisi con questo cookie fallita ripetutamente. Dopo l'aggiornamento
   puoi riprovare con il link originale per la verifica.
+3fa32d481c6c: 'Successi recenti: 0'
 3fea7ca76cde: Stato
 405ba1795958: Configurazione topic
 410224ea7c69: Tutti esistenti, nessuna aggiunta
@@ -112,6 +113,7 @@
 '734176584215': Non sei il proprietario di questo canale, non hai il permesso di modificare
   la configurazione del canale
 7391ce6dcdc7: Nessun link da riprovare
+7584153f91d1: 'Fallimenti recenti: 0'
 769d88e425e0: Completato
 77274b54a324: 'Errore {stage}:'
 77ad39632d5d: Nessun link ricevuto
@@ -175,7 +177,6 @@
 9f80223ca0ac: Elimina selezionati ({count})
 a0526e72f8a7: Esporta configurazione
 a16f4a3f483b: I cookie di {name} potrebbero essere scaduti
-a2b83df06d16: Errori recenti
 a3e3b88377c8: Inizia
 a3f71e3e829f: Le piattaforme senza proxy configurato usano questo proxy, se ce ne
   sono più di uno viene scelto uno a caso ogni volta.
@@ -187,6 +188,7 @@ ab511431782e: I contenuti di tipo articolo sono inviati direttamente con formato
   formattato di Telegram, senza creare una pagina Telegraph.
 ad66098d7867: Conserva i log degli errori
 ad6b70383f0e: Disponibile
+b01ae1789286: Fallito 0 volte
 b0294761479a: Dopo la disattivazione, i link di questa piattaforma non verranno analizzati
   automaticamente.
 b130e582ed8b: '{count} volte'

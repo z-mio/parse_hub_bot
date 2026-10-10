@@ -54,6 +54,7 @@
 3d3eeb2bc9cd: Opción de configuración desconocida
 3f9578ad1850: El análisis con esta cookie ha fallado consecutivamente. Después de
   actualizar, puede reintentar la validación con el enlace original.
+3fa32d481c6c: 'Éxitos recientes: 0'
 3fea7ca76cde: Estado
 405ba1795958: Configuración del tema
 410224ea7c69: Todas ya existen, no hay nuevas
@@ -112,6 +113,7 @@
 '734176584215': No eres el propietario de este canal, no tienes permiso para modificar
   la configuración del canal
 7391ce6dcdc7: No hay enlaces para reintentar
+7584153f91d1: 'Fallos recientes: 0'
 769d88e425e0: Completado
 77274b54a324: 'Error en {stage}:'
 77ad39632d5d: No se recibió ningún enlace
@@ -175,7 +177,6 @@
 9f80223ca0ac: Eliminar seleccionados ({count})
 a0526e72f8a7: Exportar configuración
 a16f4a3f483b: La cookie de {name} puede haber expirado
-a2b83df06d16: Errores recientes
 a3e3b88377c8: Iniciar
 a3f71e3e829f: Las plataformas sin configuración de proxy individual usan el proxy
   aquí, si hay varias, se selecciona una al azar cada vez.
@@ -187,6 +188,7 @@ ab511431782e: Los contenidos tipo artículo se envían directamente con texto en
   de Telegram, sin crear páginas en Telegraph.
 ad66098d7867: Conservar registros de errores
 ad6b70383f0e: Disponible
+b01ae1789286: Fallos 0 veces
 b0294761479a: Después de desactivar, los enlaces de esa plataforma ya no se analizarán
   automáticamente.
 b130e582ed8b: '{count} veces'

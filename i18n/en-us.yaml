@@ -54,6 +54,7 @@
 3d3eeb2bc9cd: Unknown configuration item
 3f9578ad1850: Parsing with this Cookie failed repeatedly. After update, you can retry
   verification with the original link.
+3fa32d481c6c: 'Recent Successes: 0'
 3fea7ca76cde: Status
 405ba1795958: Topic Configuration
 410224ea7c69: All exist, no additions
@@ -108,6 +109,7 @@
 '734176584215': You are not the owner of this channel, no permission to modify channel
   configuration
 7391ce6dcdc7: No links to retry
+7584153f91d1: 'Recent Failures: 0'
 769d88e425e0: Done
 77274b54a324: '{stage} error:'
 77ad39632d5d: No link received
@@ -170,7 +172,6 @@
 9f80223ca0ac: Delete Selected ({count})
 a0526e72f8a7: Export Configuration
 a16f4a3f483b: Cookie of {name} may be invalid
-a2b83df06d16: Recent errors
 a3e3b88377c8: Start
 a3f71e3e829f: Platforms without individually configured proxies use the proxy here,
   one randomly selected per request if multiple.
@@ -182,6 +183,7 @@ ab511431782e: Article content is sent directly using Telegram rich text, and Tel
   pages are no longer created.
 ad66098d7867: Retain error logs
 ad6b70383f0e: Available
+b01ae1789286: 'Failures: 0 times'
 b0294761479a: After disabling, links from this platform will no longer be automatically
   parsed when sent.
 b130e582ed8b: 0 times

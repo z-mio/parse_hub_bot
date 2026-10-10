@@ -53,6 +53,7 @@
 3d3eeb2bc9cd: Nieznana opcja konfiguracji
 3f9578ad1850: Analiza z tym ciasteczkiem ciągle się nie powiodła. Po aktualizacji
   można spróbować ponownie użyć oryginalnego linku do weryfikacji.
+3fa32d481c6c: Ostatnie sukcesy: 0
 3fea7ca76cde: Stan
 405ba1795958: Konfiguracja tematu
 410224ea7c69: Wszystkie już istnieją, brak nowych
@@ -111,6 +112,7 @@
 '734176584215': Nie jesteś właścicielem tego kanału, nie masz uprawnień do zmiany
   konfiguracji kanału
 7391ce6dcdc7: Brak linków do ponownej próby
+7584153f91d1: Ostatnie niepowodzenia: 0
 769d88e425e0: Zakończono
 77274b54a324: 'Błąd {stage}:'
 77ad39632d5d: Nie otrzymano łącza
@@ -174,7 +176,6 @@
 9f80223ca0ac: Usuń zaznaczone ({count})
 a0526e72f8a7: Eksportuj konfigurację
 a16f4a3f483b: Ciasteczka {name} mogą być nieaktualne
-a2b83df06d16: Ostatnie błędy
 a3e3b88377c8: Start
 a3f71e3e829f: Platformy bez indywidualnego proxy korzystają z tego proxy, przy wielu
   wpisach wybierany jest losowo jeden z nich.
@@ -186,6 +187,7 @@ ab511431782e: Treści artykułów wysyłaj bezpośrednio jako bogaty tekst Teleg
   twórz już stron Telegraph.
 ad66098d7867: Zachowaj dziennik błędów
 ad6b70383f0e: Dostępny
+b01ae1789286: Niepowodzenia 0 razy
 b0294761479a: Po wyłączeniu wysyłanie linków z tej platformy nie będzie automatycznie
   analizowane.
 b130e582ed8b: '{count} razy'

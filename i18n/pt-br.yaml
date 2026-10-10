@@ -52,6 +52,7 @@
 3d3eeb2bc9cd: Opção de configuração desconhecida
 3f9578ad1850: Falha contínua na análise deste Cookie. Após atualização, você pode
   tentar validar novamente com o link original.
+3fa32d481c6c: 'Sucesso recente: 0'
 3fea7ca76cde: Status
 405ba1795958: Configuração do tópico
 410224ea7c69: Todos existem, sem novos adicionados
@@ -102,6 +103,7 @@
 '734176584215': Você não é o proprietário deste canal, não tem permissão para modificar
   a configuração do canal
 7391ce6dcdc7: Nenhum link para tentar novamente
+7584153f91d1: 'Falhas recentes: 0'
 769d88e425e0: Concluído
 77274b54a324: 'Erro em {stage}:'
 77ad39632d5d: Nenhum link recebido
@@ -165,7 +167,6 @@
 9f80223ca0ac: Excluir selecionados ({count})
 a0526e72f8a7: Exportar configuração
 a16f4a3f483b: Os Cookies de {name} podem ter expirado
-a2b83df06d16: Erros recentes
 a3e3b88377c8: Iniciar
 a3f71e3e829f: Plataformas sem proxy configurado usam o proxy daqui, selecionando um
   aleatoriamente se houver vários.
@@ -177,6 +178,7 @@ ab511431782e: Conteúdo do tipo artigo é enviado diretamente com texto rico do 
   sem criar páginas no Telegraph.
 ad66098d7867: Manter registro de erros
 ad6b70383f0e: Disponível
+b01ae1789286: Falha 0 vezes
 b0294761479a: Após o fechamento, o envio do link dessa plataforma não será mais analisado
   automaticamente.
 b130e582ed8b: '{count} vezes'
