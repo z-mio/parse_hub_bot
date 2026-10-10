@@ -6,7 +6,9 @@
   canal avant de configurer
 06778dbf05d5: Gestion de la plateforme
 08b55fea3c93: Gérer
+08c6faa776e6: Ce n'est pas un lien de {name}
 091d3a0665fa: Configuration du canal
+09df5be03bca: Tester {count} cookies de {name}
 0b93dc449457: Le résultat de l'analyse n'affiche pas le résumé du contenu du post.
   Les articles envoyés via Telegraph ou en texte enrichi ne sont pas affectés.
 0d3d68e32996: Une tâche identique est déjà en cours d'analyse, veuillez attendre la
@@ -14,6 +16,7 @@
 0d5a8d10f2a9: Pas de proxy
 0f6c4353601e: Envoyer le fichier original, éviter la compression de la qualité
 0f6cedccc5d3: Trop de GIF, téléchargement ignoré, veuillez télécharger vous-même
+1a0782afa3e4: Lien non supporté
 1a603ac4b55c: Veuillez envoyer `/cfg` en message privé, groupe ou sujet, ou utiliser
   `/cfg <nom d'utilisateur/lien/id du canal>` pour configurer
 1a7619451107: Le message d'erreur reste affiché en cas d'échec de l'analyse, il est
@@ -51,6 +54,7 @@
 3d3eeb2bc9cd: Élément de configuration inconnu
 3f9578ad1850: L'analyse avec ce cookie a échoué de manière répétée. Vous pouvez réessayer
   avec le lien original après mise à jour pour vérification.
+3fea7ca76cde: État
 405ba1795958: Configuration du sujet
 410224ea7c69: Tous existent déjà, aucun ajout
 411955a09348: Adresse open source
@@ -109,6 +113,7 @@
 7391ce6dcdc7: Pas de lien à réessayer
 769d88e425e0: Terminé
 77274b54a324: 'Erreur {stage} :'
+77ad39632d5d: Aucun lien reçu
 7853187dd3ea: Type de support
 7b48a0292498: Le résultat de l'analyse n'affiche pas le titre du post. Les articles
   envoyés via Telegraph ou en texte enrichi ne sont pas affectés.
@@ -165,13 +170,14 @@
   utilisée comme couverture vidéo ; si désactivé, aucune couverture n'est définie.
 9b3dbf3e3f85: Masquer le « Source » en bas
 9f80223ca0ac: Supprimer la sélection ({count})
-a04144e4d732: Désélectionner tout
 a16f4a3f483b: Le cookie de {name} pourrait avoir expiré
 a2b83df06d16: Erreur récente
 a3e3b88377c8: Démarrer
 a3f71e3e829f: Les plateformes sans configuration de proxy individuelle utilisent ce
   proxy, s'il y en a plusieurs, l'un est choisi aléatoirement à chaque fois.
+a9c8984f0cc8: Test sélectionné ({count})
 aa357cb96ee8: Analyse
+aab57a3547a4: Désélectionner
 ab480060abb1: Ne pas afficher les journaux d'erreurs
 ab511431782e: Le contenu de type article est envoyé directement en texte enrichi Telegram,
   sans créer de page Telegraph.
@@ -210,10 +216,12 @@ d5a73b0c7f2f: Téléverser
 d6bac3942764: Ajouter un proxy
 db06c78d1e24: Tester
 ddc469e02e5f: Configuration de la plateforme
+e131da680a5a: Envoyez un lien, il sera analysé une fois pour chaque cookie sélectionné
 e14de27e8559: '{target_label}'
 e22c9a05b424: Remplacer
 e35cfa1b6535: Gérer les cookies
 e3ab31c8d89c: Analyser et prévisualiser le contenu
+e3ba26e0bbb5: Aucun cookie sélectionné
 e46d8cfa177c: Utiliser le proxy par défaut global ({count} items)
 e4f6307e1c4f: 'Passé à : {LANG_MAP[selected]}'
 e56a0df09ac2: Échecs consécutifs
@@ -233,8 +241,11 @@ eeaf2cf99827: Analyse de proxy
 f047ff589a7a: Envoyer en paquet, avec informations d'analyse
 f136c494af8c: Créer une page Telegraph
 f26ef9142458: Télécharger
+f6a5f1d39bfb: 'Test terminé : {ok} réussis, {failed} échoués'
 f6a87eabb74a: Ajouter un cookie pour {name}
+f85549cdfce6: En cours de test
 f88f0ab8aed9: 'Indisponible : {err}'
+fc954d25ec15: Agent
 fcaea8ec774e: Ne pas envoyer de message d'erreur en cas d'échec d'analyse.
 fe2d26a257d6: Non configuré
 fed0d2f0cea0: Ajoute une option « lien original » dans la liste des résultats en mode

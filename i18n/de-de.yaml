@@ -6,7 +6,9 @@
   dem Kanal hinzu und konfigurieren Sie ihn dann.
 06778dbf05d5: Plattformverwaltung
 08b55fea3c93: Verwalten
+08c6faa776e6: Dies ist kein Link von {name}
 091d3a0665fa: Kanal-Konfiguration
+09df5be03bca: Teste {count} Cookies von {name}
 0b93dc449457: Der Analyseergebnis zeigt keine Zusammenfassung des Beitragsinhalts
   an. Artikel, die mit Telegraph oder Rich-Text gesendet werden, sind nicht betroffen.
 0d3d68e32996: Eine identische Aufgabe wird bereits analysiert, bitte warten Sie, bis
@@ -14,6 +16,7 @@
 0d5a8d10f2a9: Kein Proxy
 0f6c4353601e: Originaldatei senden, um Qualitätsverlust zu vermeiden
 0f6cedccc5d3: Zu viele GIFs, Upload übersprungen, bitte selbst herunterladen
+1a0782afa3e4: Dieser Link wird nicht unterstützt
 1a603ac4b55c: Bitte senden Sie `/cfg` oder verwenden Sie `/cfg <Kanal-Benutzername/Link/ID>`
   im privaten Chat, in der Gruppe oder im Thema zur Konfiguration.
 1a7619451107: Bei Analysefehlern bleibt die Fehlermeldung bestehen und wird nach 15
@@ -52,6 +55,7 @@
 3f9578ad1850: Die Analyse mit diesem Cookie ist mehrmals fehlgeschlagen. Nach der
   Aktualisierung kann die ursprüngliche Verbindung zur erneuten Überprüfung genutzt
   werden.
+3fea7ca76cde: Status
 405ba1795958: Themen-Konfiguration
 410224ea7c69: Alle bereits vorhanden, keine neuen hinzugefügt
 411955a09348: Open-Source-Adresse
@@ -110,6 +114,7 @@
 7391ce6dcdc7: Keine Links zum erneuten Versuch vorhanden
 769d88e425e0: Fertig
 77274b54a324: '{stage} Fehler:'
+77ad39632d5d: Kein Link empfangen
 7853187dd3ea: Unterstützungstyp
 7b48a0292498: Der Analyseergebnis zeigt keine Beitragstitel an. Artikel, die mit Telegraph
   oder Rich-Text gesendet werden, sind nicht betroffen.
@@ -166,13 +171,14 @@
   verwendet; bei Deaktivierung wird kein Cover eingestellt.
 9b3dbf3e3f85: Untere "Quelle" ausblenden
 9f80223ca0ac: Ausgewählte löschen ({count})
-a04144e4d732: Auswahl aufheben
 a16f4a3f483b: Cookie von {name} könnte ungültig sein
 a2b83df06d16: Kürzliche Fehler
 a3e3b88377c8: Start
 a3f71e3e829f: Plattformen ohne eigene Proxy-Konfiguration verwenden diesen Proxy,
   bei mehreren wird jedes Mal zufällig einer gewählt.
+a9c8984f0cc8: Auswahl testen ({count})
 aa357cb96ee8: Auflösung
+aab57a3547a4: Invertieren
 ab480060abb1: Fehlerprotokolle nicht anzeigen
 ab511431782e: Artikelinhalte werden direkt mit Telegram Rich-Text gesendet, es wird
   keine Telegraph-Seite mehr erstellt.
@@ -213,10 +219,12 @@ d5a73b0c7f2f: Hochladen
 d6bac3942764: Proxy hinzufügen
 db06c78d1e24: Testen
 ddc469e02e5f: Plattform-Konfiguration
+e131da680a5a: Sende einen Link, um jeden ausgewählten Cookie einzeln zu analysieren
 e14de27e8559: '{target_label}'
 e22c9a05b424: Ersetzen
 e35cfa1b6535: Cookie verwalten
 e3ab31c8d89c: Inhalt analysieren und Vorschau anzeigen
+e3ba26e0bbb5: Keine Cookies ausgewählt
 e46d8cfa177c: Globalen Standard-Proxy verwenden ({count} Einträge)
 e4f6307e1c4f: 'Wechsel zu: {LANG_MAP[selected]}'
 e56a0df09ac2: Mehrfaches Fehlschlagen
@@ -236,8 +244,11 @@ eeaf2cf99827: Proxy auflösen
 f047ff589a7a: Paket senden, inklusive Analyseinformationen
 f136c494af8c: Telegraph-Seite erstellen
 f26ef9142458: Herunterladen
+f6a5f1d39bfb: 'Test abgeschlossen: {ok} erfolgreich, {failed} fehlgeschlagen'
 f6a87eabb74a: '{name} Cookies hinzufügen'
+f85549cdfce6: Im Test
 f88f0ab8aed9: 'Nicht verfügbar: {err}'
+fc954d25ec15: Agent
 fcaea8ec774e: Bei Analysefehlern wird keine Fehlermeldung gesendet.
 fe2d26a257d6: Nicht eingestellt
 fed0d2f0cea0: In der Ergebnisliste des Inline-Modus wird die Option „Originallink“

@@ -6,13 +6,16 @@
   configurar
 06778dbf05d5: Gerenciamento da plataforma
 08b55fea3c93: Gerenciar
+08c6faa776e6: Este não é um link do {name}
 091d3a0665fa: Configuração do canal
+09df5be03bca: Testando {count} cookies do {name}
 0b93dc449457: O resumo do corpo da postagem não será exibido no resultado da análise.
   Artigos enviados via Telegraph ou texto rico não são afetados.
 0d3d68e32996: Já existe uma tarefa igual sendo processada, aguardando a conclusão...
 0d5a8d10f2a9: Não usar proxy
 0f6c4353601e: Enviar arquivo original, evitar compressão de qualidade
 0f6cedccc5d3: Muitos GIFs, pulando upload, por favor baixe manualmente
+1a0782afa3e4: Este link não é suportado
 1a603ac4b55c: Por favor, envie `/cfg` em chat privado, grupo ou tópico, ou use `/cfg
   <nome de usuário/link/id do canal>` para configurar
 1a7619451107: Quando ocorre um erro na análise, a mensagem de erro permanece; ao fechar,
@@ -49,6 +52,7 @@
 3d3eeb2bc9cd: Opção de configuração desconhecida
 3f9578ad1850: Falha contínua na análise deste Cookie. Após atualização, você pode
   tentar validar novamente com o link original.
+3fea7ca76cde: Status
 405ba1795958: Configuração do tópico
 410224ea7c69: Todos existem, sem novos adicionados
 411955a09348: Endereço de código aberto
@@ -99,6 +103,7 @@
 7391ce6dcdc7: Nenhum link para tentar novamente
 769d88e425e0: Concluído
 77274b54a324: 'Erro em {stage}:'
+77ad39632d5d: Nenhum link recebido
 7853187dd3ea: Tipo de suporte
 7b48a0292498: O título da postagem não será exibido no resultado da análise. Artigos
   enviados via Telegraph ou texto rico não são afetados.
@@ -155,13 +160,14 @@
   do vídeo; se desativado, nenhuma capa será definida.
 9b3dbf3e3f85: Ocultar "Source" na parte inferior
 9f80223ca0ac: Excluir selecionados ({count})
-a04144e4d732: Desmarcar tudo
 a16f4a3f483b: Os Cookies de {name} podem ter expirado
 a2b83df06d16: Erros recentes
 a3e3b88377c8: Iniciar
 a3f71e3e829f: Plataformas sem proxy configurado usam o proxy daqui, selecionando um
   aleatoriamente se houver vários.
+a9c8984f0cc8: Testando seleção ({count})
 aa357cb96ee8: Análise
+aab57a3547a4: Inverter seleção
 ab480060abb1: Não mostrar logs de erro
 ab511431782e: Conteúdo do tipo artigo é enviado diretamente com texto rico do Telegram,
   sem criar páginas no Telegraph.
@@ -200,10 +206,12 @@ d5a73b0c7f2f: Enviar
 d6bac3942764: Adicionar proxy
 db06c78d1e24: Testar
 ddc469e02e5f: Configuração da plataforma
+e131da680a5a: Envie um link, cada cookie selecionado será analisado individualmente
 e14de27e8559: '{target_label}'
 e22c9a05b424: Substituir
 e35cfa1b6535: Gerenciar Cookie
 e3ab31c8d89c: Analisar e pré-visualizar conteúdo
+e3ba26e0bbb5: Nenhum cookie selecionado
 e46d8cfa177c: Usar proxy padrão global ({count} itens)
 e4f6307e1c4f: 'Alterado para: {LANG_MAP[selected]}'
 e56a0df09ac2: Falha contínua
@@ -222,8 +230,11 @@ eeaf2cf99827: Analisar proxy
 f047ff589a7a: Enviar em pacote, com informações de análise
 f136c494af8c: Criar página no Telegraph
 f26ef9142458: Baixar
+f6a5f1d39bfb: 'Teste concluído: {ok} bem-sucedidos, {failed} falhados'
 f6a87eabb74a: Adicionar Cookie para {name}
+f85549cdfce6: Em teste
 f88f0ab8aed9: 'Indisponível: {err}'
+fc954d25ec15: Agente
 fcaea8ec774e: Não enviar mensagem de erro se a análise falhar.
 fe2d26a257d6: Não definido
 fed0d2f0cea0: Na lista de resultados do modo inline, adicione a opção "Link original";

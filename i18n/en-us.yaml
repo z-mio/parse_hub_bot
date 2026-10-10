@@ -6,7 +6,9 @@
   configuring
 06778dbf05d5: Platform Management
 08b55fea3c93: Manage
+08c6faa776e6: This is not a {name} link
 091d3a0665fa: Channel Configuration
+09df5be03bca: Test {name} with {count} cookies
 0b93dc449457: Parsing results will not display the post summary. Articles sent via
   Telegraph or rich text are unaffected.
 0d3d68e32996: A task with the same content is already being parsed, waiting for parsing
@@ -14,6 +16,7 @@
 0d5a8d10f2a9: Do not use proxy
 0f6c4353601e: Send original file to avoid quality compression
 0f6cedccc5d3: Too many GIFs, skipping upload, please download manually
+1a0782afa3e4: Link not supported
 1a603ac4b55c: Please send `/cfg` in private chat, group, or topic, or use `/cfg <channel
   username/link/id>` to configure
 1a7619451107: Error messages during parsing remain visible; when turned off, they
@@ -51,6 +54,7 @@
 3d3eeb2bc9cd: Unknown configuration item
 3f9578ad1850: Parsing with this Cookie failed repeatedly. After update, you can retry
   verification with the original link.
+3fea7ca76cde: Status
 405ba1795958: Topic Configuration
 410224ea7c69: All exist, no additions
 411955a09348: Open source address
@@ -105,6 +109,7 @@
 7391ce6dcdc7: No links to retry
 769d88e425e0: Done
 77274b54a324: '{stage} error:'
+77ad39632d5d: No link received
 7853187dd3ea: Support type
 7b48a0292498: Parsing results will not display the post title. Articles sent via Telegraph
   or rich text are unaffected.
@@ -160,13 +165,14 @@
   videos; if turned off, no cover is set.
 9b3dbf3e3f85: Hide bottom "Source"
 9f80223ca0ac: Delete Selected ({count})
-a04144e4d732: Deselect All
 a16f4a3f483b: Cookie of {name} may be invalid
 a2b83df06d16: Recent errors
 a3e3b88377c8: Start
 a3f71e3e829f: Platforms without individually configured proxies use the proxy here,
   one randomly selected per request if multiple.
+a9c8984f0cc8: Test selected ({count})
 aa357cb96ee8: Parsing
+aab57a3547a4: Invert Selection
 ab480060abb1: Do not display error logs
 ab511431782e: Article content is sent directly using Telegram rich text, and Telegraph
   pages are no longer created.
@@ -205,10 +211,12 @@ d5a73b0c7f2f: Upload
 d6bac3942764: Add proxy
 db06c78d1e24: Test
 ddc469e02e5f: Platform configuration
+e131da680a5a: Send a link, it will be parsed once for each selected cookie
 e14de27e8559: '{target_label}'
 e22c9a05b424: Replace
 e35cfa1b6535: Manage Cookie
 e3ab31c8d89c: Parse and preview content
+e3ba26e0bbb5: No cookie selected
 e46d8cfa177c: Use global default proxy (0 items)
 e4f6307e1c4f: 'Switched to: {LANG_MAP[selected]}'
 e56a0df09ac2: Continuous failure
@@ -227,8 +235,11 @@ eeaf2cf99827: Parse proxy
 f047ff589a7a: Pack and send with parsing information
 f136c494af8c: Create Telegraph page
 f26ef9142458: Download
+f6a5f1d39bfb: 'Test completed: {ok} success, {failed} failure'
 f6a87eabb74a: Add Cookie for 0
+f85549cdfce6: Testing
 f88f0ab8aed9: 'Unavailable: 0'
+fc954d25ec15: Proxy
 fcaea8ec774e: Do not send error messages when parsing fails.
 fe2d26a257d6: Not set
 fed0d2f0cea0: Add an "Original Link" option in the result list of inline mode; when

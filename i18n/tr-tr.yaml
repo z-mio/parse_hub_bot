@@ -5,13 +5,16 @@
 04f706887b08: Bot bu kanala katılmadı, lütfen önce Botu kanala ekleyin ve sonra yapılandırın
 06778dbf05d5: Platform yönetimi
 08b55fea3c93: Yönet
+08c6faa776e6: Bu, {name} bağlantısı değildir
 091d3a0665fa: Kanal Yapılandırması
+09df5be03bca: '{name} için {count} tane Cookie testi'
 0b93dc449457: Çözümleme sonucu gönderi metni özeti gösterilmez. Telegraph veya zengin
   metin ile gönderilen makaleler etkilenmez.
 0d3d68e32996: Aynı görev zaten çözülüyor, çözüm tamamlanana kadar bekleyin...
 0d5a8d10f2a9: Vekil sunucu kullanma
 0f6c4353601e: Orijinal dosyayı gönder, kalite sıkıştırmasını önle
 0f6cedccc5d3: GIF çok fazla, yükleme atlandı, lütfen kendiniz indirin
+1a0782afa3e4: Bu bağlantı desteklenmiyor
 1a603ac4b55c: Lütfen özel mesajda, grupta veya konularda `/cfg` komutunu gönderin
   veya `/cfg <kanal kullanıcı adı/link/id>` ile yapılandırın
 1a7619451107: Çözümleme hatası oluştuğunda hata mesajı sürekli kalır, kapatıldığında
@@ -48,6 +51,7 @@
 3d3eeb2bc9cd: Bilinmeyen yapılandırma öğesi
 3f9578ad1850: Bu Cookie ile çözümleme ardışık olarak başarısız oldu. Güncelledikten
   sonra orijinal bağlantı ile tekrar doğrulama yapabilirsiniz.
+3fea7ca76cde: Durum
 405ba1795958: Konu yapılandırması
 410224ea7c69: Hepsi zaten mevcut, yeni ekleme yok
 411955a09348: Açık kaynak adresi
@@ -105,6 +109,7 @@
 7391ce6dcdc7: Tekrar denenecek bağlantı yok
 769d88e425e0: Tamamlandı
 77274b54a324: '{stage} hata:'
+77ad39632d5d: Bağlantı alınmadı
 7853187dd3ea: Destek türü
 7b48a0292498: Çözümleme sonucu gönderi başlığı gösterilmez. Telegraph veya zengin
   metin ile gönderilen makaleler etkilenmez.
@@ -161,13 +166,14 @@
   kapağı olarak kullanılır, kapatılırsa kapak ayarlanmaz.
 9b3dbf3e3f85: Alt "Kaynak"u gizle
 9f80223ca0ac: Seçilenleri sil ({count})
-a04144e4d732: Tüm seçimi kaldır
 a16f4a3f483b: '{name} için Cookie geçersiz olabilir'
 a2b83df06d16: Son hatalar
 a3e3b88377c8: Başlat
 a3f71e3e829f: Özel yapılandırılmış vekil sunucu olmayan platformlar buradaki vekil
   sunucuyu kullanır, birden fazla varsa her seferinde rastgele biri seçilir.
+a9c8984f0cc8: Seçilenleri test et ({count})
 aa357cb96ee8: Çözümleme
+aab57a3547a4: Seçimi ters çevir
 ab480060abb1: Hata günlüklerini gösterme
 ab511431782e: Makaleler doğrudan Telegram zengin metin olarak gönderilir, Telegraph
   sayfası oluşturulmaz.
@@ -207,10 +213,12 @@ d5a73b0c7f2f: Yükle
 d6bac3942764: Proxy ekle
 db06c78d1e24: Test
 ddc469e02e5f: Platform yapılandırması
+e131da680a5a: Bir bağlantı gönderin, seçilen her bir Cookie ayrı ayrı çözümlenir
 e14de27e8559: '{target_label}'
 e22c9a05b424: Değiştir
 e35cfa1b6535: Çerezleri yönet
 e3ab31c8d89c: İçeriği çözümle ve önizle
+e3ba26e0bbb5: Seçili Cookie yok
 e46d8cfa177c: Genel varsayılan proxy kullanılıyor ({count} adet)
 e4f6307e1c4f: '{LANG_MAP[selected]} olarak değiştirildi'
 e56a0df09ac2: Ardışık başarısızlık
@@ -230,8 +238,11 @@ eeaf2cf99827: Proxy çözümlemesi
 f047ff589a7a: Paket halinde gönder, çözümleme bilgisi ile birlikte
 f136c494af8c: Telegraph sayfası oluştur
 f26ef9142458: İndir
+f6a5f1d39bfb: 'Test tamamlandı: {ok} başarılı, {failed} başarısız'
 f6a87eabb74a: '{name} için çerez ekle'
+f85549cdfce6: Test ediliyor
 f88f0ab8aed9: 'Kullanılamıyor: {err}'
+fc954d25ec15: Vekil
 fcaea8ec774e: Çözümleme hatası durumunda hata mesajı gönderilmez.
 fe2d26a257d6: Ayarlanmadı
 fed0d2f0cea0: Satır içi modunda sonuç listesine "Orijinal Bağlantı" seçeneği eklenir,
