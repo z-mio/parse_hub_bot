@@ -24,6 +24,7 @@ from plugins.admin.render import (
     build_page,
     cb,
     cookie_detail_text,
+    cookie_ref,
     cookie_status_text,
     get_proxies,
     kind_label,
@@ -119,6 +120,10 @@ async def admin_callback(cli: Client, cq: CallbackQuery) -> None:
             case "open":
                 page = args[0]
                 SELECTIONS.pop((chat_id, cq.message.id), None)
+                if len(args) == 3:
+                    refs = list_values(pl_cfg, page, args[1])
+                    if picked := {c for c in refs if cookie_ref(c) == args[2]}:
+                        _selection(chat_id, cq.message.id, page, create=True)[args[1]] = picked
             case "mode":
                 pid, kind, mode = args
                 page = pid

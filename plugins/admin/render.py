@@ -1,3 +1,4 @@
+import hashlib
 import time
 from itertools import batched
 
@@ -43,6 +44,11 @@ COOKIES = "c"
 """多选时 cookie 列表的 key, 代理列表用 KINDS"""
 type Selection = dict[str, set[str]]
 """列表 key -> 已选中的值"""
+
+
+def cookie_ref(cookie: str) -> str:
+    """回调里引用某条 cookie 的短哈希"""
+    return hashlib.sha256(cookie.encode()).hexdigest()[:16]
 
 
 def cb(*parts: str | int) -> str:
@@ -311,13 +317,20 @@ def _check_cell(checked: bool, callback_data: str) -> RichBlockTableCell:
 
 
 def _select_all_header(
-    _t: PreLocaleSelector, pid: str, key: str, values: list[str], selected: set[str], labels: list[str], blanks: int
+    _t: PreLocaleSelector,
+    pid: str,
+    key: str,
+    values: list[str],
+    selected: set[str],
+    labels: list[str],
+    blanks: int,
+    **label_kwargs: object,
 ) -> list[RichBlockTableCell]:
     """表头: 第一格是全选按钮, 后面是列名, 按钮列留空"""
     label = _t("反选") if selected >= set(values) else _t("全选")
     return [
         _cell(RichTextButton(_button(label, cb("selall", pid, key))), is_header=True),
-        *(_cell(RichTextBold(_r(x)), is_header=True) for x in labels),
+        *(_cell(RichTextBold(_r(x)), is_header=True, **label_kwargs) for x in labels),
         *(_cell("", is_header=True) for _ in range(blanks)),
     ]
 
@@ -351,11 +364,11 @@ def _proxy_list(
         blocks.append(
             InputRichBlockTable(
                 cells=[
-                    _select_all_header(_t, pid, kind, values, selected, [_t("代理")], 1),
+                    _select_all_header(_t, pid, kind, values, selected, [_t("代理")], 1, align="center"),
                     *[
                         [
                             _check_cell(u in selected, cb("sel", pid, kind, i)),
-                            _cell(RichTextCode(_r(u))),
+                            _cell(RichTextCode(_r(u)), align="center"),
                             _button_cell(_t("测试"), cb("test", pid, kind, i)),
                         ]
                         for i, u in enumerate(values)
@@ -428,14 +441,20 @@ def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selectio
         blocks.append(
             InputRichBlockTable(
                 cells=[
-                    _select_all_header(_t, pid, COOKIES, cookies, selected, ["Cookie", _t("状态")], 2),
+                    _select_all_header(_t, pid, COOKIES, cookies, selected, ["Cookie", _t("状态")], 1, align="center"),
                     *[
                         [
                             _check_cell(c in selected, cb("sel", pid, COOKIES, i)),
-                            _cell(mask_secret(c, stars=3)),
+                            _cell(mask_secret(c, stars=3), align="center"),
                             _cookie_status_cell(_t, pid, i, c),
-                            _button_cell(_t("测试"), cb("testc", pid, i)),
-                            _button_cell(_t("替换"), cb("repc", pid, i)),
+                            _cell(
+                                [
+                                    RichTextButton(_button(_t("测试"), cb("testc", pid, i))),
+                                    " ",
+                                    RichTextButton(_button(_t("替换"), cb("repc", pid, i))),
+                                ],
+                                align="right",
+                            ),
                         ]
                         for i, c in enumerate(cookies)
                     ],
@@ -500,7 +519,11 @@ def build_cookie_alert(_t: PreLocaleSelector, alert: CookieAlert) -> InputRichMe
             _italic(_t("带这条 Cookie 的解析连续失败。更新后可以用原链接重试验证。")),
             InputRichBlockButtons(
                 buttons=[
-                    _button(_t("管理 Cookie"), cb("open", alert.platform_id), ButtonStyle.PRIMARY),
+                    _button(
+                        _t("管理 Cookie"),
+                        cb("open", alert.platform_id, COOKIES, cookie_ref(alert.cookie)),
+                        ButtonStyle.PRIMARY,
+                    ),
                     _button(_t("用原链接重试"), cb("retry", alert.platform_id)),
                 ]
             ),
