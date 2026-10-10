@@ -1,6 +1,6 @@
 0203186350ef: Proxy padrão global não está configurado, conexão direta real
 024738655610: Opção "URL original" embutida
-038cf03872e5: Recarregar arquivo
+0452214502d6: Importar configuração
 047ddf74eb5e: Esta não é a sua configuração
 04f706887b08: Bot não entrou no canal, por favor adicione o Bot ao canal antes de
   configurar
@@ -76,6 +76,7 @@
 5210725561a8: Tentar novamente com o link original
 53ace4305f51: Ativado
 569c1f28ab00: Empacotando...
+575e0a86eea5: Recarregar configuração
 5861d620c41d: Baixando... | {current}/{total}
 5a9f36a77173: Empacotar
 5b943dc87178: Link para download do GIF
@@ -115,6 +116,8 @@
 816de50b9e0e: Por favor, insira o link na caixa de chat
 '849320560237': Ligado
 868afb493654: Selecione o alvo da configuração
+87d3ab3e5514: Envie o arquivo platform_config.yaml, ou cole diretamente o conteúdo
+  YAML. A importação substituirá completamente a configuração atual.
 89881c6b335c: Suporta http / https / socks5 / socks5h, um por linha, pode adicionar
   em lote
 8a8672da4ab7: Opção de configuração não suportada
@@ -160,6 +163,7 @@
   do vídeo; se desativado, nenhuma capa será definida.
 9b3dbf3e3f85: Ocultar "Source" na parte inferior
 9f80223ca0ac: Excluir selecionados ({count})
+a0526e72f8a7: Exportar configuração
 a16f4a3f483b: Os Cookies de {name} podem ter expirado
 a2b83df06d16: Erros recentes
 a3e3b88377c8: Iniciar
@@ -206,6 +210,7 @@ d5a73b0c7f2f: Enviar
 d6bac3942764: Adicionar proxy
 db06c78d1e24: Testar
 ddc469e02e5f: Configuração da plataforma
+e0f0665bb67b: Configuração importada, efeito imediato
 e131da680a5a: Envie um link, cada cookie selecionado será analisado individualmente
 e14de27e8559: '{target_label}'
 e22c9a05b424: Substituir
@@ -230,6 +235,7 @@ eeaf2cf99827: Analisar proxy
 f047ff589a7a: Enviar em pacote, com informações de análise
 f136c494af8c: Criar página no Telegraph
 f26ef9142458: Baixar
+f4847a7070ed: Nenhuma configuração recebida
 f6a5f1d39bfb: 'Teste concluído: {ok} bem-sucedidos, {failed} falhados'
 f6a87eabb74a: Adicionar Cookie para {name}
 f85549cdfce6: Em teste

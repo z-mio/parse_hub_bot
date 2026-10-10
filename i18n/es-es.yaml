@@ -1,6 +1,6 @@
 0203186350ef: Proxy predeterminado global no configurado, conexión directa real
 024738655610: Opción de "URL original" en línea
-038cf03872e5: Recargar archivo
+0452214502d6: Importar configuración
 047ddf74eb5e: Esta no es tu configuración
 04f706887b08: El bot no se ha unido a este canal, por favor añade el bot al canal
   antes de configurar
@@ -86,6 +86,7 @@
 5210725561a8: Reintentar con enlace original
 53ace4305f51: Activado
 569c1f28ab00: Empaquetando...
+575e0a86eea5: Recargar configuración
 5861d620c41d: Descargando... | {current}/{total}
 5a9f36a77173: Empaquetar
 5b943dc87178: Enlace de descarga del GIF
@@ -125,6 +126,8 @@
 816de50b9e0e: Por favor, introduce un enlace en el chat
 '849320560237': Encendido
 868afb493654: Seleccionar objetivo de configuración
+87d3ab3e5514: Envía el archivo platform_config.yaml o pega directamente el contenido
+  YAML. La importación reemplazará toda la configuración actual.
 89881c6b335c: Soporta http / https / socks5 / socks5h, uno por línea para añadir en
   lote
 8a8672da4ab7: Opción de configuración no soportada
@@ -170,6 +173,7 @@
   como portada del video; si se desactiva, no se establece portada.
 9b3dbf3e3f85: Ocultar "Fuente" en la parte inferior
 9f80223ca0ac: Eliminar seleccionados ({count})
+a0526e72f8a7: Exportar configuración
 a16f4a3f483b: La cookie de {name} puede haber expirado
 a2b83df06d16: Errores recientes
 a3e3b88377c8: Iniciar
@@ -218,6 +222,7 @@ d5a73b0c7f2f: Subir
 d6bac3942764: Agregar proxy
 db06c78d1e24: Probar
 ddc469e02e5f: Configuración de la plataforma
+e0f0665bb67b: Configuración importada, efecto inmediato
 e131da680a5a: Envía un enlace y analizará cada cookie seleccionada por separado
 e14de27e8559: '{target_label}'
 e22c9a05b424: Reemplazar
@@ -243,6 +248,7 @@ eeaf2cf99827: Analizar proxy
 f047ff589a7a: Enviar empaquetado con información de análisis
 f136c494af8c: Crear página Telegraph
 f26ef9142458: Descargar
+f4847a7070ed: No se recibió configuración
 f6a5f1d39bfb: 'Prueba completada: {ok} éxito(s), {failed} fallo(s)'
 f6a87eabb74a: Agregar cookies para {name}
 f85549cdfce6: En prueba

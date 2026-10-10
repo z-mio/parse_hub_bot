@@ -1,6 +1,6 @@
 0203186350ef: Domyślny globalny proxy nie jest ustawiony, faktyczne połączenie bezpośrednie
 024738655610: Opcja „Inline 'Oryginalny URL'"
-038cf03872e5: Przeładuj plik
+0452214502d6: Importuj konfigurację
 047ddf74eb5e: To nie jest twoja konfiguracja
 04f706887b08: Bot nie dołączył do tego kanału, najpierw dodaj bota do kanału, a następnie
   skonfiguruj
@@ -85,6 +85,7 @@
 5210725561a8: Spróbuj ponownie użyć oryginalnego linku
 53ace4305f51: Włączone
 569c1f28ab00: Pakowanie...
+575e0a86eea5: Przeładuj konfigurację
 5861d620c41d: Pobieranie... | {current}/{total}
 5a9f36a77173: Pakuj
 5b943dc87178: Link do pobrania GIF
@@ -124,6 +125,8 @@
 816de50b9e0e: Wpisz link w polu czatu
 '849320560237': Włącz
 868afb493654: Wybierz cel konfiguracji
+87d3ab3e5514: Wyślij plik platform_config.yaml lub wklej bezpośrednio zawartość YAML.
+  Po imporcie cała konfiguracja zostanie zastąpiona.
 89881c6b335c: Obsługuje http / https / socks5 / socks5h, jeden na linię, możliwe dodanie
   hurtowe
 8a8672da4ab7: Nieobsługiwany element konfiguracji
@@ -169,6 +172,7 @@
   jako okładki wideo, po wyłączeniu okładka nie będzie ustawiana.
 9b3dbf3e3f85: Ukryj dolny „Źródło”
 9f80223ca0ac: Usuń zaznaczone ({count})
+a0526e72f8a7: Eksportuj konfigurację
 a16f4a3f483b: Ciasteczka {name} mogą być nieaktualne
 a2b83df06d16: Ostatnie błędy
 a3e3b88377c8: Start
@@ -215,6 +219,7 @@ d5a73b0c7f2f: Przesyłanie
 d6bac3942764: Dodaj proxy
 db06c78d1e24: Testuj
 ddc469e02e5f: Konfiguracja platformy
+e0f0665bb67b: Konfiguracja została zaimportowana i natychmiast aktywowana
 e131da680a5a: Wyślij łącze, a każde z wybranych plików cookie zostanie osobno przetworzone
 e14de27e8559: '{target_label}'
 e22c9a05b424: Zamień
@@ -239,6 +244,7 @@ eeaf2cf99827: Analizuj proxy
 f047ff589a7a: Wyślij jako paczkę, z informacjami o analizie
 f136c494af8c: Utwórz stronę Telegraph
 f26ef9142458: Pobierz
+f4847a7070ed: Nie otrzymano konfiguracji
 f6a5f1d39bfb: 'Test zakończony: {ok} pomyślnych, {failed} nieudanych'
 f6a87eabb74a: Dodaj ciasteczka dla {name}
 f85549cdfce6: W trakcie testów

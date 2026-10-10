@@ -1,6 +1,6 @@
 0203186350ef: Global default proxy not set, connecting directly
 024738655610: Inline "Original URL" option
-038cf03872e5: Reload file
+0452214502d6: Import Configuration
 047ddf74eb5e: This is not your configuration
 04f706887b08: Bot has not joined this channel, please add the Bot to the channel before
   configuring
@@ -83,6 +83,7 @@
 5210725561a8: Retry with original link
 53ace4305f51: Enabled
 569c1f28ab00: Packaging...
+575e0a86eea5: Reload Configuration
 5861d620c41d: Downloading... | {current}/{total}
 5a9f36a77173: Package
 5b943dc87178: GIF download link
@@ -121,6 +122,8 @@
 816de50b9e0e: Please enter the link in the chat box
 '849320560237': 'On'
 868afb493654: Select configuration target
+87d3ab3e5514: Send the platform_config.yaml file, or directly paste the YAML content.
+  After importing, the entire configuration will replace the current one.
 89881c6b335c: Supports http / https / socks5 / socks5h, one per line for batch addition
 8a8672da4ab7: Unsupported configuration item
 8dc878e08cd6: Send the share link for parsing
@@ -165,6 +168,7 @@
   videos; if turned off, no cover is set.
 9b3dbf3e3f85: Hide bottom "Source"
 9f80223ca0ac: Delete Selected ({count})
+a0526e72f8a7: Export Configuration
 a16f4a3f483b: Cookie of {name} may be invalid
 a2b83df06d16: Recent errors
 a3e3b88377c8: Start
@@ -211,6 +215,7 @@ d5a73b0c7f2f: Upload
 d6bac3942764: Add proxy
 db06c78d1e24: Test
 ddc469e02e5f: Platform configuration
+e0f0665bb67b: Configuration imported, taking effect immediately
 e131da680a5a: Send a link, it will be parsed once for each selected cookie
 e14de27e8559: '{target_label}'
 e22c9a05b424: Replace
@@ -235,6 +240,7 @@ eeaf2cf99827: Parse proxy
 f047ff589a7a: Pack and send with parsing information
 f136c494af8c: Create Telegraph page
 f26ef9142458: Download
+f4847a7070ed: No configuration received
 f6a5f1d39bfb: 'Test completed: {ok} success, {failed} failure'
 f6a87eabb74a: Add Cookie for 0
 f85549cdfce6: Testing

@@ -1,6 +1,6 @@
 0203186350ef: Globale standaardproxy niet ingesteld, directe verbinding in werkelijkheid
 024738655610: Inline "Originele URL" optie
-038cf03872e5: Bestand opnieuw laden
+0452214502d6: Configuratie importeren
 047ddf74eb5e: Dit is niet jouw configuratie
 04f706887b08: Bot is niet toegevoegd aan dit kanaal, voeg de Bot eerst toe aan het
   kanaal voordat je het configureert
@@ -87,6 +87,7 @@
 5210725561a8: Opnieuw proberen met originele link
 53ace4305f51: Ingeschakeld
 569c1f28ab00: Bezig met inpakken...
+575e0a86eea5: Configuratie opnieuw laden
 5861d620c41d: Bezig met downloaden... | {current}/{total}
 5a9f36a77173: Inpakken
 5b943dc87178: GIF downloadlink
@@ -126,6 +127,8 @@
 816de50b9e0e: Voer een link in het chatvenster in
 '849320560237': Aan
 868afb493654: Kies configuratiedoel
+87d3ab3e5514: Stuur het bestand platform_config.yaml of plak de YAML-inhoud direct.
+  Na import wordt de huidige configuratie volledig vervangen
 89881c6b335c: Ondersteunt http / https / socks5 / socks5h, één per regel, kan in bulk
   toegevoegd worden
 8a8672da4ab7: Niet-ondersteunde configuratieoptie
@@ -172,6 +175,7 @@
   ingesteld.
 9b3dbf3e3f85: Verberg "Bron" onderaan
 9f80223ca0ac: Geselecteerde verwijderen ({count})
+a0526e72f8a7: Configuratie exporteren
 a16f4a3f483b: Cookie van {name} is mogelijk verlopen
 a2b83df06d16: Laatste fout
 a3e3b88377c8: Start
@@ -217,6 +221,7 @@ d5a73b0c7f2f: Uploaden
 d6bac3942764: Proxy toevoegen
 db06c78d1e24: Testen
 ddc469e02e5f: Platformconfiguratie
+e0f0665bb67b: Configuratie geïmporteerd en onmiddellijk van kracht
 e131da680a5a: Verstuur een link, die wordt apart geanalyseerd met elke geselecteerde
   cookie
 e14de27e8559: '{target_label}'
@@ -243,6 +248,7 @@ eeaf2cf99827: Proxy parseren
 f047ff589a7a: Verpak en stuur, inclusief parseer informatie
 f136c494af8c: Maak een Telegraph-pagina aan
 f26ef9142458: Downloaden
+f4847a7070ed: Geen configuratie ontvangen
 f6a5f1d39bfb: 'Test voltooid: {ok} geslaagd, {failed} mislukt'
 f6a87eabb74a: '{name} cookie toevoegen'
 f85549cdfce6: Bezig met testen

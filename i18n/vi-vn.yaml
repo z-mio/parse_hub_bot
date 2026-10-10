@@ -1,6 +1,6 @@
 0203186350ef: 代理 mặc định toàn cục chưa được thiết lập, kết nối trực tiếp thực tế
 024738655610: Tùy chọn "URL gốc" nội tuyến
-038cf03872e5: Tải lại tệp
+0452214502d6: Nhập cấu hình
 047ddf74eb5e: Đây không phải là cấu hình của bạn
 04f706887b08: Bot chưa tham gia kênh này, vui lòng thêm Bot vào kênh trước khi cấu
   hình
@@ -82,6 +82,7 @@
 5210725561a8: Thử lại với liên kết gốc
 53ace4305f51: Đã bật
 569c1f28ab00: Đang đóng gói...
+575e0a86eea5: Tải lại cấu hình
 5861d620c41d: Đang tải xuống... | {current}/{total}
 5a9f36a77173: Đóng gói
 5b943dc87178: Liên kết tải xuống GIF
@@ -121,6 +122,8 @@
 816de50b9e0e: Vui lòng nhập liên kết trong hộp chat
 '849320560237': Bật
 868afb493654: Chọn mục tiêu cấu hình
+87d3ab3e5514: Gửi tệp platform_config.yaml hoặc dán nội dung YAML trực tiếp. Sau khi
+  nhập sẽ thay thế toàn bộ cấu hình hiện tại
 89881c6b335c: Hỗ trợ http / https / socks5 / socks5h, mỗi dòng một mục để thêm hàng
   loạt
 8a8672da4ab7: Mục cấu hình không được hỗ trợ
@@ -166,6 +169,7 @@
   tắt sẽ không thiết lập ảnh bìa.
 9b3dbf3e3f85: Ẩn "Nguồn" ở dưới cùng
 9f80223ca0ac: Xóa mục đã chọn ({count})
+a0526e72f8a7: Xuất cấu hình
 a16f4a3f483b: Cookie của {name} có thể đã hết hạn
 a2b83df06d16: Lỗi gần đây
 a3e3b88377c8: Bắt đầu
@@ -213,6 +217,7 @@ d5a73b0c7f2f: Tải lên
 d6bac3942764: Thêm proxy
 db06c78d1e24: Kiểm tra
 ddc469e02e5f: Cấu hình nền tảng
+e0f0665bb67b: Đã nhập cấu hình, có hiệu lực ngay lập tức
 e131da680a5a: Gửi một liên kết, sẽ phân tích từng Cookie được chọn một cách riêng
   biệt
 e14de27e8559: '{target_label}'
@@ -238,6 +243,7 @@ eeaf2cf99827: Phân giải proxy
 f047ff589a7a: Gửi gói kèm thông tin phân tích
 f136c494af8c: Tạo trang Telegraph
 f26ef9142458: Tải xuống
+f4847a7070ed: Không nhận được cấu hình
 f6a5f1d39bfb: 'Kiểm tra hoàn tất: {ok} thành công, {failed} thất bại'
 f6a87eabb74a: Thêm Cookie cho {name}
 f85549cdfce6: Đang thử nghiệm

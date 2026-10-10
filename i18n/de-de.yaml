@@ -1,6 +1,6 @@
 0203186350ef: Globaler Standardproxy nicht eingestellt, direkte Verbindung wird verwendet
 024738655610: Inline-Option "Original URL"
-038cf03872e5: Datei neu laden
+0452214502d6: Konfiguration importieren
 047ddf74eb5e: Das ist nicht deine Konfiguration
 04f706887b08: Bot ist diesem Kanal nicht beigetreten, bitte fügen Sie den Bot zuerst
   dem Kanal hinzu und konfigurieren Sie ihn dann.
@@ -87,6 +87,7 @@
 5210725561a8: Mit ursprünglichem Link erneut versuchen
 53ace4305f51: Aktiviert
 569c1f28ab00: Verpacken...
+575e0a86eea5: Konfiguration neu laden
 5861d620c41d: Herunterladen... | {current}/{total}
 5a9f36a77173: Verpacken
 5b943dc87178: GIF-Download-Link
@@ -126,6 +127,8 @@
 816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
 '849320560237': Ein
 868afb493654: Konfigurationsziel wählen
+87d3ab3e5514: Senden Sie die platform_config.yaml Datei oder fügen Sie den YAML-Inhalt
+  direkt ein. Nach dem Import wird die aktuelle Konfiguration vollständig ersetzt.
 89881c6b335c: Unterstützt http / https / socks5 / socks5h, jeweils eine Zeile, für
   Massenhinzufügung
 8a8672da4ab7: Nicht unterstützte Konfigurationsoption
@@ -171,6 +174,7 @@
   verwendet; bei Deaktivierung wird kein Cover eingestellt.
 9b3dbf3e3f85: Untere "Quelle" ausblenden
 9f80223ca0ac: Ausgewählte löschen ({count})
+a0526e72f8a7: Konfiguration exportieren
 a16f4a3f483b: Cookie von {name} könnte ungültig sein
 a2b83df06d16: Kürzliche Fehler
 a3e3b88377c8: Start
@@ -219,6 +223,7 @@ d5a73b0c7f2f: Hochladen
 d6bac3942764: Proxy hinzufügen
 db06c78d1e24: Testen
 ddc469e02e5f: Plattform-Konfiguration
+e0f0665bb67b: Konfiguration wurde importiert und ist sofort wirksam
 e131da680a5a: Sende einen Link, um jeden ausgewählten Cookie einzeln zu analysieren
 e14de27e8559: '{target_label}'
 e22c9a05b424: Ersetzen
@@ -244,6 +249,7 @@ eeaf2cf99827: Proxy auflösen
 f047ff589a7a: Paket senden, inklusive Analyseinformationen
 f136c494af8c: Telegraph-Seite erstellen
 f26ef9142458: Herunterladen
+f4847a7070ed: Keine Konfiguration erhalten
 f6a5f1d39bfb: 'Test abgeschlossen: {ok} erfolgreich, {failed} fehlgeschlagen'
 f6a87eabb74a: '{name} Cookies hinzufügen'
 f85549cdfce6: Im Test

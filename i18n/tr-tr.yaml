@@ -1,6 +1,6 @@
 0203186350ef: Küresel varsayılan vekil sunucu ayarlanmadı, doğrudan bağlantı yapılacak
 024738655610: Satır içi "Orijinal URL" seçeneği
-038cf03872e5: Dosyayı yeniden yükle
+0452214502d6: Yapılandırmayı İçe Aktar
 047ddf74eb5e: Bu senin konfigürasyonun değil
 04f706887b08: Bot bu kanala katılmadı, lütfen önce Botu kanala ekleyin ve sonra yapılandırın
 06778dbf05d5: Platform yönetimi
@@ -82,6 +82,7 @@
 5210725561a8: Orijinal bağlantı ile tekrar dene
 53ace4305f51: Etkinleştirildi
 569c1f28ab00: Paketleniyor...
+575e0a86eea5: Yapılandırmayı Yeniden Yükle
 5861d620c41d: İndiriliyor... | {current}/{total}
 5a9f36a77173: Paketle
 5b943dc87178: GIF indirme linki
@@ -121,6 +122,8 @@
 816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
 '849320560237': Açık
 868afb493654: Yapılandırma hedefi seçin
+87d3ab3e5514: platform_config.yaml dosyasını gönderin veya YAML içeriğini doğrudan
+  yapıştırın. İçe aktardıktan sonra mevcut yapılandırma tamamen değiştirilecektir.
 89881c6b335c: http / https / socks5 / socks5h desteklenir, her satıra bir adres yazılarak
   toplu ekleme yapılabilir
 8a8672da4ab7: Desteklenmeyen yapılandırma öğesi
@@ -166,6 +169,7 @@
   kapağı olarak kullanılır, kapatılırsa kapak ayarlanmaz.
 9b3dbf3e3f85: Alt "Kaynak"u gizle
 9f80223ca0ac: Seçilenleri sil ({count})
+a0526e72f8a7: Yapılandırmayı Dışa Aktar
 a16f4a3f483b: '{name} için Cookie geçersiz olabilir'
 a2b83df06d16: Son hatalar
 a3e3b88377c8: Başlat
@@ -213,6 +217,7 @@ d5a73b0c7f2f: Yükle
 d6bac3942764: Proxy ekle
 db06c78d1e24: Test
 ddc469e02e5f: Platform yapılandırması
+e0f0665bb67b: Yapılandırma içe aktarıldı, hemen geçerli oldu
 e131da680a5a: Bir bağlantı gönderin, seçilen her bir Cookie ayrı ayrı çözümlenir
 e14de27e8559: '{target_label}'
 e22c9a05b424: Değiştir
@@ -238,6 +243,7 @@ eeaf2cf99827: Proxy çözümlemesi
 f047ff589a7a: Paket halinde gönder, çözümleme bilgisi ile birlikte
 f136c494af8c: Telegraph sayfası oluştur
 f26ef9142458: İndir
+f4847a7070ed: Hiçbir yapılandırma alınmadı
 f6a5f1d39bfb: 'Test tamamlandı: {ok} başarılı, {failed} başarısız'
 f6a87eabb74a: '{name} için çerez ekle'
 f85549cdfce6: Test ediliyor

@@ -1,6 +1,6 @@
 0203186350ef: Proxy predefinito globale non impostato, connessione diretta effettiva
 024738655610: Opzione "URL originale" inline
-038cf03872e5: Ricarica file
+0452214502d6: Importa configurazione
 047ddf74eb5e: Questa non è la tua configurazione
 04f706887b08: Il Bot non è stato aggiunto a questo canale, aggiungi prima il Bot al
   canale e poi configura
@@ -86,6 +86,7 @@
 5210725561a8: Riprova con il link originale
 53ace4305f51: Abilitato
 569c1f28ab00: Impacchettamento in corso...
+575e0a86eea5: Ricarica configurazione
 5861d620c41d: Download in corso... | {current}/{total}
 5a9f36a77173: Impacchetta
 5b943dc87178: Link per il download GIF
@@ -125,6 +126,8 @@
 816de50b9e0e: Inserisci il link nella chat
 '849320560237': Attiva
 868afb493654: Seleziona obiettivo configurazione
+87d3ab3e5514: Invia il file platform_config.yaml o incolla direttamente il contenuto
+  YAML. L'importazione sostituirà completamente la configurazione attuale
 89881c6b335c: Supporta http / https / socks5 / socks5h, uno per riga per aggiunte
   multiple
 8a8672da4ab7: Opzione di configurazione non supportata
@@ -170,6 +173,7 @@
   piattaforma come anteprima; se disattivato, nessuna copertina sarà impostata.
 9b3dbf3e3f85: Nascondi "Fonte" in basso
 9f80223ca0ac: Elimina selezionati ({count})
+a0526e72f8a7: Esporta configurazione
 a16f4a3f483b: I cookie di {name} potrebbero essere scaduti
 a2b83df06d16: Errori recenti
 a3e3b88377c8: Inizia
@@ -217,6 +221,7 @@ d5a73b0c7f2f: Carica
 d6bac3942764: Aggiungi proxy
 db06c78d1e24: Test
 ddc469e02e5f: Configurazione piattaforma
+e0f0665bb67b: Configurazione importata, effetto immediato
 e131da680a5a: Invia un link, ogni cookie selezionato verrà analizzato singolarmente
 e14de27e8559: '{target_label}'
 e22c9a05b424: Sostituisci
@@ -242,6 +247,7 @@ eeaf2cf99827: Analizza proxy
 f047ff589a7a: Invia pacchettizzato con informazioni di analisi
 f136c494af8c: Crea pagina Telegraph
 f26ef9142458: Scarica
+f4847a7070ed: Configurazione non ricevuta
 f6a5f1d39bfb: 'Test completato: {ok} riusciti, {failed} falliti'
 f6a87eabb74a: Aggiungi cookie di {name}
 f85549cdfce6: In fase di prova

@@ -1,6 +1,6 @@
 0203186350ef: Le proxy par défaut global n'est pas configuré, connexion directe réelle
 024738655610: Option « URL d'origine » en ligne
-038cf03872e5: Recharger le fichier
+0452214502d6: Importer la configuration
 047ddf74eb5e: Ce n'est pas votre configuration
 04f706887b08: Le bot n'a pas rejoint ce canal, veuillez d'abord ajouter le bot au
   canal avant de configurer
@@ -86,6 +86,7 @@
 5210725561a8: Réessayer avec le lien original
 53ace4305f51: Activé
 569c1f28ab00: Emballage en cours...
+575e0a86eea5: Recharger la configuration
 5861d620c41d: Téléchargement en cours... | {current}/{total}
 5a9f36a77173: Emballer
 5b943dc87178: Lien de téléchargement GIF
@@ -125,6 +126,8 @@
 816de50b9e0e: Veuillez entrer un lien dans la zone de chat
 '849320560237': Activé
 868afb493654: Choisir la cible de configuration
+87d3ab3e5514: Envoyez le fichier platform_config.yaml ou collez directement le contenu
+  YAML. L’importation remplacera entièrement la configuration actuelle.
 89881c6b335c: Supporte http / https / socks5 / socks5h, un par ligne pour ajout en
   masse
 8a8672da4ab7: Option de configuration non prise en charge
@@ -170,6 +173,7 @@
   utilisée comme couverture vidéo ; si désactivé, aucune couverture n'est définie.
 9b3dbf3e3f85: Masquer le « Source » en bas
 9f80223ca0ac: Supprimer la sélection ({count})
+a0526e72f8a7: Exporter la configuration
 a16f4a3f483b: Le cookie de {name} pourrait avoir expiré
 a2b83df06d16: Erreur récente
 a3e3b88377c8: Démarrer
@@ -216,6 +220,7 @@ d5a73b0c7f2f: Téléverser
 d6bac3942764: Ajouter un proxy
 db06c78d1e24: Tester
 ddc469e02e5f: Configuration de la plateforme
+e0f0665bb67b: Configuration importée, prise en compte immédiatement
 e131da680a5a: Envoyez un lien, il sera analysé une fois pour chaque cookie sélectionné
 e14de27e8559: '{target_label}'
 e22c9a05b424: Remplacer
@@ -241,6 +246,7 @@ eeaf2cf99827: Analyse de proxy
 f047ff589a7a: Envoyer en paquet, avec informations d'analyse
 f136c494af8c: Créer une page Telegraph
 f26ef9142458: Télécharger
+f4847a7070ed: Aucune configuration reçue
 f6a5f1d39bfb: 'Test terminé : {ok} réussis, {failed} échoués'
 f6a87eabb74a: Ajouter un cookie pour {name}
 f85549cdfce6: En cours de test
