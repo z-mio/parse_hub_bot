@@ -22,6 +22,11 @@ class PlatformConfigService:
             fn(draft)
             self._apply(PlatformsConfig.from_data(draft.to_data()), save=True)
 
+    async def replace(self, new: PlatformsConfig) -> None:
+        """整份替换为新配置并写回文件"""
+        async with self._lock:
+            self._apply(new, save=True)
+
     async def reload(self) -> None:
         """从文件重载, 配置有误时抛出 PlatformConfigError 并保留当前配置"""
         async with self._lock:

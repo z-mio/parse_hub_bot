@@ -119,6 +119,15 @@ class PlatformsConfig(BaseModel):
         return pc
 
     @classmethod
+    def parse_text(cls, text: str) -> "PlatformsConfig":
+        """解析 yaml 文本, 配置有误时抛出 PlatformConfigError"""
+        try:
+            data = safe_load(text)
+        except YAMLError as e:
+            raise PlatformConfigError(f"platform_config.yaml 格式错误:\n{e}") from e
+        return cls.from_data(data) if data else cls()
+
+    @classmethod
     def from_data(cls, data: Any) -> "PlatformsConfig":
         if not isinstance(data, dict):
             raise PlatformConfigError("platform_config.yaml 顶层必须是键值对")

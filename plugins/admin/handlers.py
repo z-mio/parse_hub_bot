@@ -1,4 +1,5 @@
 import asyncio
+import io
 import time
 from dataclasses import dataclass
 
@@ -8,6 +9,7 @@ from pydantic import AnyUrl
 from pyrogram import Client, filters
 from pyrogram.errors import MessageNotModified, RPCError
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from yaml import safe_dump
 
 from core import PlatformConfigError, PlatformsConfig, bs, pl_cfg
 from core.platform_config import MaskedSecretStr, Platform, url_str
@@ -40,7 +42,7 @@ admin_filter = filters.user(list[int | str](bs.admin_ids))
 @dataclass
 class PendingInput:
     kind: str
-    """proxy / cookie / cookie_test"""
+    """proxy / cookie / cookie_test / import"""
     pid: str
     panel_chat_id: int
     panel_message_id: int
@@ -163,7 +165,11 @@ async def admin_callback(cli: Client, cq: CallbackQuery) -> None:
             case "test":
                 await _answer_proxy_test(cq, _t, args[0], args[1], int(args[2]))
                 return
-            case "addp" | "addc" | "repc" | "testc" | "testsel":
+            case "export":
+                await _export_config(cli, cq.message)
+                await cq.answer()
+                return
+            case "addp" | "addc" | "repc" | "testc" | "testsel" | "import":
                 await _send_prompt(cli, cq, _t, act, args)
                 await cq.answer()
                 return
@@ -226,8 +232,24 @@ async def _answer_proxy_test(cq: CallbackQuery, _t: PreLocaleSelector, pid: str,
     await cq.answer(f"✅ {_t('可用')} · {ms} ms", show_alert=True)
 
 
+async def _export_config(cli: Client, msg: Message) -> None:
+    data = safe_dump(pl_cfg.to_data(), allow_unicode=True, sort_keys=False)
+    file = io.BytesIO(data.encode())
+    file.name = f"platform_config_{time.strftime('%Y%m%d-%H%M%S')}.yaml"
+    await cli.send_document(_chat_id(msg), file)
+
+
 async def _send_prompt(cli: Client, cq: CallbackQuery, _t: PreLocaleSelector, act: str, args: list[str]) -> None:
     if not cq.message:
+        return
+    if act == "import":
+        prompt = "\n\n".join(
+            [
+                format_label(_t("导入配置")),
+                _t("发送 platform_config.yaml 文件，或直接粘贴 YAML 内容。导入后会整份替换当前配置"),
+            ]
+        )
+        await _prompt(cli, _t, PendingInput("import", HOME, _chat_id(cq.message), cq.message.id, prompt))
         return
     pid = args[0]
     name = _t("全局默认") if pid == GLOBAL else platform_name(pid)
@@ -324,7 +346,7 @@ async def _handle_input(cli: Client, msg: Message) -> None:
         else:
             notice = await _apply_input(_t, pending, raw)
     except (InputError, PlatformConfigError) as e:
-        error = str(e)
+        error = str(e)[:1000]
     finally:
         for message_id in (msg.id, msg.reply_to_message_id):
             try:
@@ -400,6 +422,11 @@ async def _read_input(_t: PreLocaleSelector, msg: Message) -> str:
 
 async def _apply_input(_t: PreLocaleSelector, pending: PendingInput, raw: str) -> str:
     pid = pending.pid
+    if pending.kind == "import":
+        if not raw.strip():
+            raise InputError(_t("没有收到配置"))
+        await platform_config_service.replace(PlatformsConfig.parse_text(raw))
+        return f"✅ {_t('已导入配置，立即生效')}"
     if pending.kind == "proxy" and pending.proxy_kind:
         kind = pending.proxy_kind
         urls = parse_proxies(_t, raw)
