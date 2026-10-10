@@ -1,17 +1,22 @@
+0203186350ef: Küresel varsayılan vekil sunucu ayarlanmadı, doğrudan bağlantı yapılacak
 024738655610: Satır içi "Orijinal URL" seçeneği
+038cf03872e5: Dosyayı yeniden yükle
 047ddf74eb5e: Bu senin konfigürasyonun değil
 04f706887b08: Bot bu kanala katılmadı, lütfen önce Botu kanala ekleyin ve sonra yapılandırın
 06778dbf05d5: Platform yönetimi
+08b55fea3c93: Yönet
 091d3a0665fa: Kanal Yapılandırması
 0b93dc449457: Çözümleme sonucu gönderi metni özeti gösterilmez. Telegraph veya zengin
   metin ile gönderilen makaleler etkilenmez.
 0d3d68e32996: Aynı görev zaten çözülüyor, çözüm tamamlanana kadar bekleyin...
+0d5a8d10f2a9: Vekil sunucu kullanma
 0f6c4353601e: Orijinal dosyayı gönder, kalite sıkıştırmasını önle
 0f6cedccc5d3: GIF çok fazla, yükleme atlandı, lütfen kendiniz indirin
 1a603ac4b55c: Lütfen özel mesajda, grupta veya konularda `/cfg` komutunu gönderin
   veya `/cfg <kanal kullanıcı adı/link/id>` ile yapılandırın
 1a7619451107: Çözümleme hatası oluştuğunda hata mesajı sürekli kalır, kapatıldığında
   15 saniye sonra otomatik silinir.
+1c65ec9ed726: Küresel varsayılan
 1d30c358e2a1: Varsayılan çözümleme modu
 1f3c920d087b: İşleniyor...
 20a7b9ae5106: Eski Sürüm Ayar Menüsü
@@ -19,23 +24,39 @@
 2560e051161e: Çözümleme sonucunun sonunda "Kaynak" orijinal bağlantısı artık eklenmez.
 256aefe3fdbf: Hata Günlüğü
 27350d00b70d: Yükleniyor...
+280b423af06e: Ayarlanmadı, küresel vekil sunucu kullanan platformlar doğrudan bağlanacak
 295bb704f520: Dil
 2bc28481a223: Bağlantı mesajlarını otomatik sil
+2be75b10449b: Küresel
+2c5f811829a3: Dosya çok büyük
+2f77212ebba4: Henüz ayrı yapılandırılmış bir platform yok, tümü küresel varsayılan
+  vekil sunucuyu kullanıyor.
 30364e475d07: Bu senin işlemin değil
 3065ed13e5f9: Orijinal bağlantıyı al
+308136d04bc5: 'Desteklenmeyen vekil protokolü: {line}'
 31f3c8c65cc4: Kanal kullanıcı adı/bağlantı/id
 32316f34b45d: İçerik Görüntüleme
 330add4a5718: Çözümleme ilerleme mesajları artık gönderilmeyecek, çözümleme tamamlandıktan
   sonra doğrudan sonuç gönderilecek.
 33ccc7a4682a: Desteklenmeyen platform
+3754101e31ed: Vekil adresi alınamadı
 3795485677d6: Grup yapılandırması
 39b75e75d433: Video kapağı
 39e4a584197b: Desteklenen platformlar
+3a3283894195: Cookie ekle
+3cf173960e16: Liste değişti, lütfen yenileyip tekrar deneyin
 3d3eeb2bc9cd: Bilinmeyen yapılandırma öğesi
+3f9578ad1850: Bu Cookie ile çözümleme ardışık olarak başarısız oldu. Güncelledikten
+  sonra orijinal bağlantı ile tekrar doğrulama yapabilirsiniz.
 405ba1795958: Konu yapılandırması
+410224ea7c69: Hepsi zaten mevcut, yeni ekleme yok
 411955a09348: Açık kaynak adresi
+4181f7fe2a31: Az önce
+44a60049e225: Bu platform yapılandırmasını sil
 460ce129a523: İndiriliyor...
+4930e603474f: Ardışık başarısız oldu {count} kez
 4981287fe504: Platform
+4ab3bb20832a: '{name} için {kind} ekle'
 4e9ce9dfe13d: Başlığı Gizle
 4fb5f29ee802: Lütfen bir link ekleyin veya bir mesaja yanıt verin
 4fbdbeb0f163: '
@@ -53,23 +74,35 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Buraya metni yazın=='
+50b2b2deda32: '{added} adet Çerez eklendi, hemen geçerli'
+5210725561a8: Orijinal bağlantı ile tekrar dene
 53ace4305f51: Etkinleştirildi
 569c1f28ab00: Paketleniyor...
 5861d620c41d: İndiriliyor... | {current}/{total}
 5a9f36a77173: Paketle
 5b943dc87178: GIF indirme linki
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Başarıyla denendi
+5ce05549b18b: Özel
 5d6ac8f8e4f3: Makale zengin metin olarak gönderildi
 5e788d9e0992: Kanal değil
 5f411223ca5a: Geri
+5f651ec2cae6: Cookie yapılandırılmadı
+625fb26b4b33: İptal
 662e14fab581: Doğrudan bağlantı gönderilirken kullanılan çözümleme yöntemi, komut
   kullanıldığında komut geçerlidir.
+669fee3d99a5: Dosya UTF-8 metin formatında olmalı
+66eeacd93a7c: Tümünü seç
+6721039b2066: Doğrudan bağlantı
 6740d8c7b274: Mesaja yanıt ver
 6769c172299c: Bu sohbetin yöneticisi değilsiniz, yapılandırmayı değiştirme yetkiniz
   yok
 68957ac274c5: İndiriliyor... | {current * 100 / total:.0f}%
+6e4725b992cd: '{added} adet Çerez ile değiştirildi, hemen geçerli'
+7030ff64701a: Hata
 '734176584215': Bu kanalın sahibi değilsiniz, kanal yapılandırmasını değiştirme yetkiniz
   yok
+7391ce6dcdc7: Tekrar denenecek bağlantı yok
 769d88e425e0: Tamamlandı
 77274b54a324: '{stage} hata:'
 7853187dd3ea: Destek türü
@@ -79,9 +112,12 @@
 
 
   <b>Sorun Bildirimi: @MisakaSisters</b>'
+7fba2391f40b: '{hours} saat önce'
 816de50b9e0e: Lütfen sohbet kutusuna bağlantı girin
 '849320560237': Açık
 868afb493654: Yapılandırma hedefi seçin
+89881c6b335c: http / https / socks5 / socks5h desteklenir, her satıra bir adres yazılarak
+  toplu ekleme yapılabilir
 8a8672da4ab7: Desteklenmeyen yapılandırma öğesi
 8dc878e08cd6: Çözümleme için paylaşım bağlantısı gönderin
 8f555aa82c87: Orijinal bağlantı
@@ -116,49 +152,88 @@
 
   **Açık Kaynak Adresi: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Çözümleme ilerlemesini devre dışı bırak
+95451f30604f: '{ago} başarılı'
+95b351c86267: Düzenle
+96378ed32de3: '{days} gün önce'
+9662a47609b8: '{minutes} dakika önce'
+96d012dc9331: Vekil indir
 996b5ce5395f: Video gönderilirken platform tarafından sağlanan kapak görseli video
   kapağı olarak kullanılır, kapatılırsa kapak ayarlanmaz.
 9b3dbf3e3f85: Alt "Kaynak"u gizle
+9f80223ca0ac: Seçilenleri sil ({count})
+a04144e4d732: Tüm seçimi kaldır
+a16f4a3f483b: '{name} için Cookie geçersiz olabilir'
+a2b83df06d16: Son hatalar
 a3e3b88377c8: Başlat
+a3f71e3e829f: Özel yapılandırılmış vekil sunucu olmayan platformlar buradaki vekil
+  sunucuyu kullanır, birden fazla varsa her seferinde rastgele biri seçilir.
+aa357cb96ee8: Çözümleme
 ab480060abb1: Hata günlüklerini gösterme
 ab511431782e: Makaleler doğrudan Telegram zengin metin olarak gönderilir, Telegraph
   sayfası oluşturulmaz.
 ad66098d7867: Hata günlüklerini sakla
+ad6b70383f0e: Mevcut
 b0294761479a: Kapalıyken, bu platformun bağlantısı gönderildiğinde otomatik çözümleme
   yapılmaz.
+b130e582ed8b: '{count} kez'
+b22cd71cee6a: Her satırda bir adet Çerez; birden fazla satırı yapıştırabilir veya
+  .txt dosyası gönderebilirsiniz (her satırda bir Çerez)
 b3bbb48dcb10: Çözümleme çok sık yapılıyor, lütfen {e.retry_after:.1f} saniye sonra
   tekrar deneyin
 b6aaf8f2a2be: Grup içi kişisel yapılandırma
 b765e4eb1844: Orijinal bağlantı
+b9db8476eed8: Kayıt yok
 bbef4170b1e1: Komut listesi
+bc20e7ba40bf: Tek tek yapılandırılacak platformu seçin
 be6f406c8f81: Kişisel yapılandırma
 bebccdf7a76e: Bağlantı formatı geçersiz
 bfe68d5844f8: Bağlantı
 c039b80e17dd: Toplu çözümleme
+c07a3c850982: '{name} öğesinin {number} numaralı Cookie''sini değiştir'
 c11154582f8a: Özeti Gizle
 c2236f70c559: Önbellek çözümlemesini atla
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Çözümleme tamamlandıktan sonra kullanıcı tarafından gönderilen bağlantı
   otomatik olarak silinir. Gruplarda botun mesaj silme yetkisi olması gerekir.
+c7cf968fe303: Özel proxy havuzu boş, genel varsayılan proxy'ye düşülecek
+cabc0250bb93: Değişiklik hemen geçerli olur, yeniden başlatmaya gerek yok.
+d060b3bd861e: Çerez alınmadı
 d2282636abc7: Yapılandırma paneli
 d2a9e9b5d414: Mesaj Davranışı
 d5631690265c: Yapılandırma hedefi tanınamadı
 d58a55bceec7: Kapalı
 d59c948c471c: Çözülüyor...
 d5a73b0c7f2f: Yükle
+d6bac3942764: Proxy ekle
+db06c78d1e24: Test
+ddc469e02e5f: Platform yapılandırması
 e14de27e8559: '{target_label}'
+e22c9a05b424: Değiştir
+e35cfa1b6535: Çerezleri yönet
 e3ab31c8d89c: İçeriği çözümle ve önizle
+e46d8cfa177c: Genel varsayılan proxy kullanılıyor ({count} adet)
 e4f6307e1c4f: '{LANG_MAP[selected]} olarak değiştirildi'
+e56a0df09ac2: Ardışık başarısızlık
 e5aa11737c3b: '"Özelleştirilmiş Metin" özelliği etkinleştirildiğinde, kanal veya özel
   sohbetlerde `==metin==` çift eşittir sınır belirleyici sözdizimini kullanarak, `metin`
   stilini koruyarak çözümleme sonucuna ekleyebilirsiniz (💡 Kanallar özelleştirilmiş
   Emoji''leri desteklemez).'
+e5b19edddb6f: '{added} adet {label} eklendi, hemen geçerli'
 e7a34daf96fd: Çözümleme sonucu orijinal mesaja cevap olarak gönderilir, kapatılırsa
   doğrudan sohbete gönderilir.
+e902582488f8: 'Yeniden deneme başarısız oldu: {err}'
+ea74ed8e66cf: Platform ekle
+ea7999d00285: Genel varsayılan proxy
 eaa3cd851501: Özel metin
+ebd48bca8b00: 'Geçersiz proxy adresi: {line}'
+eeaf2cf99827: Proxy çözümlemesi
 f047ff589a7a: Paket halinde gönder, çözümleme bilgisi ile birlikte
 f136c494af8c: Telegraph sayfası oluştur
+f26ef9142458: İndir
+f6a87eabb74a: '{name} için çerez ekle'
+f88f0ab8aed9: 'Kullanılamıyor: {err}'
 fcaea8ec774e: Çözümleme hatası durumunda hata mesajı gönderilmez.
+fe2d26a257d6: Ayarlanmadı
 fed0d2f0cea0: Satır içi modunda sonuç listesine "Orijinal Bağlantı" seçeneği eklenir,
   seçilirse sadece bağlantı gönderilir.
 ff7e330bebf8: Konu içi kişisel yapılandırma

@@ -1,18 +1,23 @@
+0203186350ef: Proxy default global tidak disetel, koneksi langsung sebenarnya
 024738655610: Opsi "URL Asli" Inline
+038cf03872e5: Muat ulang file
 047ddf74eb5e: Ini bukan konfigurasi Anda
 04f706887b08: Bot belum bergabung dengan saluran ini, silakan tambahkan Bot ke saluran
   terlebih dahulu sebelum mengonfigurasi
 06778dbf05d5: Manajemen Platform
+08b55fea3c93: Kelola
 091d3a0665fa: Konfigurasi Saluran
 0b93dc449457: Hasil parsing tidak menampilkan ringkasan isi postingan. Artikel yang
   dikirim menggunakan Telegraph atau teks kaya tidak terpengaruh.
 0d3d68e32996: Tugas yang sama sedang diproses, tunggu hingga selesai...
+0d5a8d10f2a9: Tidak menggunakan proxy
 0f6c4353601e: Kirim file asli, hindari kompresi kualitas gambar
 0f6cedccc5d3: GIF terlalu banyak, lewati pengunggahan, silakan unduh sendiri
 1a603ac4b55c: Silakan kirim `/cfg` atau gunakan `/cfg <nama pengguna/link/id saluran>`
   dalam obrolan pribadi, grup, atau topik untuk konfigurasi
 1a7619451107: Pesan kesalahan akan tetap ada saat terjadi kesalahan parsing, dan akan
   otomatis dihapus 15 detik setelah ditutup.
+1c65ec9ed726: Default global
 1d30c358e2a1: Mode parsing default
 1f3c920d087b: Sedang diproses...
 20a7b9ae5106: Menu Konfigurasi Versi Lama
@@ -20,23 +25,40 @@
 2560e051161e: Hasil parsing tidak lagi menyertakan tautan asli "Source" di akhir.
 256aefe3fdbf: Catatan Kesalahan
 27350d00b70d: Sedang mengunggah...
+280b423af06e: Tidak disetel, platform yang menggunakan proxy global akan terhubung
+  langsung
 295bb704f520: Bahasa
 2bc28481a223: Hapus otomatis pesan tautan
+2be75b10449b: Global
+2c5f811829a3: File terlalu besar
+2f77212ebba4: Belum ada platform yang dikonfigurasikan secara terpisah, semuanya menggunakan
+  proxy default global.
 30364e475d07: Ini bukan tindakan Anda
 3065ed13e5f9: Dapatkan tautan asli
+308136d04bc5: 'Protokol proxy tidak didukung: {line}'
 31f3c8c65cc4: Nama pengguna/link/id saluran
 32316f34b45d: Tampilan Konten
 330add4a5718: Tidak lagi mengirim pesan kemajuan parsing, hasil akan dikirim langsung
   setelah parsing selesai.
 33ccc7a4682a: Platform tidak didukung
+3754101e31ed: Alamat proxy tidak diterima
 3795485677d6: Konfigurasi grup
 39b75e75d433: Sampul video
 39e4a584197b: Platform yang didukung
+3a3283894195: Tambah Cookie
+3cf173960e16: Daftar telah berubah, silakan segarkan dan coba lagi
 3d3eeb2bc9cd: Item konfigurasi tidak dikenal
+3f9578ad1850: Parsing dengan Cookie ini gagal terus menerus. Setelah diperbarui, coba
+  verifikasi kembali dengan tautan asli.
 405ba1795958: Konfigurasi topik
+410224ea7c69: Semua sudah ada, tidak ada yang baru
 411955a09348: Alamat sumber terbuka
+4181f7fe2a31: Baru saja
+44a60049e225: Hapus konfigurasi platform ini
 460ce129a523: Sedang mengunduh...
+4930e603474f: Gagal berturut-turut sebanyak {count} kali
 4981287fe504: Platform
+4ab3bb20832a: Tambah {kind} dari {name}
 4e9ce9dfe13d: Sembunyikan judul
 4fb5f29ee802: Harap sertakan tautan atau balas pesan
 4fbdbeb0f163: '
@@ -55,22 +77,34 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Tuliskan teks di sini=='
+50b2b2deda32: Telah menambahkan {added} Cookie, berlaku segera
+5210725561a8: Coba lagi dengan tautan asli
 53ace4305f51: Diaktifkan
 569c1f28ab00: Sedang mengemas...
 5861d620c41d: Sedang mengunduh... | {current}/{total}
 5a9f36a77173: Mengemas
 5b943dc87178: Tautan unduhan GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Berhasil coba ulang
+5ce05549b18b: Khusus
 5d6ac8f8e4f3: Artikel dikirim menggunakan teks kaya
 5e788d9e0992: Bukan saluran
 5f411223ca5a: Kembali
+5f651ec2cae6: Cookie belum dikonfigurasi
+625fb26b4b33: Batal
 662e14fab581: Metode parsing yang digunakan saat mengirim tautan langsung, saat menggunakan
   perintah, perintah akan diutamakan.
+669fee3d99a5: File harus berupa teks UTF-8
+66eeacd93a7c: Pilih Semua
+6721039b2066: Koneksi langsung
 6740d8c7b274: Balas pesan
 6769c172299c: Anda bukan admin obrolan ini, tidak berwenang mengubah konfigurasi
 68957ac274c5: Sedang mengunduh... | {current * 100 / total:.0f}%
+6e4725b992cd: Telah diganti dengan {added} Cookie, berlaku segera
+7030ff64701a: Kesalahan
 '734176584215': Anda bukan pemilik saluran ini, tidak berwenang mengubah konfigurasi
   saluran
+7391ce6dcdc7: Tidak ada tautan untuk dicoba ulang
 769d88e425e0: Selesai
 77274b54a324: 'Kesalahan {stage}:'
 7853187dd3ea: Jenis dukungan
@@ -80,9 +114,12 @@
 
 
   <b>Umpan Balik Masalah: @MisakaSisters</b>'
+7fba2391f40b: '{hours} jam yang lalu'
 816de50b9e0e: Silakan masukkan tautan di kotak obrolan
 '849320560237': Hidup
 868afb493654: Pilih target konfigurasi
+89881c6b335c: Mendukung http / https / socks5 / socks5h, satu baris satu, dapat ditambahkan
+  secara massal
 8a8672da4ab7: Opsi konfigurasi tidak didukung
 8dc878e08cd6: Kirim tautan berbagi untuk dianalisis
 8f555aa82c87: Tautan asli
@@ -117,48 +154,87 @@
 
   **Sumber terbuka: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Nonaktifkan progres parsing
+95451f30604f: '{ago} berhasil'
+95b351c86267: Edit
+96378ed32de3: '{days} hari yang lalu'
+9662a47609b8: '{minutes} menit yang lalu'
+96d012dc9331: Unduh proxy
 996b5ce5395f: Saat mengirim video, gunakan gambar sampul yang disediakan platform
   sebagai sampul video; jika dimatikan, tidak akan mengatur sampul.
 9b3dbf3e3f85: Sembunyikan "Sumber" di bagian bawah
+9f80223ca0ac: Hapus yang Dipilih ({count})
+a04144e4d732: Batal Pilih Semua
+a16f4a3f483b: Cookie dari {name} mungkin sudah kedaluwarsa
+a2b83df06d16: Kesalahan terbaru
 a3e3b88377c8: Mulai
+a3f71e3e829f: Platform tanpa konfigurasi proxy khusus menggunakan proxy di sini, jika
+  lebih dari satu akan dipilih secara acak setiap kali.
+aa357cb96ee8: Analisis
 ab480060abb1: Jangan tampilkan log kesalahan
 ab511431782e: Konten artikel langsung dikirim menggunakan teks kaya Telegram, tidak
   membuat halaman Telegraph lagi.
 ad66098d7867: Simpan log kesalahan
+ad6b70383f0e: Tersedia
 b0294761479a: Setelah dimatikan, mengirim tautan dari platform tersebut tidak akan
   otomatis diparsing.
+b130e582ed8b: '{count} kali'
+b22cd71cee6a: Satu baris satu Cookie, Anda dapat menempel beberapa baris sekaligus
+  atau mengirim file .txt (juga satu baris satu Cookie)
 b3bbb48dcb10: Analisis terlalu sering, silakan coba lagi setelah {e.retry_after:.1f}
   detik
 b6aaf8f2a2be: Konfigurasi pribadi dalam grup
 b765e4eb1844: Tautan asli
+b9db8476eed8: Belum ada catatan
 bbef4170b1e1: Daftar perintah
+bc20e7ba40bf: Pilih platform untuk dikonfigurasi secara terpisah
 be6f406c8f81: Konfigurasi pribadi
 bebccdf7a76e: Format tautan tidak valid
 bfe68d5844f8: Tautan
 c039b80e17dd: Pemrosesan agregat
+c07a3c850982: Ganti Cookie ke- {number} dari {name}
 c11154582f8a: Sembunyikan deskripsi
 c2236f70c559: Melewati parsing cache
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Tautan yang dikirim pengguna akan dihapus otomatis setelah parsing selesai.
   Di grup, bot harus memiliki izin untuk menghapus pesan.
+c7cf968fe303: Kolam proxy khusus kosong, akan kembali ke proxy default global
+cabc0250bb93: Perubahan akan langsung berlaku, tidak perlu restart.
+d060b3bd861e: Tidak menerima Cookie
 d2282636abc7: Panel konfigurasi
 d2a9e9b5d414: Perilaku Pesan
 d5631690265c: Target konfigurasi tidak dikenali
 d58a55bceec7: Mati
 d59c948c471c: Sedang memproses...
 d5a73b0c7f2f: Unggah
+d6bac3942764: Tambahkan proxy
+db06c78d1e24: Tes
+ddc469e02e5f: Konfigurasi platform
 e14de27e8559: '{target_label}'
+e22c9a05b424: Ganti
+e35cfa1b6535: Kelola Cookie
 e3ab31c8d89c: Parsing dan pratinjau konten
+e46d8cfa177c: Gunakan proxy default global ({count} item)
 e4f6307e1c4f: 'Berhasil beralih ke: {LANG_MAP[selected]}'
+e56a0df09ac2: Kegagalan beruntun
 e5aa11737c3b: Setelah mengaktifkan "Teks Kustom", gunakan sintaks pembatas tanda sama
   dengan ganda `==Teks==` di saluran / obrolan pribadi untuk menyisipkan `Teks` dengan
   gaya yang dipertahankan dalam hasil parse (💡 Saluran tidak mendukung Emoji kustom)
+e5b19edddb6f: '{added} {label} telah ditambahkan, langsung berlaku'
 e7a34daf96fd: Hasil parsing dikirim sebagai balasan ke pesan asli; jika dimatikan,
   dikirim langsung ke obrolan.
+e902582488f8: 'Coba ulang masih gagal: {err}'
+ea74ed8e66cf: Tambahkan platform
+ea7999d00285: Proxy default global
 eaa3cd851501: Teks kustom
+ebd48bca8b00: 'Alamat proxy tidak valid: {line}'
+eeaf2cf99827: Analisis proxy
 f047ff589a7a: Kirim paket, sertakan informasi parsing
 f136c494af8c: Buat halaman Telegraph
+f26ef9142458: Unduh
+f6a87eabb74a: Tambahkan Cookie untuk {name}
+f88f0ab8aed9: 'Tidak tersedia: {err}'
 fcaea8ec774e: Saat terjadi kesalahan parsing, tidak mengirim pesan kesalahan.
+fe2d26a257d6: Belum diatur
 fed0d2f0cea0: Dalam mode inline, daftar hasil menambahkan opsi "Tautan Asli"; jika
   dipilih, hanya mengirim tautan itu sendiri.
 ff7e330bebf8: Konfigurasi pribadi dalam topik
