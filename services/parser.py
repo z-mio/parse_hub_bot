@@ -3,6 +3,7 @@ from typing import Self
 from parsehub import ParseHub, Platform
 from parsehub.types import (
     AnyParseResult,
+    ContentUnavailableError,
 )
 
 from core import pl_cfg
@@ -48,6 +49,8 @@ class ParseService:
                 return pr
             except Exception as e:
                 logger.warning(f"解析失败, attempt={attempt}/{max_retries}, err={e}")
+                if isinstance(e, ContentUnavailableError):
+                    raise Exception(e) from e
                 if cookie_value:
                     cookie_health.record_failure(p.id, cookie_value, e, url)
                 if attempt >= max_retries:
@@ -59,6 +62,8 @@ class ParseService:
         p = self.get_platform(url)
         try:
             await self.parser.parse(url, cookie=cookie, proxy=pl_cfg.roll_parser_proxy(p.id))
+        except ContentUnavailableError:
+            raise
         except Exception as e:
             cookie_health.record_failure(p.id, cookie, e, url, alert=False)
             raise
