@@ -45,6 +45,10 @@ COMMANDS = {
     "ocfg": t_("旧版配置菜单"),
 }
 
+ADMIN_COMMANDS = {
+    "admin": t_("平台配置"),
+}
+
 
 def build_start_text() -> LocaleContent:
     return t_(
