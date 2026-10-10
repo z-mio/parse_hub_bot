@@ -1,18 +1,26 @@
+0203186350ef: Domyślny globalny proxy nie jest ustawiony, faktyczne połączenie bezpośrednie
 024738655610: Opcja „Inline 'Oryginalny URL'"
+0452214502d6: Importuj konfigurację
 047ddf74eb5e: To nie jest twoja konfiguracja
 04f706887b08: Bot nie dołączył do tego kanału, najpierw dodaj bota do kanału, a następnie
   skonfiguruj
 06778dbf05d5: Zarządzanie platformą
+08b55fea3c93: Zarządzaj
+08c6faa776e6: To nie jest łącze {name}
 091d3a0665fa: Konfiguracja kanału
+09df5be03bca: Testowanie {count} plików cookie dla {name}
 0b93dc449457: Wyniki analizy nie pokazują streszczenia treści posta. Artykuły wysłane
   przez Telegraph lub jako bogaty tekst nie są dotknięte.
 0d3d68e32996: Już trwa analiza tego samego zadania, czekaj na zakończenie analizy...
+0d5a8d10f2a9: Nie używaj proxy
 0f6c4353601e: Wyślij oryginalny plik, aby uniknąć kompresji jakości obrazu
 0f6cedccc5d3: Zbyt wiele GIF-ów, pomijanie przesyłania, proszę pobrać samodzielnie
+1a0782afa3e4: Ten link nie jest obsługiwany
 1a603ac4b55c: Proszę wysłać `/cfg` lub użyć `/cfg <nazwa_użytkownika_kanalu/link/id>`
   w prywatnej rozmowie, grupie lub temacie, aby skonfigurować
 1a7619451107: W przypadku błędu analizy komunikat o błędzie pozostaje widoczny, po
   zamknięciu zostanie automatycznie usunięty po 15 sekundach.
+1c65ec9ed726: Globalny domyślny
 1d30c358e2a1: Domyślny tryb analizy
 1f3c920d087b: Przetwarzanie...
 20a7b9ae5106: Stare menu konfiguracji
@@ -20,23 +28,41 @@
 2560e051161e: Na końcu wyników analizy nie będzie już dołączany oryginalny link „Source”.
 256aefe3fdbf: Dziennik błędów
 27350d00b70d: Przesyłanie...
+280b423af06e: Nie ustawiono, platformy korzystające z globalnego proxy będą łączyć
+  się bezpośrednio
 295bb704f520: Język
 2bc28481a223: Automatyczne usuwanie wiadomości z linkami
+2be75b10449b: Globalny
+2c5f811829a3: Plik jest zbyt duży
+2f77212ebba4: Brak indywidualnie skonfigurowanych platform, wszystkie korzystają z
+  globalnego domyślnego proxy.
 30364e475d07: To nie jest twoja operacja
 3065ed13e5f9: Pobierz oryginalny link
+308136d04bc5: 'Nieobsługiwany protokół proxy: {line}'
 31f3c8c65cc4: Nazwa użytkownika/link/id kanału
 32316f34b45d: Wyświetlanie treści
 330add4a5718: Nie wysyłaj już wiadomości o postępach analizowania, po zakończeniu
   analizy wyślij bezpośrednio wynik.
 33ccc7a4682a: Nieobsługiwana platforma
+3754101e31ed: Nie otrzymano adresu proxy
 3795485677d6: Konfiguracja grupy
 39b75e75d433: Miniatura wideo
 39e4a584197b: Obsługiwane platformy
+3a3283894195: Dodaj ciasteczko
+3cf173960e16: Lista uległa zmianie, odśwież i spróbuj ponownie
 3d3eeb2bc9cd: Nieznana opcja konfiguracji
+3f9578ad1850: Analiza z tym ciasteczkiem ciągle się nie powiodła. Po aktualizacji
+  można spróbować ponownie użyć oryginalnego linku do weryfikacji.
+3fea7ca76cde: Stan
 405ba1795958: Konfiguracja tematu
+410224ea7c69: Wszystkie już istnieją, brak nowych
 411955a09348: Adres open source
+4181f7fe2a31: Właśnie teraz
+44a60049e225: Usuń konfigurację tej platformy
 460ce129a523: Pobieranie...
+4930e603474f: 'Ciągłe niepowodzenia: {count} razy'
 4981287fe504: Platforma
+4ab3bb20832a: 'Dodaj dla {name}: {kind}'
 4e9ce9dfe13d: Ukryj tytuł
 4fb5f29ee802: Proszę dołączyć link lub odpowiedzieć na wiadomość
 4fbdbeb0f163: '
@@ -55,25 +81,39 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Tu wpisz tekst reklamowy=='
+50b2b2deda32: Dodano {added} ciasteczek, natychmiastowe zastosowanie
+5210725561a8: Spróbuj ponownie użyć oryginalnego linku
 53ace4305f51: Włączone
 569c1f28ab00: Pakowanie...
+575e0a86eea5: Przeładuj konfigurację
 5861d620c41d: Pobieranie... | {current}/{total}
 5a9f36a77173: Pakuj
 5b943dc87178: Link do pobrania GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Próba zakończona sukcesem
+5ce05549b18b: Dedykowany
 5d6ac8f8e4f3: Artykuł wysłany z użyciem formatowania tekstu
 5e788d9e0992: Nie kanał
 5f411223ca5a: Powrót
+5f651ec2cae6: Brak skonfigurowanych ciasteczek
+625fb26b4b33: Anuluj
 662e14fab581: Sposób analizy używany przy bezpośrednim wysłaniu linku. Podczas użycia
   komendy obowiązuje sposób określony w komendzie.
+669fee3d99a5: Plik musi być tekstem UTF-8
+66eeacd93a7c: Zaznacz wszystkie
+6721039b2066: Połączenie bezpośrednie
 6740d8c7b274: Odpowiedz na wiadomość
 6769c172299c: Nie jesteś administratorem tego czatu, nie masz uprawnień do zmiany
   konfiguracji
 68957ac274c5: Pobieranie... | {current * 100 / total:.0f}%
+6e4725b992cd: Zastąpiono {added} ciasteczkami, natychmiastowe zastosowanie
+7030ff64701a: Błąd
 '734176584215': Nie jesteś właścicielem tego kanału, nie masz uprawnień do zmiany
   konfiguracji kanału
+7391ce6dcdc7: Brak linków do ponownej próby
 769d88e425e0: Zakończono
 77274b54a324: 'Błąd {stage}:'
+77ad39632d5d: Nie otrzymano łącza
 7853187dd3ea: Typ wsparcia
 7b48a0292498: Wyniki analizy nie pokazują tytułu posta. Artykuły wysłane przez Telegraph
   lub jako bogaty tekst nie są dotknięte.
@@ -81,9 +121,14 @@
 
 
   <b>Opinie i sugestie: @MisakaSisters</b>'
+7fba2391f40b: '{hours} godzin temu'
 816de50b9e0e: Wpisz link w polu czatu
 '849320560237': Włącz
 868afb493654: Wybierz cel konfiguracji
+87d3ab3e5514: Wyślij plik platform_config.yaml lub wklej bezpośrednio zawartość YAML.
+  Po imporcie cała konfiguracja zostanie zastąpiona.
+89881c6b335c: Obsługuje http / https / socks5 / socks5h, jeden na linię, możliwe dodanie
+  hurtowe
 8a8672da4ab7: Nieobsługiwany element konfiguracji
 8dc878e08cd6: Wyślij link do udostępnienia w celu analizy
 8f555aa82c87: Oryginalny link
@@ -118,47 +163,95 @@
 
   **Kod źródłowy: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Wyłącz postęp analizy
+95451f30604f: '{ago} sukcesów'
+95b351c86267: Edytuj
+96378ed32de3: '{days} dni temu'
+9662a47609b8: '{minutes} minut temu'
+96d012dc9331: Pobierz proxy
 996b5ce5395f: Podczas wysyłania wideo użyj miniatury udostępnionej przez platformę
   jako okładki wideo, po wyłączeniu okładka nie będzie ustawiana.
 9b3dbf3e3f85: Ukryj dolny „Źródło”
+9f80223ca0ac: Usuń zaznaczone ({count})
+a0526e72f8a7: Eksportuj konfigurację
+a16f4a3f483b: Ciasteczka {name} mogą być nieaktualne
+a2b83df06d16: Ostatnie błędy
 a3e3b88377c8: Start
+a3f71e3e829f: Platformy bez indywidualnego proxy korzystają z tego proxy, przy wielu
+  wpisach wybierany jest losowo jeden z nich.
+a9c8984f0cc8: Testowanie wybranych ({count})
+aa357cb96ee8: Analiza
+aab57a3547a4: Odwróć zaznaczenie
 ab480060abb1: Nie pokazuj dziennika błędów
 ab511431782e: Treści artykułów wysyłaj bezpośrednio jako bogaty tekst Telegram, nie
   twórz już stron Telegraph.
 ad66098d7867: Zachowaj dziennik błędów
+ad6b70383f0e: Dostępny
 b0294761479a: Po wyłączeniu wysyłanie linków z tej platformy nie będzie automatycznie
   analizowane.
+b130e582ed8b: '{count} razy'
+b22cd71cee6a: Jedno ciasteczko na linię, można wkleić wiele linii naraz lub wysłać
+  plik .txt (również jedno ciasteczko na linię)
 b3bbb48dcb10: Analiza zbyt częsta, spróbuj ponownie za {e.retry_after:.1f}s
 b6aaf8f2a2be: Konfiguracja osobista w grupie
 b765e4eb1844: Oryginalny link
+b9db8476eed8: Brak rekordów
 bbef4170b1e1: Lista poleceń
+bc20e7ba40bf: Wybierz platformę do indywidualnej konfiguracji
 be6f406c8f81: Konfiguracja osobista
 bebccdf7a76e: Nieprawidłowy format linku
 bfe68d5844f8: Link
 c039b80e17dd: Agreguj analizę
+c07a3c850982: Zamień plik cookie nr {number} dla {name}
 c11154582f8a: Ukryj wprowadzenie
 c2236f70c559: Omijanie analizy pamięci podręcznej
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Po zakończeniu analizy link wysłany przez użytkownika jest automatycznie
   usuwany. W grupach bot musi mieć uprawnienia do usuwania wiadomości.
+c7cf968fe303: Specjalna pula proxy jest pusta, zostanie użyte globalne domyślne proxy
+cabc0250bb93: Zmiany wchodzą w życie natychmiast, bez potrzeby restartu.
+d060b3bd861e: Nie otrzymano ciasteczek
 d2282636abc7: Panel konfiguracji
 d2a9e9b5d414: Zachowanie wiadomości
 d5631690265c: Nie można rozpoznać celu konfiguracji
 d58a55bceec7: Wyłącz
 d59c948c471c: Analizowanie...
 d5a73b0c7f2f: Przesyłanie
+d6bac3942764: Dodaj proxy
+db06c78d1e24: Testuj
+ddc469e02e5f: Konfiguracja platformy
+e0f0665bb67b: Konfiguracja została zaimportowana i natychmiast aktywowana
+e131da680a5a: Wyślij łącze, a każde z wybranych plików cookie zostanie osobno przetworzone
 e14de27e8559: '{target_label}'
+e22c9a05b424: Zamień
+e35cfa1b6535: Zarządzaj ciasteczkami
 e3ab31c8d89c: Analizuj i podglądaj zawartość
+e3ba26e0bbb5: Nie wybrano plików cookie
+e46d8cfa177c: Użyj globalnego domyślnego proxy ({count} pozycji)
 e4f6307e1c4f: 'Przełączono na: {LANG_MAP[selected]}'
+e56a0df09ac2: Ciągłe błędy
 e5aa11737c3b: Po włączeniu opcji „Niestandardowy tekst”, używając w kanale lub prywatnej
   rozmowie składni z podwójnym znakiem równości `==tekst==`, można wstawić „tekst”
   z zachowaniem stylu do wyniku analizy (💡 Kanały nie obsługują niestandardowych emotikonów)
+e5b19edddb6f: Dodano {added} pozycji {label}, zmiany wchodzą w życie natychmiast
 e7a34daf96fd: Wynik analizy jest wysyłany jako odpowiedź na oryginalną wiadomość,
   po wyłączeniu jest wysyłany bezpośrednio do czatu.
+e902582488f8: 'Ponowna próba nie powiodła się: {err}'
+ea74ed8e66cf: Dodaj platformę
+ea7999d00285: Globalne domyślne proxy
 eaa3cd851501: Niestandardowy tekst
+ebd48bca8b00: 'Nieprawidłowy adres proxy: {line}'
+eeaf2cf99827: Analizuj proxy
 f047ff589a7a: Wyślij jako paczkę, z informacjami o analizie
 f136c494af8c: Utwórz stronę Telegraph
+f26ef9142458: Pobierz
+f4847a7070ed: Nie otrzymano konfiguracji
+f6a5f1d39bfb: 'Test zakończony: {ok} pomyślnych, {failed} nieudanych'
+f6a87eabb74a: Dodaj ciasteczka dla {name}
+f85549cdfce6: W trakcie testów
+f88f0ab8aed9: 'Niedostępny: {err}'
+fc954d25ec15: Agent
 fcaea8ec774e: W przypadku błędu analizy nie wysyłaj komunikatu o błędzie.
+fe2d26a257d6: Nie ustawiono
 fed0d2f0cea0: W trybie inline na liście wyników dodaj opcję „Oryginalny link”, wybranie
   jej spowoduje wysłanie tylko samego linku.
 ff7e330bebf8: Konfiguracja osobista w temacie

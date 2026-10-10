@@ -1,19 +1,22 @@
 import asyncio
 import shutil
+from functools import partial
 from typing import Any
 
 import pillow_heif
 from pyrogram import Client
+from pyrogram.errors import RPCError
 from pyrogram.handlers import ConnectHandler, DisconnectHandler
-from pyrogram.types import BotCommand
+from pyrogram.types import BotCommand, BotCommandScopeChat
 
 from core import bs, on_connect, on_disconnect, ws
 from db.engine import close_db
 from db.init import init_db
 from i18n import ISO639_MAP
 from log import logger, setup_logging
-from plugins.helpers import COMMANDS
-from services import parse_cache
+from plugins.admin.alert import send_cookie_alert
+from plugins.helpers import ADMIN_COMMANDS, COMMANDS
+from services import cookie_health, parse_cache
 from utils.event_loop import setup_optimized_event_loop
 
 pillow_heif.register_heif_opener()
@@ -49,8 +52,10 @@ class Bot(Client):
         logger.success("数据库初始化完成")
 
         parse_cache.start_cleanup()
+        cookie_health.set_notifier(partial(send_cookie_alert, self))
         await super().start(*args, **kwargs)
         await self.set_menu()
+        await self.set_admin_menu()
         return self
 
     async def stop(self, *args: Any, **kwargs: Any) -> Client:
@@ -80,6 +85,22 @@ class Bot(Client):
             )
             logger.debug(f"{iso639 or '默认'} 菜单已设置: {tc}")
             await asyncio.sleep(0.5)
+
+    async def set_admin_menu(self) -> None:
+        """管理员的命令菜单额外带上管理命令"""
+        lang = self.cfg.language
+        commands = [BotCommand(command=k, description=v[lang]) for k, v in {**COMMANDS, **ADMIN_COMMANDS}.items()]
+        expected = [(c.command, c.description) for c in commands]
+        for uid in self.cfg.admin_ids:
+            scope = BotCommandScopeChat(chat_id=uid)
+            try:
+                current = await self.get_bot_commands(scope=scope)
+                if [(c.command, c.description) for c in current] == expected:
+                    continue
+                await self.set_bot_commands(commands, scope=scope)
+                logger.debug(f"管理员 {uid} 菜单已设置")
+            except RPCError as e:
+                logger.warning(f"设置管理员 {uid} 菜单失败: {e}")
 
 
 if __name__ == "__main__":

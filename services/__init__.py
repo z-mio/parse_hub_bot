@@ -1,8 +1,10 @@
 from .cache import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, parse_cache, persistent_cache
 from .chat import ChatService
+from .cookie_health import CookieAlert, CookieStat, cookie_health
 from .forum_topic import ForumTopicService
 from .parser import ParseService
 from .pipeline import ParsePipeline, PipelineProgressCallback, PipelineResult, StatusReporter
+from .platform_config import platform_config_service
 from .settings import (
     AnySettingsTarget,
     ChannelSettingsTarget,
@@ -40,4 +42,8 @@ __all__ = [
     "PipelineResult",
     "PipelineProgressCallback",
     "StatusReporter",
+    "cookie_health",
+    "CookieAlert",
+    "CookieStat",
+    "platform_config_service",
 ]

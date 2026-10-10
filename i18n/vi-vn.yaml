@@ -1,18 +1,26 @@
+0203186350ef: 代理 mặc định toàn cục chưa được thiết lập, kết nối trực tiếp thực tế
 024738655610: Tùy chọn "URL gốc" nội tuyến
+0452214502d6: Nhập cấu hình
 047ddf74eb5e: Đây không phải là cấu hình của bạn
 04f706887b08: Bot chưa tham gia kênh này, vui lòng thêm Bot vào kênh trước khi cấu
   hình
 06778dbf05d5: Quản lý nền tảng
+08b55fea3c93: Quản lý
+08c6faa776e6: Đây không phải là liên kết của {name}
 091d3a0665fa: Cấu hình kênh
+09df5be03bca: Kiểm tra {count} Cookie của {name}
 0b93dc449457: Kết quả phân tích không hiển thị tóm tắt nội dung bài đăng. Các bài
   viết gửi bằng Telegraph hoặc định dạng phong phú không bị ảnh hưởng.
 0d3d68e32996: Đã có tác vụ giống đang được phân tích, vui lòng chờ hoàn thành...
+0d5a8d10f2a9: Không sử dụng proxy
 0f6c4353601e: Gửi tệp gốc, tránh nén chất lượng hình ảnh
 0f6cedccc5d3: Quá nhiều GIF, bỏ qua tải lên, vui lòng tải xuống thủ công
+1a0782afa3e4: Không hỗ trợ liên kết này
 1a603ac4b55c: Vui lòng gửi `/cfg` hoặc sử dụng `/cfg <tên người dùng/kênh/liên kết/id>`
   trong tin nhắn riêng, nhóm hoặc chủ đề để cấu hình
 1a7619451107: Khi phân tích lỗi, thông báo lỗi sẽ được giữ liên tục, khi tắt sẽ tự
   động xóa sau 15 giây.
+1c65ec9ed726: Mặc định toàn cục
 1d30c358e2a1: Chế độ phân tích mặc định
 1f3c920d087b: Đang xử lý...
 20a7b9ae5106: Menu cấu hình phiên bản cũ
@@ -20,23 +28,41 @@
 2560e051161e: Kết quả phân tích không còn kèm theo liên kết gốc “Source” ở cuối.
 256aefe3fdbf: Nhật ký lỗi
 27350d00b70d: Đang tải lên...
+280b423af06e: Chưa thiết lập, các nền tảng sử dụng proxy toàn cục sẽ kết nối trực
+  tiếp
 295bb704f520: Ngôn ngữ
 2bc28481a223: Tự động xóa tin nhắn liên kết
+2be75b10449b: Toàn cục
+2c5f811829a3: Tệp quá lớn
+2f77212ebba4: Chưa có nền tảng nào được cấu hình riêng, tất cả đều sử dụng proxy mặc
+  định toàn cục.
 30364e475d07: Đây không phải thao tác của bạn
 3065ed13e5f9: Lấy liên kết gốc
+308136d04bc5: 'Giao thức proxy không được hỗ trợ: {line}'
 31f3c8c65cc4: Tên người dùng/liên kết/id kênh
 32316f34b45d: Hiển thị nội dung
 330add4a5718: Không gửi tin nhắn tiến trình phân tích nữa, sau khi phân tích xong
   sẽ gửi kết quả trực tiếp.
 33ccc7a4682a: Nền tảng không được hỗ trợ
+3754101e31ed: Không nhận được địa chỉ proxy
 3795485677d6: Cấu hình nhóm
 39b75e75d433: Ảnh bìa video
 39e4a584197b: Nền tảng hỗ trợ
+3a3283894195: Thêm Cookie
+3cf173960e16: Danh sách đã thay đổi, vui lòng làm mới và thử lại
 3d3eeb2bc9cd: Mục cấu hình không xác định
+3f9578ad1850: Phân tích với cookie này liên tục thất bại. Sau khi cập nhật, có thể
+  thử lại xác thực với liên kết gốc.
+3fea7ca76cde: Trạng thái
 405ba1795958: Cấu hình chủ đề
+410224ea7c69: Tất cả đã tồn tại, không có thêm mới
 411955a09348: Địa chỉ nguồn mở
+4181f7fe2a31: Vừa xong
+44a60049e225: Xóa cấu hình nền tảng này
 460ce129a523: Đang tải xuống...
+4930e603474f: Liên tiếp thất bại {count} lần
 4981287fe504: Nền tảng
+4ab3bb20832a: Thêm {kind} của {name}
 4e9ce9dfe13d: Ẩn tiêu đề
 4fb5f29ee802: Vui lòng thêm liên kết hoặc trả lời một tin nhắn
 4fbdbeb0f163: '>**Để đảm bảo trải nghiệm sử dụng cho tất cả người dùng, hiện tại đã
@@ -52,25 +78,39 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Viết kịch bản ở đây=='
+50b2b2deda32: Đã thêm {added} cookie, có hiệu lực ngay lập tức
+5210725561a8: Thử lại với liên kết gốc
 53ace4305f51: Đã bật
 569c1f28ab00: Đang đóng gói...
+575e0a86eea5: Tải lại cấu hình
 5861d620c41d: Đang tải xuống... | {current}/{total}
 5a9f36a77173: Đóng gói
 5b943dc87178: Liên kết tải xuống GIF
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Thử lại thành công
+5ce05549b18b: Dùng riêng
 5d6ac8f8e4f3: Bài viết sử dụng văn bản định dạng phong phú để gửi
 5e788d9e0992: Không phải kênh
 5f411223ca5a: Quay lại
+5f651ec2cae6: Chưa cấu hình Cookie
+625fb26b4b33: Hủy
 662e14fab581: Phương thức phân tích khi gửi liên kết trực tiếp, khi sử dụng lệnh sẽ
   ưu tiên lệnh.
+669fee3d99a5: Tệp phải là văn bản UTF-8
+66eeacd93a7c: Chọn tất cả
+6721039b2066: Kết nối trực tiếp
 6740d8c7b274: Trả lời tin nhắn
 6769c172299c: Bạn không phải là quản trị viên của cuộc trò chuyện này, không có quyền
   thay đổi cấu hình
 68957ac274c5: Đang tải xuống... | {current * 100 / total:.0f}%
+6e4725b992cd: Đã thay thế bằng {added} cookie, có hiệu lực ngay lập tức
+7030ff64701a: Lỗi
 '734176584215': Bạn không phải là chủ sở hữu của kênh này, không có quyền thay đổi
   cấu hình kênh
+7391ce6dcdc7: Không có liên kết nào để thử lại
 769d88e425e0: Hoàn thành
 77274b54a324: 'Lỗi {stage}:'
+77ad39632d5d: Không nhận được liên kết
 7853187dd3ea: Loại hỗ trợ
 7b48a0292498: Kết quả phân tích không hiển thị tiêu đề bài đăng. Các bài viết gửi
   bằng Telegraph hoặc định dạng phong phú không bị ảnh hưởng.
@@ -78,9 +118,14 @@
 
 
   <b>Phản hồi vấn đề: @MisakaSisters</b>'
+7fba2391f40b: '{hours} giờ trước'
 816de50b9e0e: Vui lòng nhập liên kết trong hộp chat
 '849320560237': Bật
 868afb493654: Chọn mục tiêu cấu hình
+87d3ab3e5514: Gửi tệp platform_config.yaml hoặc dán nội dung YAML trực tiếp. Sau khi
+  nhập sẽ thay thế toàn bộ cấu hình hiện tại
+89881c6b335c: Hỗ trợ http / https / socks5 / socks5h, mỗi dòng một mục để thêm hàng
+  loạt
 8a8672da4ab7: Mục cấu hình không được hỗ trợ
 8dc878e08cd6: Gửi liên kết chia sẻ để phân tích
 8f555aa82c87: Liên kết gốc
@@ -115,48 +160,97 @@
 
   **Địa chỉ mã nguồn mở: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Vô hiệu hóa tiến trình phân tích
+95451f30604f: '{ago} thành công'
+95b351c86267: Chỉnh sửa
+96378ed32de3: '{days} ngày trước'
+9662a47609b8: '{minutes} phút trước'
+96d012dc9331: Tải proxy
 996b5ce5395f: Khi gửi video, sử dụng ảnh bìa do nền tảng cung cấp làm ảnh bìa video,
   tắt sẽ không thiết lập ảnh bìa.
 9b3dbf3e3f85: Ẩn "Nguồn" ở dưới cùng
+9f80223ca0ac: Xóa mục đã chọn ({count})
+a0526e72f8a7: Xuất cấu hình
+a16f4a3f483b: Cookie của {name} có thể đã hết hạn
+a2b83df06d16: Lỗi gần đây
 a3e3b88377c8: Bắt đầu
+a3f71e3e829f: Các nền tảng chưa cấu hình proxy riêng sẽ sử dụng proxy tại đây, nếu
+  có nhiều sẽ chọn ngẫu nhiên mỗi lần.
+a9c8984f0cc8: Kiểm tra lựa chọn ({count})
+aa357cb96ee8: Phân tích
+aab57a3547a4: Bỏ chọn ngược lại
 ab480060abb1: Không hiển thị nhật ký lỗi
 ab511431782e: Nội dung dạng bài viết sẽ được gửi trực tiếp bằng định dạng phong phú
   Telegram, không tạo trang Telegraph nữa.
 ad66098d7867: Giữ lại nhật ký lỗi
+ad6b70383f0e: Có sẵn
 b0294761479a: Sau khi tắt, việc gửi liên kết của nền tảng đó sẽ không được phân tích
   tự động.
+b130e582ed8b: '{count} lần'
+b22cd71cee6a: Mỗi dòng một cookie, có thể dán nhiều dòng cùng lúc, hoặc gửi tệp .txt
+  (mỗi dòng một cookie tương tự)
 b3bbb48dcb10: Phân tích quá thường xuyên, vui lòng thử lại sau {e.retry_after:.1f}
   giây
 b6aaf8f2a2be: Cấu hình cá nhân trong nhóm
 b765e4eb1844: Liên kết nguyên bản
+b9db8476eed8: Chưa có bản ghi
 bbef4170b1e1: Danh sách lệnh
+bc20e7ba40bf: Chọn nền tảng để cấu hình riêng
 be6f406c8f81: Cấu hình cá nhân
 bebccdf7a76e: Định dạng liên kết không hợp lệ
 bfe68d5844f8: Liên kết
 c039b80e17dd: Phân tích tổng hợp
+c07a3c850982: Thay thế cookie thứ {number} của {name}
 c11154582f8a: Ẩn phần giới thiệu
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Sau khi phân tích xong sẽ tự động xóa liên kết do người dùng gửi. Trong
   nhóm cần bot có quyền xóa tin nhắn.
+c7cf968fe303: Bể chứa proxy riêng đang trống, sẽ quay về proxy mặc định toàn cục
+cabc0250bb93: Sửa đổi có hiệu lực ngay lập tức, không cần khởi động lại.
+d060b3bd861e: Không nhận được cookie
 d2282636abc7: Bảng cấu hình
 d2a9e9b5d414: Hành vi tin nhắn
 d5631690265c: Không thể nhận diện mục tiêu cấu hình
 d58a55bceec7: Tắt
 d59c948c471c: Đang phân tích...
 d5a73b0c7f2f: Tải lên
+d6bac3942764: Thêm proxy
+db06c78d1e24: Kiểm tra
+ddc469e02e5f: Cấu hình nền tảng
+e0f0665bb67b: Đã nhập cấu hình, có hiệu lực ngay lập tức
+e131da680a5a: Gửi một liên kết, sẽ phân tích từng Cookie được chọn một cách riêng
+  biệt
 e14de27e8559: '{target_label}'
+e22c9a05b424: Thay thế
+e35cfa1b6535: Quản lý Cookie
 e3ab31c8d89c: Phân tích và xem trước nội dung
+e3ba26e0bbb5: Không có Cookie nào được chọn
+e46d8cfa177c: Dùng proxy mặc định toàn cục ({count} mục)
 e4f6307e1c4f: 'Đã chuyển sang: {LANG_MAP[selected]}'
+e56a0df09ac2: Liên tục thất bại
 e5aa11737c3b: Khi bật "Tùy chỉnh văn bản", trong kênh / trò chuyện riêng sử dụng cú
   pháp dấu hai bằng `==văn bản==`, có thể giữ nguyên kiểu dáng của `văn bản` và chèn
   vào kết quả phân tích (💡 Kênh không hỗ trợ Emoji tùy chỉnh)
+e5b19edddb6f: Đã thêm {added} mục {label}, có hiệu lực ngay
 e7a34daf96fd: Kết quả phân tích được gửi dưới dạng trả lời tin nhắn gốc, tắt thì gửi
   trực tiếp vào cuộc trò chuyện.
+e902582488f8: 'Thử lại vẫn thất bại: {err}'
+ea74ed8e66cf: Thêm nền tảng
+ea7999d00285: Proxy mặc định toàn cục
 eaa3cd851501: Tùy chỉnh văn bản
+ebd48bca8b00: 'Địa chỉ proxy không hợp lệ: {line}'
+eeaf2cf99827: Phân giải proxy
 f047ff589a7a: Gửi gói kèm thông tin phân tích
 f136c494af8c: Tạo trang Telegraph
+f26ef9142458: Tải xuống
+f4847a7070ed: Không nhận được cấu hình
+f6a5f1d39bfb: 'Kiểm tra hoàn tất: {ok} thành công, {failed} thất bại'
+f6a87eabb74a: Thêm Cookie cho {name}
+f85549cdfce6: Đang thử nghiệm
+f88f0ab8aed9: 'Không khả dụng: {err}'
+fc954d25ec15: Đại lý
 fcaea8ec774e: Khi phân tích lỗi sẽ không gửi thông báo lỗi.
+fe2d26a257d6: Chưa được thiết lập
 fed0d2f0cea0: Danh sách kết quả ở chế độ nội tuyến thêm tùy chọn “Liên kết gốc”, chọn
   sẽ chỉ gửi liên kết.
 ff7e330bebf8: Cấu hình cá nhân trong chủ đề

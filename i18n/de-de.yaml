@@ -1,19 +1,27 @@
+0203186350ef: Globaler Standardproxy nicht eingestellt, direkte Verbindung wird verwendet
 024738655610: Inline-Option "Original URL"
+0452214502d6: Konfiguration importieren
 047ddf74eb5e: Das ist nicht deine Konfiguration
 04f706887b08: Bot ist diesem Kanal nicht beigetreten, bitte fügen Sie den Bot zuerst
   dem Kanal hinzu und konfigurieren Sie ihn dann.
 06778dbf05d5: Plattformverwaltung
+08b55fea3c93: Verwalten
+08c6faa776e6: Dies ist kein Link von {name}
 091d3a0665fa: Kanal-Konfiguration
+09df5be03bca: Teste {count} Cookies von {name}
 0b93dc449457: Der Analyseergebnis zeigt keine Zusammenfassung des Beitragsinhalts
   an. Artikel, die mit Telegraph oder Rich-Text gesendet werden, sind nicht betroffen.
 0d3d68e32996: Eine identische Aufgabe wird bereits analysiert, bitte warten Sie, bis
   die Analyse abgeschlossen ist...
+0d5a8d10f2a9: Kein Proxy
 0f6c4353601e: Originaldatei senden, um Qualitätsverlust zu vermeiden
 0f6cedccc5d3: Zu viele GIFs, Upload übersprungen, bitte selbst herunterladen
+1a0782afa3e4: Dieser Link wird nicht unterstützt
 1a603ac4b55c: Bitte senden Sie `/cfg` oder verwenden Sie `/cfg <Kanal-Benutzername/Link/ID>`
   im privaten Chat, in der Gruppe oder im Thema zur Konfiguration.
 1a7619451107: Bei Analysefehlern bleibt die Fehlermeldung bestehen und wird nach 15
   Sekunden beim Schließen automatisch gelöscht.
+1c65ec9ed726: Globaler Standard
 1d30c358e2a1: Standard-Parsing-Modus
 1f3c920d087b: In Bearbeitung...
 20a7b9ae5106: Altes Konfigurationsmenü
@@ -22,23 +30,41 @@
   angehängt.
 256aefe3fdbf: Fehlerprotokoll
 27350d00b70d: Hochladen...
+280b423af06e: Nicht eingestellt, Plattformen mit globalem Proxy verbinden direkt
 295bb704f520: Sprache
 2bc28481a223: Automatisches Löschen von Linknachrichten
+2be75b10449b: Global
+2c5f811829a3: Datei zu groß
+2f77212ebba4: Für keine Plattform ist eine eigene Konfiguration vorhanden, alle verwenden
+  den globalen Standardproxy.
 30364e475d07: Das ist nicht Ihre Aktion
 3065ed13e5f9: Original-Link abrufen
+308136d04bc5: 'Nicht unterstütztes Proxy-Protokoll: {line}'
 31f3c8c65cc4: Kanal-Benutzername/Link/ID
 32316f34b45d: Inhaltsanzeige
 330add4a5718: Keine Fortschrittsnachrichten mehr senden, Ergebnis wird nach Abschluss
   der Analyse direkt gesendet.
 33ccc7a4682a: Nicht unterstützte Plattform
+3754101e31ed: Proxy-Adresse nicht erhalten
 3795485677d6: Gruppenkonfiguration
 39b75e75d433: Video-Cover
 39e4a584197b: Unterstützte Plattformen
+3a3283894195: Cookie hinzufügen
+3cf173960e16: Liste hat sich geändert, bitte aktualisieren und erneut versuchen
 3d3eeb2bc9cd: Unbekannte Konfigurationsoption
+3f9578ad1850: Die Analyse mit diesem Cookie ist mehrmals fehlgeschlagen. Nach der
+  Aktualisierung kann die ursprüngliche Verbindung zur erneuten Überprüfung genutzt
+  werden.
+3fea7ca76cde: Status
 405ba1795958: Themen-Konfiguration
+410224ea7c69: Alle bereits vorhanden, keine neuen hinzugefügt
 411955a09348: Open-Source-Adresse
+4181f7fe2a31: Gerade eben
+44a60049e225: Plattformkonfiguration löschen
 460ce129a523: Herunterladen...
+4930e603474f: '{count} mal hintereinander fehlgeschlagen'
 4981287fe504: Plattform
+4ab3bb20832a: Füge {kind} zu {name} hinzu
 4e9ce9dfe13d: Titel ausblenden
 4fb5f29ee802: Bitte füge einen Link hinzu oder antworte auf eine Nachricht
 4fbdbeb0f163: '
@@ -57,25 +83,39 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Hier den Text schreiben=='
+50b2b2deda32: '{added} Cookies wurden hinzugefügt und treten sofort in Kraft'
+5210725561a8: Mit ursprünglichem Link erneut versuchen
 53ace4305f51: Aktiviert
 569c1f28ab00: Verpacken...
+575e0a86eea5: Konfiguration neu laden
 5861d620c41d: Herunterladen... | {current}/{total}
 5a9f36a77173: Verpacken
 5b943dc87178: GIF-Download-Link
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Erfolgreich beim erneuten Versuch
+5ce05549b18b: Exklusiv
 5d6ac8f8e4f3: Artikel wird mit Rich-Text gesendet
 5e788d9e0992: Kein Kanal
 5f411223ca5a: Zurück
+5f651ec2cae6: Kein Cookie konfiguriert
+625fb26b4b33: Abbrechen
 662e14fab581: Analysenmethode, die beim direkten Senden von Links verwendet wird;
   bei Verwendung eines Befehls gilt der Befehl.
+669fee3d99a5: Datei muss UTF-8 Text sein
+66eeacd93a7c: Alle auswählen
+6721039b2066: Direktverbindung
 6740d8c7b274: Nachricht beantworten
 6769c172299c: Sie sind kein Administrator dieses Chats und dürfen die Konfiguration
   nicht ändern.
 68957ac274c5: Herunterladen... | {current * 100 / total:.0f}%
+6e4725b992cd: '{added} Cookies wurden ersetzt und treten sofort in Kraft'
+7030ff64701a: Fehler
 '734176584215': Sie sind nicht der Besitzer dieses Kanals und dürfen die Kanal-Konfiguration
   nicht ändern.
+7391ce6dcdc7: Keine Links zum erneuten Versuch vorhanden
 769d88e425e0: Fertig
 77274b54a324: '{stage} Fehler:'
+77ad39632d5d: Kein Link empfangen
 7853187dd3ea: Unterstützungstyp
 7b48a0292498: Der Analyseergebnis zeigt keine Beitragstitel an. Artikel, die mit Telegraph
   oder Rich-Text gesendet werden, sind nicht betroffen.
@@ -83,9 +123,14 @@
 
 
   <b>Problemmeldung: @MisakaSisters</b>'
+7fba2391f40b: vor {hours} Stunden
 816de50b9e0e: Bitte geben Sie den Link im Chatfenster ein
 '849320560237': Ein
 868afb493654: Konfigurationsziel wählen
+87d3ab3e5514: Senden Sie die platform_config.yaml Datei oder fügen Sie den YAML-Inhalt
+  direkt ein. Nach dem Import wird die aktuelle Konfiguration vollständig ersetzt.
+89881c6b335c: Unterstützt http / https / socks5 / socks5h, jeweils eine Zeile, für
+  Massenhinzufügung
 8a8672da4ab7: Nicht unterstützte Konfigurationsoption
 8dc878e08cd6: Senden Sie den Freigabelink zur Analyse
 8f555aa82c87: Original-Link
@@ -120,49 +165,98 @@
 
   **Quellcode: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Parsing-Fortschritt deaktivieren
+95451f30604f: '{ago} erfolgreich'
+95b351c86267: Bearbeiten
+96378ed32de3: vor {days} Tagen
+9662a47609b8: vor {minutes} Minuten
+96d012dc9331: Proxy herunterladen
 996b5ce5395f: Bei Videos wird das vom Anbieter bereitgestellte Vorschaubild als Video-Cover
   verwendet; bei Deaktivierung wird kein Cover eingestellt.
 9b3dbf3e3f85: Untere "Quelle" ausblenden
+9f80223ca0ac: Ausgewählte löschen ({count})
+a0526e72f8a7: Konfiguration exportieren
+a16f4a3f483b: Cookie von {name} könnte ungültig sein
+a2b83df06d16: Kürzliche Fehler
 a3e3b88377c8: Start
+a3f71e3e829f: Plattformen ohne eigene Proxy-Konfiguration verwenden diesen Proxy,
+  bei mehreren wird jedes Mal zufällig einer gewählt.
+a9c8984f0cc8: Auswahl testen ({count})
+aa357cb96ee8: Auflösung
+aab57a3547a4: Invertieren
 ab480060abb1: Fehlerprotokolle nicht anzeigen
 ab511431782e: Artikelinhalte werden direkt mit Telegram Rich-Text gesendet, es wird
   keine Telegraph-Seite mehr erstellt.
 ad66098d7867: Fehlerprotokolle behalten
+ad6b70383f0e: Verfügbar
 b0294761479a: Nach dem Ausschalten wird der Link dieser Plattform nicht mehr automatisch
   analysiert.
+b130e582ed8b: '{count} mal'
+b22cd71cee6a: Eine Cookie pro Zeile, mehrere Zeilen können auf einmal eingefügt werden,
+  .txt Dateien können ebenfalls gesendet werden (ebenfalls eine Cookie pro Zeile)
 b3bbb48dcb10: Zu häufige Analyse, bitte versuche es nach {e.retry_after:.1f} Sekunden
   erneut
 b6aaf8f2a2be: Persönliche Konfiguration in der Gruppe
 b765e4eb1844: Original-Link
+b9db8476eed8: Keine Aufzeichnungen
 bbef4170b1e1: Befehlsliste
+bc20e7ba40bf: Wählen Sie die Plattform zur Einzelkonfiguration
 be6f406c8f81: Persönliche Konfiguration
 bebccdf7a76e: Ungültiges Link-Format
 bfe68d5844f8: Link
 c039b80e17dd: Aggregiertes Parsing
+c07a3c850982: Ersetze das Cookie Nr. {number} von {name}
 c11154582f8a: Einführung ausblenden
 c2236f70c559: Cache-Parsing umgehen
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Nach Abschluss der Analyse wird der vom Benutzer gesendete Link automatisch
   gelöscht. In Gruppen benötigt der Bot Berechtigung zum Löschen von Nachrichten.
+c7cf968fe303: Der dedizierte Proxy-Pool ist leer, es wird auf den globalen Standard-Proxy
+  zurückgegriffen
+cabc0250bb93: Änderungen treten sofort in Kraft, kein Neustart erforderlich.
+d060b3bd861e: Keine Cookies erhalten
 d2282636abc7: Konfigurationspanel
 d2a9e9b5d414: Nachrichtenverhalten
 d5631690265c: Konfigurationsziel kann nicht erkannt werden
 d58a55bceec7: Aus
 d59c948c471c: Analysiere...
 d5a73b0c7f2f: Hochladen
+d6bac3942764: Proxy hinzufügen
+db06c78d1e24: Testen
+ddc469e02e5f: Plattform-Konfiguration
+e0f0665bb67b: Konfiguration wurde importiert und ist sofort wirksam
+e131da680a5a: Sende einen Link, um jeden ausgewählten Cookie einzeln zu analysieren
 e14de27e8559: '{target_label}'
+e22c9a05b424: Ersetzen
+e35cfa1b6535: Cookie verwalten
 e3ab31c8d89c: Inhalt analysieren und Vorschau anzeigen
+e3ba26e0bbb5: Keine Cookies ausgewählt
+e46d8cfa177c: Globalen Standard-Proxy verwenden ({count} Einträge)
 e4f6307e1c4f: 'Wechsel zu: {LANG_MAP[selected]}'
+e56a0df09ac2: Mehrfaches Fehlschlagen
 e5aa11737c3b: Nach Aktivierung der Funktion „Benutzerdefinierte Texte“ kann in Kanälen/Privatchats
   die Syntax `==Text==` mit doppeltem Gleichheitszeichen verwendet werden, um den
   `Text` stilgetreu in das Parsergebnis einzufügen (💡 Kanäle unterstützen keine benutzerdefinierten
   Emojis)
+e5b19edddb6f: '{added} {label} hinzugefügt, sofort wirksam'
 e7a34daf96fd: Das Analyseergebnis wird als Antwort auf die Originalnachricht gesendet;
   wenn ausgeschaltet, wird es direkt in den Chat gesendet.
+e902582488f8: 'Wiederholung fehlgeschlagen: {err}'
+ea74ed8e66cf: Plattform hinzufügen
+ea7999d00285: Globaler Standard-Proxy
 eaa3cd851501: Benutzerdefinierter Text
+ebd48bca8b00: 'Ungültige Proxy-Adresse: {line}'
+eeaf2cf99827: Proxy auflösen
 f047ff589a7a: Paket senden, inklusive Analyseinformationen
 f136c494af8c: Telegraph-Seite erstellen
+f26ef9142458: Herunterladen
+f4847a7070ed: Keine Konfiguration erhalten
+f6a5f1d39bfb: 'Test abgeschlossen: {ok} erfolgreich, {failed} fehlgeschlagen'
+f6a87eabb74a: '{name} Cookies hinzufügen'
+f85549cdfce6: Im Test
+f88f0ab8aed9: 'Nicht verfügbar: {err}'
+fc954d25ec15: Agent
 fcaea8ec774e: Bei Analysefehlern wird keine Fehlermeldung gesendet.
+fe2d26a257d6: Nicht eingestellt
 fed0d2f0cea0: In der Ergebnisliste des Inline-Modus wird die Option „Originallink“
   hinzugefügt; wenn ausgewählt, wird nur der Link selbst gesendet.
 ff7e330bebf8: Persönliche Konfiguration im Thema

@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 
 from dotenv import load_dotenv
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 from sqlalchemy import make_url
 
 load_dotenv()
@@ -23,6 +23,7 @@ class BotSettings(BaseSettings):
     bot_proxy: str | None = Field(default=None)
     data_path: Path = Field(default=Path("data"))
     language: str = Field(default="zh-hans")
+    admin_ids: Annotated[list[int], NoDecode] = Field(default=[], description="Bot 管理员 ID, 逗号分隔")
     cache_max_entries: int = Field(default=30000, ge=0, description="缓存最大条数, 0 为不限制")
     cache_disabled: bool = Field(default=False, description="禁用缓存")
 
@@ -64,6 +65,13 @@ class BotSettings(BaseSettings):
     @property
     def bot_session_name(self) -> str:
         return f"bot_{self.bot_token.split(':')[0]}"
+
+    @field_validator("admin_ids", mode="before")
+    @classmethod
+    def admin_ids_init(cls, v: str | list[int]) -> list[int] | list[str]:
+        if isinstance(v, str):
+            return [i.strip() for i in v.split(",") if i.strip()]
+        return v
 
     @field_validator("data_path", mode="before")
     @classmethod

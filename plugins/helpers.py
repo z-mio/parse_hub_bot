@@ -45,6 +45,10 @@ COMMANDS = {
     "ocfg": t_("旧版配置菜单"),
 }
 
+ADMIN_COMMANDS = {
+    "admin": t_("平台配置"),
+}
+
 
 def build_start_text() -> LocaleContent:
     return t_(
@@ -76,13 +80,13 @@ def _r(value: object) -> RichText:
 
 def _platform_table(lang: str) -> InputRichBlockTable:
     header = [
-        RichBlockTableCell(text=_r(t_("平台")[lang]), is_header=True),
-        RichBlockTableCell(text=_r(t_("支持类型")[lang]), is_header=True),
+        RichBlockTableCell(text=_r(t_("平台")[lang]), is_header=True, align="center"),
+        RichBlockTableCell(text=_r(t_("支持类型")[lang]), is_header=True, align="center"),
     ]
     rows = [
         [
-            RichBlockTableCell(text=_r(i["name"])),
-            RichBlockTableCell(text=_r(", ".join(i["supported_types"]))),
+            RichBlockTableCell(text=_r(i["name"]), align="center"),
+            RichBlockTableCell(text=_r(", ".join(i["supported_types"])), align="center"),
         ]
         for i in sorted(ParseHub().get_platforms(), key=lambda i: i["name"], reverse=True)
     ]

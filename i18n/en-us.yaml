@@ -1,19 +1,27 @@
+0203186350ef: Global default proxy not set, connecting directly
 024738655610: Inline "Original URL" option
+0452214502d6: Import Configuration
 047ddf74eb5e: This is not your configuration
 04f706887b08: Bot has not joined this channel, please add the Bot to the channel before
   configuring
 06778dbf05d5: Platform Management
+08b55fea3c93: Manage
+08c6faa776e6: This is not a {name} link
 091d3a0665fa: Channel Configuration
+09df5be03bca: Test {name} with {count} cookies
 0b93dc449457: Parsing results will not display the post summary. Articles sent via
   Telegraph or rich text are unaffected.
 0d3d68e32996: A task with the same content is already being parsed, waiting for parsing
   to complete...
+0d5a8d10f2a9: Do not use proxy
 0f6c4353601e: Send original file to avoid quality compression
 0f6cedccc5d3: Too many GIFs, skipping upload, please download manually
+1a0782afa3e4: Link not supported
 1a603ac4b55c: Please send `/cfg` in private chat, group, or topic, or use `/cfg <channel
   username/link/id>` to configure
 1a7619451107: Error messages during parsing remain visible; when turned off, they
   are automatically deleted after 15 seconds.
+1c65ec9ed726: Global default
 1d30c358e2a1: Default parsing mode
 1f3c920d087b: Processing...
 20a7b9ae5106: Old version configuration menu
@@ -22,23 +30,40 @@
   results.
 256aefe3fdbf: Error Log
 27350d00b70d: Uploading...
+280b423af06e: Not set, platforms using global proxy will connect directly
 295bb704f520: Language
 2bc28481a223: Automatically delete link messages
+2be75b10449b: Global
+2c5f811829a3: File too large
+2f77212ebba4: No platform configured individually yet, all use the global default
+  proxy.
 30364e475d07: This is not your operation
 3065ed13e5f9: Get original link
+308136d04bc5: 'Unsupported proxy protocol: {line}'
 31f3c8c65cc4: Channel username/link/id
 32316f34b45d: Content Display
 330add4a5718: No longer send parsing progress messages; send the result directly after
   parsing is complete.
 33ccc7a4682a: Unsupported platform
+3754101e31ed: No proxy address received
 3795485677d6: Group Configuration
 39b75e75d433: Video cover
 39e4a584197b: Supported platforms
+3a3283894195: Add Cookie
+3cf173960e16: List has changed, please refresh and try again
 3d3eeb2bc9cd: Unknown configuration item
+3f9578ad1850: Parsing with this Cookie failed repeatedly. After update, you can retry
+  verification with the original link.
+3fea7ca76cde: Status
 405ba1795958: Topic Configuration
+410224ea7c69: All exist, no additions
 411955a09348: Open source address
+4181f7fe2a31: Just now
+44a60049e225: Delete this platform configuration
 460ce129a523: Downloading...
+4930e603474f: Failed {count} times consecutively
 4981287fe504: Platform
+4ab3bb20832a: Add {kind} of {name}
 4e9ce9dfe13d: Hide Title
 4fb5f29ee802: Please add a link or reply to a message
 4fbdbeb0f163: '>**To ensure a good experience for all users, rate limiting is currently
@@ -54,24 +79,38 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Write your copy here=='
+50b2b2deda32: Added {added} cookies, takes effect immediately
+5210725561a8: Retry with original link
 53ace4305f51: Enabled
 569c1f28ab00: Packaging...
+575e0a86eea5: Reload Configuration
 5861d620c41d: Downloading... | {current}/{total}
 5a9f36a77173: Package
 5b943dc87178: GIF download link
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Retry successful
+5ce05549b18b: Dedicated
 5d6ac8f8e4f3: Send article using rich text
 5e788d9e0992: Non-channel
 5f411223ca5a: Back
+5f651ec2cae6: No Cookie configured
+625fb26b4b33: Cancel
 662e14fab581: The parsing method used when sending links directly; commands override
   this method when used.
+669fee3d99a5: File must be UTF-8 text
+66eeacd93a7c: Select All
+6721039b2066: Direct connection
 6740d8c7b274: Reply to message
 6769c172299c: You are not an admin of this chat, no permission to modify configuration
 68957ac274c5: Downloading... | {current * 100 / total:.0f}%
+6e4725b992cd: Replaced with {added} cookies, takes effect immediately
+7030ff64701a: Error
 '734176584215': You are not the owner of this channel, no permission to modify channel
   configuration
+7391ce6dcdc7: No links to retry
 769d88e425e0: Done
 77274b54a324: '{stage} error:'
+77ad39632d5d: No link received
 7853187dd3ea: Support type
 7b48a0292498: Parsing results will not display the post title. Articles sent via Telegraph
   or rich text are unaffected.
@@ -79,9 +118,13 @@
 
 
   <b>Feedback: @MisakaSisters</b>'
+7fba2391f40b: '{hours} hours ago'
 816de50b9e0e: Please enter the link in the chat box
 '849320560237': 'On'
 868afb493654: Select configuration target
+87d3ab3e5514: Send the platform_config.yaml file, or directly paste the YAML content.
+  After importing, the entire configuration will replace the current one.
+89881c6b335c: Supports http / https / socks5 / socks5h, one per line for batch addition
 8a8672da4ab7: Unsupported configuration item
 8dc878e08cd6: Send the share link for parsing
 8f555aa82c87: Original link
@@ -116,47 +159,95 @@
 
   **Open source at: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Disable parsing progress
+95451f30604f: '{ago} succeeded'
+95b351c86267: Edit
+96378ed32de3: '{days} days ago'
+9662a47609b8: '{minutes} minutes ago'
+96d012dc9331: Download proxy
 996b5ce5395f: Use the platform-provided thumbnail as the video cover when sending
   videos; if turned off, no cover is set.
 9b3dbf3e3f85: Hide bottom "Source"
+9f80223ca0ac: Delete Selected ({count})
+a0526e72f8a7: Export Configuration
+a16f4a3f483b: Cookie of {name} may be invalid
+a2b83df06d16: Recent errors
 a3e3b88377c8: Start
+a3f71e3e829f: Platforms without individually configured proxies use the proxy here,
+  one randomly selected per request if multiple.
+a9c8984f0cc8: Test selected ({count})
+aa357cb96ee8: Parsing
+aab57a3547a4: Invert Selection
 ab480060abb1: Do not display error logs
 ab511431782e: Article content is sent directly using Telegram rich text, and Telegraph
   pages are no longer created.
 ad66098d7867: Retain error logs
+ad6b70383f0e: Available
 b0294761479a: After disabling, links from this platform will no longer be automatically
   parsed when sent.
+b130e582ed8b: 0 times
+b22cd71cee6a: One cookie per line, you can paste multiple lines at once, or send a
+  .txt file (also one per line)
 b3bbb48dcb10: Parsing too frequently, please try again after {e.retry_after:.1f}s
 b6aaf8f2a2be: Individual configuration within group
 b765e4eb1844: Original link
+b9db8476eed8: No records yet
 bbef4170b1e1: Command list
+bc20e7ba40bf: Select platforms to configure individually
 be6f406c8f81: Personal Configuration
 bebccdf7a76e: Invalid link format
 bfe68d5844f8: Link
 c039b80e17dd: Aggregate Parsing
+c07a3c850982: Replace the cookie number {number} of {name}
 c11154582f8a: Hide Introduction
 c2236f70c559: Bypass cache parsing
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Automatically delete user-sent links after parsing is complete. In groups,
   the bot needs permission to delete messages.
+c7cf968fe303: Dedicated proxy pool is empty, will fallback to global default proxy
+cabc0250bb93: Changes take effect immediately, no restart needed.
+d060b3bd861e: No cookies received
 d2282636abc7: Configuration panel
 d2a9e9b5d414: Message Behavior
 d5631690265c: Unrecognized configuration target
 d58a55bceec7: 'Off'
 d59c948c471c: Parsing...
 d5a73b0c7f2f: Upload
+d6bac3942764: Add proxy
+db06c78d1e24: Test
+ddc469e02e5f: Platform configuration
+e0f0665bb67b: Configuration imported, taking effect immediately
+e131da680a5a: Send a link, it will be parsed once for each selected cookie
 e14de27e8559: '{target_label}'
+e22c9a05b424: Replace
+e35cfa1b6535: Manage Cookie
 e3ab31c8d89c: Parse and preview content
+e3ba26e0bbb5: No cookie selected
+e46d8cfa177c: Use global default proxy (0 items)
 e4f6307e1c4f: 'Switched to: {LANG_MAP[selected]}'
+e56a0df09ac2: Continuous failure
 e5aa11737c3b: After enabling "Custom Copy", you can use the `==copy==` double equal
   sign delimiter syntax in channels or private chats to insert the `copy` with retained
   styling into the parsed result (💡 Custom Emojis are not supported in channels).
+e5b19edddb6f: Added 0 items of 1, effective immediately
 e7a34daf96fd: Parsing results are sent as a reply to the original message; when turned
   off, results are sent directly to the chat.
+e902582488f8: 'Retry still failed: 0'
+ea74ed8e66cf: Add platform
+ea7999d00285: Global default proxy
 eaa3cd851501: Custom Copy
+ebd48bca8b00: 'Invalid proxy address: 0'
+eeaf2cf99827: Parse proxy
 f047ff589a7a: Pack and send with parsing information
 f136c494af8c: Create Telegraph page
+f26ef9142458: Download
+f4847a7070ed: No configuration received
+f6a5f1d39bfb: 'Test completed: {ok} success, {failed} failure'
+f6a87eabb74a: Add Cookie for 0
+f85549cdfce6: Testing
+f88f0ab8aed9: 'Unavailable: 0'
+fc954d25ec15: Proxy
 fcaea8ec774e: Do not send error messages when parsing fails.
+fe2d26a257d6: Not set
 fed0d2f0cea0: Add an "Original Link" option in the result list of inline mode; when
   selected, only the link itself is sent.
 ff7e330bebf8: Individual configuration within topic

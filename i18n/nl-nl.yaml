@@ -1,19 +1,27 @@
+0203186350ef: Globale standaardproxy niet ingesteld, directe verbinding in werkelijkheid
 024738655610: Inline "Originele URL" optie
+0452214502d6: Configuratie importeren
 047ddf74eb5e: Dit is niet jouw configuratie
 04f706887b08: Bot is niet toegevoegd aan dit kanaal, voeg de Bot eerst toe aan het
   kanaal voordat je het configureert
 06778dbf05d5: Platformbeheer
+08b55fea3c93: Beheer
+08c6faa776e6: Dit is geen link van {name}
 091d3a0665fa: Kanaalconfiguratie
+09df5be03bca: Test {name} van de {count} cookies
 0b93dc449457: De inhoud van de post wordt niet weergegeven in het parse-resultaat.
   Artikelen verzonden met Telegraph of rich text worden niet beïnvloed.
 0d3d68e32996: Er is al eenzelfde taak bezig met ontleden, wacht tot het ontleden is
   voltooid...
+0d5a8d10f2a9: Geen proxy gebruiken
 0f6c4353601e: Stuur het originele bestand om kwaliteitscompressie te voorkomen
 0f6cedccc5d3: Te veel GIF's, upload wordt overgeslagen, download ze zelf
+1a0782afa3e4: Deze link wordt niet ondersteund
 1a603ac4b55c: Stuur `/cfg` in een privébericht, groep of onderwerp, of gebruik `/cfg
   <kanaal gebruikersnaam/link/id>` om te configureren
 1a7619451107: Foutmeldingen blijven zichtbaar bij parse-fouten en verdwijnen automatisch
   15 seconden na het sluiten.
+1c65ec9ed726: Globale standaard
 1d30c358e2a1: Standaard parseermodus
 1f3c920d087b: Bezig met verwerken...
 20a7b9ae5106: Oud configuratiemenu
@@ -22,23 +30,41 @@
   het einde.
 256aefe3fdbf: Foutlogboek
 27350d00b70d: Bezig met uploaden...
+280b423af06e: Niet ingesteld, platforms die globale proxy gebruiken maken een directe
+  verbinding
 295bb704f520: Taal
 2bc28481a223: Automatisch verwijderde linkberichten
+2be75b10449b: Globaal
+2c5f811829a3: Bestand te groot
+2f77212ebba4: Nog geen platformen afzonderlijk geconfigureerd, alles gebruikt globale
+  standaardproxy.
 30364e475d07: Dit is niet jouw actie
 3065ed13e5f9: Oorspronkelijke link ophalen
+308136d04bc5: 'Niet-ondersteund proxyprotocol: {line}'
 31f3c8c65cc4: Kanaalgebruikersnaam/link/id
 32316f34b45d: Inhoudsweergave
 330add4a5718: Stuur geen voortgangsberichten meer over de analyse, stuur het resultaat
   direct na voltooiing van de analyse.
 33ccc7a4682a: Niet-ondersteund platform
+3754101e31ed: Proxyadres niet ontvangen
 3795485677d6: Groepsconfiguratie
 39b75e75d433: Videominiatuur
 39e4a584197b: Ondersteunde platforms
+3a3283894195: Cookie toevoegen
+3cf173960e16: Lijst is gewijzigd, vernieuw en probeer opnieuw
 3d3eeb2bc9cd: Onbekende configuratieoptie
+3f9578ad1850: Het parseren met deze cookie mislukt achtereenvolgens. Na update kunt
+  u het originele link opnieuw proberen om te valideren.
+3fea7ca76cde: Status
 405ba1795958: Topicconfiguratie
+410224ea7c69: Allemaal al bestaand, geen toevoegingen
 411955a09348: Open-source adres
+4181f7fe2a31: Zojuist
+44a60049e225: Platformconfiguratie verwijderen
 460ce129a523: Bezig met downloaden...
+4930e603474f: '{count} keer achtereenvolgend mislukt'
 4981287fe504: Platform
+4ab3bb20832a: Toevoegen van {kind} aan {name}
 4e9ce9dfe13d: Titel verbergen
 4fb5f29ee802: Voeg een link toe of beantwoord een bericht
 4fbdbeb0f163: '
@@ -57,25 +83,39 @@
 5066c3cded7f: 'https://x.com/i/status/123
 
   ==Schrijf hier de tekst=='
+50b2b2deda32: '{added} cookies toegevoegd, onmiddellijk van kracht'
+5210725561a8: Opnieuw proberen met originele link
 53ace4305f51: Ingeschakeld
 569c1f28ab00: Bezig met inpakken...
+575e0a86eea5: Configuratie opnieuw laden
 5861d620c41d: Bezig met downloaden... | {current}/{total}
 5a9f36a77173: Inpakken
 5b943dc87178: GIF downloadlink
 5bc4920f7c82: "{format_label(f'{stage}错误:')} \n```\n{error}```"
+5c86d1151466: Opnieuw proberen gelukt
+5ce05549b18b: Speciaal
 5d6ac8f8e4f3: Artikel verzonden met rich text
 5e788d9e0992: Geen kanaal
 5f411223ca5a: Terug
+5f651ec2cae6: Geen cookie geconfigureerd
+625fb26b4b33: Annuleren
 662e14fab581: De parse-methode die wordt gebruikt bij het direct verzenden van een
   link; bij gebruik van een commando geldt het commando.
+669fee3d99a5: Bestand moet een UTF-8 tekstbestand zijn
+66eeacd93a7c: Alles selecteren
+6721039b2066: Directe verbinding
 6740d8c7b274: Antwoord op bericht
 6769c172299c: Je bent geen beheerder van deze chat, je hebt geen toestemming om de
   configuratie te wijzigen
 68957ac274c5: Bezig met downloaden... | {current * 100 / total:.0f}%
+6e4725b992cd: Vervangen door {added} cookies, onmiddellijk van kracht
+7030ff64701a: Fout
 '734176584215': Je bent geen eigenaar van dit kanaal, je hebt geen toestemming om
   de kanaalconfiguratie te wijzigen
+7391ce6dcdc7: Geen links om opnieuw te proberen
 769d88e425e0: Voltooid
 77274b54a324: '{stage} fout:'
+77ad39632d5d: Geen link ontvangen
 7853187dd3ea: Ondersteuningstype
 7b48a0292498: De titel van de post wordt niet weergegeven in het parse-resultaat.
   Artikelen verzonden met Telegraph of rich text worden niet beïnvloed.
@@ -83,9 +123,14 @@
 
 
   <b>Probleemfeedback: @MisakaSisters</b>'
+7fba2391f40b: '{hours} uur geleden'
 816de50b9e0e: Voer een link in het chatvenster in
 '849320560237': Aan
 868afb493654: Kies configuratiedoel
+87d3ab3e5514: Stuur het bestand platform_config.yaml of plak de YAML-inhoud direct.
+  Na import wordt de huidige configuratie volledig vervangen
+89881c6b335c: Ondersteunt http / https / socks5 / socks5h, één per regel, kan in bulk
+  toegevoegd worden
 8a8672da4ab7: Niet-ondersteunde configuratieoptie
 8dc878e08cd6: Verzend de deel-link voor analyse
 8f555aa82c87: Originele link
@@ -120,48 +165,97 @@
 
   **Open source adres: [GitHub](https://github.com/z-mio/parse_hub_bot)**'
 945599b91845: Parsing voortgang uitschakelen
+95451f30604f: '{ago} succesvol'
+95b351c86267: Bewerken
+96378ed32de3: '{days} dagen geleden'
+9662a47609b8: '{minutes} minuten geleden'
+96d012dc9331: Proxy downloaden
 996b5ce5395f: Wanneer een video wordt verzonden, wordt de door het platform geleverde
   coverafbeelding als videominiatuur gebruikt. Bij uitschakeling wordt er geen cover
   ingesteld.
 9b3dbf3e3f85: Verberg "Bron" onderaan
+9f80223ca0ac: Geselecteerde verwijderen ({count})
+a0526e72f8a7: Configuratie exporteren
+a16f4a3f483b: Cookie van {name} is mogelijk verlopen
+a2b83df06d16: Laatste fout
 a3e3b88377c8: Start
+a3f71e3e829f: Platforms zonder afzonderlijke proxyconfiguratie gebruiken hier deze
+  proxy, bij meerdere wordt er willekeurig één gekozen.
+a9c8984f0cc8: Geselecteerde test ({count})
+aa357cb96ee8: Ontleden
+aab57a3547a4: Selectie omkeren
 ab480060abb1: Foutlogboeken niet weergeven
 ab511431782e: Artikelinhoud wordt direct als Telegram rich text verzonden en er wordt
   geen Telegraph-pagina meer aangemaakt.
 ad66098d7867: Foutlogboek bewaren
+ad6b70383f0e: Beschikbaar
 b0294761479a: Na het uitschakelen worden links van dit platform niet automatisch geanalyseerd.
+b130e582ed8b: '{count} keer'
+b22cd71cee6a: Eén cookie per regel, je kunt meerdere regels tegelijk plakken, of een
+  .txt-bestand verzenden (eveneens één cookie per regel)
 b3bbb48dcb10: Te vaak geanalyseerd, probeer het opnieuw na {e.retry_after:.1f}s
 b6aaf8f2a2be: Persoonlijke configuratie binnen groep
 b765e4eb1844: Originele link
+b9db8476eed8: Geen records
 bbef4170b1e1: Lijst met commando's
+bc20e7ba40bf: Selecteer het platform voor afzonderlijke configuratie
 be6f406c8f81: Persoonlijke configuratie
 bebccdf7a76e: Ongeldig linkformaat
 bfe68d5844f8: Link
 c039b80e17dd: Geaggregeerde ontleding
+c07a3c850982: Vervang de cookie nummer {number} van {name}
 c11154582f8a: Introductie verbergen
 c2236f70c559: Cache-omzeiling parsing
 c25add78a072: "{t} \n```\n{error}```"
 c4ee311078aa: Verwijder automatisch links die door gebruikers zijn verzonden na analyse.
   In groepen moet de bot de toestemming hebben om berichten te verwijderen.
+c7cf968fe303: Speciale proxy pool is leeg en zal terugvallen op de globale standaardproxy
+cabc0250bb93: Direct effect na wijziging, geen herstart nodig.
+d060b3bd861e: Geen cookies ontvangen
 d2282636abc7: Configuratiepaneel
 d2a9e9b5d414: Berichtgedrag
 d5631690265c: Kan configuratiedoel niet herkennen
 d58a55bceec7: Uit
 d59c948c471c: Bezig met ontleden...
 d5a73b0c7f2f: Uploaden
+d6bac3942764: Proxy toevoegen
+db06c78d1e24: Testen
+ddc469e02e5f: Platformconfiguratie
+e0f0665bb67b: Configuratie geïmporteerd en onmiddellijk van kracht
+e131da680a5a: Verstuur een link, die wordt apart geanalyseerd met elke geselecteerde
+  cookie
 e14de27e8559: '{target_label}'
+e22c9a05b424: Vervangen
+e35cfa1b6535: Cookie beheren
 e3ab31c8d89c: Parseer en bekijk inhoud
+e3ba26e0bbb5: Geen cookies geselecteerd
+e46d8cfa177c: Gebruik globale standaardproxy ({count} items)
 e4f6307e1c4f: 'Gewisseld naar: {LANG_MAP[selected]}'
+e56a0df09ac2: Achtereenvolgende mislukkingen
 e5aa11737c3b: Na het inschakelen van "Aangepaste tekst", kunt u in kanalen/privégesprekken
   de `==tekst==` dubbele gelijkheidstekens gebruiken als afbakening, om de `tekst`
   met opmaak in het resultaat in te voegen (💡 Kanalen ondersteunen geen aangepaste
   emoji's).
+e5b19edddb6f: '{added} {label} toegevoegd, direct van kracht'
 e7a34daf96fd: Het parse-resultaat wordt als antwoord op het originele bericht verzonden;
   bij uitschakeling wordt het direct in de chat geplaatst.
+e902582488f8: 'Opnieuw proberen mislukt: {err}'
+ea74ed8e66cf: Platform toevoegen
+ea7999d00285: Globale standaardproxy
 eaa3cd851501: Aangepaste tekst
+ebd48bca8b00: 'Ongeldig proxyadres: {line}'
+eeaf2cf99827: Proxy parseren
 f047ff589a7a: Verpak en stuur, inclusief parseer informatie
 f136c494af8c: Maak een Telegraph-pagina aan
+f26ef9142458: Downloaden
+f4847a7070ed: Geen configuratie ontvangen
+f6a5f1d39bfb: 'Test voltooid: {ok} geslaagd, {failed} mislukt'
+f6a87eabb74a: '{name} cookie toevoegen'
+f85549cdfce6: Bezig met testen
+f88f0ab8aed9: 'Niet beschikbaar: {err}'
+fc954d25ec15: Agent
 fcaea8ec774e: Bij parse-fouten worden er geen foutmeldingen verzonden.
+fe2d26a257d6: Niet ingesteld
 fed0d2f0cea0: De lijst met resultaten in inline-modus bevat de optie "Originele link";
   bij selectie wordt alleen de link zelf verzonden.
 ff7e330bebf8: Persoonlijke configuratie binnen onderwerp
