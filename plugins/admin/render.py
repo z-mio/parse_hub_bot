@@ -225,7 +225,7 @@ def build_home(_t: PreLocaleSelector, notice: str | None = None) -> InputRichMes
     blocks += [
         InputRichBlockButtons(
             buttons=[
-                _button(f"＋ {_t('添加平台')}", cb("open", ADD_PLATFORM)),
+                _button(f"＋ {_t('添加平台')}", cb("open", ADD_PLATFORM), ButtonStyle.SUCCESS),
                 _button(_t("重载文件"), cb("reload")),
                 _button(_t("完成"), cb("done"), ButtonStyle.PRIMARY),
             ],
