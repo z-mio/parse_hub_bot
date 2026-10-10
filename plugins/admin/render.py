@@ -161,15 +161,26 @@ def _cookie_status(_t: PreLocaleSelector, cookie: str) -> str:
     return f"— {_t('暂无记录')}"
 
 
-def _cookie_summary(pc: Platform) -> str:
+def _cookie_summary_cell(pid: str, pc: Platform) -> RichBlockTableCell:
+    """首页 cookie 列: 条数按钮, 红=有失败, 绿=都成功过, 点击弹出每条状态"""
     if not pc.cookies:
-        return "—"
+        return _cell("—", align="center")
     stats = [cookie_health.get(c.get_secret_value()) for c in pc.cookies]
+    style = ButtonStyle.DEFAULT
     if any(s and s.fail_streak for s in stats):
-        return f"{len(pc.cookies)} ⚠️"
-    if any(s and s.last_success_at for s in stats):
-        return f"{len(pc.cookies)} ✅"
-    return str(len(pc.cookies))
+        style = ButtonStyle.DANGER
+    elif all(s and s.last_success_at for s in stats):
+        style = ButtonStyle.SUCCESS
+    return _cell(RichTextButton(_button(str(len(pc.cookies)), cb("cstat", pid), style)), align="center")
+
+
+def cookie_status_text(_t: PreLocaleSelector, pid: str) -> str:
+    """cookie 状态弹窗文本, 不超过 callback answer 的 200 字限制"""
+    pc = pl_cfg.get(pid) or Platform()
+    lines = [f"{platform_name(pid)} Cookie"]
+    lines += [f"#{i + 1} {_cookie_status(_t, c.get_secret_value())}" for i, c in enumerate(pc.cookies or [])]
+    text = "\n".join(lines)
+    return text if len(text) <= 200 else f"{text[:199]}…"
 
 
 def build_page(
@@ -201,7 +212,7 @@ def build_home(_t: PreLocaleSelector, notice: str | None = None) -> InputRichMes
                 _cell(platform_name(pid), align="center"),
                 _cell(_route_label(_t, pid, "p"), align="center"),
                 _cell(_route_label(_t, pid, "d"), align="center"),
-                _cell(_cookie_summary(pc), align="center"),
+                _cookie_summary_cell(pid, pc),
                 _button_cell(_t("管理"), cb("open", pid)),
             ]
             for pid, pc in pl_cfg.platforms.items()
