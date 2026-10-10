@@ -1,3 +1,4 @@
+import errno
 import os
 import random
 from pathlib import Path
@@ -169,11 +170,17 @@ class PlatformsConfig(BaseModel):
         return data
 
     def save(self, file: Path) -> None:
-        """原子写入配置文件"""
+        """原子写入配置文件; 文件被单独挂载 (Docker bind mount) 无法替换时退回直接覆盖写入"""
+        text = safe_dump(self.to_data(), allow_unicode=True, sort_keys=False)
         tmp = file.with_name(f"{file.name}.tmp")
-        with open(tmp, "w", encoding="utf-8") as f:
-            safe_dump(self.to_data(), f, allow_unicode=True, sort_keys=False)
-        os.replace(tmp, file)
+        tmp.write_text(text, encoding="utf-8")
+        try:
+            os.replace(tmp, file)
+        except OSError as e:
+            tmp.unlink(missing_ok=True)
+            if e.errno != errno.EBUSY:
+                raise
+            file.write_text(text, encoding="utf-8")
 
     def update_from(self, other: "PlatformsConfig") -> None:
         """原地替换为另一份配置, 已导入 pl_cfg 的模块会同步看到新值"""
