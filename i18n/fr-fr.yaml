@@ -54,6 +54,7 @@
 3d3eeb2bc9cd: Élément de configuration inconnu
 3f9578ad1850: L'analyse avec ce cookie a échoué de manière répétée. Vous pouvez réessayer
   avec le lien original après mise à jour pour vérification.
+3fa32d481c6c: Réussites récentes : {ago}
 3fea7ca76cde: État
 405ba1795958: Configuration du sujet
 410224ea7c69: Tous existent déjà, aucun ajout
@@ -112,6 +113,7 @@
 '734176584215': Vous n'êtes pas le propriétaire de ce canal, vous n'avez pas le droit
   de modifier la configuration du canal
 7391ce6dcdc7: Pas de lien à réessayer
+7584153f91d1: Échecs récents : {ago}
 769d88e425e0: Terminé
 77274b54a324: 'Erreur {stage} :'
 77ad39632d5d: Aucun lien reçu
@@ -175,7 +177,6 @@
 9f80223ca0ac: Supprimer la sélection ({count})
 a0526e72f8a7: Exporter la configuration
 a16f4a3f483b: Le cookie de {name} pourrait avoir expiré
-a2b83df06d16: Erreur récente
 a3e3b88377c8: Démarrer
 a3f71e3e829f: Les plateformes sans configuration de proxy individuelle utilisent ce
   proxy, s'il y en a plusieurs, l'un est choisi aléatoirement à chaque fois.
@@ -187,6 +188,7 @@ ab511431782e: Le contenu de type article est envoyé directement en texte enrich
   sans créer de page Telegraph.
 ad66098d7867: Conserver les journaux d'erreurs
 ad6b70383f0e: Disponible
+b01ae1789286: Échecs {count} fois
 b0294761479a: Après la désactivation, l'envoi de liens de cette plateforme ne sera
   plus automatiquement analysé.
 b130e582ed8b: '{count} fois'

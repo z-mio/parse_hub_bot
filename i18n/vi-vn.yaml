@@ -53,6 +53,7 @@
 3d3eeb2bc9cd: Mục cấu hình không xác định
 3f9578ad1850: Phân tích với cookie này liên tục thất bại. Sau khi cập nhật, có thể
   thử lại xác thực với liên kết gốc.
+3fa32d481c6c: 'Thành công gần đây: 0'
 3fea7ca76cde: Trạng thái
 405ba1795958: Cấu hình chủ đề
 410224ea7c69: Tất cả đã tồn tại, không có thêm mới
@@ -108,6 +109,7 @@
 '734176584215': Bạn không phải là chủ sở hữu của kênh này, không có quyền thay đổi
   cấu hình kênh
 7391ce6dcdc7: Không có liên kết nào để thử lại
+7584153f91d1: 'Thất bại gần đây: 0'
 769d88e425e0: Hoàn thành
 77274b54a324: 'Lỗi {stage}:'
 77ad39632d5d: Không nhận được liên kết
@@ -171,7 +173,6 @@
 9f80223ca0ac: Xóa mục đã chọn ({count})
 a0526e72f8a7: Xuất cấu hình
 a16f4a3f483b: Cookie của {name} có thể đã hết hạn
-a2b83df06d16: Lỗi gần đây
 a3e3b88377c8: Bắt đầu
 a3f71e3e829f: Các nền tảng chưa cấu hình proxy riêng sẽ sử dụng proxy tại đây, nếu
   có nhiều sẽ chọn ngẫu nhiên mỗi lần.
@@ -183,6 +184,7 @@ ab511431782e: Nội dung dạng bài viết sẽ được gửi trực tiếp b�
   Telegram, không tạo trang Telegraph nữa.
 ad66098d7867: Giữ lại nhật ký lỗi
 ad6b70383f0e: Có sẵn
+b01ae1789286: Thất bại 0 lần
 b0294761479a: Sau khi tắt, việc gửi liên kết của nền tảng đó sẽ không được phân tích
   tự động.
 b130e582ed8b: '{count} lần'

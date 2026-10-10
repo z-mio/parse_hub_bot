@@ -23,6 +23,7 @@ from plugins.admin.render import (
     Selection,
     build_page,
     cb,
+    cookie_detail_text,
     cookie_status_text,
     get_proxies,
     kind_label,
@@ -165,6 +166,9 @@ async def admin_callback(cli: Client, cq: CallbackQuery) -> None:
                 await platform_config_service.reload()
             case "test":
                 await _answer_proxy_test(cq, _t, args[0], args[1], int(args[2]))
+                return
+            case "cdetail":
+                await cq.answer(cookie_detail_text(_t, args[0], int(args[1])), show_alert=True)
                 return
             case "cstat":
                 await cq.answer(cookie_status_text(_t, args[0]), show_alert=True)

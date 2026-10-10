@@ -53,6 +53,7 @@
 3d3eeb2bc9cd: Item konfigurasi tidak dikenal
 3f9578ad1850: Parsing dengan Cookie ini gagal terus menerus. Setelah diperbarui, coba
   verifikasi kembali dengan tautan asli.
+3fa32d481c6c: 'Sukses Terakhir: 0'
 3fea7ca76cde: Status
 405ba1795958: Konfigurasi topik
 410224ea7c69: Semua sudah ada, tidak ada yang baru
@@ -110,6 +111,7 @@
 '734176584215': Anda bukan pemilik saluran ini, tidak berwenang mengubah konfigurasi
   saluran
 7391ce6dcdc7: Tidak ada tautan untuk dicoba ulang
+7584153f91d1: 'Gagal Terakhir: 0'
 769d88e425e0: Selesai
 77274b54a324: 'Kesalahan {stage}:'
 77ad39632d5d: Tidak menerima tautan
@@ -173,7 +175,6 @@
 9f80223ca0ac: Hapus yang Dipilih ({count})
 a0526e72f8a7: Ekspor Konfigurasi
 a16f4a3f483b: Cookie dari {name} mungkin sudah kedaluwarsa
-a2b83df06d16: Kesalahan terbaru
 a3e3b88377c8: Mulai
 a3f71e3e829f: Platform tanpa konfigurasi proxy khusus menggunakan proxy di sini, jika
   lebih dari satu akan dipilih secara acak setiap kali.
@@ -185,6 +186,7 @@ ab511431782e: Konten artikel langsung dikirim menggunakan teks kaya Telegram, ti
   membuat halaman Telegraph lagi.
 ad66098d7867: Simpan log kesalahan
 ad6b70383f0e: Tersedia
+b01ae1789286: Gagal 0 kali
 b0294761479a: Setelah dimatikan, mengirim tautan dari platform tersebut tidak akan
   otomatis diparsing.
 b130e582ed8b: '{count} kali'

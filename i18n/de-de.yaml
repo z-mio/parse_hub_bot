@@ -55,6 +55,7 @@
 3f9578ad1850: Die Analyse mit diesem Cookie ist mehrmals fehlgeschlagen. Nach der
   Aktualisierung kann die ursprüngliche Verbindung zur erneuten Überprüfung genutzt
   werden.
+3fa32d481c6c: 'Erfolgreich kürzlich: 0'
 3fea7ca76cde: Status
 405ba1795958: Themen-Konfiguration
 410224ea7c69: Alle bereits vorhanden, keine neuen hinzugefügt
@@ -113,6 +114,7 @@
 '734176584215': Sie sind nicht der Besitzer dieses Kanals und dürfen die Kanal-Konfiguration
   nicht ändern.
 7391ce6dcdc7: Keine Links zum erneuten Versuch vorhanden
+7584153f91d1: 'Zuletzt fehlgeschlagen: 0'
 769d88e425e0: Fertig
 77274b54a324: '{stage} Fehler:'
 77ad39632d5d: Kein Link empfangen
@@ -176,7 +178,6 @@
 9f80223ca0ac: Ausgewählte löschen ({count})
 a0526e72f8a7: Konfiguration exportieren
 a16f4a3f483b: Cookie von {name} könnte ungültig sein
-a2b83df06d16: Kürzliche Fehler
 a3e3b88377c8: Start
 a3f71e3e829f: Plattformen ohne eigene Proxy-Konfiguration verwenden diesen Proxy,
   bei mehreren wird jedes Mal zufällig einer gewählt.
@@ -188,6 +189,7 @@ ab511431782e: Artikelinhalte werden direkt mit Telegram Rich-Text gesendet, es w
   keine Telegraph-Seite mehr erstellt.
 ad66098d7867: Fehlerprotokolle behalten
 ad6b70383f0e: Verfügbar
+b01ae1789286: Fehlgeschlagen 0 Mal
 b0294761479a: Nach dem Ausschalten wird der Link dieser Plattform nicht mehr automatisch
   analysiert.
 b130e582ed8b: '{count} mal'

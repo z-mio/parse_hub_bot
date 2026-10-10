@@ -161,6 +161,48 @@ def _cookie_status(_t: PreLocaleSelector, cookie: str) -> str:
     return f"— {_t('暂无记录')}"
 
 
+def _cookie_status_cell(_t: PreLocaleSelector, pid: str, index: int, cookie: str) -> RichBlockTableCell:
+    """详情页状态列: 红=连续失败, 绿=最近成功, 点击弹出该条详情"""
+    stat = cookie_health.get(cookie)
+    label, style = "—", ButtonStyle.DEFAULT
+    if cookie_health.is_testing(cookie):
+        label = str(_t("测试中"))
+    elif stat and stat.fail_streak:
+        count = stat.fail_streak
+        label, style = str(_t(f"失败 {count} 次")), ButtonStyle.DANGER
+    elif stat and stat.last_success_at:
+        label, style = _ago(_t, stat.last_success_at), ButtonStyle.SUCCESS
+    return _cell(RichTextButton(_button(label, cb("cdetail", pid, index), style)), align="center")
+
+
+def cookie_detail_text(_t: PreLocaleSelector, pid: str, index: int) -> str:
+    """单条 cookie 详情弹窗, 不超过 callback answer 的 200 字限制"""
+    cookies = [c.get_secret_value() for c in (pl_cfg.get(pid) or Platform()).cookies or []]
+    if not 0 <= index < len(cookies):
+        return str(_t("列表已变化，请刷新后重试"))
+    cookie = cookies[index]
+    lines = [f"#{index + 1} {mask_secret(cookie, stars=3)}"]
+    if cookie_health.is_testing(cookie):
+        lines.append(str(_t("测试中")))
+    stat = cookie_health.get(cookie)
+    if not stat:
+        lines.append(str(_t("暂无记录")))
+    else:
+        if stat.fail_streak:
+            count = stat.fail_streak
+            lines.append(str(_t(f"连续失败 {count} 次")))
+        if stat.last_success_at:
+            ago = _ago(_t, stat.last_success_at)
+            lines.append(str(_t(f"最近成功：{ago}")))
+        if stat.last_failure_at:
+            ago = _ago(_t, stat.last_failure_at)
+            lines.append(str(_t(f"最近失败：{ago}")))
+        if stat.fail_streak and stat.last_error:
+            lines.append(stat.last_error)
+    text = "\n".join(lines)
+    return text if len(text) <= 200 else f"{text[:199]}…"
+
+
 def _cookie_summary_cell(pid: str, pc: Platform) -> RichBlockTableCell:
     """首页 cookie 列: 条数按钮, 红=有失败, 绿=都成功过, 点击弹出每条状态"""
     if not pc.cookies:
@@ -391,7 +433,7 @@ def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selectio
                         [
                             _check_cell(c in selected, cb("sel", pid, COOKIES, i)),
                             _cell(mask_secret(c, stars=3)),
-                            _cell(_cookie_status(_t, c)),
+                            _cookie_status_cell(_t, pid, i, c),
                             _button_cell(_t("测试"), cb("testc", pid, i)),
                             _button_cell(_t("替换"), cb("repc", pid, i)),
                         ]
@@ -417,22 +459,7 @@ def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selectio
         )
     )
 
-    errors = [
-        (i, stat.last_error)
-        for i, c in enumerate(cookies)
-        if (stat := cookie_health.get(c)) and stat.fail_streak and stat.last_error
-    ]
     blocks += _notice(notice)
-    if errors:
-        blocks.append(
-            InputRichBlockDetails(
-                summary=_r(RichTextBold(_r(_t("最近错误")))),
-                blocks=[
-                    InputRichBlockParagraph(text=_r([f"#{i + 1} ", RichTextCode(_r(err[:300]))])) for i, err in errors
-                ],
-            )
-        )
-
     bottom = [_button(f"‹ {_t('返回')}", cb("open", HOME))]
     if pid in pl_cfg.platforms:
         bottom.append(_button(_t("删除该平台配置"), cb("delpf", pid), ButtonStyle.DANGER))

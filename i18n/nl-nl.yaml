@@ -55,6 +55,7 @@
 3d3eeb2bc9cd: Onbekende configuratieoptie
 3f9578ad1850: Het parseren met deze cookie mislukt achtereenvolgens. Na update kunt
   u het originele link opnieuw proberen om te valideren.
+3fa32d481c6c: 'Onlangs geslaagd: 0'
 3fea7ca76cde: Status
 405ba1795958: Topicconfiguratie
 410224ea7c69: Allemaal al bestaand, geen toevoegingen
@@ -113,6 +114,7 @@
 '734176584215': Je bent geen eigenaar van dit kanaal, je hebt geen toestemming om
   de kanaalconfiguratie te wijzigen
 7391ce6dcdc7: Geen links om opnieuw te proberen
+7584153f91d1: 'Onlangs mislukt: 0'
 769d88e425e0: Voltooid
 77274b54a324: '{stage} fout:'
 77ad39632d5d: Geen link ontvangen
@@ -177,7 +179,6 @@
 9f80223ca0ac: Geselecteerde verwijderen ({count})
 a0526e72f8a7: Configuratie exporteren
 a16f4a3f483b: Cookie van {name} is mogelijk verlopen
-a2b83df06d16: Laatste fout
 a3e3b88377c8: Start
 a3f71e3e829f: Platforms zonder afzonderlijke proxyconfiguratie gebruiken hier deze
   proxy, bij meerdere wordt er willekeurig één gekozen.
@@ -189,6 +190,7 @@ ab511431782e: Artikelinhoud wordt direct als Telegram rich text verzonden en er 
   geen Telegraph-pagina meer aangemaakt.
 ad66098d7867: Foutlogboek bewaren
 ad6b70383f0e: Beschikbaar
+b01ae1789286: Mislukt 0 keer
 b0294761479a: Na het uitschakelen worden links van dit platform niet automatisch geanalyseerd.
 b130e582ed8b: '{count} keer'
 b22cd71cee6a: Eén cookie per regel, je kunt meerdere regels tegelijk plakken, of een

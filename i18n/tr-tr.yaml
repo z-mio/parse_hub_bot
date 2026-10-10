@@ -51,6 +51,7 @@
 3d3eeb2bc9cd: Bilinmeyen yapılandırma öğesi
 3f9578ad1850: Bu Cookie ile çözümleme ardışık olarak başarısız oldu. Güncelledikten
   sonra orijinal bağlantı ile tekrar doğrulama yapabilirsiniz.
+3fa32d481c6c: 'Son Başarı: 0'
 3fea7ca76cde: Durum
 405ba1795958: Konu yapılandırması
 410224ea7c69: Hepsi zaten mevcut, yeni ekleme yok
@@ -108,6 +109,7 @@
 '734176584215': Bu kanalın sahibi değilsiniz, kanal yapılandırmasını değiştirme yetkiniz
   yok
 7391ce6dcdc7: Tekrar denenecek bağlantı yok
+7584153f91d1: 'Son Başarısızlık: 0'
 769d88e425e0: Tamamlandı
 77274b54a324: '{stage} hata:'
 77ad39632d5d: Bağlantı alınmadı
@@ -171,7 +173,6 @@
 9f80223ca0ac: Seçilenleri sil ({count})
 a0526e72f8a7: Yapılandırmayı Dışa Aktar
 a16f4a3f483b: '{name} için Cookie geçersiz olabilir'
-a2b83df06d16: Son hatalar
 a3e3b88377c8: Başlat
 a3f71e3e829f: Özel yapılandırılmış vekil sunucu olmayan platformlar buradaki vekil
   sunucuyu kullanır, birden fazla varsa her seferinde rastgele biri seçilir.
@@ -183,6 +184,7 @@ ab511431782e: Makaleler doğrudan Telegram zengin metin olarak gönderilir, Tele
   sayfası oluşturulmaz.
 ad66098d7867: Hata günlüklerini sakla
 ad6b70383f0e: Mevcut
+b01ae1789286: Başarısızlık 0 kere
 b0294761479a: Kapalıyken, bu platformun bağlantısı gönderildiğinde otomatik çözümleme
   yapılmaz.
 b130e582ed8b: '{count} kez'
