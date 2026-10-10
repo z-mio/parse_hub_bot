@@ -147,6 +147,8 @@ def _ago(_t: PreLocaleSelector, ts: float) -> str:
 
 
 def _cookie_status(_t: PreLocaleSelector, cookie: str) -> str:
+    if cookie_health.is_testing(cookie):
+        return f"⏳ {_t('测试中')}"
     stat = cookie_health.get(cookie)
     if stat is None:
         return f"— {_t('暂无记录')}"
@@ -185,7 +187,7 @@ def build_page(
 
 
 def build_home(_t: PreLocaleSelector, notice: str | None = None) -> InputRichMessage:
-    blocks: list[InputRichBlock] = [_heading(f"🌐 {_t('平台配置')}"), *_notice(notice)]
+    blocks: list[InputRichBlock] = [_heading(f"🌐 {_t('平台配置')}")]
     blocks.append(_italic(_t("修改后立即生效，无需重启。")))
 
     if pl_cfg.platforms:
@@ -222,6 +224,7 @@ def build_home(_t: PreLocaleSelector, notice: str | None = None) -> InputRichMes
             ],
         )
     )
+    blocks += _notice(notice)
     blocks += [
         InputRichBlockButtons(
             buttons=[
@@ -247,16 +250,33 @@ def _check_cell(checked: bool, callback_data: str) -> RichBlockTableCell:
     )
 
 
+def _select_all_header(
+    _t: PreLocaleSelector, pid: str, key: str, values: list[str], selected: set[str], labels: list[str], blanks: int
+) -> list[RichBlockTableCell]:
+    """表头: 第一格是全选按钮, 后面是列名, 按钮列留空"""
+    label = _t("反选") if selected >= set(values) else _t("全选")
+    return [
+        _cell(RichTextButton(_button(label, cb("selall", pid, key))), is_header=True),
+        *(_cell(RichTextBold(_r(x)), is_header=True) for x in labels),
+        *(_cell("", is_header=True) for _ in range(blanks)),
+    ]
+
+
 def _bulk_buttons(
-    _t: PreLocaleSelector, pid: str, key: str, values: list[str], selected: set[str], add: RichMessageButton
+    _t: PreLocaleSelector,
+    pid: str,
+    key: str,
+    values: list[str],
+    selected: set[str],
+    add: RichMessageButton,
+    test_action: str | None = None,
 ) -> InputRichBlockButtons:
     buttons = []
-    if values:
-        all_selected = selected >= set(values)
-        buttons.append(_button(_t("取消全选") if all_selected else _t("全选"), cb("selall", pid, key)))
-        if selected:
-            count = len(selected & set(values))
-            buttons.append(_button(_t(f"删除所选 ({count})"), cb("delsel", pid, key), ButtonStyle.DANGER))
+    if values and selected:
+        count = len(selected & set(values))
+        if test_action:
+            buttons.append(_button(_t(f"测试所选 ({count})"), cb(test_action, pid)))
+        buttons.append(_button(_t(f"删除所选 ({count})"), cb("delsel", pid, key), ButtonStyle.DANGER))
     buttons.append(add)
     return InputRichBlockButtons(buttons=buttons)
 
@@ -271,12 +291,15 @@ def _proxy_list(
         blocks.append(
             InputRichBlockTable(
                 cells=[
-                    [
-                        _check_cell(u in selected, cb("sel", pid, kind, i)),
-                        _cell(RichTextCode(_r(u))),
-                        _button_cell(_t("测试"), cb("test", pid, kind, i)),
-                    ]
-                    for i, u in enumerate(values)
+                    _select_all_header(_t, pid, kind, values, selected, [_t("代理")], 1),
+                    *[
+                        [
+                            _check_cell(u in selected, cb("sel", pid, kind, i)),
+                            _cell(RichTextCode(_r(u))),
+                            _button_cell(_t("测试"), cb("test", pid, kind, i)),
+                        ]
+                        for i, u in enumerate(values)
+                    ],
                 ],
                 is_bordered=False,
                 is_compact=True,
@@ -293,11 +316,12 @@ def _proxy_list(
 
 
 def build_global(_t: PreLocaleSelector, notice: str | None, selection: Selection) -> InputRichMessage:
-    blocks: list[InputRichBlock] = [_heading(f"🌐 {_t('全局默认代理')}"), *_notice(notice)]
+    blocks: list[InputRichBlock] = [_heading(f"🌐 {_t('全局默认代理')}")]
     blocks.append(_italic(_t("没有单独配置代理的平台使用这里的代理，多条时每次随机选一条。")))
     for kind in KINDS:
         blocks.append(_heading(kind_label(_t, kind), 4))
         blocks += _proxy_list(_t, GLOBAL, kind, _t("未设置，使用全局代理的平台会直连"), selection)
+    blocks += _notice(notice)
     blocks += [
         InputRichBlockButtons(
             buttons=[_button(f"‹ {_t('返回')}", cb("open", HOME))],
@@ -309,7 +333,7 @@ def build_global(_t: PreLocaleSelector, notice: str | None, selection: Selection
 
 def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selection: Selection) -> InputRichMessage:
     pc = pl_cfg.get(pid) or Platform()
-    blocks: list[InputRichBlock] = [_heading(f"⚙️ {platform_name(pid)}"), *_notice(notice)]
+    blocks: list[InputRichBlock] = [_heading(f"⚙️ {platform_name(pid)}")]
 
     for kind in KINDS:
         mode = proxy_mode(pc, kind)
@@ -344,13 +368,17 @@ def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selectio
         blocks.append(
             InputRichBlockTable(
                 cells=[
-                    [
-                        _check_cell(c in selected, cb("sel", pid, COOKIES, i)),
-                        _cell(mask_secret(c, stars=3)),
-                        _cell(_cookie_status(_t, c)),
-                        _button_cell(_t("替换"), cb("repc", pid, i)),
-                    ]
-                    for i, c in enumerate(cookies)
+                    _select_all_header(_t, pid, COOKIES, cookies, selected, ["Cookie", _t("状态")], 2),
+                    *[
+                        [
+                            _check_cell(c in selected, cb("sel", pid, COOKIES, i)),
+                            _cell(mask_secret(c, stars=3)),
+                            _cell(_cookie_status(_t, c)),
+                            _button_cell(_t("测试"), cb("testc", pid, i)),
+                            _button_cell(_t("替换"), cb("repc", pid, i)),
+                        ]
+                        for i, c in enumerate(cookies)
+                    ],
                 ],
                 is_bordered=False,
                 is_compact=True,
@@ -367,6 +395,7 @@ def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selectio
             cookies,
             selected,
             _button(f"＋ {_t('添加 Cookie')}", cb("addc", pid), ButtonStyle.SUCCESS),
+            test_action="testsel",
         )
     )
 
@@ -375,6 +404,7 @@ def build_platform(_t: PreLocaleSelector, pid: str, notice: str | None, selectio
         for i, c in enumerate(cookies)
         if (stat := cookie_health.get(c)) and stat.fail_streak and stat.last_error
     ]
+    blocks += _notice(notice)
     if errors:
         blocks.append(
             InputRichBlockDetails(

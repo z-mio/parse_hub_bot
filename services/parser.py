@@ -54,6 +54,16 @@ class ParseService:
                     raise Exception(e) from e
         raise
 
+    async def test_cookie(self, url: str, cookie: str) -> None:
+        """用指定 cookie 解析一次, 结果计入该 cookie 的统计"""
+        p = self.get_platform(url)
+        try:
+            await self.parser.parse(url, cookie=cookie, proxy=pl_cfg.roll_parser_proxy(p.id))
+        except Exception as e:
+            cookie_health.record_failure(p.id, cookie, e, url, alert=False)
+            raise
+        cookie_health.record_success(cookie)
+
     async def get_raw_url(self, url: str, clean_all: bool = True) -> str:
         p = self.get_platform(url)
 

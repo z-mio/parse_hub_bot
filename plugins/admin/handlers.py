@@ -1,3 +1,4 @@
+import asyncio
 import time
 from dataclasses import dataclass
 
@@ -31,6 +32,7 @@ from services import ParseService, UserService, cookie_health, platform_config_s
 
 PROXY_TEST_URL = "https://cp.cloudflare.com/generate_204"
 MAX_INPUT_FILE_SIZE = 1024 * 1024
+COOKIE_TEST_TIMEOUT = 60
 
 admin_filter = filters.user(list[int | str](bs.admin_ids))
 
@@ -38,13 +40,14 @@ admin_filter = filters.user(list[int | str](bs.admin_ids))
 @dataclass
 class PendingInput:
     kind: str
-    """proxy / cookie"""
+    """proxy / cookie / cookie_test"""
     pid: str
     panel_chat_id: int
     panel_message_id: int
     prompt: str
     proxy_kind: str | None = None
     cookie_index: int | None = None
+    test_cookies: list[str] | None = None
 
 
 PENDING: dict[tuple[int, int], PendingInput] = {}
@@ -160,7 +163,7 @@ async def admin_callback(cli: Client, cq: CallbackQuery) -> None:
             case "test":
                 await _answer_proxy_test(cq, _t, args[0], args[1], int(args[2]))
                 return
-            case "addp" | "addc" | "repc":
+            case "addp" | "addc" | "repc" | "testc" | "testsel":
                 await _send_prompt(cli, cq, _t, act, args)
                 await cq.answer()
                 return
@@ -240,6 +243,26 @@ async def _send_prompt(cli: Client, cq: CallbackQuery, _t: PreLocaleSelector, ac
                 _t("支持 http / https / socks5 / socks5h，一行一个可批量添加"),
             ]
         )
+    elif act in ("testc", "testsel"):
+        values = list_values(pl_cfg, pid, COOKIES)
+        if act == "testc":
+            index = int(args[1])
+            if not 0 <= index < len(values):
+                raise InputError(_t("列表已变化，请刷新后重试"))
+            cookies = [values[index]]
+        else:
+            selected = _selection(pending.panel_chat_id, pending.panel_message_id, pid).get(COOKIES, set())
+            cookies = [c for c in values if c in selected]
+            if not cookies:
+                raise InputError(_t("没有选中的 Cookie"))
+        count = len(cookies)
+        pending.kind, pending.test_cookies = "cookie_test", cookies
+        pending.prompt = "\n\n".join(
+            [
+                format_label(_t(f"测试 {name} 的 {count} 条 Cookie")),
+                _t("发送一个链接，会用所选的每条 Cookie 分别解析一次"),
+            ]
+        )
     else:
         pending.kind = "cookie"
         if act == "repc":
@@ -293,9 +316,13 @@ async def _handle_input(cli: Client, msg: Message) -> None:
     pending = PENDING.pop((chat_id, msg.reply_to_message_id))
     _t = await _get_t(msg.from_user.id)
 
-    notice = error = None
+    notice = error = test_url = None
     try:
-        notice = await _apply_input(_t, pending, await _read_input(_t, msg))
+        raw = await _read_input(_t, msg)
+        if pending.kind == "cookie_test":
+            test_url = _parse_test_url(_t, pending.pid, raw)
+        else:
+            notice = await _apply_input(_t, pending, raw)
     except (InputError, PlatformConfigError) as e:
         error = str(e)
     finally:
@@ -308,23 +335,55 @@ async def _handle_input(cli: Client, msg: Message) -> None:
         await _prompt(cli, _t, pending, error)
         return
 
+    if test_url and pending.test_cookies:
+        cookie_health.set_testing(pending.test_cookies, True)
+        try:
+            await _refresh_panel(cli, _t, pending, None)
+            notice = await _test_cookies(_t, pending.pid, test_url, pending.test_cookies)
+        finally:
+            cookie_health.set_testing(pending.test_cookies, False)
+    await _refresh_panel(cli, _t, pending, notice)
+
+
+async def _refresh_panel(cli: Client, _t: PreLocaleSelector, pending: PendingInput, notice: str | None) -> None:
+    page = build_page(_t, pending.pid, notice, _selection(pending.panel_chat_id, pending.panel_message_id, pending.pid))
     try:
-        await cli.edit_message_text(
-            pending.panel_chat_id,
-            pending.panel_message_id,
-            rich_message=build_page(
-                _t, pending.pid, notice, _selection(pending.panel_chat_id, pending.panel_message_id, pending.pid)
-            ),
-        )
+        await cli.edit_message_text(pending.panel_chat_id, pending.panel_message_id, rich_message=page)
     except MessageNotModified:
         pass
     except RPCError:
-        await cli.send_rich_message(
-            pending.panel_chat_id,
-            build_page(
-                _t, pending.pid, notice, _selection(pending.panel_chat_id, pending.panel_message_id, pending.pid)
-            ),
-        )
+        await cli.send_rich_message(pending.panel_chat_id, page)
+
+
+def _parse_test_url(_t: PreLocaleSelector, pid: str, raw: str) -> str:
+    url = raw.strip()
+    if not url:
+        raise InputError(_t("没有收到链接"))
+    try:
+        platform = ParseService().get_platform(url)
+    except ValueError as e:
+        raise InputError(_t("不支持这个链接")) from e
+    if platform.id != pid:
+        name = platform_name(pid)
+        raise InputError(_t(f"这不是 {name} 的链接"))
+    return url
+
+
+async def _test_cookies(_t: PreLocaleSelector, pid: str, url: str, cookies: list[str]) -> str:
+    async def test(cookie: str) -> bool:
+        try:
+            await asyncio.wait_for(ParseService().test_cookie(url, cookie), COOKIE_TEST_TIMEOUT)
+        except TimeoutError as e:
+            cookie_health.record_failure(pid, cookie, e, url, alert=False)
+            return False
+        except Exception:
+            return False
+        return True
+
+    results = await asyncio.gather(*(test(c) for c in cookies))
+    ok = sum(results)
+    failed = len(results) - ok
+    return f"🧪 {_t(f'测试完成：{ok} 条成功，{failed} 条失败')}"
 
 
 async def _read_input(_t: PreLocaleSelector, msg: Message) -> str:

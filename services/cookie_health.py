@@ -40,6 +40,7 @@ class CookieHealth:
         self._last_failed_url: dict[str, str] = {}
         self._notifier: CookieAlertNotifier | None = None
         self._tasks: set[asyncio.Task[None]] = set()
+        self._testing: set[str] = set()
 
     @staticmethod
     def _key(cookie: str) -> str:
@@ -51,6 +52,16 @@ class CookieHealth:
     def get(self, cookie: str) -> CookieStat | None:
         return self._stats.get(self._key(cookie))
 
+    def set_testing(self, cookies: list[str], testing: bool) -> None:
+        keys = {self._key(c) for c in cookies}
+        if testing:
+            self._testing |= keys
+        else:
+            self._testing -= keys
+
+    def is_testing(self, cookie: str) -> bool:
+        return self._key(cookie) in self._testing
+
     def last_failed_url(self, platform_id: str) -> str | None:
         return self._last_failed_url.get(platform_id)
 
@@ -60,14 +71,14 @@ class CookieHealth:
         stat.alerted = False
         stat.last_success_at = time.time()
 
-    def record_failure(self, platform_id: str, cookie: str, error: Exception, url: str) -> None:
+    def record_failure(self, platform_id: str, cookie: str, error: Exception, url: str, *, alert: bool = True) -> None:
         stat = self._stats.setdefault(self._key(cookie), CookieStat())
         stat.fail_streak += 1
         stat.last_failure_at = time.time()
         stat.last_error = str(error) or type(error).__name__
         self._last_failed_url[platform_id] = url
 
-        if stat.fail_streak < ALERT_FAIL_STREAK or stat.alerted or not self._notifier:
+        if not alert or stat.fail_streak < ALERT_FAIL_STREAK or stat.alerted or not self._notifier:
             return
         stat.alerted = True
         task = asyncio.ensure_future(self._notifier(CookieAlert(platform_id, cookie, stat, url)))
