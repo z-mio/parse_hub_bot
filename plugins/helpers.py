@@ -1,6 +1,7 @@
 """plugins 共用的工具函数和数据类"""
 
 import asyncio
+import itertools
 import re
 from html.parser import HTMLParser
 from typing import cast
@@ -79,17 +80,16 @@ def _r(value: object) -> RichText:
 
 
 def _platform_table(lang: str) -> InputRichBlockTable:
-    header = [
-        RichBlockTableCell(text=_r(t_("平台")[lang]), is_header=True, align="center"),
-        RichBlockTableCell(text=_r(t_("支持类型")[lang]), is_header=True, align="center"),
-    ]
-    rows = [
-        [
-            RichBlockTableCell(text=_r(i["name"]), align="center"),
-            RichBlockTableCell(text=_r(", ".join(i["supported_types"])), align="center"),
-        ]
-        for i in sorted(ParseHub().get_platforms(), key=lambda i: i["name"], reverse=True)
-    ]
+    def _cell(text: str, *, is_header: bool = False) -> RichBlockTableCell:
+        return RichBlockTableCell(text=_r(text), is_header=is_header, align="left")
+
+    platforms = sorted(ParseHub().get_platforms(), key=lambda i: i["name"], reverse=True)
+    header = [_cell(t_("平台")[lang], is_header=True), _cell(t_("支持类型")[lang], is_header=True)] * 2
+    rows: list[list[RichBlockTableCell]] = []
+    for pair in itertools.batched(platforms, 2):
+        row = [_cell(text) for i in pair for text in (i["name"], ", ".join(i["supported_types"]))]
+        row += [RichBlockTableCell()] * (4 - len(row))
+        rows.append(row)
     return InputRichBlockTable(cells=[header, *rows], is_bordered=True, is_striped=True)
 
 
