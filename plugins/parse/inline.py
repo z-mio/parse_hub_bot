@@ -232,7 +232,9 @@ def build_cached_inline_results(
                 title=title,
                 input_message_content=InputTextMessageContent(
                     caption,
-                    link_preview_options=LinkPreviewOptions(show_above_text=True),
+                    link_preview_options=LinkPreviewOptions(
+                        url=entry.telegraph_url, show_above_text=True
+                    ),
                 ),
             )
         )
@@ -341,7 +343,7 @@ async def build_inline_results(
                 description=parse_result.content,
                 input_message_content=InputTextMessageContent(
                     caption,
-                    link_preview_options=LinkPreviewOptions(show_above_text=True),
+                    link_preview_options=LinkPreviewOptions(url=url, show_above_text=True),
                 ),
             )
         )

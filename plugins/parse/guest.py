@@ -415,7 +415,10 @@ def _text_result(raw_url: str | None, caption: str) -> InlineQueryResult:
     return InlineQueryResultArticle(
         title="-",
         input_message_content=InputTextMessageContent(
-            caption, link_preview_options=LinkPreviewOptions(is_disabled=not raw_url, url=raw_url)
+            caption,
+            link_preview_options=LinkPreviewOptions(
+                is_disabled=not raw_url, url=raw_url, show_above_text=bool(raw_url)
+            ),
         ),
     )
 
