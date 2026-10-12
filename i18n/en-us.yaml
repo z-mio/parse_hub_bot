@@ -7,6 +7,7 @@
 06778dbf05d5: Platform Management
 08b55fea3c93: Manage
 08c6faa776e6: This is not a {name} link
+0917aff08657: Send images/texts/multimedia using rich text
 091d3a0665fa: Channel Configuration
 09df5be03bca: Test {name} with {count} cookies
 0b93dc449457: Parsing results will not display the post summary. Articles sent via
@@ -42,6 +43,8 @@
 308136d04bc5: 'Unsupported proxy protocol: {line}'
 31f3c8c65cc4: Channel username/link/id
 32316f34b45d: Content Display
+32628e75e20f: Multiple media items in rich text are displayed as a slideshow; after
+  closing, they switch to a tiled layout.
 330add4a5718: No longer send parsing progress messages; send the result directly after
   parsing is complete.
 33ccc7a4682a: Unsupported platform
@@ -104,6 +107,7 @@
 6740d8c7b274: Reply to message
 6769c172299c: You are not an admin of this chat, no permission to modify configuration
 68957ac274c5: Downloading... | {current * 100 / total:.0f}%
+6c52468cbce2: Rich text uses a slideshow layout.
 6e4725b992cd: Replaced with {added} cookies, takes effect immediately
 7030ff64701a: Error
 '734176584215': You are not the owner of this channel, no permission to modify channel
@@ -208,6 +212,8 @@ c4ee311078aa: Automatically delete user-sent links after parsing is complete. In
 c7cf968fe303: Dedicated proxy pool is empty, will fallback to global default proxy
 cabc0250bb93: Changes take effect immediately, no restart needed.
 d060b3bd861e: No cookies received
+d17813a860db: Graphic/multimedia content is sent using Telegram rich text, no longer
+  using media groups
 d2282636abc7: Configuration panel
 d2a9e9b5d414: Message Behavior
 d5631690265c: Unrecognized configuration target

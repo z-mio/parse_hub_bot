@@ -7,6 +7,8 @@
 06778dbf05d5: Zarządzanie platformą
 08b55fea3c93: Zarządzaj
 08c6faa776e6: To nie jest łącze {name}
+0917aff08657: Wysyłanie treści tekstowo-graficznych/multimedialnych za pomocą bogatego
+  tekstu
 091d3a0665fa: Konfiguracja kanału
 09df5be03bca: Testowanie {count} plików cookie dla {name}
 0b93dc449457: Wyniki analizy nie pokazują streszczenia treści posta. Artykuły wysłane
@@ -41,6 +43,8 @@
 308136d04bc5: 'Nieobsługiwany protokół proxy: {line}'
 31f3c8c65cc4: Nazwa użytkownika/link/id kanału
 32316f34b45d: Wyświetlanie treści
+32628e75e20f: Wiele mediów w tekście sformatowanym wyświetlanych jako pokaz slajdów,
+  po zamknięciu zmienianych na kolaż
 330add4a5718: Nie wysyłaj już wiadomości o postępach analizowania, po zakończeniu
   analizy wyślij bezpośrednio wynik.
 33ccc7a4682a: Nieobsługiwana platforma
@@ -107,6 +111,7 @@
 6769c172299c: Nie jesteś administratorem tego czatu, nie masz uprawnień do zmiany
   konfiguracji
 68957ac274c5: Pobieranie... | {current * 100 / total:.0f}%
+6c52468cbce2: Tekst sformatowany używa układu pokazu slajdów
 6e4725b992cd: Zastąpiono {added} ciasteczkami, natychmiastowe zastosowanie
 7030ff64701a: Błąd
 '734176584215': Nie jesteś właścicielem tego kanału, nie masz uprawnień do zmiany
@@ -212,6 +217,8 @@ c4ee311078aa: Po zakończeniu analizy link wysłany przez użytkownika jest auto
 c7cf968fe303: Specjalna pula proxy jest pusta, zostanie użyte globalne domyślne proxy
 cabc0250bb93: Zmiany wchodzą w życie natychmiast, bez potrzeby restartu.
 d060b3bd861e: Nie otrzymano ciasteczek
+d17813a860db: Treści tekstowo-graficzne/wielomedialne są wysyłane za pomocą formatowania
+  Telegram Rich Text, zamiast korzystać z grup mediów
 d2282636abc7: Panel konfiguracji
 d2a9e9b5d414: Zachowanie wiadomości
 d5631690265c: Nie można rozpoznać celu konfiguracji

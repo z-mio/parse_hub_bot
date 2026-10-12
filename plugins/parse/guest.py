@@ -1,34 +1,18 @@
-import asyncio
 import copy
 
 from easy_ai18n import PreLocaleSelector
 from parsehub import AnyParseResult
-from parsehub.types import AniFile, AniRef, ImageFile, LivePhotoFile, RichTextParseResult, VideoFile
+from parsehub.types import RichTextParseResult
 from pyrogram import Client, enums, raw
 from pyrogram.parser.utils import add_surrogates, remove_surrogates
 from pyrogram.types import (
     InlineQueryResult,
     InlineQueryResultArticle,
-    InputMediaAnimation,
-    InputMediaDocument,
-    InputMediaPhoto,
-    InputMediaVideo,
     InputRichBlock,
-    InputRichBlockAnimation,
-    InputRichBlockDocument,
-    InputRichBlockExpandableBlockQuotation,
-    InputRichBlockParagraph,
-    InputRichBlockPhoto,
-    InputRichBlockSlideshow,
-    InputRichBlockVideo,
-    InputRichMessage,
     InputRichMessageContent,
     InputTextMessageContent,
     LinkPreviewOptions,
     Message,
-    RichText,
-    RichTextBold,
-    RichTextUrl,
 )
 
 from core import bs
@@ -40,17 +24,20 @@ from plugins.parse.inline import (
     build_cached_inline_results,
     build_inline_results,
 )
-from plugins.parse.sender import media_input
+from plugins.parse.rich import (
+    RICH_MEDIA_LIMIT,
+    build_rich_media_blocks,
+    cached_rich_media_blocks,
+    rich_caption_blocks,
+    rich_media_messages,
+)
 from repo.settings import SettingsConfig
 from services import ParseService, SettingsService, UserService
-from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
-from services.media import fetch_thumb, make_thumb, resolve_media_info
+from services.cache import CacheEntry, parse_cache, persistent_cache
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
 from utils.helpers import to_list, with_request_id
 
 logger = logger.bind(name="GuestParse")
-GUEST_MEDIA_LIMIT = 10
-GUEST_TIMEOUT = 120
 
 
 class _GuestReporter(StatusReporter):
@@ -87,7 +74,7 @@ async def call_guest_parse(cli: Client, message: Message) -> None:
     logger.info(f"收到游客解析请求: query={query}, from_user={from_user}")
     if query is None:
         if _mentions_me(cli, message):
-            await responder.answer(_text_result(None, _t("请加上链接或回复一条消息")))
+            await responder.answer(_text_result(_t("请加上链接或回复一条消息")))
         else:
             logger.debug("guest 查询无有效链接且未 @")
         return
@@ -114,15 +101,13 @@ class _GuestResponder:
         result: InlineQueryResult,
         *,
         fallback: InlineQueryResult | None = None,
-        deadline: float | None = None,
     ) -> None:
         if self.answered:
             logger.warning("guest: 已回复过, 忽略重复回复")
             return
         self.answered = True
         try:
-            async with asyncio.timeout_at(deadline):
-                written = await result.write(self._cli)
+            written = await result.write(self._cli)
         except Exception as e:
             if fallback is None:
                 logger.warning(f"guest 结果构建失败({type(e).__name__}): {e}")
@@ -175,37 +160,6 @@ def _first_result(results: list[InlineQueryResult], config: SettingsConfig) -> I
     return results[0] if results else None
 
 
-def _rich_caption_blocks(
-    title: str | None, content: str | None, raw_url: str, config: SettingsConfig
-) -> list[InputRichBlock]:
-    """与常规解析同布局的 caption 块: 粗体标题+短正文 / 标题段 + 可折叠长文, ▎Source 超链接独立段"""
-    blocks: list[InputRichBlock] = []
-    content = (content or "").strip()
-    show_desc = not config.hide_desc and bool(content)
-    is_long = len(content) > 500 or len(content.splitlines()) > 10
-
-    head: list[RichText | str] = []
-    if not config.hide_title and title:
-        head.append(RichTextBold(title))  # type: ignore[arg-type]
-    if show_desc and not is_long:
-        head += ["\n\n", content]
-    if head:
-        blocks.append(InputRichBlockParagraph(head))  # type: ignore[arg-type]
-    if show_desc and is_long:
-        if len(content) > 1000:
-            content = content[:900] + "......"
-        blocks.append(InputRichBlockExpandableBlockQuotation(content))  # type: ignore[arg-type]
-    if not config.hide_source:
-        source_runs: list[RichText | str] = [
-            RichTextBold("▎"),  # type: ignore[arg-type]
-            RichTextUrl("Source", raw_url),  # type: ignore[arg-type]
-        ]
-        blocks.append(
-            InputRichBlockParagraph(["\n", RichTextBold(source_runs)])  # type: ignore[arg-type]
-        )
-    return blocks
-
-
 async def _guest_parse(
     cli: Client,
     responder: _GuestResponder,
@@ -230,7 +184,7 @@ async def _guest_parse(
             )
             await responder.answer(
                 _cached_rich_result(cached, raw_url, config),
-                fallback=_text_result(raw_url, caption),
+                fallback=_text_result(caption),
             )
         else:
             result = _first_result(build_cached_inline_results(cached, raw_url, lang, config), config)
@@ -253,8 +207,7 @@ async def _guest_parse(
             await responder.answer(result)
         return
 
-    deadline = asyncio.get_running_loop().time() + GUEST_TIMEOUT
-    fallback = _text_result(raw_url, build_caption(parse_result, config=config))
+    fallback = _text_result(build_caption(parse_result, config=config))
     with ParsePipeline(
         query,
         raw_url,
@@ -263,123 +216,46 @@ async def _guest_parse(
         singleflight=False,
         t=_t,
     ) as pipeline:
-        result = None
-        try:
-            async with asyncio.timeout_at(deadline):
-                pr = await pipeline.run()
-                if pr is not None and pr.processed_list:
-                    result = await _to_guest_rich(pr, config)
-        except TimeoutError:
-            logger.warning(f"guest 下载/处理超时, 退回文本: {query}")
-        if result is None:
-            await responder.answer(fallback)
+        pr = await pipeline.run()
+        if pr is not None and pr.processed_list:
+            await responder.answer(await _to_guest_rich(pr, config), fallback=fallback)
         else:
-            await responder.answer(result, fallback=fallback, deadline=deadline)
+            await responder.answer(fallback)
 
 
 def _limit_media(parse_result: AnyParseResult) -> AnyParseResult:
     media = to_list(parse_result.media)
-    kept: list = []
-    ani_count = 0
-    other_count = 0
-    for ref in media:
-        if isinstance(ref, AniRef):
-            if ani_count >= GUEST_MEDIA_LIMIT:
-                continue
-            ani_count += 1
-        else:
-            if other_count >= GUEST_MEDIA_LIMIT:
-                continue
-            other_count += 1
-        kept.append(ref)
-    if len(kept) == len(media):
+    if len(media) <= RICH_MEDIA_LIMIT:
         return parse_result
     limited = copy.copy(parse_result)
-    limited.media = kept
+    limited.media = media[:RICH_MEDIA_LIMIT]
     return limited
 
 
-def _assemble_rich(
+def _guest_article(
     media_blocks: list[InputRichBlock],
-    standalone: list[InputRichBlock],
     title: str | None,
     content: str | None,
     raw_url: str,
     config: SettingsConfig,
 ) -> InlineQueryResultArticle:
-    blocks: list[InputRichBlock] = []
-    media_blocks = media_blocks[:GUEST_MEDIA_LIMIT]
-    if len(media_blocks) > 1:
-        blocks.append(InputRichBlockSlideshow(media_blocks))
-    else:
-        blocks.extend(media_blocks)
-    blocks.extend(standalone[:GUEST_MEDIA_LIMIT])
-    blocks.extend(_rich_caption_blocks(title, content, raw_url, config))
+    message = rich_media_messages(
+        media_blocks[:RICH_MEDIA_LIMIT],
+        rich_caption_blocks(title, content, raw_url, config),
+        slideshow=config.rich_slideshow,
+        limit=RICH_MEDIA_LIMIT,
+    )[0]
     return InlineQueryResultArticle(
         title=title or "-",
         description=content,
-        input_message_content=InputRichMessageContent(InputRichMessage(blocks=blocks)),
+        input_message_content=InputRichMessageContent(message),
     )
 
 
 async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQueryResultArticle:
-    """下载完成 → 本地文件富文本消息: 媒体块在上(多图幻灯片, 动图独立块), caption 块在下"""
-    media_refs = to_list(pr.parse_result.media)
-    media_blocks: list[InputRichBlock] = []
-    standalone: list[InputRichBlock] = []
-    thumb_index = 0
-    for media_ref, processed in zip(media_refs, pr.processed_list, strict=False):
-        file_paths = processed.output_paths or [processed.source.path]
-        for file_path in file_paths:
-            file_path_str = str(file_path)
-            width, height, duration = resolve_media_info(processed, file_path_str)
-
-            match processed.source:
-                case ImageFile():
-                    media_blocks.append(InputRichBlockPhoto(InputMediaPhoto(media_input(file_path_str))))
-                case AniFile():
-                    standalone.append(InputRichBlockAnimation(InputMediaAnimation(media_input(file_path_str))))
-                case VideoFile():
-                    thumb = None
-                    if pr.output_dir is not None:
-                        thumb_path = pr.output_dir / f"_thumb_{thumb_index}.jpg"
-                        thumb_index += 1
-                        if media_ref.thumb_url:
-                            thumb = await fetch_thumb(media_ref.thumb_url, thumb_path)
-                    media_blocks.append(
-                        InputRichBlockVideo(
-                            InputMediaVideo(
-                                media=media_input(file_path_str),
-                                thumb=thumb,
-                                duration=duration,
-                                width=width,
-                                height=height,
-                                supports_streaming=True,
-                            )
-                        )
-                    )
-                case LivePhotoFile():
-                    thumb = None
-                    if pr.output_dir is not None:
-                        thumb_path = pr.output_dir / f"_thumb_{thumb_index}.jpg"
-                        thumb_index += 1
-                        thumb = make_thumb(file_path_str, thumb_path)
-                    media_blocks.append(
-                        InputRichBlockVideo(
-                            InputMediaVideo(
-                                media=media_input(processed.source.video_path),
-                                thumb=thumb,
-                                duration=duration,
-                                width=width,
-                                height=height,
-                                supports_streaming=True,
-                            )
-                        )
-                    )
-
-    return _assemble_rich(
-        media_blocks,
-        standalone,
+    """下载完成 → 本地文件富文本消息: 媒体块在上(幻灯片), caption 块在下"""
+    return _guest_article(
+        await build_rich_media_blocks(pr, video_cover=True),
         pr.parse_result.title,
         pr.parse_result.content,
         pr.parse_result.raw_url,
@@ -388,21 +264,8 @@ async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQu
 
 
 def _cached_rich_result(entry: CacheEntry, raw_url: str, config: SettingsConfig) -> InlineQueryResultArticle:
-    media_blocks: list[InputRichBlock] = []
-    standalone: list[InputRichBlock] = []
-    for media in entry.media or []:
-        match media.type:
-            case CacheMediaType.PHOTO:
-                media_blocks.append(InputRichBlockPhoto(InputMediaPhoto(media.file_id)))
-            case CacheMediaType.VIDEO:
-                media_blocks.append(InputRichBlockVideo(InputMediaVideo(media.file_id, supports_streaming=True)))
-            case CacheMediaType.ANIMATION:
-                standalone.append(InputRichBlockAnimation(InputMediaAnimation(media.file_id)))
-            case CacheMediaType.DOCUMENT:
-                standalone.append(InputRichBlockDocument(InputMediaDocument(media.file_id)))
-    return _assemble_rich(
-        media_blocks,
-        standalone,
+    return _guest_article(
+        cached_rich_media_blocks(entry.media or []),
         entry.parse_result.title,
         entry.parse_result.content,
         raw_url,
@@ -410,15 +273,13 @@ def _cached_rich_result(entry: CacheEntry, raw_url: str, config: SettingsConfig)
     )
 
 
-def _text_result(raw_url: str | None, caption: str) -> InlineQueryResult:
+def _text_result(caption: str) -> InlineQueryResult:
     """下载失败/无链接时的保底: 纯文本消息"""
     return InlineQueryResultArticle(
         title="-",
         input_message_content=InputTextMessageContent(
             caption,
-            link_preview_options=LinkPreviewOptions(
-                is_disabled=not raw_url, url=raw_url, show_above_text=bool(raw_url)
-            ),
+            link_preview_options=LinkPreviewOptions(is_disabled=True),
         ),
     )
 
@@ -428,4 +289,4 @@ def _error_result(_t: PreLocaleSelector, error: Exception) -> InlineQueryResult:
     text = _t(f"{format_label(f'{stage}错误:')} \n```\n{error}```")
     if bs.demo_mode:
         text += _t("\n\n<b>问题反馈: @MisakaSisters</b>")
-    return _text_result(None, text)
+    return _text_result(text)
