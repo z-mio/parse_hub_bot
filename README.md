@@ -57,6 +57,7 @@
 | **小红书**      |  ✅  |  ✅  |                             |
 | **贴吧**        |  ✅  |  ✅  |                             |
 | **微信公众号**  |      |  ✅  |                             |
+| **微信视频号**  |  ✅  |      |                             |
 | **快手**        |  ✅  |  ✅  |                             |
 | **酷安**        |      |  ✅  |                             |
 | **皮皮虾**      |  ✅  |  ✅  |                             |
@@ -166,31 +167,32 @@ platforms:
 
 `<platform_id>` 必须是以下合法的平台 ID：
 
-| 平台 ID     | 对应平台    |
-|:------------|:------------|
-| `twitter`   | Twitter / X |
-| `instagram` | Instagram   |
-| `youtube`   | YouTube     |
-| `facebook`  | Facebook    |
-| `threads`   | Threads     |
-| `bilibili`  | 哔哩哔哩    |
-| `douyin`    | 抖音        |
-| `tiktok`    | TikTok      |
-| `weibo`     | 微博        |
-| `xhs`       | 小红书      |
-| `tieba`     | 百度贴吧    |
-| `weixin`    | 微信公众号  |
-| `kuaishou`  | 快手        |
-| `coolapk`   | 酷安        |
-| `pipix`     | 皮皮虾      |
-| `zuiyou`    | 最右        |
-| `xiaoheihe` | 小黑盒      |
-| `snapchat`  | Snapchat    |
-| `zhihu`     | 知乎        |
-| `douban`    | 豆瓣        |
-| `bangumi`   | Bangumi     |
-| `toutiao`   | 今日头条    |
-| `medium`    | Medium      |
+| 平台 ID           | 对应平台    |
+|:------------------|:------------|
+| `twitter`         | Twitter / X |
+| `instagram`       | Instagram   |
+| `youtube`         | YouTube     |
+| `facebook`        | Facebook    |
+| `threads`         | Threads     |
+| `bilibili`        | 哔哩哔哩    |
+| `douyin`          | 抖音        |
+| `tiktok`          | TikTok      |
+| `weibo`           | 微博        |
+| `xhs`             | 小红书      |
+| `tieba`           | 百度贴吧    |
+| `weixin`          | 微信公众号  |
+| `weixin_channels` | 微信视频号  |
+| `kuaishou`        | 快手        |
+| `coolapk`         | 酷安        |
+| `pipix`           | 皮皮虾      |
+| `zuiyou`          | 最右        |
+| `xiaoheihe`       | 小黑盒      |
+| `snapchat`        | Snapchat    |
+| `zhihu`           | 知乎        |
+| `douban`          | 豆瓣        |
+| `bangumi`         | Bangumi     |
+| `toutiao`         | 今日头条    |
+| `medium`          | Medium      |
 
 ### 🍪 支持 Cookie 的平台
 
@@ -205,6 +207,7 @@ platforms:
 - `小红书`
 - `知乎`
 - `豆瓣`
+- `微信视频号`（需要填腾讯元宝 yuanbao.tencent.com 登录后的 Cookie）
 
 ### 📌 配置示例
 
