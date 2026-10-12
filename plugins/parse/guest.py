@@ -1,21 +1,21 @@
-import io
-import os
+import asyncio
+import copy
 
-import httpx
+from easy_ai18n import PreLocaleSelector
 from parsehub import AnyParseResult
-from parsehub.types import AniFile, ImageFile, LivePhotoFile, RichTextParseResult, VideoFile
-from pyrogram import Client, enums
+from parsehub.types import AniFile, AniRef, ImageFile, LivePhotoFile, RichTextParseResult, VideoFile
+from pyrogram import Client, enums, raw
+from pyrogram.parser.utils import add_surrogates, remove_surrogates
 from pyrogram.types import (
     InlineQueryResult,
     InlineQueryResultArticle,
-    InlineQueryResultPhoto,
-    InlineQueryResultVideo,
     InputMediaAnimation,
+    InputMediaDocument,
     InputMediaPhoto,
     InputMediaVideo,
     InputRichBlock,
     InputRichBlockAnimation,
-    InputRichBlockCollage,
+    InputRichBlockDocument,
     InputRichBlockExpandableBlockQuotation,
     InputRichBlockParagraph,
     InputRichBlockPhoto,
@@ -31,24 +31,26 @@ from pyrogram.types import (
     RichTextUrl,
 )
 
+from core import bs
 from db import get_session
 from i18n import t_
 from log import logger
-from plugins.helpers import build_caption
+from plugins.helpers import build_caption, build_caption_by_str, format_label
 from plugins.parse.inline import (
-    DEFAULT_PARSE_RESULT_THUMB_URL,
     build_cached_inline_results,
     build_inline_results,
 )
 from plugins.parse.sender import media_input
 from repo.settings import SettingsConfig
 from services import ParseService, SettingsService, UserService
-from services.cache import parse_cache, persistent_cache
-from services.media import resolve_media_info
+from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
+from services.media import fetch_thumb, make_thumb, resolve_media_info
 from services.pipeline import ParsePipeline, PipelineResult, StatusReporter
 from utils.helpers import to_list, with_request_id
 
 logger = logger.bind(name="GuestParse")
+GUEST_MEDIA_LIMIT = 10
+GUEST_TIMEOUT = 120
 
 
 class _GuestReporter(StatusReporter):
@@ -69,7 +71,7 @@ class _GuestReporter(StatusReporter):
 async def call_guest_parse(cli: Client, message: Message) -> None:
     """游客模式解析: bot 不在群时被 @ 召唤, 用 setBotGuestChatResult 直接回一条消息
 
-    注意: query_id 单次有效, 调用失败同样作废, 结果必须在发送前选好, 不能兜底重试。
+    注意: query_id 单次有效, 媒体先上传再提交结果; 提交后不可重试。
     不做 platform_filter: 回复别人链接消息时只 @bot 的用法里, 链接在被回复消息里。
     """
     if not message.guest_query_id:
@@ -80,99 +82,111 @@ async def call_guest_parse(cli: Client, message: Message) -> None:
         config = await SettingsService(session).get_config_by_user(from_user)
         _t = t_[lang]
 
-    query = message.text or message.caption or ""
-    if not query or ParseService().parser.get_platform(query) is None:
-        # 只 @bot 不带链接: 试试被回复消息的文本(回复链在 guest update 的 reference_messages 里)
-        ref = message.reply_to_message
-        if ref and (t := ref.text or ref.caption or ""):
-            query = t
-    if ParseService().parser.get_platform(query) is None:
-        # 只有主动 @bot 才回馈提示; 回复 bot 消息没链接视为正常聊天, 静默忽略
-        entities = message.entities or message.caption_entities or []
-        mentioned = any(e.type == enums.MessageEntityType.MENTION for e in entities)
-        if mentioned:
-            await _answer(cli, message, _text_result(None, _t("请加上链接或回复一条消息")), query)
-        else:
-            logger.debug(f"guest 查询无有效链接且未 @: {query}")
-        return
+    responder = _GuestResponder(cli, message.guest_query_id)
+    query = _resolve_query(cli, message)
     logger.info(f"收到游客解析请求: query={query}, from_user={from_user}")
-
-    raw_url = await ParseService().get_raw_url(query)
-
-    if cached := await persistent_cache.get(raw_url):
-        logger.debug("guest: 缓存命中")
-        results = build_cached_inline_results(cached, raw_url, lang, config)
-        result = _pick_result(results, config)
-        await _answer(cli, message, result, query)
-        return
-
-    parse_result = await parse_cache.get(raw_url)
-    if parse_result is None:
-        parse_result = await ParseService().parse(query)
-        await parse_cache.set(raw_url, parse_result)
-
-    # 富文本/无媒体: 不需要下载, 走 inline 同款文本结果
-    if isinstance(parse_result, RichTextParseResult) or not to_list(parse_result.media):
-        results = await build_inline_results(parse_result, cli, lang, config)
-        result = _to_guest_result(results, parse_result, config)
-        await _answer(cli, message, result, query)
-        return
-
-    # 有媒体: 下载 → 处理 → 富文本块上传本地文件
-    # 文件须在 answer_guest_query 上传完成前存在, 不能先 cleanup
-    with ParsePipeline(
-        query, raw_url, _GuestReporter(), parse_result=parse_result, singleflight=False, t=_t
-    ) as pipeline:
-        pr = await pipeline.run()
-        if pr is None or not pr.processed_list:
-            logger.warning(f"guest 下载失败, 退回文本: {query}")
-            result = _text_result(raw_url, build_caption(parse_result, config=config))
+    if query is None:
+        if _mentions_me(cli, message):
+            await responder.answer(_text_result(None, _t("请加上链接或回复一条消息")))
         else:
-            result = await _to_guest_rich(pr, config)
-        await _answer(cli, message, result, query)
-
-
-async def _answer(cli: Client, message: Message, result: InlineQueryResult | None, query: str) -> None:
-    if result is None or not message.guest_query_id:
-        logger.warning(f"guest: 无可回复结果, query={query}")
+            logger.debug("guest 查询无有效链接且未 @")
         return
+
     try:
-        sent = await cli.answer_guest_query(message.guest_query_id, result)
-        logger.debug(f"guest 回复成功: {sent}")
+        await _guest_parse(cli, responder, query, lang, config, _t)
     except Exception as e:
-        logger.warning(f"guest 回复失败({type(e).__name__}): {e}")
+        logger.opt(exception=e).debug("详细堆栈")
+        logger.error(f"guest 解析失败: {e}")
+        if not responder.answered and not config.hide_error:
+            await responder.answer(_error_result(_t, e))
 
 
-def _pick_result(results: list[InlineQueryResult], config: SettingsConfig) -> InlineQueryResult | None:
-    """cached 结果里挑一条: 跳过原始链接占位, 取第一个媒体/文本结果"""
+class _GuestResponder:
+    """query_id 单次有效(失败也消耗): 整个请求只允许一次 SetBotGuestChatResult"""
+
+    def __init__(self, cli: Client, guest_query_id: str) -> None:
+        self._cli = cli
+        self._query_id = guest_query_id
+        self.answered = False
+
+    async def answer(
+        self,
+        result: InlineQueryResult,
+        *,
+        fallback: InlineQueryResult | None = None,
+        deadline: float | None = None,
+    ) -> None:
+        if self.answered:
+            logger.warning("guest: 已回复过, 忽略重复回复")
+            return
+        self.answered = True
+        try:
+            async with asyncio.timeout_at(deadline):
+                written = await result.write(self._cli)
+        except Exception as e:
+            if fallback is None:
+                logger.warning(f"guest 结果构建失败({type(e).__name__}): {e}")
+                return
+            logger.warning(f"guest 上传失败, 退回文本({type(e).__name__}): {e}")
+            try:
+                written = await fallback.write(self._cli)
+            except Exception as e2:
+                logger.warning(f"guest 文本兜底构建失败({type(e2).__name__}): {e2}")
+                return
+        try:
+            r = await self._cli.invoke(
+                raw.functions.messages.SetBotGuestChatResult(query_id=int(self._query_id), result=written)
+            )
+            logger.debug(f"guest 回复成功: {r}")
+        except Exception as e:
+            logger.warning(f"guest 回复失败({type(e).__name__}): {e}")
+
+
+def _mentions_me(cli: Client, message: Message) -> bool:
+    username = cli.me.username if cli.me else None
+    if not username:
+        return False
+    text = message.text or message.caption or ""
+    entities = message.entities or message.caption_entities or []
+    s = add_surrogates(text)
+    return any(
+        e.type == enums.MessageEntityType.MENTION
+        and remove_surrogates(s[e.offset : e.offset + e.length]).lower() == f"@{username}".lower()
+        for e in entities
+    )
+
+
+def _resolve_query(cli: Client, message: Message) -> str | None:
+    query = message.text or message.caption or ""
+    if ParseService().parser.get_platform(query) is not None:
+        return query
+    if _mentions_me(cli, message):
+        reply = message.reply_to_message
+        query = (reply.text or reply.caption or "") if reply else ""
+        if ParseService().parser.get_platform(query) is not None:
+            return query
+    return None
+
+
+def _first_result(results: list[InlineQueryResult], config: SettingsConfig) -> InlineQueryResult | None:
+    """跳过原始链接占位, 取第一个媒体/文本结果"""
     if config.enable_inline_raw_url and results:
         results = results[1:]
     return results[0] if results else None
 
 
-def _plain_caption(parse_result: AnyParseResult, config: SettingsConfig) -> str:
-    """富文本 paragraph 是纯文本, caption 里的 markdown/html 标记会原样泄露, 手工拼"""
-    parts = []
-    if not config.hide_title and parse_result.title:
-        parts.append(parse_result.title)
-    if not config.hide_desc and parse_result.content:
-        parts.append(parse_result.content)
-    caption = "\n\n".join(parts)
-    if not config.hide_source:
-        caption += f"\n\n▎Source: {parse_result.raw_url}"
-    return caption
-
-
-def _rich_caption_blocks(parse_result: AnyParseResult, config: SettingsConfig) -> list[InputRichBlock]:
+def _rich_caption_blocks(
+    title: str | None, content: str | None, raw_url: str, config: SettingsConfig
+) -> list[InputRichBlock]:
     """与常规解析同布局的 caption 块: 粗体标题+短正文 / 标题段 + 可折叠长文, ▎Source 超链接独立段"""
     blocks: list[InputRichBlock] = []
-    content = (parse_result.content or "").strip()
+    content = (content or "").strip()
     show_desc = not config.hide_desc and bool(content)
     is_long = len(content) > 500 or len(content.splitlines()) > 10
 
     head: list[RichText | str] = []
-    if not config.hide_title and parse_result.title:
-        head.append(RichTextBold(parse_result.title))
+    if not config.hide_title and title:
+        head.append(RichTextBold(title))  # type: ignore[arg-type]
     if show_desc and not is_long:
         head += ["\n\n", content]
     if head:
@@ -184,7 +198,7 @@ def _rich_caption_blocks(parse_result: AnyParseResult, config: SettingsConfig) -
     if not config.hide_source:
         source_runs: list[RichText | str] = [
             RichTextBold("▎"),  # type: ignore[arg-type]
-            RichTextUrl("Source", parse_result.raw_url),  # type: ignore[arg-type]
+            RichTextUrl("Source", raw_url),  # type: ignore[arg-type]
         ]
         blocks.append(
             InputRichBlockParagraph(["\n", RichTextBold(source_runs)])  # type: ignore[arg-type]
@@ -192,50 +206,128 @@ def _rich_caption_blocks(parse_result: AnyParseResult, config: SettingsConfig) -
     return blocks
 
 
-def _shrink_thumb(img_bytes: bytes, out_path: str) -> str | None:
-    """压到 TG thumb 规格(<=320px JPEG)"""
-    try:
-        from PIL import Image
+async def _guest_parse(
+    cli: Client,
+    responder: _GuestResponder,
+    query: str,
+    lang: str,
+    config: SettingsConfig,
+    _t: PreLocaleSelector,
+) -> None:
+    raw_url = await ParseService().get_raw_url(query)
 
-        img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
-        img.thumbnail((320, 320))
-        img.save(out_path, "JPEG", quality=80)
-        return out_path
-    except Exception:
-        return None
+    if cached := await persistent_cache.get(raw_url):
+        logger.debug("guest: 缓存命中")
+        if cached.media:
+            caption = build_caption_by_str(
+                cached.parse_result.title,
+                cached.parse_result.content,
+                raw_url,
+                cached.telegraph_url,
+                hide_source=config.hide_source,
+                hide_title=config.hide_title,
+                hide_desc=config.hide_desc,
+            )
+            await responder.answer(
+                _cached_rich_result(cached, raw_url, config),
+                fallback=_text_result(raw_url, caption),
+            )
+        else:
+            result = _first_result(build_cached_inline_results(cached, raw_url, lang, config), config)
+            if result is None:
+                logger.warning(f"guest: 无可回复结果, query={query}")
+            else:
+                await responder.answer(result)
+        return
+
+    parse_result = await parse_cache.get(raw_url)
+    if parse_result is None:
+        parse_result = await ParseService().parse(query)
+        await parse_cache.set(raw_url, parse_result)
+
+    if isinstance(parse_result, RichTextParseResult) or not to_list(parse_result.media):
+        result = _first_result(await build_inline_results(parse_result, cli, lang, config), config)
+        if result is None:
+            logger.warning(f"guest: 无可回复结果, query={query}")
+        else:
+            await responder.answer(result)
+        return
+
+    deadline = asyncio.get_running_loop().time() + GUEST_TIMEOUT
+    fallback = _text_result(raw_url, build_caption(parse_result, config=config))
+    with ParsePipeline(
+        query,
+        raw_url,
+        _GuestReporter(),
+        parse_result=_limit_media(parse_result),
+        singleflight=False,
+        t=_t,
+    ) as pipeline:
+        result = None
+        try:
+            async with asyncio.timeout_at(deadline):
+                pr = await pipeline.run()
+                if pr is not None and pr.processed_list:
+                    result = await _to_guest_rich(pr, config)
+        except TimeoutError:
+            logger.warning(f"guest 下载/处理超时, 退回文本: {query}")
+        if result is None:
+            await responder.answer(fallback)
+        else:
+            await responder.answer(result, fallback=fallback, deadline=deadline)
 
 
-async def _fetch_thumb(url: str, work_dir: str) -> str | None:
-    """下载平台缩略图并压到 TG thumb 规格, 失败返回 None"""
-    try:
-        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
-            resp = await client.get(url)
-            resp.raise_for_status()
-        return _shrink_thumb(resp.content, os.path.join(work_dir, f"_thumb_{abs(hash(url)) & 0xFFFF:04x}.jpg"))
-    except Exception as e:
-        logger.debug(f"缩略图获取失败({url}): {e}")
-        return None
+def _limit_media(parse_result: AnyParseResult) -> AnyParseResult:
+    media = to_list(parse_result.media)
+    kept: list = []
+    ani_count = 0
+    other_count = 0
+    for ref in media:
+        if isinstance(ref, AniRef):
+            if ani_count >= GUEST_MEDIA_LIMIT:
+                continue
+            ani_count += 1
+        else:
+            if other_count >= GUEST_MEDIA_LIMIT:
+                continue
+            other_count += 1
+        kept.append(ref)
+    if len(kept) == len(media):
+        return parse_result
+    limited = copy.copy(parse_result)
+    limited.media = kept
+    return limited
 
 
-def _local_thumb(file_path: str, work_dir: str) -> str | None:
-    """本地图压到 TG thumb 规格"""
-    try:
-        with open(file_path, "rb") as f:
-            return _shrink_thumb(f.read(), os.path.join(work_dir, f"_thumb_{os.path.basename(file_path)}.jpg"))
-    except Exception:
-        return None
+def _assemble_rich(
+    media_blocks: list[InputRichBlock],
+    standalone: list[InputRichBlock],
+    title: str | None,
+    content: str | None,
+    raw_url: str,
+    config: SettingsConfig,
+) -> InlineQueryResultArticle:
+    blocks: list[InputRichBlock] = []
+    media_blocks = media_blocks[:GUEST_MEDIA_LIMIT]
+    if len(media_blocks) > 1:
+        blocks.append(InputRichBlockSlideshow(media_blocks))
+    else:
+        blocks.extend(media_blocks)
+    blocks.extend(standalone[:GUEST_MEDIA_LIMIT])
+    blocks.extend(_rich_caption_blocks(title, content, raw_url, config))
+    return InlineQueryResultArticle(
+        title=title or "-",
+        description=content,
+        input_message_content=InputRichMessageContent(InputRichMessage(blocks=blocks)),
+    )
 
 
-async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQueryResult:
-    """下载完成 → 本地文件富文本消息: 媒体块在上(多图幻灯片, 动图独立块), caption 块在下
-
-    视频用 thumb(内嵌小图)而不是 video_cover: 富文本场景客户端不渲染 video_cover。
-    """
+async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQueryResultArticle:
+    """下载完成 → 本地文件富文本消息: 媒体块在上(多图幻灯片, 动图独立块), caption 块在下"""
     media_refs = to_list(pr.parse_result.media)
-    work_dir = str(pr.output_dir or ".")
-
     media_blocks: list[InputRichBlock] = []
-    animations: list[InputRichBlock] = []
+    standalone: list[InputRichBlock] = []
+    thumb_index = 0
     for media_ref, processed in zip(media_refs, pr.processed_list, strict=False):
         file_paths = processed.output_paths or [processed.source.path]
         for file_path in file_paths:
@@ -246,9 +338,14 @@ async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQu
                 case ImageFile():
                     media_blocks.append(InputRichBlockPhoto(InputMediaPhoto(media_input(file_path_str))))
                 case AniFile():
-                    animations.append(InputRichBlockAnimation(InputMediaAnimation(media_input(file_path_str))))
+                    standalone.append(InputRichBlockAnimation(InputMediaAnimation(media_input(file_path_str))))
                 case VideoFile():
-                    thumb = await _fetch_thumb(media_ref.thumb_url, work_dir) if media_ref.thumb_url else None
+                    thumb = None
+                    if pr.output_dir is not None:
+                        thumb_path = pr.output_dir / f"_thumb_{thumb_index}.jpg"
+                        thumb_index += 1
+                        if media_ref.thumb_url:
+                            thumb = await fetch_thumb(media_ref.thumb_url, thumb_path)
                     media_blocks.append(
                         InputRichBlockVideo(
                             InputMediaVideo(
@@ -262,11 +359,16 @@ async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQu
                         )
                     )
                 case LivePhotoFile():
+                    thumb = None
+                    if pr.output_dir is not None:
+                        thumb_path = pr.output_dir / f"_thumb_{thumb_index}.jpg"
+                        thumb_index += 1
+                        thumb = make_thumb(file_path_str, thumb_path)
                     media_blocks.append(
                         InputRichBlockVideo(
                             InputMediaVideo(
                                 media=media_input(processed.source.video_path),
-                                thumb=_local_thumb(file_path_str, work_dir),
+                                thumb=thumb,
                                 duration=duration,
                                 width=width,
                                 height=height,
@@ -275,18 +377,36 @@ async def _to_guest_rich(pr: PipelineResult, config: SettingsConfig) -> InlineQu
                         )
                     )
 
-    blocks: list[InputRichBlock] = []
-    if len(media_blocks) > 1:
-        blocks.append(InputRichBlockSlideshow(media_blocks[:10]))  # 幻灯片张数有上限
-    else:
-        blocks.extend(media_blocks)
-    blocks.extend(animations[:10])
-    blocks.extend(_rich_caption_blocks(pr.parse_result, config))
+    return _assemble_rich(
+        media_blocks,
+        standalone,
+        pr.parse_result.title,
+        pr.parse_result.content,
+        pr.parse_result.raw_url,
+        config,
+    )
 
-    return InlineQueryResultArticle(
-        title=pr.parse_result.title or "-",
-        description=pr.parse_result.content,
-        input_message_content=InputRichMessageContent(InputRichMessage(blocks=blocks)),
+
+def _cached_rich_result(entry: CacheEntry, raw_url: str, config: SettingsConfig) -> InlineQueryResultArticle:
+    media_blocks: list[InputRichBlock] = []
+    standalone: list[InputRichBlock] = []
+    for media in entry.media or []:
+        match media.type:
+            case CacheMediaType.PHOTO:
+                media_blocks.append(InputRichBlockPhoto(InputMediaPhoto(media.file_id)))
+            case CacheMediaType.VIDEO:
+                media_blocks.append(InputRichBlockVideo(InputMediaVideo(media.file_id, supports_streaming=True)))
+            case CacheMediaType.ANIMATION:
+                standalone.append(InputRichBlockAnimation(InputMediaAnimation(media.file_id)))
+            case CacheMediaType.DOCUMENT:
+                standalone.append(InputRichBlockDocument(InputMediaDocument(media.file_id)))
+    return _assemble_rich(
+        media_blocks,
+        standalone,
+        entry.parse_result.title,
+        entry.parse_result.content,
+        raw_url,
+        config,
     )
 
 
@@ -300,62 +420,10 @@ def _text_result(raw_url: str | None, caption: str) -> InlineQueryResult:
     )
 
 
-def _to_guest_result(
-    results: list[InlineQueryResult], parse_result: AnyParseResult, config: SettingsConfig
-) -> InlineQueryResult | None:
-    """把 inline 结果列表转成一条 guest 回复:
-    多媒体 → 富文本 collage; 直连视频 → 视频结果; 非直连视频保留封面图+原链接
-    """
-    if config.enable_inline_raw_url and results:
-        results = results[1:]
-    if not results:
-        return None
-
-    media_list = to_list(parse_result.media)
-    caption = build_caption(parse_result, config=config)
-    title = parse_result.title or "-"
-
-    def convert(r: InlineQueryResult) -> InlineQueryResult | None:
-        # download 占位图 → 直连 mp4 视频结果 (guest 没有 chosen_result 二次上传)
-        if not (isinstance(r, InlineQueryResultPhoto) and (r.id or "").startswith("download_")):
-            return r
-        ref = media_list[int(r.id.split("_")[1])]
-        return InlineQueryResultVideo(
-            video_url=ref.url,
-            thumb_url=ref.thumb_url or DEFAULT_PARSE_RESULT_THUMB_URL,
-            title=title,
-            caption=caption,
-            video_width=ref.width or 0,
-            video_height=ref.height or 0,
-        )
-
-    converted = [convert(r) for r in results]
-    if len(converted) == 1:
-        return converted[0]
-
-    # 多个媒体 → 富文本 collage 拼贴(单条消息塞多张)
-    blocks: list[InputRichBlock] = []
-    for r in converted:
-        if isinstance(r, InlineQueryResultPhoto):
-            blocks.append(InputRichBlockPhoto(InputMediaPhoto(r.photo_url)))
-        elif isinstance(r, InlineQueryResultVideo):
-            blocks.append(InputRichBlockVideo(InputMediaVideo(r.video_url, thumb=r.thumb_url)))
-        else:
-            return converted[0]
-
-    if len(blocks) < 2:
-        return converted[0]
-    blocks = blocks[:10]
-
-    return InlineQueryResultArticle(
-        title=title,
-        description=parse_result.content,
-        input_message_content=InputRichMessageContent(
-            InputRichMessage(
-                blocks=[
-                    InputRichBlockParagraph(_plain_caption(parse_result, config)),  # type: ignore[arg-type]
-                    InputRichBlockCollage(blocks),
-                ]
-            )
-        ),
-    )
+def _error_result(_t: PreLocaleSelector, error: Exception) -> InlineQueryResult:
+    stage = _t("解析")
+    t = format_label(_t(f"{stage}错误:"))
+    text = _t(f"{t} \n```\n{error}```")
+    if bs.demo_mode:
+        text += _t("\n\n<b>问题反馈: @MisakaSisters</b>")
+    return _text_result(None, text)

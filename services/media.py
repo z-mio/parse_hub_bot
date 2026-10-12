@@ -1,9 +1,12 @@
+import io
 from dataclasses import dataclass
 from pathlib import Path
 
+import httpx
 from easy_ai18n import PreLocaleSelector
 from parsehub.types import AnyMediaFile, DownloadResult, ProgressUnit
 from parsehub.utils.media_info import MediaInfoReader
+from PIL import Image
 
 from log import logger
 from utils.helpers import to_list
@@ -15,6 +18,30 @@ class ProcessedMedia:
     source: AnyMediaFile
     output_paths: list[Path] | None = None
     output_dir: Path | None = None
+
+
+def make_thumb(src: bytes | str | Path, out_path: str | Path) -> str | None:
+    """压到 TG thumb 规格(≤320px JPEG), 失败返回 None"""
+    try:
+        img = Image.open(io.BytesIO(src) if isinstance(src, bytes) else src).convert("RGB")
+        img.thumbnail((320, 320))
+        img.save(out_path, "JPEG", quality=85)
+        return str(out_path)
+    except Exception as e:
+        logger.debug(f"缩略图处理失败: {e}")
+        return None
+
+
+async def fetch_thumb(url: str, out_path: str | Path) -> str | None:
+    """下载缩略图并压到 TG thumb 规格, 失败返回 None"""
+    try:
+        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
+            resp = await client.get(url)
+            resp.raise_for_status()
+        return make_thumb(resp.content, out_path)
+    except Exception as e:
+        logger.warning(f"缩略图获取失败, 跳过({url}): {e}")
+        return None
 
 
 def resolve_media_info(processed: ProcessedMedia, file_path: str) -> tuple[int, int, int]:
