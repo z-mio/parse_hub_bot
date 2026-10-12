@@ -113,6 +113,8 @@ BOT_TOKEN=     # Bot token; create one via @BotFather
 
 # 🔲 Optional
 BOT_PROXY=     # Proxy for the bot's Telegram connection, e.g. http://127.0.0.1:7890
+ADMIN_IDS=     # Telegram user IDs of admins, comma-separated, e.g. 123456789,987654321
+               # Admins can use /admin in private chat to manage platform config and receive cookie failure alerts
 ```
 
 ### 🌐 Platform Configuration

@@ -113,6 +113,8 @@ BOT_TOKEN=     # 机器人 Token，向 @BotFather 申请
 
 # 🔲 可选
 BOT_PROXY=     # Bot 连接 TG 使用的代理，例：http://127.0.0.1:7890
+ADMIN_IDS=     # 管理员的 TG 用户 ID，逗号分隔，例：123456789,987654321
+               # 管理员可私聊使用 /admin 管理平台配置，并接收 Cookie 失效告警
 ```
 
 ### 🌐 平台配置
