@@ -424,9 +424,8 @@ def _text_result(raw_url: str | None, caption: str) -> InlineQueryResult:
 
 
 def _error_result(_t: PreLocaleSelector, error: Exception) -> InlineQueryResult:
-    stage = _t("解析")
-    t = format_label(_t(f"{stage}错误:"))
-    text = _t(f"{t} \n```\n{error}```")
+    stage = "解析"
+    text = _t(f"{format_label(f'{stage}错误:')} \n```\n{error}```")
     if bs.demo_mode:
         text += _t("\n\n<b>问题反馈: @MisakaSisters</b>")
     return _text_result(None, text)
