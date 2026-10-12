@@ -7,6 +7,7 @@
 06778dbf05d5: Gestión de la plataforma
 08b55fea3c93: Administrar
 08c6faa776e6: Esto no es un enlace de {name}
+0917aff08657: Enviar texto e imágenes/multimedia con texto enriquecido
 091d3a0665fa: Configuración del canal
 09df5be03bca: Probar {count} cookies de {name}
 0b93dc449457: El resultado del análisis no mostrará el resumen del contenido del post.
@@ -42,6 +43,8 @@
 308136d04bc5: 'Protocolo de proxy no soportado: {line}'
 31f3c8c65cc4: Nombre de usuario/enlace/id del canal
 32316f34b45d: Mostrar contenido
+32628e75e20f: Múltiples medios en texto enriquecido se muestran en una presentación
+  de diapositivas; al cerrarla, cambian a un collage.
 330add4a5718: Ya no se enviarán mensajes de progreso de análisis; una vez finalizado,
   se enviará directamente el resultado.
 33ccc7a4682a: Plataforma no soportada
@@ -108,6 +111,7 @@
 6769c172299c: No eres administrador de este chat, no tienes permiso para modificar
   la configuración
 68957ac274c5: Descargando... | {current * 100 / total:.0f}%
+6c52468cbce2: El texto enriquecido usa un diseño de presentación de diapositivas.
 6e4725b992cd: Se han reemplazado por {added} cookies, efecto inmediato
 7030ff64701a: Error
 '734176584215': No eres el propietario de este canal, no tienes permiso para modificar
@@ -215,6 +219,8 @@ c7cf968fe303: El grupo de proxies dedicado está vacío, se volverá al proxy pr
   global
 cabc0250bb93: Los cambios se aplican de inmediato, no es necesario reiniciar.
 d060b3bd861e: No se recibieron cookies
+d17813a860db: El contenido de texto e imágenes/multimedia se enviará usando Telegram
+  con texto enriquecido, sin usar grupos de medios
 d2282636abc7: Panel de configuración
 d2a9e9b5d414: Comportamiento del mensaje
 d5631690265c: No se puede reconocer el objetivo de configuración

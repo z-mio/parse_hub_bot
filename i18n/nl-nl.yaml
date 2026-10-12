@@ -7,6 +7,7 @@
 06778dbf05d5: Platformbeheer
 08b55fea3c93: Beheer
 08c6faa776e6: Dit is geen link van {name}
+0917aff08657: Tekst en multimedia versturen met rijke tekst
 091d3a0665fa: Kanaalconfiguratie
 09df5be03bca: Test {name} van de {count} cookies
 0b93dc449457: De inhoud van de post wordt niet weergegeven in het parse-resultaat.
@@ -43,6 +44,8 @@
 308136d04bc5: 'Niet-ondersteund proxyprotocol: {line}'
 31f3c8c65cc4: Kanaalgebruikersnaam/link/id
 32316f34b45d: Inhoudsweergave
+32628e75e20f: Meerdere media in rich text worden in een diavoorstelling weergegeven,
+  na het sluiten verandert het in een mozaïek
 330add4a5718: Stuur geen voortgangsberichten meer over de analyse, stuur het resultaat
   direct na voltooiing van de analyse.
 33ccc7a4682a: Niet-ondersteund platform
@@ -109,6 +112,7 @@
 6769c172299c: Je bent geen beheerder van deze chat, je hebt geen toestemming om de
   configuratie te wijzigen
 68957ac274c5: Bezig met downloaden... | {current * 100 / total:.0f}%
+6c52468cbce2: Rich text gebruikt diavoorstelling lay-out
 6e4725b992cd: Vervangen door {added} cookies, onmiddellijk van kracht
 7030ff64701a: Fout
 '734176584215': Je bent geen eigenaar van dit kanaal, je hebt geen toestemming om
@@ -214,6 +218,8 @@ c4ee311078aa: Verwijder automatisch links die door gebruikers zijn verzonden na 
 c7cf968fe303: Speciale proxy pool is leeg en zal terugvallen op de globale standaardproxy
 cabc0250bb93: Direct effect na wijziging, geen herstart nodig.
 d060b3bd861e: Geen cookies ontvangen
+d17813a860db: Afbeeldingen en multimedia-inhoud worden verzonden met Telegram rich
+  text, media groepen worden niet meer gebruikt
 d2282636abc7: Configuratiepaneel
 d2a9e9b5d414: Berichtgedrag
 d5631690265c: Kan configuratiedoel niet herkennen

@@ -7,6 +7,7 @@
 06778dbf05d5: Quản lý nền tảng
 08b55fea3c93: Quản lý
 08c6faa776e6: Đây không phải là liên kết của {name}
+0917aff08657: Gửi văn bản hình ảnh/đa phương tiện bằng văn bản định dạng phong phú
 091d3a0665fa: Cấu hình kênh
 09df5be03bca: Kiểm tra {count} Cookie của {name}
 0b93dc449457: Kết quả phân tích không hiển thị tóm tắt nội dung bài đăng. Các bài
@@ -41,6 +42,8 @@
 308136d04bc5: 'Giao thức proxy không được hỗ trợ: {line}'
 31f3c8c65cc4: Tên người dùng/liên kết/id kênh
 32316f34b45d: Hiển thị nội dung
+32628e75e20f: Nhiều phương tiện trong văn bản định dạng phong phú được trình bày dưới
+  dạng trình chiếu, đóng lại sẽ chuyển sang dạng ghép hình
 330add4a5718: Không gửi tin nhắn tiến trình phân tích nữa, sau khi phân tích xong
   sẽ gửi kết quả trực tiếp.
 33ccc7a4682a: Nền tảng không được hỗ trợ
@@ -104,6 +107,7 @@
 6769c172299c: Bạn không phải là quản trị viên của cuộc trò chuyện này, không có quyền
   thay đổi cấu hình
 68957ac274c5: Đang tải xuống... | {current * 100 / total:.0f}%
+6c52468cbce2: Văn bản định dạng phong phú sử dụng bố cục trình chiếu
 6e4725b992cd: Đã thay thế bằng {added} cookie, có hiệu lực ngay lập tức
 7030ff64701a: Lỗi
 '734176584215': Bạn không phải là chủ sở hữu của kênh này, không có quyền thay đổi
@@ -210,6 +214,8 @@ c4ee311078aa: Sau khi phân tích xong sẽ tự động xóa liên kết do ng�
 c7cf968fe303: Bể chứa proxy riêng đang trống, sẽ quay về proxy mặc định toàn cục
 cabc0250bb93: Sửa đổi có hiệu lực ngay lập tức, không cần khởi động lại.
 d060b3bd861e: Không nhận được cookie
+d17813a860db: Nội dung hình ảnh/đa phương tiện sử dụng Telegram Rich Text để gửi,
+  không còn sử dụng nhóm phương tiện nữa
 d2282636abc7: Bảng cấu hình
 d2a9e9b5d414: Hành vi tin nhắn
 d5631690265c: Không thể nhận diện mục tiêu cấu hình

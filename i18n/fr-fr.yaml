@@ -7,6 +7,7 @@
 06778dbf05d5: Gestion de la plateforme
 08b55fea3c93: Gérer
 08c6faa776e6: Ce n'est pas un lien de {name}
+0917aff08657: Envoyer texte et multimédia avec du texte enrichi
 091d3a0665fa: Configuration du canal
 09df5be03bca: Tester {count} cookies de {name}
 0b93dc449457: Le résultat de l'analyse n'affiche pas le résumé du contenu du post.
@@ -42,6 +43,8 @@
 308136d04bc5: 'Protocole proxy non pris en charge : {line}'
 31f3c8c65cc4: Nom d'utilisateur/lien/id du canal
 32316f34b45d: Affichage du contenu
+32628e75e20f: Plusieurs médias dans le texte enrichi sont présentés sous forme de
+  diaporama, après fermeture, ils deviennent un collage
 330add4a5718: Ne plus envoyer de messages de progression de l'analyse, envoyer directement
   le résultat une fois l'analyse terminée.
 33ccc7a4682a: Plateforme non supportée
@@ -108,6 +111,7 @@
 6769c172299c: Vous n'êtes pas administrateur de cette conversation, vous n'avez pas
   le droit de modifier la configuration
 68957ac274c5: Téléchargement en cours... | {current * 100 / total:.0f}%
+6c52468cbce2: Le texte enrichi utilise une disposition en diaporama
 6e4725b992cd: '{added} cookies ont été remplacés, prise d''effet immédiate'
 7030ff64701a: Erreur
 '734176584215': Vous n'êtes pas le propriétaire de ce canal, vous n'avez pas le droit
@@ -213,6 +217,8 @@ c4ee311078aa: Supprimer automatiquement le lien envoyé par l'utilisateur après
 c7cf968fe303: Le pool de proxy dédié est vide, il reviendra au proxy par défaut global
 cabc0250bb93: Prend effet immédiatement après modification, pas besoin de redémarrer.
 d060b3bd861e: Aucun cookie reçu
+d17813a860db: Le contenu texte/image/multimédia est envoyé via Telegram en texte enrichi,
+  l'utilisation du groupe média n'est plus nécessaire
 d2282636abc7: Panneau de configuration
 d2a9e9b5d414: Comportement du message
 d5631690265c: Impossible de reconnaître la cible de configuration

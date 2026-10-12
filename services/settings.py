@@ -76,6 +76,8 @@ class ConfigPatch(TypedDict, total=False):
     hide_desc: bool
     hide_title: bool
     rich_mode: bool
+    rich_media_mode: bool
+    rich_slideshow: bool
     hide_error: bool
 
 

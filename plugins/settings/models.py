@@ -216,12 +216,28 @@ BOOL_SWITCHES = (
         get_value=lambda config: config.rich_mode,
         patch=lambda settings, target, value: settings.patch_config(target, rich_mode=value),
     ),
+    BoolSwitchDTO(
+        field="rich_media_mode",
+        code="rr",
+        label=t_("图文/多媒体使用富文本发送"),
+        desc=t_("图文/多媒体内容使用 Telegram 富文本发送, 不再使用媒体组"),
+        get_value=lambda config: config.rich_media_mode,
+        patch=lambda settings, target, value: settings.patch_config(target, rich_media_mode=value),
+    ),
+    BoolSwitchDTO(
+        field="rich_slideshow",
+        code="rs",
+        label=t_("富文本使用幻灯片布局"),
+        desc=t_("富文本中的多个媒体以幻灯片展示, 关闭后改为拼图"),
+        get_value=lambda config: config.rich_slideshow,
+        patch=lambda settings, target, value: settings.patch_config(target, rich_slideshow=value),
+    ),
 )
 
 BOOL_SWITCH_MAP = {switch.code: switch for switch in BOOL_SWITCHES}
 
 SWITCH_GROUPS = (
-    SwitchGroupDTO(t_("内容显示"), ("ht", "hd", "hs", "vc", "cc", "ri")),
+    SwitchGroupDTO(t_("内容显示"), ("ht", "hd", "hs", "vc", "cc", "ri", "rr", "rs")),
     SwitchGroupDTO(t_("消息行为"), ("rm", "ad", "np", "ir")),
     SwitchGroupDTO(t_("错误日志"), ("el", "he")),
 )

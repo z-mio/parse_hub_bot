@@ -21,6 +21,11 @@ from pyrogram.types import (
     InputMediaDocument,
     InputMediaPhoto,
     InputMediaVideo,
+    InputRichBlock,
+    InputRichBlockAnimation,
+    InputRichBlockDocument,
+    InputRichBlockPhoto,
+    InputRichBlockVideo,
     InputRichMessage,
     LinkPreviewOptions,
     Message,
@@ -29,7 +34,18 @@ from pyrogram.types import (
 from core import bs
 from log import logger
 from plugins.helpers import build_caption, build_caption_by_str, format_label
-from plugins.parse.cache import build_cached_media_group, cache_media_from_message
+from plugins.parse.cache import (
+    build_cached_media_group,
+    cache_media_from_message,
+    cache_media_from_rich_message,
+)
+from plugins.parse.rich import (
+    RICH_MEDIA_LIMIT,
+    cached_rich_media_blocks,
+    is_rich_media_result,
+    rich_caption_blocks,
+    rich_media_messages,
+)
 from repo.settings import SettingsConfig
 from services import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, PipelineResult, StatusReporter
 from services.media import ProcessedMedia, resolve_media_info
@@ -449,6 +465,7 @@ async def send_media(
     return CacheEntry(
         parse_result=CacheParseResult(title=parse_result.title, content=parse_result.content),
         media=media_list,
+        rich_media=is_rich_media_result(parse_result),
     )
 
 
@@ -479,10 +496,67 @@ async def send_cached(sender: MessageSender, entry: CacheEntry, url: str, *, cus
         await sender.text_no_preview(caption)
         return
 
+    if sender.config.rich_media_mode and entry.rich_media:
+        try:
+            caption_blocks = rich_caption_blocks(
+                entry.parse_result.title,
+                entry.parse_result.content,
+                url,
+                sender.config,
+                custom_content=custom_content,
+            )
+            await send_rich_media(
+                sender, cached_rich_media_blocks(entry.media), caption_blocks, slideshow=sender.config.rich_slideshow
+            )
+            return
+        except Exception as e:
+            logger.warning(f"富文本缓存发送失败, 退回常规发送: {e}")
+
     if len(entry.media) == 1:
         await send_cached_single(sender, entry.media[0], caption, video_cover=sender.config.video_cover)
     else:
         await send_cached_multi(sender, entry.media, caption, video_cover=sender.config.video_cover)
+
+
+async def send_rich_media(
+    sender: MessageSender,
+    blocks: list[InputRichBlock],
+    caption_blocks: list[InputRichBlock],
+    *,
+    slideshow: bool,
+) -> list[CacheMedia] | None:
+    """图文/多媒体以富文本消息发送: 所有媒体进幻灯片/拼图(超出上限自动分条, 文档块除外),
+    文档独立块和 caption 块附在最后一条。返回缓存媒体, 与返回块数不符时返回 None。"""
+    # 文档块无法进幻灯片/拼图, 拆为独立块
+    standalone = [b for b in blocks if isinstance(b, InputRichBlockDocument)]
+    slideshow_blocks = [b for b in blocks if not isinstance(b, InputRichBlockDocument)]
+
+    media_list: list[CacheMedia] = []
+    for message in rich_media_messages(blocks, caption_blocks, slideshow=slideshow, limit=RICH_MEDIA_LIMIT):
+        await sender.upload_photo()
+        sent = await sender.rich_message(message)
+        if sent:
+            media_list.extend(cache_media_from_rich_message(sent))
+
+    # 幻灯片/拼图里的视频会被 Tg 以 animation 块返回, 块类型不可信, 按顺序与输入块配对取输入类型
+    media_inputs = slideshow_blocks + standalone
+    if len(media_list) != len(media_inputs):
+        logger.warning(f"富文本媒体数量不符: sent={len(media_inputs)}, got={len(media_list)}, 不写缓存")
+        return None
+    type_map: dict[type, CacheMediaType] = {
+        InputRichBlockPhoto: CacheMediaType.PHOTO,
+        InputRichBlockVideo: CacheMediaType.VIDEO,
+        InputRichBlockAnimation: CacheMediaType.ANIMATION,
+        InputRichBlockDocument: CacheMediaType.DOCUMENT,
+    }
+    return [
+        CacheMedia(
+            type=type_map.get(type(block), cm.type),
+            file_id=cm.file_id,
+            cover_file_id=cm.cover_file_id,
+        )
+        for block, cm in zip(media_inputs, media_list, strict=True)
+    ]
 
 
 def media_input(media: PathType | BinaryIO | None) -> PathType | BinaryIO:

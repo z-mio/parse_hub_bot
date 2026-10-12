@@ -110,6 +110,8 @@ class CacheEntry(BaseModel):
     media: list[CacheMedia] | None = None
     telegraph_url: str | None = None
     rich: bool = False
+    # 来自 ImageParseResult/MultimediaParseResult 的条目, 允许走富文本幻灯片缓存发送
+    rich_media: bool = False
 
 
 class PersistentCache:

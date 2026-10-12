@@ -20,6 +20,34 @@ def cache_media_from_message(m: Message) -> CacheMedia | None:
     return None
 
 
+def cache_media_from_rich_message(m: Message) -> list[CacheMedia]:
+    """从已发送的富文本 Message 的块中递归提取 CacheMedia。"""
+    media: list[CacheMedia] = []
+
+    def walk(blocks: list) -> None:
+        for b in blocks or []:
+            if getattr(b, "photo", None):
+                media.append(CacheMedia(type=CacheMediaType.PHOTO, file_id=b.photo.file_id))
+            elif getattr(b, "video", None):
+                media.append(
+                    CacheMedia(
+                        type=CacheMediaType.VIDEO,
+                        file_id=b.video.file_id,
+                        cover_file_id=b.video.video_cover.file_id if b.video.video_cover else None,
+                    )
+                )
+            elif getattr(b, "animation", None):
+                media.append(CacheMedia(type=CacheMediaType.ANIMATION, file_id=b.animation.file_id))
+            elif getattr(b, "document", None):
+                media.append(CacheMedia(type=CacheMediaType.DOCUMENT, file_id=b.document.file_id))
+            if getattr(b, "blocks", None):
+                walk(b.blocks)
+
+    if m.rich_message:
+        walk(m.rich_message.blocks)
+    return media
+
+
 def build_cached_media_group(
     media: list[CacheMedia], *, video_cover: bool
 ) -> list[InputMediaPhoto | InputMediaVideo | InputMediaDocument]:

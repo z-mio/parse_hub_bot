@@ -123,6 +123,18 @@ class SettingsConfig(BaseModel):
         ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
     ] = False
 
+    rich_media_mode: Annotated[
+        bool,
+        Field(description="图文/多媒体使用 Telegram 富文本发送"),
+        ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
+    ] = False
+
+    rich_slideshow: Annotated[
+        bool,
+        Field(description="富文本媒体使用幻灯片布局, 关闭为拼图"),
+        ConfigMetadata(ALL_SCOPES, MergeStrategy.PREFERENCE),
+    ] = True
+
     hide_error: Annotated[
         bool,
         Field(description="解析错误时不发送错误日志消息"),

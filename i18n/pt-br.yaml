@@ -7,6 +7,7 @@
 06778dbf05d5: Gerenciamento da plataforma
 08b55fea3c93: Gerenciar
 08c6faa776e6: Este não é um link do {name}
+0917aff08657: Envio de texto e mídia usando rich text
 091d3a0665fa: Configuração do canal
 09df5be03bca: Testando {count} cookies do {name}
 0b93dc449457: O resumo do corpo da postagem não será exibido no resultado da análise.
@@ -40,6 +41,8 @@
 308136d04bc5: 'Protocolo de proxy não suportado: {line}'
 31f3c8c65cc4: Nome de usuário/link/id do canal
 32316f34b45d: Exibição do conteúdo
+32628e75e20f: Múltiplos mídias em texto rico são exibidos como slides, após fechamento
+  mudam para mosaico
 330add4a5718: Não envie mais mensagens de progresso de análise, envie o resultado
   diretamente após a conclusão da análise.
 33ccc7a4682a: Plataforma não suportada
@@ -98,6 +101,7 @@
 6769c172299c: Você não é administrador deste chat, não tem permissão para modificar
   a configuração
 68957ac274c5: Baixando... | {current * 100 / total:.0f}%
+6c52468cbce2: Texto rico usa layout de slides
 6e4725b992cd: '{added} Cookies substituídos, efeito imediato'
 7030ff64701a: Erro
 '734176584215': Você não é o proprietário deste canal, não tem permissão para modificar
@@ -203,6 +207,8 @@ c4ee311078aa: Após a conclusão da análise, o link enviado pelo usuário será
 c7cf968fe303: O pool de proxy dedicado está vazio, voltando para o proxy padrão global
 cabc0250bb93: A alteração entrará em vigor imediatamente, sem necessidade de reinicialização.
 d060b3bd861e: Nenhum Cookie recebido
+d17813a860db: O conteúdo de texto/imagem/multimídia usa envio de texto rico no Telegram,
+  não mais grupos de mídia
 d2282636abc7: Painel de configuração
 d2a9e9b5d414: Comportamento da mensagem
 d5631690265c: Alvo da configuração não reconhecido

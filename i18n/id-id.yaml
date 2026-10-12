@@ -7,6 +7,7 @@
 06778dbf05d5: Manajemen Platform
 08b55fea3c93: Kelola
 08c6faa776e6: Ini bukan tautan {name}
+0917aff08657: Kirim Teks Kaya dengan Gambar/Multimedia
 091d3a0665fa: Konfigurasi Saluran
 09df5be03bca: Menguji {count} cookie dari {name}
 0b93dc449457: Hasil parsing tidak menampilkan ringkasan isi postingan. Artikel yang
@@ -41,6 +42,8 @@
 308136d04bc5: 'Protokol proxy tidak didukung: {line}'
 31f3c8c65cc4: Nama pengguna/link/id saluran
 32316f34b45d: Tampilan Konten
+32628e75e20f: Beberapa media dalam teks kaya ditampilkan sebagai slideshow, setelah
+  ditutup diubah menjadi mosaik
 330add4a5718: Tidak lagi mengirim pesan kemajuan parsing, hasil akan dikirim langsung
   setelah parsing selesai.
 33ccc7a4682a: Platform tidak didukung
@@ -106,6 +109,7 @@
 6740d8c7b274: Balas pesan
 6769c172299c: Anda bukan admin obrolan ini, tidak berwenang mengubah konfigurasi
 68957ac274c5: Sedang mengunduh... | {current * 100 / total:.0f}%
+6c52468cbce2: Teks kaya menggunakan tata letak slideshow
 6e4725b992cd: Telah diganti dengan {added} Cookie, berlaku segera
 7030ff64701a: Kesalahan
 '734176584215': Anda bukan pemilik saluran ini, tidak berwenang mengubah konfigurasi
@@ -212,6 +216,8 @@ c4ee311078aa: Tautan yang dikirim pengguna akan dihapus otomatis setelah parsing
 c7cf968fe303: Kolam proxy khusus kosong, akan kembali ke proxy default global
 cabc0250bb93: Perubahan akan langsung berlaku, tidak perlu restart.
 d060b3bd861e: Tidak menerima Cookie
+d17813a860db: Konten gambar/ multimedia dikirim menggunakan teks kaya Telegram, tidak
+  lagi menggunakan grup media
 d2282636abc7: Panel konfigurasi
 d2a9e9b5d414: Perilaku Pesan
 d5631690265c: Target konfigurasi tidak dikenali
