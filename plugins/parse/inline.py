@@ -1,9 +1,7 @@
-import io
 import os
 import tempfile
 from collections.abc import Sequence
 
-import httpx
 from parsehub import AnyParseResult
 from parsehub.types import (
     AniRef,
@@ -11,7 +9,6 @@ from parsehub.types import (
     RichTextParseResult,
     VideoRef,
 )
-from PIL import Image
 from pyrogram import Client
 from pyrogram.types import (
     ChosenInlineResult,
@@ -52,7 +49,7 @@ from plugins.parse.reporters import InlineStatusReporter
 from repo.settings import SettingsConfig
 from services import ParseService, SettingsService, UserService
 from services.cache import CacheEntry, CacheMediaType, parse_cache, persistent_cache
-from services.media import resolve_media_info
+from services.media import fetch_thumb, resolve_media_info
 from services.pipeline import ParsePipeline
 from utils.helpers import to_list, with_request_id
 
@@ -67,17 +64,15 @@ async def _fetch_video_thumb(video_ref: VideoRef | None) -> str | None:
     thumb_url = getattr(video_ref, "thumb_url", None)
     if not thumb_url:
         return None
+    tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+    tmp.close()
     try:
-        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
-            resp = await client.get(str(thumb_url))
-            resp.raise_for_status()
-        img = Image.open(io.BytesIO(resp.content)).convert("RGB")
-        img.thumbnail((320, 320))
-        tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
-        img.save(tmp, "JPEG", quality=85)
-        tmp.close()
-        return tmp.name
+        path = await fetch_thumb(str(thumb_url), tmp.name)
+        if path is None:
+            os.unlink(tmp.name)
+        return path
     except Exception as e:
+        os.unlink(tmp.name)
         logger.warning(f"内联视频封面下载失败, 跳过: {e}")
         return None
 
@@ -237,7 +232,9 @@ def build_cached_inline_results(
                 title=title,
                 input_message_content=InputTextMessageContent(
                     caption,
-                    link_preview_options=LinkPreviewOptions(show_above_text=True),
+                    link_preview_options=LinkPreviewOptions(
+                        url=entry.telegraph_url, show_above_text=True
+                    ),
                 ),
             )
         )
@@ -346,7 +343,7 @@ async def build_inline_results(
                 description=parse_result.content,
                 input_message_content=InputTextMessageContent(
                     caption,
-                    link_preview_options=LinkPreviewOptions(show_above_text=True),
+                    link_preview_options=LinkPreviewOptions(url=url, show_above_text=True),
                 ),
             )
         )

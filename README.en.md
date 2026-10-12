@@ -36,6 +36,7 @@
 - 🎬 **Multi-platform parsing** — Parse content from 20+ major platforms, including Douyin, Bilibili, YouTube,
   Xiaohongshu, and Twitter
 - ⚡ **Inline mode** — Parse a link from any chat by typing `@BotUsername <link>`
+- 👥 **Guest mode** — Mention `@BotUsername` in any chat to parse, no need to add the bot first
 - 🖼️ **Telegram-ready media** — Automatic transcoding, long-image splitting, and large-video segmentation
 - 📦 **Multiple delivery modes** — Online preview, original file, or packaged download
 - 🐳 **Docker deployment** — Ready to use out of the box
