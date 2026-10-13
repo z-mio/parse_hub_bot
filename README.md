@@ -84,6 +84,7 @@ docker run -d \
   -e API_ID=你的API_ID \
   -e API_HASH=你的API_HASH \
   -e BOT_TOKEN=你的BOT_TOKEN \
+  -e ADMIN_IDS=你的TG用户ID \
   -v ./logs:/app/logs \
   -v ./data:/app/data \
   --name parse-hub-bot \
