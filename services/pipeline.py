@@ -266,8 +266,8 @@ class ParsePipeline:
                 if timeout is not None:
                     return await asyncio.wait_for(coro, timeout=timeout)
                 return await coro
-            except TimeoutError:
-                error = TimeoutError(f"[{stage}] 超时 (>{timeout}s)")
+            except TimeoutError as e:
+                error = TimeoutError(f"[{stage}] 超时 (>{timeout}s)") if timeout is not None else e
                 logger.error(str(error))
                 if attempt < max_attempts:
                     logger.warning(f"[{stage}] 将在 {retry_delay}s 后重试 ({attempt}/{retries})")
