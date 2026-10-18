@@ -72,3 +72,4 @@ class InterceptHandler(logging.Handler):
 
 
 logging.basicConfig(handlers=[InterceptHandler()], level="ERROR", force=True)
+setup_logging()
