@@ -1547,7 +1547,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "2.3.10"
+version = "2.3.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -1574,9 +1574,9 @@ dependencies = [
     { name = "xhshow" },
     { name = "yt-dlp", extra = ["default"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/58/40/1d17a2b67818998b2cca0e1663ef5cb2a389a2cdb47dc732324bd8cbe7bd/parsehub-2.3.10.tar.gz", hash = "sha256:747fa64fec6ddc36e387cbf34e8503468deae7c56e2f9bc7a26701e74a8e51a3", size = 133913, upload-time = "2026-10-15T17:43:40.536Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/35/54e872308c87fc5afe767ee1cd099d3873576a2df97ed135e0e96b4e99f3/parsehub-2.3.11.tar.gz", hash = "sha256:4c482f65decb94b9be63b2779a96a896b4ba85e0ae432faf553cb5e4f30940e9", size = 134727, upload-time = "2026-10-18T09:51:26.47Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4c/de/57ddd9b370342ba262d22a051e22a0a1ba2e381ed344f72e9b920c8cf176/parsehub-2.3.10-py3-none-any.whl", hash = "sha256:24dffd0a6fb1cde5c9ef61a0ad1834d58c0d8a37a0be3c64135f83683988f08a", size = 151038, upload-time = "2026-10-15T17:43:38.807Z" },
+    { url = "https://files.pythonhosted.org/packages/cf/31/e925f81f2674b7b6b50e2bf0570ab5fcbe1ebefa0f88d540ede4dc3e67ab/parsehub-2.3.11-py3-none-any.whl", hash = "sha256:37621d860c9e5e990f322995a3127a0cdd357997befa7adf423450f8337fea01", size = 151834, upload-time = "2026-10-18T09:51:24.703Z" },
 ]
 
 [[package]]
@@ -1625,7 +1625,7 @@ requires-dist = [
     { name = "loguru", specifier = ">=0.6.0" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
-    { name = "parsehub", specifier = ">=2.3.10" },
+    { name = "parsehub", specifier = ">=2.3.11" },
     { name = "pillow", specifier = ">=12.1.1" },
     { name = "pillow-heif", specifier = ">=1.1.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
