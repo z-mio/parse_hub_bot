@@ -1,27 +1,17 @@
 import asyncio
 import os
-import sys
+import time
 
 from pyrogram import Client
 from pyrogram.session import Session
 
-from core.config import bs, ws
+from core.config import ws
 from log import logger
 
 logger = logger.bind(name="Watchdog")
-
-
-async def reset_count_task() -> None:
-    """重置重启次数任务"""
-    if ws.restart_count:
-        logger.info(f"第 {ws.restart_count} 次重启成功, 稳定运行 10 分钟后重置重启次数")
-    elif ws.disconnect_count:
-        logger.info("Bot 重连成功, 稳定运行 10 分钟后重置断开连接次数")
-
-    await asyncio.sleep(600)
-    ws.reset_bot_disconnect_count()
-    ws.reset_bot_restart_count()
-    logger.info("已稳定运行 10 分钟, 次数已重置")
+STOP_TIMEOUT = 30
+_grace_task: asyncio.Task[None] | None = None
+_disconnected_at: float | None = None
 
 
 async def on_connect(_: Client, session: Session) -> None:
@@ -30,66 +20,52 @@ async def on_connect(_: Client, session: Session) -> None:
     if session.is_media:
         return
 
-    ws.is_running = True
-    logger.success("Bot 开始运行...")
+    global _disconnected_at, _grace_task
+    if _grace_task is not None:
+        _grace_task.cancel()
+        _grace_task = None
 
-    if ws.restart_count or ws.disconnect_count:
-        asyncio.create_task(reset_count_task())
+    if _disconnected_at is None:
+        logger.success("Bot 开始运行...")
+    else:
+        disconnected_seconds = time.monotonic() - _disconnected_at
+        logger.success(f"Bot 已重新连接, 断开 {disconnected_seconds:.1f} 秒")
+        _disconnected_at = None
 
 
 async def on_disconnect(cli: Client, session: Session) -> None:
     """Bot 断开连接回调函数"""
 
+    global _disconnected_at, _grace_task
     if session.is_media:
         return
 
     if ws.exit_flag:
-        ws.is_running = False
-
-    # 正常退出
-    if ws.exit_flag and not ws.is_running:
+        if _grace_task is not None and _grace_task is not asyncio.current_task():
+            _grace_task.cancel()
+            _grace_task = None
         logger.info("Bot 已结束运行")
         return
 
-    # 启动失败
-    if not ws.is_running and not ws.restart_count:
-        exit("Bot 连接失败, 请检查设备网络和代理配置")
-
-    # 断开连接
-    if ws.restart_count >= ws.max_restart_count:
-        exit(f"重启次数已达上限 ({ws.max_restart_count} 次), 结束进程")
-
-    if ws.disconnect_count < ws.max_disconnect_count:
-        ws.update_bot_disconnect_count()
-        logger.warning(f"Bot 已断开连接... | {ws.disconnect_count}/{ws.max_disconnect_count}")
+    if _grace_task is not None:
         return
 
-    if bs.debug:
-        exit("Bot 已断开连接, 目前处于调试模式, 已跳过重启")
+    if _disconnected_at is None:
+        _disconnected_at = time.monotonic()
+    logger.warning(f"Bot 已断开连接, 等待自动重连 (最多 {ws.reconnect_grace_seconds} 秒)")
+    _grace_task = asyncio.create_task(_exit_if_not_reconnected(cli))
 
+
+async def _exit_if_not_reconnected(cli: Client) -> None:
+    """等待主连接恢复, 超时后结束进程"""
+    global _grace_task
+    await asyncio.sleep(ws.reconnect_grace_seconds)
+    _grace_task = None
+    logger.error(f"Bot 断开超过 {ws.reconnect_grace_seconds} 秒仍未恢复, 结束进程等待容器重启")
     try:
-        ws.update_bot_restart_count()
-        logger.warning(f"Bot 已断开连接, 尝试重启... | {ws.restart_count}/{ws.max_restart_count}")
-
-        if ws.restart_count == ws.remove_session_after_restart and not cli.in_memory:
-            await remove_session_file(cli)
-
-        python = sys.executable
-        os.execv(python, [python] + sys.argv)
+        await asyncio.wait_for(cli.stop(), STOP_TIMEOUT)
     except Exception as e:
         logger.exception(e)
-        exit("重启失败, 结束进程, 以上为错误信息")
-
-
-async def remove_session_file(cli: Client) -> None:
-    """删除会话文件"""
-    logger.warning("尝试删除会话文件...")
-    try:
-        if cli.session is not None:
-            await cli.session.stop()
-        await cli.storage.close()
-        if (session := cli.workdir / f"{cli.name}.session") and session.exists():
-            os.remove(session)
-            logger.warning(f"会话文件已移除: {session}")
-    except Exception as e:
-        logger.error(f"移除会话文件失败: {e}")
+    await logger.complete()
+    # 回调任务里抛 SystemExit 不一定能结束进程, 直接非零退出交给容器重启
+    os._exit(1)
