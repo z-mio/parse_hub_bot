@@ -1,6 +1,7 @@
 from typing import Self
 
 from parsehub import ParseHub, Platform
+from parsehub.errors import ParseHubError
 from parsehub.types import (
     AnyParseResult,
     ContentUnavailableError,
@@ -15,8 +16,12 @@ from .cookie_health import cookie_health
 logger = logger.bind(name="ParseService")
 
 
+def _used_cookie(e: BaseException) -> bool:
+    return isinstance(e, ParseHubError) and bool(e.cookie)
+
+
 def _cookie_failure(pr: AnyParseResult) -> FallbackAttempt | None:
-    return next((a for a in pr.fallback_errors if a.cookie and not isinstance(a.error, ContentUnavailableError)), None)
+    return next((a for a in pr.fallback_errors if _used_cookie(a.error)), None)
 
 
 class ParseService:
@@ -64,7 +69,7 @@ class ParseService:
                 logger.warning(f"解析失败, attempt={attempt}/{max_retries}, err={e}")
                 if isinstance(e, ContentUnavailableError):
                     raise
-                if cookie_value:
+                if cookie_value and _used_cookie(e):
                     cookie_health.record_failure(p.id, cookie_value, e, url)
                 if attempt >= max_retries:
                     raise
@@ -75,10 +80,9 @@ class ParseService:
         p = self.get_platform(url)
         try:
             pr = await self.parser.parse(url, cookie=cookie, proxy=pl_cfg.roll_parser_proxy(p.id))
-        except ContentUnavailableError:
-            raise
         except Exception as e:
-            cookie_health.record_failure(p.id, cookie, e, url, alert=False)
+            if _used_cookie(e):
+                cookie_health.record_failure(p.id, cookie, e, url, alert=False)
             raise
         if failed := _cookie_failure(pr):
             cookie_health.record_failure(p.id, cookie, failed.error, url, alert=False)

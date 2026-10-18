@@ -33,7 +33,8 @@ type CookieAlertNotifier = Callable[[CookieAlert], Awaitable[None]]
 
 
 class CookieHealth:
-    """cookie 使用情况统计, 只存内存, 重启后清零。带 cookie 的解析失败都算该 cookie 失败一次"""
+    """cookie 使用情况统计, 只存内存, 重启后清零。
+    实际用了 cookie 的解析失败 (错误带 cookie 字段) 算该 cookie 失败一次"""
 
     def __init__(self) -> None:
         self._stats: dict[str, CookieStat] = {}
