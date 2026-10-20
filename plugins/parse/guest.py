@@ -74,7 +74,12 @@ async def call_guest_parse(cli: Client, message: Message) -> None:
     logger.info(f"收到游客解析请求: query={query}, from_user={from_user}")
     if query is None:
         if _mentions_me(cli, message):
-            await responder.answer(_text_result(_t("请加上链接或回复一条消息")))
+            text = (
+                _t("不支持的平台")
+                if _has_link(message) or _has_link(message.reply_to_message)
+                else _t("请加上链接或回复一条消息")
+            )
+            await responder.answer(_text_result(text))
         else:
             logger.debug("guest 查询无有效链接且未 @")
         return
@@ -139,6 +144,13 @@ def _mentions_me(cli: Client, message: Message) -> bool:
         and remove_surrogates(s[e.offset : e.offset + e.length]).lower() == f"@{username}".lower()
         for e in entities
     )
+
+
+def _has_link(message: Message | None) -> bool:
+    if message is None:
+        return False
+    entities = message.entities or message.caption_entities or []
+    return any(e.type in (enums.MessageEntityType.URL, enums.MessageEntityType.TEXT_LINK) for e in entities)
 
 
 def _resolve_query(cli: Client, message: Message) -> str | None:
