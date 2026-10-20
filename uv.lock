@@ -1547,7 +1547,7 @@ wheels = [
 
 [[package]]
 name = "parsehub"
-version = "2.3.12"
+version = "2.3.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -1574,9 +1574,9 @@ dependencies = [
     { name = "xhshow" },
     { name = "yt-dlp", extra = ["default"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/47/07/0c6346c38669d07ff0ef0d305ef2944b47910db555449f2967fd8b3b147b/parsehub-2.3.12.tar.gz", hash = "sha256:35d3427dd18ac450de0334fb4795d9c806dca6372f643efdebfdb02a7900448c", size = 134715, upload-time = "2026-10-20T11:27:10.287Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b8/63/f3a5748e7681b39fee571d56670ad183ba85ff801b269cda9fb8e0ce7e78/parsehub-2.3.13.tar.gz", hash = "sha256:4843548f52796c20b2e3d8a60830379315657ca7fc9afa078aae369520911d21", size = 135846, upload-time = "2026-10-20T17:22:33.895Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bc/05/17873c5a34a9009156b2d37499b012ad7e26a52d96bf86b40a39b6464c1c/parsehub-2.3.12-py3-none-any.whl", hash = "sha256:a370bb24faebdc0e637b8c1438d04f2c576d615c4d5b61a6f0780751733b1532", size = 151853, upload-time = "2026-10-20T11:27:08.399Z" },
+    { url = "https://files.pythonhosted.org/packages/62/92/f8e034eb32bd0cd630a3b75572b61218d0183b702576bb0b05887a0ff4e7/parsehub-2.3.13-py3-none-any.whl", hash = "sha256:c627d5e75ef26d2cf39f88e3b5118f98b5c0e1058df3c01c255da7418a45659a", size = 153328, upload-time = "2026-10-20T17:22:32.229Z" },
 ]
 
 [[package]]
@@ -1625,7 +1625,7 @@ requires-dist = [
     { name = "loguru", specifier = ">=0.6.0" },
     { name = "lxml-html-clean", specifier = ">=0.4.1" },
     { name = "markdown", specifier = ">=3.7" },
-    { name = "parsehub", specifier = ">=2.3.12" },
+    { name = "parsehub", specifier = ">=2.3.13" },
     { name = "pillow", specifier = ">=12.1.1" },
     { name = "pillow-heif", specifier = ">=1.1.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
@@ -2799,11 +2799,11 @@ wheels = [
 
 [[package]]
 name = "yt-dlp"
-version = "2026.8.19"
+version = "2026.10.10.233141.dev0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1e/e0/832fa4ca334b766a06933a196066edc3dba37cdb6f14cd98d59bcc69a4b4/yt_dlp-2026.8.19.tar.gz", hash = "sha256:9e213e48cea35c66b378e4447903f118f6392a5fa380a2b6d7070ec86f4e0af1", size = 3052025, upload-time = "2026-08-19T23:48:59.291Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/2f/69a67ddfceb2daf9b7bc43826dbec7761ccfc7f264c9ec657b03b8cead13/yt_dlp-2026.10.10.233141.dev0.tar.gz", hash = "sha256:3782c394377a073903e55924a630a733c820fdb70cf8330525137f8fcef57a3d", size = 3055384, upload-time = "2026-10-10T23:35:33.571Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/69/b2/8cd1613f56eed7ceb64fbd4df3f1c01246bfb098e6f398228bafda22b80b/yt_dlp-2026.8.19-py3-none-any.whl", hash = "sha256:1d57897e94c6665a0a6f9bc54b34e584284e32c034ffab3a7df25d8f7b24eedf", size = 3185533, upload-time = "2026-08-19T23:48:56.925Z" },
+    { url = "https://files.pythonhosted.org/packages/a9/24/568769172d45bdc83dc26e958adfcaa811cb9814cacdff3723bcfd4b0750/yt_dlp-2026.10.10.233141.dev0-py3-none-any.whl", hash = "sha256:0a3d0ad593800995837f44ace900cf1689a497b52bad206066624d8eb5116c1b", size = 3186562, upload-time = "2026-10-10T23:35:30.289Z" },
 ]
 
 [package.optional-dependencies]
