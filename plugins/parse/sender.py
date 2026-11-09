@@ -4,10 +4,20 @@ from collections.abc import Awaitable, Callable, Sequence
 from dataclasses import dataclass, replace
 from functools import partial
 from itertools import batched
+from pathlib import Path
 from typing import Any, BinaryIO, cast
 
 from easy_ai18n import PreLocaleSelector
-from parsehub.types import AniFile, AniRef, AnyMediaRef, AnyParseResult, ImageFile, LivePhotoFile, VideoFile
+from parsehub.types import (
+    AniFile,
+    AniRef,
+    AnyMediaRef,
+    AnyParseResult,
+    ImageFile,
+    LivePhotoFile,
+    MusicFile,
+    VideoFile,
+)
 from pyrogram import Client, enums
 from pyrogram.errors import FloodWait, Forbidden, SlowmodeWait, WebpageCurlFailed, WebpageMediaEmpty
 from pyrogram.types import (
@@ -48,7 +58,7 @@ from plugins.parse.rich import (
 )
 from repo.settings import SettingsConfig
 from services import CacheEntry, CacheMedia, CacheMediaType, CacheParseResult, PipelineResult, StatusReporter
-from services.media import ProcessedMedia, resolve_media_info
+from services.media import ProcessedMedia, fetch_thumb, resolve_media_info
 from utils.helpers import pack_dir_to_tar_gz, to_list
 
 logger = logger.bind(name="ParseSender")
@@ -131,6 +141,9 @@ class MessageSender:
 
     async def upload_video(self) -> None:
         await self.chat_action(enums.ChatAction.UPLOAD_VIDEO)
+
+    async def upload_audio(self) -> None:
+        await self.chat_action(enums.ChatAction.UPLOAD_AUDIO)
 
     async def text(
         self,
@@ -304,6 +317,29 @@ class MessageSender:
             ),
         )
 
+    async def audio(
+        self,
+        audio: PathType | BinaryIO,
+        *,
+        caption: str | None = None,
+        duration: int | None = None,
+        title: str | None = None,
+        thumb: PathType | BinaryIO | None = None,
+    ) -> Message:
+        return cast(
+            Message,
+            await self._send_and_schedule_delete(
+                partial(
+                    self.msg.reply_audio if self.config.reply_msg else self.msg.answer_audio,
+                    audio,
+                    caption=caption or "",
+                    duration=duration or 0,
+                    title=title,
+                    thumb=thumb,
+                )
+            ),
+        )
+
     async def media_group(self, media: list[ReplyMediaGroupItem]) -> list[Message]:
         return await self._send_and_schedule_delete(
             partial(
@@ -449,16 +485,20 @@ async def send_media(
 ) -> CacheEntry | None:
     """构建、发送媒体，并返回缓存条目。"""
     media_refs = to_list(parse_result.media)
-    photos_videos, animations = build_input_media(media_refs, processed_list, video_cover=sender.config.video_cover)
-    all_count = len(photos_videos) + len(animations)
-    logger.debug(f"媒体分类完成: animations={len(animations)}, photos_videos={len(photos_videos)}")
 
-    if all_count == 1:
-        logger.debug("单媒体模式发送")
-        media_list = await send_single(sender, photos_videos, animations, caption)
+    if len(processed_list) == 1 and isinstance(processed_list[0].source, MusicFile):
+        media_list = await send_music(sender, media_refs[0], processed_list[0], caption, title=parse_result.title)
     else:
-        logger.debug(f"多媒体模式发送: total={all_count}")
-        media_list = await send_multi(sender, photos_videos, animations, caption, media_refs, _t=_t)
+        photos_videos, animations = build_input_media(media_refs, processed_list, video_cover=sender.config.video_cover)
+        all_count = len(photos_videos) + len(animations)
+        logger.debug(f"媒体分类完成: animations={len(animations)}, photos_videos={len(photos_videos)}")
+
+        if all_count == 1:
+            logger.debug("单媒体模式发送")
+            media_list = await send_single(sender, photos_videos, animations, caption)
+        else:
+            logger.debug(f"多媒体模式发送: total={all_count}")
+            media_list = await send_multi(sender, photos_videos, animations, caption, media_refs, _t=_t)
 
     if media_list is None:
         return None
@@ -650,6 +690,42 @@ async def send_single(
     return media_list
 
 
+async def send_music(
+    sender: MessageSender,
+    media_ref: AnyMediaRef,
+    processed: ProcessedMedia,
+    caption: str,
+    *,
+    title: str,
+) -> list[CacheMedia] | None:
+    """发送音乐文件, 返回 CacheMedia 列表。上传失败时降级为 document。"""
+    file_path = (processed.output_paths or [processed.source.path])[0]
+    thumb = (
+        await fetch_thumb(media_ref.thumb_url, Path(file_path).with_name("_thumb_audio.jpg"))
+        if media_ref.thumb_url
+        else None
+    )
+
+    try:
+        await sender.upload_audio()
+        sent = await sender.audio(
+            file_path,
+            caption=caption,
+            duration=getattr(processed.source, "duration", 0),
+            title=title or None,
+            thumb=thumb,
+        )
+    except Exception as e:
+        logger.warning(f"上传失败 {e}, 使用兼容模式上传")
+        await sender.upload_document()
+        await sender.force_document(file_path, caption=caption)
+        return None
+
+    if sent and (cm := cache_media_from_message(sent)):
+        return [cm]
+    return []
+
+
 def build_gif_button(media_refs: Sequence[AnyMediaRef]) -> Ikm:
     buttons = []
     n = 5
@@ -737,6 +813,9 @@ async def send_cached_single(sender: MessageSender, m: CacheMedia, caption: str,
         case CacheMediaType.ANIMATION:
             await sender.upload_photo()
             await sender.animation(m.file_id, caption=caption)
+        case CacheMediaType.AUDIO:
+            await sender.upload_audio()
+            await sender.audio(m.file_id, caption=caption)
         case CacheMediaType.DOCUMENT:
             await sender.upload_document()
             await sender.force_document(m.file_id, caption=caption)

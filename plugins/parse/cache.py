@@ -15,6 +15,8 @@ def cache_media_from_message(m: Message) -> CacheMedia | None:
         )
     if m.animation:
         return CacheMedia(type=CacheMediaType.ANIMATION, file_id=m.animation.file_id)
+    if m.audio:
+        return CacheMedia(type=CacheMediaType.AUDIO, file_id=m.audio.file_id)
     if m.document:
         return CacheMedia(type=CacheMediaType.DOCUMENT, file_id=m.document.file_id)
     return None

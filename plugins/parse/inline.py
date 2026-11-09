@@ -6,6 +6,8 @@ from parsehub import AnyParseResult
 from parsehub.types import (
     AniRef,
     ImageRef,
+    MusicFile,
+    MusicRef,
     RichTextParseResult,
     VideoRef,
 )
@@ -17,11 +19,13 @@ from pyrogram.types import (
     InlineQueryResultAnimation,
     InlineQueryResultArticle,
     InlineQueryResultCachedAnimation,
+    InlineQueryResultCachedAudio,
     InlineQueryResultCachedDocument,
     InlineQueryResultCachedPhoto,
     InlineQueryResultCachedVideo,
     InlineQueryResultPhoto,
     InlineQueryResultVideo,
+    InputMediaAudio,
     InputMediaVideo,
     InputRichMessage,
     InputRichMessageContent,
@@ -56,12 +60,12 @@ from utils.helpers import to_list, with_request_id
 logger = logger.bind(name="InlineParse")
 
 
-async def _fetch_video_thumb(video_ref: VideoRef | None) -> str | None:
+async def _fetch_video_thumb(media_ref: VideoRef | MusicRef | None) -> str | None:
     """下载视频封面并转成 thumb 要求的 JPEG（≤320px），失败返回 None
 
     内联模式用 video_cover 封面会被 TG 丢弃不展示，必须用 thumb 预览图参数。
     """
-    thumb_url = getattr(video_ref, "thumb_url", None)
+    thumb_url = getattr(media_ref, "thumb_url", None)
     if not thumb_url:
         return None
     tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
@@ -160,7 +164,7 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
         await reporter.report(_t("上 传 中..."))
 
         processed = result.processed_list[media_index]
-        video_ref = parse_result.media[media_index] if isinstance(parse_result.media, Sequence) else parse_result.media
+        media_ref = parse_result.media[media_index] if isinstance(parse_result.media, Sequence) else parse_result.media
 
         try:
             file_paths = processed.output_paths or [processed.source.path]
@@ -168,17 +172,27 @@ async def inline_result_download(cli: Client, chosen_result: ChosenInlineResult)
             logger.debug(f"inline 上传文件: {file_path_str}")
             width, height, duration = resolve_media_info(processed, file_path_str)
 
-            thumb_path = await _fetch_video_thumb(video_ref)
+            thumb_path = await _fetch_video_thumb(media_ref)
             try:
-                media = InputMediaVideo(
-                    file_path_str,
-                    caption=caption,
-                    thumb=thumb_path,
-                    duration=duration or 0,
-                    width=width or 0,
-                    height=height or 0,
-                    supports_streaming=True,
-                )
+                media: InputMediaAudio | InputMediaVideo
+                if isinstance(processed.source, MusicFile):
+                    media = InputMediaAudio(
+                        file_path_str,
+                        thumb=thumb_path,
+                        caption=caption,
+                        duration=processed.source.duration,
+                        title=parse_result.title or "",
+                    )
+                else:
+                    media = InputMediaVideo(
+                        file_path_str,
+                        caption=caption,
+                        thumb=thumb_path,
+                        duration=duration or 0,
+                        width=width or 0,
+                        height=height or 0,
+                        supports_streaming=True,
+                    )
                 await cli.edit_inline_media(inline_message_id, media=media)
             finally:
                 if thumb_path:
@@ -232,9 +246,7 @@ def build_cached_inline_results(
                 title=title,
                 input_message_content=InputTextMessageContent(
                     caption,
-                    link_preview_options=LinkPreviewOptions(
-                        url=entry.telegraph_url, show_above_text=True
-                    ),
+                    link_preview_options=LinkPreviewOptions(url=entry.telegraph_url, show_above_text=True),
                 ),
             )
         )
@@ -278,6 +290,13 @@ def build_cached_inline_results(
                     InlineQueryResultCachedAnimation(
                         animation_file_id=m.file_id,
                         title=title,
+                        caption=caption,
+                    )
+                )
+            case CacheMediaType.AUDIO:
+                results.append(
+                    InlineQueryResultCachedAudio(
+                        audio_file_id=m.file_id,
                         caption=caption,
                     )
                 )
@@ -377,7 +396,7 @@ async def build_inline_results(
                     description=parse_result.content,
                 )
             )
-        elif isinstance(media_ref, VideoRef):
+        elif isinstance(media_ref, VideoRef | MusicRef):
             results.append(
                 InlineQueryResultPhoto(
                     media_ref.thumb_url or DEFAULT_PARSE_RESULT_THUMB_URL,

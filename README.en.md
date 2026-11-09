@@ -43,15 +43,15 @@
 
 ## 📦 Supported Platforms
 
-| Platform            | Video | Image Posts |                    Other                    |
-|:--------------------|:-----:|:-----------:|:-------------------------------------------:|
-| **Twitter / X**     |  ✅   |     ✅      |                 📝 Articles                 |
+| Platform            | Video | Image Posts | Other                                       |
+|---------------------|:-----:|:-----------:|---------------------------------------------|
+| **Twitter / X**     |  ✅   |     ✅      | 📝 Articles                                 |
 | **Instagram**       |  ✅   |     ✅      |                                             |
-| **YouTube**         |  ✅   |             |                  🎵 Music                   |
+| **YouTube**         |  ✅   |             | 🎵 Music                                    |
 | **Facebook**        |  ✅   |             |                                             |
 | **Threads**         |  ✅   |     ✅      |                                             |
-| **Bilibili**        |  ✅   |             |                 📝 Updates                  |
-| **Douyin**          |  ✅   |     ✅      |               ☀️ Daily posts                |
+| **Bilibili**        |  ✅   |             | 📝 Updates, 🎵 Music                        |
+| **Douyin**          |  ✅   |     ✅      | ☀️ Daily posts                              |
 | **TikTok**          |  ✅   |     ✅      |                                             |
 | **Weibo**           |  ✅   |     ✅      |                                             |
 | **Xiaohongshu**     |  ✅   |     ✅      |                                             |
@@ -64,11 +64,11 @@
 | **Zuiyou**          |  ✅   |     ✅      |                                             |
 | **Xiaoheihe**       |  ✅   |     ✅      |                                             |
 | **Snapchat**        |  ✅   |             |                                             |
-| **Zhihu**           |  ✅   |     ✅      |       🐶 Q&A, columns, circles, Daily       |
-| **Douban**          |  ✅   |     ✅      |               👥 Group topics               |
+| **Zhihu**           |  ✅   |     ✅      | 🐶 Questions, columns, circles, Daily       |
+| **Douban**          |  ✅   |     ✅      | 👥 Group topics                             |
 | **Bangumi**         |       |     ✅      | 💬 Subject discussions, blogs, group topics |
-| **Toutiao**         |  ✅   |     ✅      |        📰 Articles, Weitoutiao posts        |
-| **Medium**          |  ✅   |     ✅      |                 📰 Articles                 |
+| **Toutiao**         |  ✅   |     ✅      | 📰 Articles, Weitoutiao posts               |
+| **Medium**          |  ✅   |     ✅      | 📰 Articles                                 |
 
 > 🔧 More platforms are being added continuously...
 
@@ -121,7 +121,8 @@ ADMIN_IDS=     # Telegram user IDs of admins, comma-separated, e.g. 123456789,98
 
 ### 🌐 Platform Configuration
 
-Configure **proxies** and **cookies** for each parser platform. Managing them online with `/admin` is recommended — changes take effect immediately, no restart required.
+Configure **proxies** and **cookies** for each parser platform. Managing them online with `/admin` is recommended —
+changes take effect immediately, no restart required.
 
 #### 🛠️ Online Management
 
@@ -129,10 +130,14 @@ Configure **proxies** and **cookies** for each parser platform. Managing them on
 2. Send `/admin` to the bot in a private chat to open the config panel
 
 - **Global default proxies** — Set the default parser / downloader proxy pools
-- **Platform config** — Choose a proxy mode per platform (global / dedicated / direct) and manage dedicated proxy pools and cookies
-- **One-click testing** — Test proxy connectivity; send a link to parse it with each selected cookie and check whether it works
-- **Failure alerts** — Admins are notified when a cookie fails to parse 3 times in a row, with shortcuts to replace it and retry the original link
-- **Import / Export** — Export a full config backup, or import a file / YAML to replace the whole config; after editing the file manually, tap "Reload Configuration" to apply it
+- **Platform config** — Choose a proxy mode per platform (global / dedicated / direct) and manage dedicated proxy pools
+  and cookies
+- **One-click testing** — Test proxy connectivity; send a link to parse it with each selected cookie and check whether
+  it works
+- **Failure alerts** — Admins are notified when a cookie fails to parse 3 times in a row, with shortcuts to replace it
+  and retry the original link
+- **Import / Export** — Export a full config backup, or import a file / YAML to replace the whole config; after editing
+  the file manually, tap "Reload Configuration" to apply it
 
 ### 🔀 Proxy Priority
 
@@ -168,7 +173,8 @@ Direct connection (no proxy)
 <details>
 <summary>📄 Edit the config file manually</summary>
 
-The config file is located at `data/config/platform_config.yaml` and can also be edited directly. After editing, tap "Reload Configuration" in `/admin` or restart the bot to apply the changes.
+The config file is located at `data/config/platform_config.yaml` and can also be edited directly. After editing, tap
+"Reload Configuration" in `/admin` or restart the bot to apply the changes.
 
 ```yaml
 # ═══════════════════════ Global default proxies ═══════════════════════

@@ -92,6 +92,7 @@ class CacheMediaType(StrEnum):
     VIDEO = "video"
     ANIMATION = "animation"
     DOCUMENT = "document"
+    AUDIO = "audio"
 
 
 class CacheParseResult(BaseModel):

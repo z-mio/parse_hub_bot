@@ -67,6 +67,9 @@ class MediaProcessingUnit:
             return await self.process_image(Path(file_path))
         elif media_type == "video":
             return await self.process_video(Path(file_path))
+        elif media_type == "audio":
+            self.logger("音频无需处理")
+            return MediaProcessResult(output_paths=[Path(file_path)])
         else:
             raise ValueError(f"Unsupported media type: {file_path}")
 
@@ -482,6 +485,8 @@ class MediaProcessingUnit:
                 return "image"
             if mime.startswith("video/"):
                 return "video"
+            if mime.startswith("audio/"):
+                return "audio"
         return "unknown"
 
 
