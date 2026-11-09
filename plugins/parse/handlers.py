@@ -308,13 +308,10 @@ async def handle_parse(req: ParseRequest) -> bool:
 
         if req.config.rich_media_mode and is_rich_media_result(parse_result):
             skip_gifs = (
-                sum(isinstance(m, AniRef) for m in to_list(parse_result.media))
-                > GIF_ONLY_SKIP_DOWNLOAD_COUNT_THRESHOLD
+                sum(isinstance(m, AniRef) for m in to_list(parse_result.media)) > GIF_ONLY_SKIP_DOWNLOAD_COUNT_THRESHOLD
             )
             try:
-                blocks = await build_rich_media_blocks(
-                    result, video_cover=req.config.video_cover, skip_gifs=skip_gifs
-                )
+                blocks = await build_rich_media_blocks(result, video_cover=req.config.video_cover, skip_gifs=skip_gifs)
                 caption_blocks = rich_caption_blocks(
                     parse_result.title,
                     parse_result.content,

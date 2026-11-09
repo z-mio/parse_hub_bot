@@ -56,8 +56,7 @@ class ParseService:
                 logger.debug(f"解析完成: {pr}")
                 if pr.fallback_errors:
                     logger.warning(
-                        "解析成功, 但前面的回退层失败: "
-                        + "; ".join(f"{a.name}: {a.error}" for a in pr.fallback_errors)
+                        "解析成功, 但前面的回退层失败: " + "; ".join(f"{a.name}: {a.error}" for a in pr.fallback_errors)
                     )
                 if cookie_value:
                     if failed := _cookie_failure(pr):
