@@ -69,6 +69,7 @@
 | **Bangumi**     |      |  ✅  | 💬 条目讨论, 日志, 小组话题 |
 | **今日头条**    |  ✅  |  ✅  | 📰 文章, 微头条             |
 | **Medium**      |  ✅  |  ✅  | 📰 文章                     |
+| **煎蛋**        |      |  ✅  | 📰 文章, 💬 话题            |
 
 > 🔧 更多平台持续接入中...
 
@@ -213,6 +214,7 @@ platforms:
 | `snapchat`        | Snapchat    | `zhihu`     | 知乎       |
 | `douban`          | 豆瓣        | `bangumi`   | Bangumi    |
 | `toutiao`         | 今日头条    | `medium`    | Medium     |
+| `jandan`          | 煎蛋        |             |            |
 
 #### 📌 配置示例
 
