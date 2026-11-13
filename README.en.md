@@ -69,6 +69,7 @@
 | **Bangumi**         |       |     ✅      | 💬 Subject discussions, blogs, group topics |
 | **Toutiao**         |  ✅   |     ✅      | 📰 Articles, Weitoutiao posts               |
 | **Medium**          |  ✅   |     ✅      | 📰 Articles                                 |
+| **Jandan**          |       |     ✅      | 📰 Articles, 💬 Topics                      |
 
 > 🔧 More platforms are being added continuously...
 
@@ -219,6 +220,7 @@ platforms:
 | `snapchat`        | Snapchat        | `zhihu`     | Zhihu       |
 | `douban`          | Douban          | `bangumi`   | Bangumi     |
 | `toutiao`         | Toutiao         | `medium`    | Medium      |
+| `jandan`          | Jandan          |             |             |
 
 #### 📌 Configuration Examples
 
