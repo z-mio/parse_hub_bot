@@ -10,7 +10,7 @@ dependencies = [
     "easy-ai18n>=1.2.1",
     "haishoku>=1.1.8",
     "httpx[socks]>=0.28.1",
-    "kurigram>=2.2.24",
+    "kurigram[fast]>=2.2.27",
     "loguru>=0.6.0",
     "lxml-html-clean>=0.4.1",
     "markdown>=3.7",
@@ -23,9 +23,6 @@ dependencies = [
     "pyyaml>=6.0.3",
     "sqlalchemy[asyncio]>=2.0.51,<2.1",
     "telegraph>=2.2.0",
-    "tgcrypto>=1.2.5",
-    "uvloop>=0.22.1 ; sys_platform != 'win32'",
-    "winloop>=0.3.1 ; sys_platform == 'win32'",
 ]
 
 [tool.ruff]
