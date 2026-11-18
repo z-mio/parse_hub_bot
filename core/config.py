@@ -65,6 +65,12 @@ class BotSettings(BaseSettings):
     def bot_session_name(self) -> str:
         return f"bot_{self.bot_token.split(':')[0]}"
 
+    @field_validator("bot_proxy", mode="before")
+    @classmethod
+    def bot_proxy_init(cls, v: str | None) -> str | None:
+        """BOT_PROXY= 空串视为未配置"""
+        return v or None
+
     @field_validator("admin_ids", mode="before")
     @classmethod
     def admin_ids_init(cls, v: str | list[int]) -> list[int] | list[str]:
@@ -80,17 +86,4 @@ class BotSettings(BaseSettings):
         return p
 
 
-class WatchdogSettings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=None,
-        extra="ignore",
-        env_prefix="WD_",
-    )
-    exit_flag: bool = Field(default=False)
-    """退出标志"""
-    reconnect_grace_seconds: int = Field(default=120)
-    """主连接断开后等待自动重连的时间(秒), 超时仍未恢复则结束进程交给容器重启"""
-
-
 bs = BotSettings()  # type: ignore[call-arg]
-ws = WatchdogSettings()

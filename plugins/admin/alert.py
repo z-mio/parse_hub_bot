@@ -17,5 +17,5 @@ async def send_cookie_alert(cli: Client, alert: CookieAlert) -> None:
             _t = t_[await UserService(session).get_lang(uid)]
         try:
             await cli.send_rich_message(uid, build_cookie_alert(_t, alert))
-        except RPCError as e:
+        except (RPCError, TimeoutError) as e:
             logger.warning(f"向管理员 {uid} 发送 cookie 失效通知失败: {e}")

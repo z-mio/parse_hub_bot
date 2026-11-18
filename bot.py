@@ -6,10 +6,9 @@ from typing import Any
 import pillow_heif
 from pyrogram import Client
 from pyrogram.errors import RPCError
-from pyrogram.handlers import ConnectHandler, DisconnectHandler
 from pyrogram.types import BotCommand, BotCommandScopeChat
 
-from core import bs, on_connect, on_disconnect, ws
+from core import bs
 from db.engine import close_db
 from db.init import init_db
 from i18n import ISO639_MAP
@@ -17,16 +16,12 @@ from log import logger, setup_logging
 from plugins.admin.alert import send_cookie_alert
 from plugins.helpers import ADMIN_COMMANDS, COMMANDS
 from services import cookie_health, parse_cache
-from utils.event_loop import setup_optimized_event_loop
 
 pillow_heif.register_heif_opener()
 
 setup_logging(debug=bs.debug)
 if bs.debug:
     logger.enable("parsehub")
-
-setup_optimized_event_loop()
-loop = asyncio.new_event_loop()
 
 
 class Bot(Client):
@@ -40,13 +35,10 @@ class Bot(Client):
             bot_token=self.cfg.bot_token,
             plugins={"root": "plugins"},
             proxy=self.cfg.bot_proxy,
-            loop=loop,
             workdir=self.cfg.sessions_path,
         )
 
     async def start(self, *args: Any, **kwargs: Any) -> "Bot":
-        self.init_watchdog()
-
         logger.info("初始化数据库...")
         await init_db()
         logger.success("数据库初始化完成")
@@ -59,17 +51,12 @@ class Bot(Client):
         return self
 
     async def stop(self, *args: Any, **kwargs: Any) -> Client:
-        ws.exit_flag = True
         await super().stop(*args, **kwargs)
         await close_db()
         # 结束时清理下载残留
         if self.cfg.download_dir.exists() and not self.cfg.debug_skip_cleanup:
             shutil.rmtree(self.cfg.download_dir)
         return self
-
-    def init_watchdog(self) -> None:
-        self.add_handler(ConnectHandler(on_connect))
-        self.add_handler(DisconnectHandler(on_disconnect))
 
     async def set_menu(self) -> None:
         commands = await self.get_bot_commands()

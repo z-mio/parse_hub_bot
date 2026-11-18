@@ -76,7 +76,10 @@ class MessageStatusReporter(StatusReporter):
 
     async def dismiss(self) -> None:
         if self._msg:
-            await self._msg.delete()
+            try:
+                await self._msg.delete()
+            except (FloodWait, SlowmodeWait, TimeoutError):
+                pass
 
     async def _edit_text(self, text: str, **kwargs: Any) -> None:
         try:
@@ -85,7 +88,7 @@ class MessageStatusReporter(StatusReporter):
             else:
                 if self._msg.text != text:
                     await self._msg.edit_text(text, **kwargs)
-        except (FloodWait, SlowmodeWait):
+        except (FloodWait, SlowmodeWait, TimeoutError):
             pass
         except Forbidden as e:
             logger.warning(f"状态消息发送失败, Bot 无权限: {e}")
@@ -148,7 +151,7 @@ class InlineStatusReporter(StatusReporter):
     async def _edit_inline_text(self, **kwargs: Any) -> None:
         try:
             await self._cli.edit_inline_text(**kwargs)
-        except (FloodWait, SlowmodeWait):
+        except (FloodWait, SlowmodeWait, TimeoutError):
             pass
         except Forbidden as e:
             logger.warning(f"消息发送失败, Bot 无权限: {e}")

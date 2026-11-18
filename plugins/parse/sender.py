@@ -113,7 +113,7 @@ class MessageSender:
                 return await send_coro_fn()
             except (FloodWait, SlowmodeWait) as e:
                 if attempt < MAX_RETRIES - 1:
-                    wait_seconds = e.value if isinstance(e.value, int | float) else 0.5
+                    wait_seconds = e.seconds or 0.5
                     logger.warning(f"{e.ID} 重试 ({attempt + 1}/{MAX_RETRIES})，等待 {wait_seconds}s")
                     await asyncio.sleep(float(wait_seconds))
                 else:
