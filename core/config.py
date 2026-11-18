@@ -65,6 +65,12 @@ class BotSettings(BaseSettings):
     def bot_session_name(self) -> str:
         return f"bot_{self.bot_token.split(':')[0]}"
 
+    @field_validator("bot_proxy", mode="before")
+    @classmethod
+    def bot_proxy_init(cls, v: str | None) -> str | None:
+        """BOT_PROXY= 空串视为未配置"""
+        return v or None
+
     @field_validator("admin_ids", mode="before")
     @classmethod
     def admin_ids_init(cls, v: str | list[int]) -> list[int] | list[str]:
